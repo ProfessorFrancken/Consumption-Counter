@@ -22,6 +22,10 @@ const Statistics = () => (
   <h2>Statistics</h2>
 )
 
+const Recent = () => (
+  <h2>Recent</h2>
+)
+
 class App extends Component {
   render() {
     return (
@@ -32,6 +36,7 @@ class App extends Component {
             <Route exact path="/statistics" component={Statistics} />
             <Route exact path="/committees" component={Committees} />
             <Route exact path="/pricelist" component={Pricelist} />
+            <Route exact path="/recent" component={Recent} />
 
             <Route exact path="/" component={MainScreen} />
 
