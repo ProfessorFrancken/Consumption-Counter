@@ -5,7 +5,7 @@ import LinkButton from './LinkButton'
 
 const Status = () => (
   <div className="Footer-status">
-    <strong>Status:</strong> connected
+    <strong>Status:</strong> <span className="text-success">connected</span>
   </div>
 )
 
