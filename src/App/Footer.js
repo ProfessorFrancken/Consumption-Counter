@@ -1,6 +1,7 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import './Footer.css';
+import LinkButton from './LinkButton'
 
 const Status = () => (
   <div className="Footer-status">
@@ -8,15 +9,9 @@ const Status = () => (
   </div>
 )
 
-const FooterLink = ({to, children, className}) => (
-  <Link className={`btn btn-outline-secondary ${className}`} to={to}>
-    {children}
-  </Link>
-)
-
 const GoBack = () => (
   <div className="Footer-go-back">
-    <FooterLink className="btn-block" to="/">Go back</FooterLink>
+    <LinkButton className="btn-block" to="/">Go back</LinkButton>
   </div>
 )
 
@@ -24,7 +19,9 @@ const GoBack = () => (
 const Footer = () => (
     <footer className="Footer">
         <nav className="Footer-navigation">
-          <FooterLink to="/prominent">Prominent</FooterLink> <FooterLink to="/committees">Committees</FooterLink> <FooterLink to="/recent">Recent</FooterLink>
+          <LinkButton to="/prominent" className="mr-2">Prominent</LinkButton>
+          <LinkButton to="/committees" className="mx-2">Committees</LinkButton>
+          <LinkButton to="/recent" className="mx-2">Recent</LinkButton>
         </nav>
         <Route path="/:anything" component={GoBack} />
         <Status />

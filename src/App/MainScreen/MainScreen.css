@@ -1,0 +1,64 @@
+:root {
+  --columns: 6;
+}
+
+.SelectionGrid {
+  list-style: none;
+
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  /* grid-auto-rows: 3em; */
+
+  /* grid-template-rows: repeat(10, 1fr); */
+
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+
+  justify-items: stretch;
+  align-items: stretch;
+  align-content: stretch;
+
+
+  height: 100%;
+  align-content: stretch;
+}
+
+.SelectionItem {
+
+  background: tomato;
+  color: white;
+
+  padding: .5em;
+  font-weight: bold;
+  font-size: 1em;
+  text-align: center;
+
+  align-self: stretch;
+
+}
+
+
+/* .SelectionGrid { */
+/*   list-style: none; */
+
+/*   padding: 0; */
+/*   margin: 0; */
+
+/*   display: flex; */
+/*   flex-wrap: wrap; */
+/*   justify-content: space-between; */
+/* } */
+/* .SelectionItem { */
+/*   flex-grow: 1; */
+/*   background: tomato; */
+/*   color: white; */
+
+/*   padding: .5em; */
+/*   font-weight: bold; */
+/*   font-size: 1em; */
+/*   text-align: center; */
+
+/* } */

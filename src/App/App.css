@@ -28,14 +28,11 @@
 }
 .App-main {
   grid-area: main;
+  background: #aacc00;
+  flex-grow: 1;
 }
 
 .App {
   display: flex;
   flex-direction: collumn;
-}
-
-.Mainscreen {
-  background: #aacc00;
-  flex-grow: 1;
 }

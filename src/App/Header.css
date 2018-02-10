@@ -1,14 +1,9 @@
 .Header {
-  background: #00ccaa;
   display: flex;
   flex-direction: row;
 
   justify-content: space-between;
   align-items: center;
-}
-
-.Header-logo {
-  /* animation: App-logo-spin infinite 20s linear; */
 }
 
 .Header-title {
@@ -17,9 +12,4 @@
 
 .Header-navigation {
   padding-left: 1em;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }

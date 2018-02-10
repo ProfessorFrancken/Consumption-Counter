@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import Header from './Header'
 import Footer from './Footer'
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import MainScreen from './MainScreen/MainScreen'
-import { Container, Row, Col } from 'reactstrap';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -28,12 +27,14 @@ class App extends Component {
     return (
       <div className="App">
           <Header />
-          <div className="App-main Mainscreen">
+          <div className="App-main">
             <Route exact path="/prominent" component={Prominent} />
             <Route exact path="/statistics" component={Statistics} />
             <Route exact path="/committees" component={Committees} />
             <Route exact path="/pricelist" component={Pricelist} />
+
             <Route exact path="/" component={MainScreen} />
+
           </div>
           <Footer />
       </div>

@@ -1,9 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-
-const LinkButton = ({to, children}) => (
-  <Link className="btn btn-outline-secondary" to={to}>
+const LinkButton = ({to, children, className = ''}) => (
+  <Link className={`btn btn-lg btn-outline-light ${className}`} to={to}>
     {children}
   </Link>
 )
