@@ -2,6 +2,17 @@
   --primary: #173249;
 }
 
+@font-face {
+	font-family: "Gill Sans MT Pro";
+	src: url("assets/GillSansMTPro-Light.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Gill Sans MT Pro";
+	src: url("assets/GillSansDisplayMTPro-Bold.woff") format("woff");
+	font-weight: bold;
+}
+
 
 body {
   margin: 0;
@@ -20,4 +31,9 @@ body {
   background-size: cover;
 
   color: white;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Gill Sans MT Pro, sans-serif;
 }

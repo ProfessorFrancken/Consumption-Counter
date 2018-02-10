@@ -1,6 +1,7 @@
 import React from 'react'
 import faker from 'faker'
 import './MainScreen.css'
+import LinkButton from './../LinkButton'
 
 faker.seed(123)
 const members = [...Array(6 * 7).keys()].map((idx) => {
@@ -17,16 +18,17 @@ const members = [...Array(6 * 7).keys()].map((idx) => {
 
 const MainScreen = () => (
   <div className="MainScreen h-100 py-3">
-  <ul className="SelectionGrid">
-    {members.map((member, idx) => (
-      <li
-        key={member.id}
-        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
-        >
-        {member.fullName}
-      </li>
-    ))}
-  </ul>
+    <nav className="SelectionGrid">
+      {members.map((member, idx) => (
+        <LinkButton
+          key={member.id}
+          className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+          to="/products"
+          >
+          {member.fullName}
+        </LinkButton>
+      ))}
+    </nav>
   </div>
 )
 
