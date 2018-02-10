@@ -1,38 +1,17 @@
 .App {
+  height: 100vh;
 
   padding: 1em;
 
   text-align: center;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   justify-content: space-between;
 
-  grid-template-columns: 100%;
-  grid-template-rows: 50px auto 50px;
-  grid-template-areas:
-  "header"
-  "main"
-  "footer";
-}
-
-
-.App-header {
-  grid-area: header;
-}
-
-.App-footer {
-  grid-area: footer;
-  background: #123456;
-
-}
-.App-main {
-  grid-area: main;
-  background: #aacc00;
-  flex-grow: 1;
-}
-
-.App {
   display: flex;
   flex-direction: collumn;
+}
+
+.App-main {
+  flex-grow: 1;
 }

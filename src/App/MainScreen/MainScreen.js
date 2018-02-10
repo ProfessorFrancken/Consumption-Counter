@@ -21,7 +21,7 @@ const MainScreen = () => (
     {members.map((member, idx) => (
       <li
         key={member.id}
-        className="SelectionItem"
+        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
         >
         {member.fullName}
       </li>
