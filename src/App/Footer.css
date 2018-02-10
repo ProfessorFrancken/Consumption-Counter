@@ -1,0 +1,22 @@
+.Footer {
+  display: flex;
+  flex-flow: row wrap;
+
+  justify-content: space-between;
+  align-items: center;
+
+  background: #ccaa00;
+}
+
+.Footer-navigation {
+  padding-right: 1em;
+}
+
+.Footer-status {
+  padding-left: 1em;
+}
+
+.Footer-go-back {
+  flex-grow: 1;
+  padding: 0 1em;
+}

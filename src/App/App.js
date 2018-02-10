@@ -3,7 +3,9 @@ import Header from './Header'
 import Footer from './Footer'
 import { Route, Link } from 'react-router-dom'
 import MainScreen from './MainScreen/MainScreen'
+import { Container, Row, Col } from 'reactstrap';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const Prominent = () => (
   <h2>Prominent</h2>
@@ -20,21 +22,19 @@ const Pricelist = () => (
 const Statistics = () => (
   <h2>Statistics</h2>
 )
-const GoBack = () => (
-  <Link to="/">Go back</Link>
-)
 
 class App extends Component {
   render() {
     return (
       <div className="App">
           <Header />
-          <Route exact path="/prominent" component={Prominent} />
-          <Route exact path="/statistics" component={Statistics} />
-          <Route exact path="/committees" component={Committees} />
-          <Route exact path="/pricelist" component={Pricelist} />
-          <Route path="/:anything" component={GoBack} />
-          <Route exact path="/" component={MainScreen} />
+          <div className="App-main Mainscreen">
+            <Route exact path="/prominent" component={Prominent} />
+            <Route exact path="/statistics" component={Statistics} />
+            <Route exact path="/committees" component={Committees} />
+            <Route exact path="/pricelist" component={Pricelist} />
+            <Route exact path="/" component={MainScreen} />
+          </div>
           <Footer />
       </div>
     );
