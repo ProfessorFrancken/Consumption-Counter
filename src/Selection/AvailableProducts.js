@@ -1,14 +1,19 @@
 import { connect } from 'react-redux'
 import { addProductToOrder } from '../actions'
 import Products from './Products'
+import { mapValues } from 'lodash'
 
 const getAvailableProducts = (products, member) =>
-  products.filter((product) => (product.age_restriction <= member.age))
-
+  mapValues(
+    products,
+    (products) => products.filter(
+      (product) => (product.age_restriction <= member.age)
+    )
+  )
 
 const mapStateToProps = state => {
   return {
-    products: getAvailableProducts(state.products, state.member)
+    products: getAvailableProducts(state.products, state.selected_member)
   }
 }
 

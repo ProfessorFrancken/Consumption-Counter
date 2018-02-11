@@ -19,10 +19,6 @@ const products = groupBy(
   }), (product) => product.positie)
   , (product) => product.category);
 
-console.log(products['Fris']);
-
-const members = [];
-
 const Product = ({ product, onClick }) => (
   <button
     key={product.id}
@@ -55,7 +51,7 @@ const Product = ({ product, onClick }) => (
   </button>
 )
 
-const Products = () => {
+const Products = ({ products = {} }) => {
 
   // Do an assert that we have three categories
 
