@@ -1,34 +1,33 @@
-
-.products {
-  padding: 0;
-  margin: 0;
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  height: 100%;
-  grid-column-gap: .5em;
-  grid-row-gap: .5em;
-
-  height: 100%;
-  align-content: stretch;
-}
-
-.products > * {
-  overflow: hidden;
-  max-height: 100px;
-  height: 100px;
-}
-
-.SelectionGrid-products {
+.products-grid {
   grid-template-columns: repeat(2, 49%);
-  /* grid-gap: 0; */
   flex-grow: 1;
 
   width: 100%;
   grid-column-gap: 2%;
+
+  margin: 0 1%;
 }
 
-.SelectionGrid-products .SelectionItem {
+.products-grid:first-child, .products-grid:last-child {
+  margin: 0;
+}
 
+.btn-product {
+  color: #333;
+  background-color: white;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.btn-product-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.9);
+  padding: .5em;
+  position: absolute;
+  font-weight: bold;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
