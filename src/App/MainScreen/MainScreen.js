@@ -2,7 +2,7 @@ import React from 'react'
 import faker from 'faker'
 import './MainScreen.css'
 import LinkButton from './../LinkButton'
-import { sortBy } from 'underscore'
+import { sortBy, chunk } from 'lodash'
 
 faker.seed(123)
 const members = sortBy(
@@ -21,19 +21,17 @@ const members = sortBy(
 );
 
 const MainScreen = () => (
-  <div className="MainScreen h-100 py-3">
-    <nav className="SelectionGrid">
-      {members.map((member, idx) => (
-        <LinkButton
-          key={member.id}
-          className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
-          to="/products"
-          >
-          {member.fullName}
-        </LinkButton>
-      ))}
-    </nav>
-  </div>
+  <nav className="SelectionGrid">
+    {members.map((member, idx) => (
+      <LinkButton
+        key={member.id}
+        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+        to="/products"
+        >
+        {member.fullName}
+      </LinkButton>
+    ))}
+  </nav>
 )
 
 export default MainScreen

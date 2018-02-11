@@ -1,0 +1,21 @@
+
+.products {
+  padding: 0;
+  margin: 0;
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  height: 100%;
+  grid-column-gap: .5em;
+  grid-row-gap: .5em;
+
+  height: 100%;
+  align-content: stretch;
+}
+
+.products > * {
+  overflow: hidden;
+  max-height: 100px;
+  height: 100px;
+}
