@@ -1,9 +1,12 @@
 export const actions = {
-  addProductToOrder
+  addProductToOrder,
+  selectMember,
 }
 
 export const CONSTANTS = {
-  ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER'
+  ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
+
+  SELECT_MEMBER: 'SELECT_MEMBER',
 }
 
 /**
@@ -20,6 +23,13 @@ export function addProductToOrder(product) {
       product,
       member: selected_member
     })
+  }
+}
+
+export function selectMember(member) {
+  return {
+    type: CONSTANTS.SELECT_MEMBER,
+    member
   }
 }
 

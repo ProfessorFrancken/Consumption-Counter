@@ -3,6 +3,7 @@ import Header from './Header'
 import Footer from './Footer'
 import { Route } from 'react-router-dom'
 import MainScreen from './MainScreen/MainScreen'
+import Members from './../Selection/Members/MemberSelection'
 import AvailableProducts from './../Selection/Products/AvailableProducts'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -39,7 +40,8 @@ const App = ({ title }) => (
         <Route exact path="/recent" component={Recent} />
 
         <Route exact path="/products" component={AvailableProducts} />
-        <Route exact path="/" component={MainScreen} />
+        <Route exact path="/" component={Members} />
+        <Route exact path="/members" component={Members} />
       </div>
     </div>
     <Footer />

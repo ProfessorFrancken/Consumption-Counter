@@ -1,5 +1,6 @@
 import producten from './../assets/products.json'
 import { sortBy, groupBy } from 'lodash'
+import faker from 'faker'
 
 const defaultProductsState = groupBy(
   sortBy(
@@ -27,8 +28,25 @@ export function products(state = defaultProductsState, action) {
   }
 }
 
-export function members(state = {}, action) {
-  return state
+faker.seed(123)
+const defaultMembers = sortBy(
+  [...Array(6 * 7).keys()].map((idx) => {
+    const surname = faker.name.lastName();
+    const firstName = faker.name.firstName();
+    return {
+      firstName,
+      surname,
+      fullName: `${firstName} ${surname} ${surname}`,
+      id: idx,
+      birthday: undefined,
+      cosmetics: undefined
+    }
+  }),
+  (member) => member.surname
+);
+console.log(defaultMembers)
+export function members(state = defaultMembers, action) {
+  return state;
 }
 
 export function selected_member(state, action) {
