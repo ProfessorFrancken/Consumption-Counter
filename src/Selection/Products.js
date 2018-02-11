@@ -23,100 +23,61 @@ console.log(products['Fris']);
 
 const members = [];
 
+const Product = ({ product, onClick }) => (
+  <button
+    key={product.id}
+    onClick={onClick}
+    className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+    to="/products"
+    style={{
+      color: "#333",
+      backgroundColor: "white",
+      backgroundImage: `url(https:/old.professorfrancken.nl/database/streep/afbeeldingen/${product.image})`,
+      backgroundSize: "cover",
+      backgroundPosition: "50% 50%",
+      position: "relative"
+    }}
+  >
+    <span
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        color: "rgba(255, 255, 255, 0.9)",
+        padding: ".5em",
+        position: "absolute",
+        fontWeight: "bold",
+        bottom: 0,
+        left: 0,
+        right: 0
+      }}
+    >
+      {product.name}
+    </span>
+  </button>
+)
+
 const Products = () => {
+
+  // Do an assert that we have three categories
 
   return (
     <div className="h-100 d-flex flex-row">
-    <nav className="SelectionGrid SelectionGrid-products">
-    {products["Bier"].map((product, idx) => (
-      <button
-        key={product.id}
-        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
-        to="/products"
-        >
-        {product.name}
-      </button>
-    ))}
-    </nav>
-    <nav className="SelectionGrid SelectionGrid-products" style={{margin: "0 1%"}}>
-    {products["Fris"].map((product, idx) => (
-      <button
-        key={product.id}
-        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
-        to="/products"
-        >
-        {product.name}
-      </button>
-    ))}
-    </nav>
-    <nav className="SelectionGrid SelectionGrid-products">
-    {products["Eten"].map((product, idx) => (
-      <button
-        key={product.id}
-        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
-        to="/products"
-        >
-        {product.name}
-      </button>
-    ))}
-    </nav>
+      <nav className="SelectionGrid SelectionGrid-products">
+        {products["Bier"].map((product, idx) => (
+          <Product product={product} />
+        ))}
+      </nav>
+      <nav className="SelectionGrid SelectionGrid-products" style={{margin: "0 1%"}}>
+        {products["Fris"].map((product, idx) => (
+          <Product product={product} />
+        ))}
+      </nav>
+      <nav className="SelectionGrid SelectionGrid-products">
+        {products["Eten"].map((product, idx) => (
+          <Product product={product} />
+        ))}
+      </nav>
     </div>
   )
-
-  return (
-  <div className="d-flex flex-row">
-  <div className="products">
-    {products["Bier"].map((product, idx) => (
-      <button
-        key={product.id}
-        className="btn btn-outline-light d-flex flex-column justify-content-center p-0"
-        to="/products"
-        >
-        <img
-          src={`https:/old.professorfrancken.nl/database/streep/afbeeldingen/${product.image}`}
-          alt={`${product.name}`}
-          className="img-fluid"
-          style={{ backgroundColor: 'white', objectFit: 'cover' }}
-        />
-        {/* {product.name} */}
-      </button>
-    ))}
-  </div>
-
-  <div className="products mx-2">
-    {products["Fris"].map((product, idx) => (
-      <button
-        key={product.id}
-        className="btn btn-outline-light d-flex flex-column justify-content-center p-0"
-        to="/products"
-        >
-        <img
-          src={`https:/old.professorfrancken.nl/database/streep/afbeeldingen/${product.image}`}
-          alt={`${product.name}`}
-          className="img-fluid"
-        />
-        {/* {product.name} */}
-      </button>
-    ))}
-  </div>
-<div className="products">
-    {products["Eten"].map((product, idx) => (
-      <button
-        key={product.id}
-        className="btn btn-outline-light d-flex flex-column justify-content-center p-0"
-        to="/products"
-        >
-        <img
-          src={`https:/old.professorfrancken.nl/database/streep/afbeeldingen/${product.image}`}
-          alt={`${product.name}`}
-          className="img-fluid"
-        />
-        {/* {product.name} */}
-      </button>
-    ))}
-  </div>
-  </div>
-)
 }
 
 export default Products
