@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import { addProductToOrder } from '../actions'
-import Products from './Products'
 import { mapValues } from 'lodash'
+import { addProductToOrder } from '../../actions'
+import Products from './Products'
 
 const getAvailableProducts = (products, member) =>
   mapValues(

@@ -3,7 +3,7 @@ import Header from './Header'
 import Footer from './Footer'
 import { Route } from 'react-router-dom'
 import MainScreen from './MainScreen/MainScreen'
-import AvailableProducts from './../Selection/AvailableProducts'
+import AvailableProducts from './../Selection/Products/AvailableProducts'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
