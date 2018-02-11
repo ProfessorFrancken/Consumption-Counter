@@ -13,14 +13,14 @@ const getAvailableProducts = (products, member) =>
 
 const mapStateToProps = state => {
   return {
-    products: getAvailableProducts(state.products, state.selected_member)
+    products: getAvailableProducts(state.products, state.selected_member),
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    addProductToOrder: id => {
-      dispatch(addProductToOrder(id))
+    addProductToOrder: product => {
+      dispatch(addProductToOrder(product))
     }
   }
 }

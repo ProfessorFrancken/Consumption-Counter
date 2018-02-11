@@ -33,6 +33,8 @@ export function members(state = {}, action) {
 
 export function selected_member(state, action) {
   return {
+    id: 1,
+    fullName: 'Mark Redeman',
     age: 19
   }
 }
