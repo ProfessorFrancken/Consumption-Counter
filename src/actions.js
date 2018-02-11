@@ -1,12 +1,22 @@
 export const actions = {
   addProductToOrder,
   selectMember,
+
+  fetchInitialData,
 }
 
-export const CONSTANTS = {
+export const TYPES = {
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
 
   SELECT_MEMBER: 'SELECT_MEMBER',
+
+  FETCH_MEMBERS_REQUEST: 'FETCH_MEMBERS_REQUEST',
+  FETCH_MEMBERS_SUCCESS: 'FETCH_MEMBERS_SUCCESS',
+  FETCH_MEMBERS_FAILURE: 'FETCH_MEMBERS_FAILURE',
+
+  FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
+  FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
+  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE',
 }
 
 /**
@@ -19,7 +29,7 @@ export function addProductToOrder(product) {
     const { selected_member } = getState();
 
     dispatch({
-      type: CONSTANTS.ADD_PRODUCT_TO_ORDER,
+      type: TYPES.ADD_PRODUCT_TO_ORDER,
       product,
       member: selected_member
     })
@@ -28,8 +38,41 @@ export function addProductToOrder(product) {
 
 export function selectMember(member) {
   return {
-    type: CONSTANTS.SELECT_MEMBER,
+    type: TYPES.SELECT_MEMBER,
     member
+  }
+}
+
+function fetchMembers() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.FETCH_MEMBERS_REQUEST
+    })
+
+    dispatch({
+      type: TYPES.FETCH_MEMBERS_SUCCESS,
+      members: []
+    })
+  }
+}
+
+function fetchProducts() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.FETCH_PRODUCTS_REQUEST
+    })
+
+    dispatch({
+      type: TYPES.FETCH_PRODUCTS_SUCCESS,
+      products: []
+    })
+  }
+}
+
+export function fetchInitialData() {
+  return (dispatch) => {
+    dispatch(fetchMembers())
+    dispatch(fetchProducts())
   }
 }
 
