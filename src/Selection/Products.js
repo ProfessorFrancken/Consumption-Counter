@@ -38,7 +38,7 @@ const Products = () => {
       </button>
     ))}
     </nav>
-    <nav className="SelectionGrid SelectionGrid-products">
+    <nav className="SelectionGrid SelectionGrid-products" style={{margin: "0 1%"}}>
     {products["Fris"].map((product, idx) => (
       <button
         key={product.id}

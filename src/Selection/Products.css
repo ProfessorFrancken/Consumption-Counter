@@ -21,7 +21,7 @@
 }
 
 .SelectionGrid-products {
-  grid-template-columns: repeat(2, 48%);
+  grid-template-columns: repeat(2, 49%);
   /* grid-gap: 0; */
   flex-grow: 1;
 
