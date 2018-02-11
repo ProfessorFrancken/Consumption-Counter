@@ -2,7 +2,6 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { Route } from 'react-router-dom'
-import MainScreen from './MainScreen/MainScreen'
 import Members from './../Selection/Members/MemberSelection'
 import AvailableProducts from './../Selection/Products/AvailableProducts'
 import './App.css';

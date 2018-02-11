@@ -3,6 +3,6 @@ import App from './App'
 
 const mapStateToProps = state => state
 
-const AppContainer = connect(mapStateToProps,)(App)
+const AppContainer = connect(mapStateToProps)(App)
 
 export default AppContainer

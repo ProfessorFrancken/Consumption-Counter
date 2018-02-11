@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { mapValues } from 'lodash'
 import { selectMember } from '../../actions'
 import Members from './Members'
 

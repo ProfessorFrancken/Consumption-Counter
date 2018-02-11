@@ -1,6 +1,5 @@
 import React from 'react';
 import LinkButton from './LinkButton'
-import { Route } from 'react-router-dom'
 import './Header.css';
 
 // The title of the header can be set when a member chooses a product
