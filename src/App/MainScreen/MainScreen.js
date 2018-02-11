@@ -10,8 +10,9 @@ const members = sortBy(
     const surname = faker.name.lastName();
     const firstName = faker.name.firstName();
     return {
+      firstName,
       surname,
-      fullName: `${firstName} ${surname}`,
+      fullName: `${firstName} ${surname} ${surname}`,
       id: idx,
       birthday: undefined,
       cosmetics: undefined
@@ -28,7 +29,8 @@ const MainScreen = () => (
         className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
         to="/products"
         >
-        {member.fullName}
+        {member.firstName}<br />
+        {member.surname}
       </LinkButton>
     ))}
   </nav>

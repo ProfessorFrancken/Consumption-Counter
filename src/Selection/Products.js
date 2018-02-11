@@ -23,7 +23,47 @@ console.log(products['Fris']);
 
 const members = [];
 
-const Products = () => (
+const Products = () => {
+
+  return (
+    <div className="h-100 d-flex flex-row">
+    <nav className="SelectionGrid SelectionGrid-products">
+    {products["Bier"].map((product, idx) => (
+      <button
+        key={product.id}
+        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+        to="/products"
+        >
+        {product.name}
+      </button>
+    ))}
+    </nav>
+    <nav className="SelectionGrid SelectionGrid-products">
+    {products["Fris"].map((product, idx) => (
+      <button
+        key={product.id}
+        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+        to="/products"
+        >
+        {product.name}
+      </button>
+    ))}
+    </nav>
+    <nav className="SelectionGrid SelectionGrid-products">
+    {products["Eten"].map((product, idx) => (
+      <button
+        key={product.id}
+        className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+        to="/products"
+        >
+        {product.name}
+      </button>
+    ))}
+    </nav>
+    </div>
+  )
+
+  return (
   <div className="d-flex flex-row">
   <div className="products">
     {products["Bier"].map((product, idx) => (
@@ -77,5 +117,6 @@ const Products = () => (
   </div>
   </div>
 )
+}
 
 export default Products

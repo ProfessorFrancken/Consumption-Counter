@@ -19,3 +19,16 @@
   max-height: 100px;
   height: 100px;
 }
+
+.SelectionGrid-products {
+  grid-template-columns: repeat(2, 48%);
+  /* grid-gap: 0; */
+  flex-grow: 1;
+
+  width: 100%;
+  grid-column-gap: 2%;
+}
+
+.SelectionGrid-products .SelectionItem {
+
+}
