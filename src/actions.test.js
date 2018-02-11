@@ -13,26 +13,27 @@ describe('Fetching initial data', () => {
     fetchMock.restore()
   })
 
-  it('Fetches members and products', () => {
+  it('Fetches members and products', (done) => {
     fetchMock
-      .getOnce('/members', { body: { members: [] }, headers: { 'content-type': 'application/json' } })
-      .getOnce('/products', { body: { products: [] }, headers: { 'content-type': 'application/json' } })
+      .mock('http://plus_one.dev/api/members', { body: { members: [] }, headers: { 'content-type': 'application/json' } })
+      .mock('http://plus_one.dev/api/products', { body: { products: [] }, headers: { 'content-type': 'application/json' } })
 
 
     const expectedActions = [
       { type: TYPES.FETCH_MEMBERS_REQUEST },
-      { type: TYPES.FETCH_MEMBERS_SUCCESS, members: [] },
       { type: TYPES.FETCH_PRODUCTS_REQUEST },
+      { type: TYPES.FETCH_MEMBERS_SUCCESS, members: [] },
       { type: TYPES.FETCH_PRODUCTS_SUCCESS, products: [] },
     ]
 
     const store = mockStore({ members: [] })
 
     store.dispatch(actions.fetchInitialData())
-    /* .then(() => {*/
-      // return of async actions
-      expect(store.getActions()).toEqual(expectedActions)
-    /* })*/
-
+         .then(() => {
+           /* return of async actions*/
+           expect(store.getActions()).toEqual(expectedActions)
+           done()
+         })
+         .catch((e) => done.fail(e))
   })
 })

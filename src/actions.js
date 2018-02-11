@@ -1,3 +1,6 @@
+import api from './api.js'
+import { orderBy, take } from 'lodash'
+
 export const actions = {
   addProductToOrder,
   selectMember,
@@ -49,10 +52,38 @@ function fetchMembers() {
       type: TYPES.FETCH_MEMBERS_REQUEST
     })
 
-    dispatch({
-      type: TYPES.FETCH_MEMBERS_SUCCESS,
-      members: []
-    })
+    const calculateAge = (birtday) => 18
+
+    const mapMembers = (lid) => {
+      return {
+        id: lid.id,
+        firstName: lid.voornaam,
+        surname: lid.achternaam,
+        age: calculateAge(lid.geboortedatum),
+        prominent: lid.prominent,
+
+        cosmetics: {
+          color: lid.kleur,
+          image: lid.afbeelding,
+          nickname: lid.nickname,
+          button: {
+            width: lid.button_width,
+            height: lid.button_height
+          }
+        }
+      }
+    }
+
+    return api.get('/members')
+       .then((response) => dispatch({
+         type: TYPES.FETCH_MEMBERS_SUCCESS,
+         members: orderBy(
+           take(response.members, 40).map(mapMembers),
+           (member) => member.surname
+         )
+       })).catch((ex) => dispatch({
+         type: TYPES.FETCH_MEMBERS_FAILUREa
+       }))
   }
 }
 
@@ -62,18 +93,22 @@ function fetchProducts() {
       type: TYPES.FETCH_PRODUCTS_REQUEST
     })
 
-    dispatch({
-      type: TYPES.FETCH_PRODUCTS_SUCCESS,
-      products: []
-    })
+    return api.get('/products')
+       .then((response) => dispatch({
+         type: TYPES.FETCH_PRODUCTS_SUCCESS,
+         products: response.products
+       }))
+       .catch((ex) => dispatch({
+         type: TYPES.FETCH_PRODUCTS_FAILURE
+       }))
   }
 }
 
 export function fetchInitialData() {
-  return (dispatch) => {
-    dispatch(fetchMembers())
-    dispatch(fetchProducts())
-  }
+  return (dispatch) => Promise.all([
+      dispatch(fetchMembers()),
+      dispatch(fetchProducts())
+    ])
 }
 
 export default actions;

@@ -3,7 +3,6 @@ import { selectMember } from '../../actions'
 import Members from './Members'
 
 const mapStateToProps = state => {
-  console.log("Members", state)
   return { members: state.members }
 }
 

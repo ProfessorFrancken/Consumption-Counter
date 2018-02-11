@@ -33,7 +33,16 @@ export const members = sortBy(
       fullName: `${firstName} ${surname} ${surname}`,
       id: idx,
       birthday: undefined,
-      cosmetics: undefined
+      age: 18,
+      cosmetics: {
+          color: undefined,
+          image: undefined,
+          nickname: undefined,
+          button: {
+            width: undefined,
+            height: undefined
+          }
+      }
     }
   }),
   (member) => member.surname
