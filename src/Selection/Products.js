@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import './Products.css'
 
 const ProductName = ({ product }) => (
@@ -18,29 +19,38 @@ const Product = ({ product, onClick }) => (
   </button>
 )
 
-const Products = ({ products = {} }) => {
+const Category = ({ category }) => (
+  <nav className="SelectionGrid products-grid">
+    {category.map((product) => <Product product={product} />)}
+  </nav>
+)
 
-  // Do an assert that we have three categories
+const Products = ({ products }) => {
+  const beer = products['Bier'];
+  const drinks = products['Fris'];
+  const food = products['Eten'];
 
   return (
     <div className="h-100 d-flex flex-row">
-      <nav className="SelectionGrid products-grid">
-        {products["Bier"].map((product, idx) => (
-          <Product product={product} />
-        ))}
-      </nav>
-      <nav className="SelectionGrid products-grid">
-        {products["Fris"].map((product, idx) => (
-          <Product product={product} />
-        ))}
-      </nav>
-      <nav className="SelectionGrid products-grid">
-        {products["Eten"].map((product, idx) => (
-          <Product product={product} />
-        ))}
-      </nav>
+      <Category category={beer} />
+      <Category category={drinks} />
+      <Category category={food} />
     </div>
   )
+}
+
+const ProductPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+});
+
+Products.propTypes = {
+  products: PropTypes.shape({
+    'Bier': PropTypes.arrayOf(ProductPropType).isRequired,
+    'Fris': PropTypes.arrayOf(ProductPropType).isRequired,
+    'Eten': PropTypes.arrayOf(ProductPropType).isRequired,
+  }).isRequired
 }
 
 export default Products
