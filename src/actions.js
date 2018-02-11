@@ -29,12 +29,12 @@ export const TYPES = {
  */
 export function addProductToOrder(product) {
   return (dispatch, getState) => {
-    const { selected_member } = getState();
+    const { selectedMember } = getState();
 
     dispatch({
       type: TYPES.ADD_PRODUCT_TO_ORDER,
       product,
-      member: selected_member
+      member: selectedMember
     })
   }
 }

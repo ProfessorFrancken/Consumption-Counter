@@ -46,7 +46,7 @@ export function surnameSelection(state = { members_per_group: 6 * 8}, action) {
   return state;
 }
 
-export function selected_member(state, action) {
+export function selectedMember(state, action) {
   return {
     id: 1,
     fullName: 'Mark Redeman',
