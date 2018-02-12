@@ -9,9 +9,9 @@
   margin: 0;
 
   display: grid;
-  grid-template-columns: repeat(var(--columns), 15%);
+  grid-template-columns: repeat(var(--columns), 1fr);
 
-  grid-column-gap: 2%;
+  grid-column-gap: 1em;
   grid-row-gap: 1em;
 
   height: 100%;

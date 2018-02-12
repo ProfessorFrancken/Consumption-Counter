@@ -1,11 +1,11 @@
 .products-grid {
-  grid-template-columns: repeat(2, 49%);
+  grid-template-columns: repeat(3, 1fr);
   flex-grow: 1;
 
   width: 100%;
-  grid-column-gap: 2%;
+  grid-column-gap: 1em;
 
-  margin: 0 1%;
+  margin: 0 1em;
 }
 
 .products-grid:first-child, .products-grid:last-child {
