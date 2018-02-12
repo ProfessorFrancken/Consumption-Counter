@@ -78,7 +78,7 @@ function fetchMembers() {
        .then((response) => dispatch({
          type: TYPES.FETCH_MEMBERS_SUCCESS,
          members: orderBy(
-           take(response.members, 40).map(mapMembers),
+           response.members.map(mapMembers),
            (member) => member.surname
          )
        })).catch((ex) => dispatch({

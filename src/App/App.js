@@ -2,6 +2,7 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { Route } from 'react-router-dom'
+import SurnameRanges from './../Selection/SurnameRanges/SurnameRangeSelection'
 import Members from './../Selection/Members/MemberSelection'
 import AvailableProducts from './../Selection/Products/AvailableProducts'
 import './App.css';
@@ -39,7 +40,7 @@ const App = ({ title }) => (
         <Route exact path="/recent" component={Recent} />
 
         <Route exact path="/products" component={AvailableProducts} />
-        <Route exact path="/" component={Members} />
+        <Route exact path="/" component={SurnameRanges} />
         <Route exact path="/members" component={Members} />
       </div>
     </div>

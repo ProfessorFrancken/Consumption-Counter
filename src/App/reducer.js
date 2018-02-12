@@ -21,16 +21,22 @@ export function members(state = defaultMembersState, action) {
   return state;
 }
 
-export function surnameRanges(state = { members_per_group: 6 * 8}, action) {
+const defaultRanges = {
+  members_per_range: 6 * 5,
+  ranges: [
+
+  ]
+}
+export function surnameRanges(state = defaultRanges, action) {
   switch (action.type) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return {
-        members_per_group: state.members_per_group,
-        groups: chunk(
+        members_per_range: state.members_per_range,
+        ranges: chunk(
           action.members,
-          state.members_per_group
-        ).map((group) => {
-          const members = group;
+          state.members_per_range
+        ).map((range) => {
+          const members = range;
 
           return {
             members,
