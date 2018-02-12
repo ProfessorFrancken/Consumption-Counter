@@ -1,11 +1,11 @@
-import { surnameSelection } from './reducer'
+import { surnameRanges } from './reducer'
 import { TYPES } from './../actions'
 import expect from 'expect'
 import faker from 'faker'
 
 describe('Surname selection reducer', () => {
   it('should return an empty initial state', () => {
-    expect(surnameSelection(undefined, {})).toEqual({
+    expect(surnameRanges(undefined, {})).toEqual({
       members_per_group: 6 * 8
     })
   })
@@ -20,7 +20,7 @@ describe('Surname selection reducer', () => {
         { surname: 'F'},
     ]
 
-    expect(surnameSelection({ members_per_group: 6 * 8}, {
+    expect(surnameRanges({ members_per_group: 6 * 8}, {
       type: TYPES.FETCH_MEMBERS_SUCCESS, members
     })).toEqual({ members_per_group: 6 * 8, groups: [
       { members, surname_start: 'A', surname_end: 'F' }
@@ -37,7 +37,7 @@ describe('Surname selection reducer', () => {
         { surname: 'F'},
     ]
 
-    expect(surnameSelection({ members_per_group: 3}, {
+    expect(surnameRanges({ members_per_group: 3}, {
       type: TYPES.FETCH_MEMBERS_SUCCESS, members
     })).toEqual({ members_per_group: 3, groups: [
       { members: [{ surname: 'A'}, { surname: 'B'}, { surname: 'C'}],

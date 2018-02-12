@@ -21,7 +21,7 @@ export function members(state = defaultMembersState, action) {
   return state;
 }
 
-export function surnameSelection(state = { members_per_group: 6 * 8}, action) {
+export function surnameRanges(state = { members_per_group: 6 * 8}, action) {
   switch (action.type) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return {
