@@ -2,18 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import LinkButton from './../../App/LinkButton'
 
-const Range = ({ range }) => (
+const Range = ({ range, onClick }) => (
   <LinkButton
     className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
+    onClick={() => onClick(range)}
     to="/members"
   >
-    {range.surname_start} - {range.surname_end}
+  {range.surname_start}<br />
+           -<br />
+  {range.surname_end}<br />
   </LinkButton>
 )
 
-const SurnameRanges = ({ ranges }) => (
+const SurnameRanges = ({ ranges, selectRange }) => (
   <nav className="SelectionGrid">
-    {ranges.map((range, idx) => <Range range={range} key={idx} />)}
+    {ranges.map((range, idx) => <Range range={range} onClick={selectRange} key={idx} />)}
   </nav>
 )
 

@@ -3,7 +3,7 @@ import { selectMember } from '../../actions'
 import Members from './Members'
 
 const mapStateToProps = state => {
-  return { members: state.members }
+  return { members: state.selectedMemberRange.members }
 }
 
 const mapDispatchToProps = (dispatch) => {

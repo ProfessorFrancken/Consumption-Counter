@@ -47,8 +47,17 @@ export function surnameRanges(state = defaultRanges, action) {
     default:
       return state
   }
+}
 
-  return state;
+export function selectedMemberRange(state = { members: [] }, action) {
+  switch (action.type) {
+    case 'SELECT_SURNAME_RANGE':
+      return {
+        members: action.range.members
+      }
+    default:
+      return state
+  }
 }
 
 export function selectedMember(state, action) {
