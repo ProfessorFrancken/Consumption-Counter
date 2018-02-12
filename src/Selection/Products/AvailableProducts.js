@@ -13,7 +13,7 @@ const getAvailableProducts = (products, member) =>
 
 const mapStateToProps = state => {
   return {
-    products: getAvailableProducts(state.products, state.selected_member),
+    products: getAvailableProducts(state.products, state.selectedMember),
   }
 }
 
