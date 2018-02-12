@@ -10,7 +10,6 @@ export function products(state = defaultProductsState, action) {
 }
 
 export function members(state = defaultMembersState, action) {
-  console.log("Getting members?")
   switch (action.type) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return action.members

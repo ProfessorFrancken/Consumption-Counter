@@ -4,8 +4,6 @@ import './Members.css'
 import LinkButton from './../../App/LinkButton'
 
 const cosmetics = (cosmetics) => {
-  console.log(cosmetics)
-
   const isPositive = (number) => Number.isInteger(number) && number > 0;
 
   const cosmeticSize = (isPositive(cosmetics.button.width) && isPositive(cosmetics.button.height))
