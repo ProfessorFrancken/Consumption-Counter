@@ -1,17 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LinkButton from './../../App/LinkButton'
 
 const Range = ({ range, onClick }) => (
-  <LinkButton
+  <button
     className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
     onClick={() => onClick(range)}
-    to="/members"
   >
   {range.surname_start}<br />
            -<br />
   {range.surname_end}<br />
-  </LinkButton>
+  </button>
 )
 
 const SurnameRanges = ({ ranges, selectRange }) => (
