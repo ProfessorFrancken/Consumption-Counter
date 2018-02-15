@@ -64,6 +64,39 @@ describe('selecing a member', () => {
       }
     ])
   })
+
+  it('should select a member from a range of members', () => {
+    const store = mockStore({ })
+    const member = {
+      id: 1,
+      firstName: 'John',
+      surname: 'Snow',
+      age: 18,
+      prominent: 0,
+
+      cosmetics: {
+        color: undefined,
+        image: undefined,
+        nickname: undefined,
+        button: {
+          width: undefined,
+          height: undefined
+        }
+      }
+    };
+
+    store.dispatch(actions.selectMember(member))
+
+
+    expect(store.getActions()).toEqual([
+      push('/products'),
+      {
+        type: TYPES.SELECT_MEMBER,
+        member
+      }
+    ])
+
+  })
 })
 
 describe('buying products', () => {

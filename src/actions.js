@@ -53,9 +53,12 @@ export function addProductToOrder(product) {
 }
 
 export function selectMember(member) {
-  return {
-    type: TYPES.SELECT_MEMBER,
-    member
+  return (dispatch) => {
+    dispatch(push('/products'))
+    dispatch({
+      type: TYPES.SELECT_MEMBER,
+      member
+    })
   }
 }
 
