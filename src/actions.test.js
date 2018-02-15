@@ -3,9 +3,12 @@ import thunk from 'redux-thunk'
 import { actions, TYPES } from './actions'
 import fetchMock from 'fetch-mock'
 import expect from 'expect' // You can use any testing library
+import { push } from "react-router-redux";
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
+
+const api = process.env.REACT_APP_API_SERVER;
 
 describe('Fetching initial data', () => {
   afterEach(() => {
@@ -15,8 +18,8 @@ describe('Fetching initial data', () => {
 
   it('Fetches members and products', (done) => {
     fetchMock
-      .mock('http://plus_one.dev/api/members', { body: { members: [] }, headers: { 'content-type': 'application/json' } })
-      .mock('http://plus_one.dev/api/products', { body: { products: [] }, headers: { 'content-type': 'application/json' } })
+      .mock(`${api}/members`, { body: { members: [] }, headers: { 'content-type': 'application/json' } })
+      .mock(`${api}/products`, { body: { products: [] }, headers: { 'content-type': 'application/json' } })
 
 
     const expectedActions = [

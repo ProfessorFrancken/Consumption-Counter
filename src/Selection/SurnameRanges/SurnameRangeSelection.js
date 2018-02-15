@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import SurnameRanges from './SurnameRanges'
+import { selectRangeOfSurnames } from './../../actions'
 
 const mapStateToProps = state => {
   return { ranges: state.surnameRanges.ranges }
@@ -8,17 +9,14 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
   return {
     selectRange: range => {
-      dispatch({
-        type: 'SELECT_SURNAME_RANGE',
-        range
-      })
+      dispatch(selectRangeOfSurnames(range))
     }
   }
 }
 
 const SurnameRangesSelection = connect(
   mapStateToProps,
-  /* mapDispatchToProps*/
+  mapDispatchToProps
 )(SurnameRanges)
 
 export default SurnameRangesSelection

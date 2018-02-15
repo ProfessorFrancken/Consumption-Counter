@@ -1,8 +1,10 @@
 import api from './api.js'
 import { orderBy, take } from 'lodash'
+import { push } from "react-router-redux";
 
 export const actions = {
   addProductToOrder,
+  selectRangeOfSurnames,
   selectMember,
 
   fetchInitialData,
@@ -11,6 +13,7 @@ export const actions = {
 export const TYPES = {
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
 
+  SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
   SELECT_MEMBER: 'SELECT_MEMBER',
 
   FETCH_MEMBERS_REQUEST: 'FETCH_MEMBERS_REQUEST',
@@ -20,6 +23,16 @@ export const TYPES = {
   FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
   FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
   FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE',
+}
+
+export function selectRangeOfSurnames(range) {
+  return (dispatch) => {
+    dispatch(push('/members'))
+    dispatch({
+      type: TYPES.SELECT_SURNAME_RANGE,
+      range
+    })
+  }
 }
 
 /**
