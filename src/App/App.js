@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import SurnameRanges from './../Selection/SurnameRanges/SurnameRangeSelection'
 import Members from './../Selection/Members/MemberSelection'
 import AvailableProducts from './../Selection/Products/AvailableProducts'
@@ -28,11 +28,10 @@ const Recent = () => (
   <h2>Recent</h2>
 )
 
-const App = ({ title }) => (
-  <div className="App">
-    <Header title={title} />
-    <div className="App-main">
+const AppContent = () => (
+  <div className="App-main">
       <div className="MainScreen h-100 py-3">
+        <Switch>
         <Route exact path="/prominent" component={Prominent} />
         <Route exact path="/statistics" component={Statistics} />
         <Route exact path="/committees" component={Committees} />
@@ -42,8 +41,15 @@ const App = ({ title }) => (
         <Route exact path="/products" component={AvailableProducts} />
         <Route exact path="/" component={SurnameRanges} />
         <Route exact path="/members" component={Members} />
+        </Switch>
       </div>
     </div>
+)
+
+const App = ({ title }) => (
+  <div className="App">
+    <Header title={title} />
+    <AppContent />
     <Footer />
   </div>
 )
