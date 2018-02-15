@@ -40,3 +40,39 @@ describe('Fetching initial data', () => {
          .catch((e) => done.fail(e))
   })
 })
+
+describe('fetching products', () => {
+  xit('maps products from an http request', () => {
+  })
+})
+
+describe('selecing a member', () => {
+  it('should first select a range of surnames', () => {
+    const store = mockStore({ })
+
+    store.dispatch(
+      actions.selectRangeOfSurnames(
+        { range: [], surname_start: 'A', surname_end: 'B'}
+      )
+    )
+
+    expect(store.getActions()).toEqual([
+      push('/members'),
+      {
+        type: TYPES.SELECT_SURNAME_RANGE,
+        range: { range: [], surname_start: 'A', surname_end: 'B'}
+      }
+    ])
+  })
+})
+
+describe('buying products', () => {
+
+  xit('making an order', () => {
+  })
+
+  xit('waits a few seconds before buying an order so that a member can cancel its order', () => {
+
+  })
+
+})
