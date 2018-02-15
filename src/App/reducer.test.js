@@ -1,4 +1,4 @@
-import { surnameRanges } from './reducer'
+import { surnameRanges, selectedMemberRange, selectedMember } from './reducer'
 import { TYPES } from './../actions'
 import expect from 'expect'
 import faker from 'faker'
@@ -47,4 +47,37 @@ describe('Surname selection reducer', () => {
         surname_start: 'D', surname_end: 'F' },
     ]})
   })
+})
+
+describe('selecting a member', () => {
+  describe('selecting a range of members', () => {
+    it('should not have selected any range by default', () => {
+      expect(selectedMemberRange(undefined, {})).toEqual({
+        members: []
+      })
+    })
+
+    it('selects a range of members', () => {
+      expect(selectedMemberRange(undefined, {
+        type: TYPES.SELECT_SURNAME_RANGE, range: { members: ['Mark']}
+      })).toEqual({
+        members: ['Mark']
+      })
+    })
+  })
+
+  describe('selecting a member', () => {
+    it('has no selected member by default', () => {
+      expect(selectedMember(undefined, {})).toEqual(null)
+    })
+
+    it('selects a member', () => {
+      expect(selectedMember(undefined, {
+        type: TYPES.SELECT_MEMBER, member: { name: 'mark' }
+      })).toEqual({ name: 'mark' })
+    })
+  })
+})
+
+describe('cancelling choices', () => {
 })

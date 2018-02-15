@@ -16,8 +16,6 @@ export function members(state = defaultMembersState, action) {
     default:
       return state
   }
-
-  return state;
 }
 
 const defaultRanges = {
@@ -51,23 +49,26 @@ export function surnameRanges(state = defaultRanges, action) {
 
 export function selectedMemberRange(state = { members: [] }, action) {
   switch (action.type) {
-    case 'SELECT_SURNAME_RANGE':
-      return {
-        members: action.range.members
-      }
+    case TYPES.SELECT_SURNAME_RANGE:
+      return { members: action.range.members }
     default:
       return state
   }
 }
 
 export function selectedMember(state, action) {
-  return {
-    id: 1,
-    fullName: 'Mark Redeman',
-    age: 19
+  switch (action.type) {
+      case TYPES.SELECT_MEMBER:
+        return action.member
+      default:
+        return null;
   }
 }
 
 export function title(state, action) {
   return "T.F.V. 'Professor Francken'"
+}
+
+export function screen(state, action) {
+
 }
