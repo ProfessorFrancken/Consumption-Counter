@@ -78,7 +78,7 @@ function fetchMembers() {
         cosmetics: {
           color: lid.kleur,
           image: lid.afbeelding,
-          nickname: lid.nickname,
+          nickname: lid.bijnaam,
           button: {
             width: lid.button_width,
             height: lid.button_height
