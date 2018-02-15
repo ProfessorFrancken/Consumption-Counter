@@ -5,20 +5,24 @@ import { Provider } from 'react-redux'
 import { mount } from 'enzyme'
 import App from './App';
 import configureMockStore from 'redux-mock-store'
+import { push } from "react-router-redux";
 
-function setup(additionalProps = {}, additionalState = {}) {
-  const props = { ...additionalProps }
+import AvailableProducts from './../Selection/Products/AvailableProducts'
 
-  const store = configureMockStore([])
+function setup(routes = ['/']) {
+  const props = {}
+
+  const mockStore = configureMockStore([])
+  const store = mockStore(mockedState())
   const app = mount(
-    <Provider store={store({ ...mockedState(), ...additionalState })}>
-      <MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={routes}>
         <App {...props}/>
       </MemoryRouter>
     </Provider>
   )
 
-  return {props, app}
+  return {props, app, store }
 }
 
 describe('rendering', () => {
@@ -34,6 +38,27 @@ describe('rendering', () => {
     const { app } = setup()
 
     expect(app.find('SurnameRanges').length).toBe(1)
+  })
+
+  describe('rendering screens depending on state', () => {
+    const screens = [
+      { path: '/', component: 'SurnameRanges' },
+      { path: '/prominent', component: 'Prominent' },
+      { path: '/statistics', component: 'Statistics' },
+      { path: '/committees', component: 'Committees' },
+      { path: '/pricelist', component: 'Pricelist' },
+      { path: '/recent', component: 'Recent' },
+      { path: '/products', component: AvailableProducts },
+      { path: '/members', component: 'Members' },
+    ]
+
+    screens.forEach((screen) => {
+      it(`renders ${screen.path}`, () => {
+        const { app } = setup([screen.path])
+
+        expect(app.find(screen.component).length).toBe(1)
+      })
+    })
   })
 })
 

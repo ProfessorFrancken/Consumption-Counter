@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchInitialData } from './../actions'
+import { withRouter } from 'react-router-dom'
 import App from './App'
 
 class AppContainer extends Component {
@@ -20,7 +21,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppContainer))
 
 // TODO add lifecycle stuff so that we can load initial data
 

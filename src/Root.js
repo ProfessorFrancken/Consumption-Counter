@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Router, Route } from 'react-router-dom'
 import AppContainer from './App/AppContainer'
+import { history } from './Setup/store'
 
 import './index.css'
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router>
-      <Route path="/:filter?" component={AppContainer} />
+    <Router history={history}>
+      <AppContainer />
     </Router>
   </Provider>
 )
