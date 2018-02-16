@@ -19,6 +19,10 @@ export const TYPES = {
   BUY_MORE: 'TOGGLE_BUY_MORE_PRODUCTS',
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
 
+  BUY_ORDER_REQUEST: 'BUY_ORDER_REQUEST',
+  BUY_ORDER_SUCCESS: 'BUY_ORDER_SUCCESS',
+  BUY_ORDER_FAILURE: 'BUY_ORDER_FAILURE',
+
   SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
   SELECT_MEMBER: 'SELECT_MEMBER',
 
@@ -48,13 +52,45 @@ export function selectRangeOfSurnames(range) {
  */
 export function addProductToOrder(product) {
   return (dispatch, getState) => {
-    const { selectedMember } = getState();
+    const { selectedMember, buyMore } = getState();
+
+    if (! buyMore) {
+      return dispatch(buySingleProduct(selectedMember, product))
+    } else {
+      dispatch({
+        type: TYPES.ADD_PRODUCT_TO_ORDER,
+        product,
+        member: selectedMember
+      })
+    }
+  }
+}
+
+function buySingleProduct(member, product) {
+  return buyOrder(member, { products: [product]})
+}
+export function buyOrder(member, order) {
+  return (dispatch) => {
 
     dispatch({
-      type: TYPES.ADD_PRODUCT_TO_ORDER,
-      product,
-      member: selectedMember
+      type: TYPES.BUY_ORDER_REQUEST,
+      member,
+      order
     })
+
+    return api.post('/orders', { member, order })
+       .then((response) => {
+         dispatch({
+           type: TYPES.BUY_ORDER_SUCCESS,
+           member,
+           order
+         })
+         dispatch(push('/'))
+       }).catch((ex) => dispatch({
+         type: TYPES.BUY_ORDER_FAILURE,
+         member,
+         order
+       }))
   }
 }
 

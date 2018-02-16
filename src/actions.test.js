@@ -120,7 +120,47 @@ describe('buying products', () => {
     expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE })
   })
 
-  xit('making an order', () => {
+  it('buys products', () => {
+    // TODO couple buy all button to ui
+  })
+
+  it('does not inmediadly buy an order when buying multiple products', () => {
+    // when a member is selected and we buy multiple products
+    const member = { id: 1 }
+    const store = mockStore({ selectedMember: member, buyMore: true })
+
+    // and when adding a product to order
+    const product = { id: 2 }
+    store.dispatch(actions.addProductToOrder(product))
+
+    // then we buy a product
+    expect(store.getActions()).toEqual([
+      { type: TYPES.ADD_PRODUCT_TO_ORDER, member, product },
+    ])
+  })
+
+  it('buys an order after adding 1 product to an order', (done) => {
+    // when a member is selected
+    // and we only buy one product
+    const member = { id: 1 }
+    const store = mockStore({ selectedMember: member, buyMore: false })
+
+    fetchMock
+      .mock(`${api}/orders`, { body: {}, headers: { 'content-type': 'application/json' } })
+
+    // and when adding a product to order
+    const product = { id: 2 }
+    store.dispatch(actions.addProductToOrder(product))
+         .then(() => {
+           // then we buy a product
+           expect(store.getActions()).toEqual([
+             { type: TYPES.BUY_ORDER_REQUEST, member, order: { products: [product] } },
+             { type: TYPES.BUY_ORDER_SUCCESS, member, order: { products: [product] } },
+             push('/'),
+           ])
+           done()
+         })
+         .catch((e) => done.fail(e))
   })
 
   xit('waits a few seconds before buying an order so that a member can cancel its order', () => {
