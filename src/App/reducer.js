@@ -24,8 +24,18 @@ const defaultRanges = {
 
   ]
 }
+
+const SETTINGS_TYPES = {
+  SET_MEMBERS_PER_RANGE: 'SET_MEMBERS_PER_RANGE'
+}
+
 export function surnameRanges(state = defaultRanges, action) {
   switch (action.type) {
+    case SETTINGS_TYPES.SET_MEMBERS_PER_RANGE:
+      return {
+        members_per_range: action.members_per_range,
+        ranges: state.ranges,
+      }
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return {
         members_per_range: state.members_per_range,
