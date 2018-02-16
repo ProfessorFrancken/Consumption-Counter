@@ -99,6 +99,21 @@ describe('selecing a member', () => {
   })
 })
 
+describe('cancelling', () => {
+  it('can cancel any selecion by going back', () => {
+    const store = mockStore({ })
+
+    store.dispatch(
+      actions.goBack()
+    )
+
+    expect(store.getActions()).toEqual([
+      push('/'),
+      { type: TYPES.GO_BACK }
+    ])
+  })
+})
+
 describe('buying products', () => {
 
   xit('making an order', () => {

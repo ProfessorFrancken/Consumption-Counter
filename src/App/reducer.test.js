@@ -76,6 +76,10 @@ describe('selecting a member', () => {
         type: TYPES.SELECT_MEMBER, member: { name: 'mark' }
       })).toEqual({ name: 'mark' })
     })
+
+    it('can cancel selecting a member', () => {
+      expect(selectedMember({ name: 'mark' }, { type: TYPES.GO_BACK })).toEqual(null)
+    })
   })
 })
 

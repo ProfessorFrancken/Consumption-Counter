@@ -51,22 +51,33 @@ export function selectedMemberRange(state = { members: [] }, action) {
   switch (action.type) {
     case TYPES.SELECT_SURNAME_RANGE:
       return { members: action.range.members }
+      case TYPES.GO_BACK:
+        return { members: [] };
     default:
       return state
   }
 }
 
-export function selectedMember(state, action) {
+export function selectedMember(state = null, action) {
   switch (action.type) {
       case TYPES.SELECT_MEMBER:
         return action.member
-      default:
+      case TYPES.GO_BACK:
         return null;
+      default:
+        return state;
   }
 }
 
-export function title(state, action) {
-  return "T.F.V. 'Professor Francken'"
+export function title(state = "T.F.V. 'Professor Francken'", action) {
+  switch (action.type) {
+      case TYPES.SELECT_MEMBER:
+        return `${action.member.firstName} ${action.member.surname}`
+      case TYPES.GO_BACK:
+        return "T.F.V. 'Professor Francken'";
+      default:
+        return state;
+  }
 }
 
 export function screen(state, action) {

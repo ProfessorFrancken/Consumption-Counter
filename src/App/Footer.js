@@ -2,17 +2,12 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import './Footer.css';
 import LinkButton from './LinkButton'
+import GoBack from './GoBack'
 
 // Add on click which shows settings menu
 const Status = () => (
   <div className="Footer-status">
     <strong>Status:</strong> <span className="text-success">connected</span>
-  </div>
-)
-
-const GoBack = () => (
-  <div className="Footer-go-back">
-    <LinkButton className="btn-lg btn-block" to="/">Go back</LinkButton>
   </div>
 )
 

@@ -3,6 +3,8 @@ import { orderBy, take } from 'lodash'
 import { push } from "react-router-redux";
 
 export const actions = {
+  goBack,
+
   addProductToOrder,
   selectRangeOfSurnames,
   selectMember,
@@ -11,6 +13,8 @@ export const actions = {
 }
 
 export const TYPES = {
+  GO_BACK: 'BO_BACK',
+
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
 
   SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
@@ -125,6 +129,13 @@ export function fetchInitialData() {
       dispatch(fetchMembers()),
       dispatch(fetchProducts())
     ])
+}
+
+export function goBack() {
+  return (dispatch) => {
+    dispatch(push('/'))
+    dispatch({ type: TYPES.GO_BACK })
+  }
 }
 
 export default actions;
