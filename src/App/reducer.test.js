@@ -1,4 +1,4 @@
-import { surnameRanges, selectedMemberRange, selectedMember } from './reducer'
+import { surnameRanges, selectedMemberRange, selectedMember, buyMore } from './reducer'
 import { TYPES } from './../actions'
 import expect from 'expect'
 import faker from 'faker'
@@ -84,4 +84,12 @@ describe('selecting a member', () => {
 })
 
 describe('cancelling choices', () => {
+})
+
+describe('buying products', () => {
+  it('is possible to buy more products', () => {
+    expect(buyMore(undefined, {})).toBe(false)
+    expect(buyMore(undefined, { type: TYPES.BUY_MORE })).toBe(true)
+    expect(buyMore(true, { type: TYPES.BUY_MORE })).toBe(false)
+  })
 })

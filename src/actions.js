@@ -4,6 +4,7 @@ import { push } from "react-router-redux";
 
 export const actions = {
   goBack,
+  buyMore,
 
   addProductToOrder,
   selectRangeOfSurnames,
@@ -15,6 +16,7 @@ export const actions = {
 export const TYPES = {
   GO_BACK: 'BO_BACK',
 
+  BUY_MORE: 'TOGGLE_BUY_MORE_PRODUCTS',
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
 
   SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
@@ -136,6 +138,10 @@ export function goBack() {
     dispatch(push('/'))
     dispatch({ type: TYPES.GO_BACK })
   }
+}
+
+export function buyMore() {
+  return { type: TYPES.BUY_MORE }
 }
 
 export default actions;

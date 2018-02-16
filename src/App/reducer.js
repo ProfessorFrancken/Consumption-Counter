@@ -80,6 +80,17 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
   }
 }
 
+export function buyMore(state = false, action) {
+  switch (action.type) {
+      case TYPES.BUY_MORE:
+         return ! state;
+      case TYPES.GO_BACK:
+        return false;
+      default:
+        return state;
+  }
+}
+
 export function screen(state, action) {
 
 }

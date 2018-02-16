@@ -116,6 +116,10 @@ describe('cancelling', () => {
 
 describe('buying products', () => {
 
+  it('is possible to toggle buying more products', () => {
+    expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE })
+  })
+
   xit('making an order', () => {
   })
 
