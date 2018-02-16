@@ -3,13 +3,7 @@ import { Route } from 'react-router-dom'
 import './Footer.css';
 import LinkButton from './LinkButton'
 import GoBack from './GoBack'
-
-// Add on click which shows settings menu
-const Status = () => (
-  <div className="Footer-status">
-    <strong>Status:</strong> <span className="text-success">connected</span>
-  </div>
-)
+import Status from './Status'
 
 const Footer = () => (
     <footer className="Footer">
