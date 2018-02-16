@@ -26,21 +26,29 @@ const cosmetics = (cosmetics) => {
   }
 }
 
-const Member = ({ member }) => (
-  <LinkButton
+const MemberName = ({ member }) => (
+  ( ! member.cosmetics.nickname )
+  ? <span>
+    {member.firstName}<br /> {member.surname}
+  </span>
+  : <span>{member.cosmetics.nickname}</span>
+)
+
+const Member = ({ member, onClick }) => (
+  <button
     key={member.id}
     className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
     to="/products"
     style={cosmetics(member.cosmetics)}
+    onClick={() => onClick(member)}
   >
-    {member.firstName}<br />
-    {member.surname}
-  </LinkButton>
+    <MemberName member={member} />
+  </button>
 )
 
-const Members = ({ members }) => (
+const Members = ({ members, selectMember }) => (
   <nav className="SelectionGrid">
-    {members.map((member) => <Member member={member} key={member.id} />)}
+    {members.map((member) => <Member member={member} key={member.id} onClick={selectMember}/>)}
   </nav>
 )
 
