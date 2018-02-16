@@ -61,6 +61,7 @@ export function selectedMemberRange(state = { members: [] }, action) {
   switch (action.type) {
     case TYPES.SELECT_SURNAME_RANGE:
       return { members: action.range.members }
+      case TYPES.BUY_ORDER_SUCCESS:
       case TYPES.GO_BACK:
         return { members: [] };
     default:
@@ -72,6 +73,7 @@ export function selectedMember(state = null, action) {
   switch (action.type) {
       case TYPES.SELECT_MEMBER:
         return action.member
+      case TYPES.BUY_ORDER_SUCCESS:
       case TYPES.GO_BACK:
         return null;
       default:
@@ -83,6 +85,7 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
   switch (action.type) {
       case TYPES.SELECT_MEMBER:
         return `${action.member.firstName} ${action.member.surname}`
+      case TYPES.BUY_ORDER_SUCCESS:
       case TYPES.GO_BACK:
         return "T.F.V. 'Professor Francken'";
       default:
@@ -94,6 +97,7 @@ export function buyMore(state = false, action) {
   switch (action.type) {
       case TYPES.BUY_MORE:
          return ! state;
+      case TYPES.BUY_ORDER_SUCCESS:
       case TYPES.GO_BACK:
         return false;
       default:
