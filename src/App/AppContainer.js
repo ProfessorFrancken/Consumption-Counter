@@ -14,7 +14,9 @@ class AppContainer extends Component {
   }
 }
 
-const mapStateToProps = state => state
+const mapStateToProps = state => {
+  return { title: state.title }
+}
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: () => dispatch(fetchInitialData())
