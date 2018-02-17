@@ -113,6 +113,29 @@ export function buyMore(state = false, action) {
   }
 }
 
+const defaultOrder = {
+  cancellable: false,
+  member: undefined,
+  products: []
+}
+export function order(state = defaultOrder, action) {
+  switch (action.type) {
+      case TYPES.ADD_PRODUCT_TO_ORDER:
+      return {
+        ...state,
+        products: [
+          ...state.products,
+          { ...action.product }
+        ]
+      }
+      case TYPES.SELECT_MEMBER:
+      case TYPES.BUY_ORDER_REQUEST:
+      case TYPES.BUY_ORDER_SUCCESS:
+      case TYPES.BUY_ORDER_FAILURE:
+      default: return state
+  }
+}
+
 const KEEP_TRACK_OF_N_TRANSCACTIONS = 10
 export function transactions(state = [], action) {
   switch (action.type) {

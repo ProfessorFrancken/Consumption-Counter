@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { buyMore } from './../../actions'
+import { buyMore, buyAll } from './../../actions'
 
-const BuyMore = ({ buyMore, toggle }) => (
+const BuyMore = ({ buyMore, selectedMultipleProducts, buyAll, toggle }) => (
   <div className="form-check">
     <input
       type="checkbox"
@@ -13,17 +13,22 @@ const BuyMore = ({ buyMore, toggle }) => (
     />
     <label className="form-check-label" htmlFor="i-want-more">
       I want more
-    </label>
+    </label> {selectedMultipleProducts
+     ? <button className="btn btn-lg btn-outline-light" onClick={buyAll}>Buy it all!</button> : null}
   </div>
 )
 
 const mapStateToProps = state => {
-  return { buyMore: state.buyMore }
+  return {
+    buyMore: state.buyMore,
+    selectedMultipleProducts: state.buyMore && state.order.products.length > 0
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggle: () => dispatch(buyMore())
+    toggle: () => dispatch(buyMore()),
+    buyAll: () => dispatch(buyAll())
   }
 };
 

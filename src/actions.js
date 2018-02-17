@@ -5,6 +5,7 @@ export const actions = {
   goBack,
   buyMore,
   buyOrder,
+  buyAll,
 
   addProductToOrder,
   selectRangeOfSurnames,
@@ -68,6 +69,14 @@ export function addProductToOrder(product) {
 
 function buySingleProduct(member, product) {
   return buyOrder(member, { products: [product]})
+}
+
+export function buyAll() {
+  return (dispatch, getState) => {
+    const { member, order } = getState()
+
+    dispatch(buyOrder(member, order))
+  }
 }
 
 export function buyOrder(member, order) {
