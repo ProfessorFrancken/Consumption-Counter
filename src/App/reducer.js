@@ -1,4 +1,3 @@
-import { products as defaultProductsState, members as defaultMembersState } from './default_data.js'
 import { TYPES } from './../actions'
 import { sortBy, groupBy, chunk, first, last, take } from 'lodash'
 
