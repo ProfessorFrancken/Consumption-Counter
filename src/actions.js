@@ -5,6 +5,7 @@ import { push } from "react-router-redux";
 export const actions = {
   goBack,
   buyMore,
+  buyOrder,
 
   addProductToOrder,
   selectRangeOfSurnames,
@@ -69,6 +70,7 @@ export function addProductToOrder(product) {
 function buySingleProduct(member, product) {
   return buyOrder(member, { products: [product]})
 }
+
 export function buyOrder(member, order) {
   return (dispatch) => {
 

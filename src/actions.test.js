@@ -116,12 +116,34 @@ describe('cancelling', () => {
 
 describe('buying products', () => {
 
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+
   it('is possible to toggle buying more products', () => {
     expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE })
   })
 
-  it('buys products', () => {
-    // TODO couple buy all button to ui
+  it('buys products', (done) => {
+    const store = mockStore({})
+    const member = { id: 1 }
+    const order = { products: []}
+
+    fetchMock
+      .mock(`${api}/orders`, { body: {}, headers: { 'content-type': 'application/json' } })
+    store.dispatch(actions.buyOrder(member, order))
+         .then(() => {
+           // then we buy a product
+           expect(store.getActions()).toEqual([
+             { type: TYPES.BUY_ORDER_REQUEST, member, order },
+             { type: TYPES.BUY_ORDER_SUCCESS, member, order },
+             push('/'),
+           ])
+           done()
+         })
+         .catch((e) => done.fail(e))
+
   })
 
   it('does not inmediadly buy an order when buying multiple products', () => {
