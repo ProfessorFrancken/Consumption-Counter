@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import { title, products, members, surnameRanges, selectedMemberRange, selectedMember, buyMore, transactions, order } from '../App/reducer.js'
+import { title, products, members, surnameRanges, selectedMemberRange, selectedMember, buyMore, transactions, order } from '../reducer.js'
 
 export default combineReducers({
     title,

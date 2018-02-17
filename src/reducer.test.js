@@ -1,5 +1,5 @@
 import { surnameRanges, selectedMemberRange, selectedMember, buyMore, transactions } from './reducer'
-import { TYPES } from './../actions'
+import { TYPES } from './actions'
 import expect from 'expect'
 import faker from 'faker'
 

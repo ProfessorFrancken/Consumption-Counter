@@ -1,4 +1,4 @@
-import { TYPES } from './../actions'
+import { TYPES } from './actions'
 import { sortBy, groupBy, chunk, first, last, take } from 'lodash'
 
 export function products(state = [], action) {
