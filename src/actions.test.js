@@ -42,8 +42,175 @@ describe('Fetching initial data', () => {
   })
 })
 
+describe('fetching members', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+  it('maps members from an http request', (done) => {
+    fetchMock
+      .mock(`${base_api}/members`, { body: { members: [
+          {
+            "id":314,
+            "voornaam":"John",
+            "initialen":"",
+            "tussenvoegsel":"",
+            "achternaam":"Snow",
+            "geboortedatum": "26-04-1993",
+            "prominent":null,
+            "kleur":null,
+            "afbeelding":null,
+            "bijnaam":null,
+            "button_width":null,
+            "button_height":null
+          },
+      ]}, headers: { 'content-type': 'application/json' } })
+
+
+    const expectedActions = [
+      { type: TYPES.FETCH_MEMBERS_REQUEST },
+      { type: TYPES.FETCH_MEMBERS_SUCCESS, members: [
+        {
+          id: 314,
+          age: 18,
+          firstName: "John",
+          surname: "Snow",
+          prominent: null,
+          cosmetics: {
+            color: null,
+            image: null,
+            nickname: null,
+            button: {
+              height: null,
+              width: null,
+            },
+          }
+        },
+      ]},
+    ]
+
+    const store = mockStore()
+
+    store.dispatch(actions.fetchMembers())
+         .then(() => {
+           expect(store.getActions()).toEqual(expectedActions)
+           done()
+         })
+         .catch((e) => done.fail(e))
+  })
+
+  it('it fails if the http request fails', (done) => {
+    fetchMock
+      .mock(
+        `${base_api}/members`,
+        { status: 400, headers: { 'content-type': 'application/json' }})
+
+    const expectedActions = [
+      { type: TYPES.FETCH_MEMBERS_REQUEST },
+      { type: TYPES.FETCH_MEMBERS_FAILURE },
+    ]
+
+    const store = mockStore()
+
+    store.dispatch(actions.fetchMembers())
+         .then(() => {
+           expect(store.getActions()).toEqual(expectedActions)
+           done()
+         })
+         .catch((e) => done.fail(e))
+  })
+
+  it("assumes a person is not allowed to buy beer if they don't have a birthday", () => {
+  })
+})
+
+
 describe('fetching products', () => {
-  xit('maps products from an http request', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+  it('maps products from an http request', (done) => {
+    fetchMock
+      .mock(`${base_api}/products`, { body: { products: [
+        {
+          "id":1,
+          "naam":"Grolsch",
+          "prijs":"0.6500",
+          "categorie":"Bier",
+          "positie":999,
+          "beschikbaar":1,
+          "afbeelding":"Uo6qQC4Hm8TUqyNjw2G4.jpg",
+          "splash_afbeelding":null,
+          "kleur":null
+        },
+        {
+          "id":2,
+          "naam":"Heineken",
+          "prijs":"0.6000",
+          "categorie":"Bier",
+          "positie":999,
+          "beschikbaar":0,
+          "afbeelding":"",
+          "splash_afbeelding":null,
+          "kleur":null
+        }
+      ] }, headers: { 'content-type': 'application/json' } })
+
+
+    const expectedActions = [
+      { type: TYPES.FETCH_PRODUCTS_REQUEST },
+      { type: TYPES.FETCH_PRODUCTS_SUCCESS, products: [
+        {
+          "age_restriction": 18,
+          "category": "Bier",
+          "id": 1,
+          "image": "Uo6qQC4Hm8TUqyNjw2G4.jpg",
+          "name": "Grolsch",
+          "position": 999,
+          "price": 65,
+        },
+        {
+          "age_restriction": 18,
+          "category": "Bier",
+          "id": 2,
+          "image": "",
+          "name": "Heineken",
+          "position": 999,
+          "price": 60,
+        },
+      ]},
+    ]
+
+    const store = mockStore()
+
+    store.dispatch(actions.fetchProducts())
+         .then(() => {
+           expect(store.getActions()).toEqual(expectedActions)
+           done()
+         })
+         .catch((e) => done.fail(e))
+  })
+
+  it('it fails if the http request fails', (done) => {
+    fetchMock
+      .mock(
+        `${base_api}/products`,
+        { status: 400, headers: { 'content-type': 'application/json' }})
+
+    const expectedActions = [
+      { type: TYPES.FETCH_PRODUCTS_REQUEST },
+      { type: TYPES.FETCH_PRODUCTS_FAILURE },
+    ]
+
+    const store = mockStore()
+
+    store.dispatch(actions.fetchProducts())
+         .then(() => {
+           expect(store.getActions()).toEqual(expectedActions)
+           done()
+         })
+         .catch((e) => done.fail(e))
   })
 })
 

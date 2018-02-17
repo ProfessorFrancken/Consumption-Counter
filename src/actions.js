@@ -12,6 +12,8 @@ export const actions = {
   selectMember,
 
   fetchInitialData,
+  fetchMembers,
+  fetchProducts,
 }
 
 export const TYPES = {
@@ -113,7 +115,7 @@ export function selectMember(member) {
   }
 }
 
-function fetchMembers() {
+export function fetchMembers() {
   return (dispatch, getState, api) => {
     dispatch({
       type: TYPES.FETCH_MEMBERS_REQUEST
@@ -149,12 +151,12 @@ function fetchMembers() {
            (member) => member.surname
          )
        })).catch((ex) => dispatch({
-         type: TYPES.FETCH_MEMBERS_FAILUREa
+         type: TYPES.FETCH_MEMBERS_FAILURE
        }))
   }
 }
 
-function fetchProducts() {
+export function fetchProducts() {
   return (dispatch, getState, api) => {
     dispatch({
       type: TYPES.FETCH_PRODUCTS_REQUEST
