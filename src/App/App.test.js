@@ -46,7 +46,7 @@ describe('rendering', () => {
       { path: '/prominent', component: 'Prominent' },
       { path: '/statistics', component: 'Statistics' },
       { path: '/committees', component: 'Committees' },
-      { path: '/pricelist', component: 'Pricelist' },
+      { path: '/pricelist', component: 'PriceList' },
       { path: '/recent', component: 'Recent' },
       { path: '/products', component: AvailableProducts },
       { path: '/members', component: 'Members' },
@@ -127,7 +127,7 @@ function mockedState() {
         {
           id: 3,
           name: "Hertog Jan",
-          price: "0.6800",
+          price: 68,
           position: 1,
           category: "Bier",
           image: "wCwnyLXTVdPEnKRXjw9I.png",
@@ -138,7 +138,7 @@ function mockedState() {
         {
           id: 27,
           name: "Ice Tea",
-          price: "0.6000",
+          price: 60,
           position: 999,
           category: "Fris",
           image: "",
@@ -149,7 +149,7 @@ function mockedState() {
         {
           id: 243,
           name: "Kinder Bueno",
-          price: "0.5500",
+          price: 55,
           position: 999,
           category: "Eten",
           image: "utnCWM87tZclyENVrG03.jpg",

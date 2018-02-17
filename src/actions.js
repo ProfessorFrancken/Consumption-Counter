@@ -154,7 +154,7 @@ function fetchProducts() {
     const mapProducts = (product) => {
       return {
         id: product.id,
-        name: product.name,
+        name: product.naam,
 
         // Note we parse the price and then convert it to fulll cents
         price: 100 * parseFloat(product.prijs),

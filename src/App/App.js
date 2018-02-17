@@ -8,6 +8,7 @@ import AvailableProducts from './../Selection/Products/AvailableProducts'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Transactions from './Transactions/'
+import PriceList from './PriceList/'
 
 const Prominent = () => (
   <h2>Prominent</h2>
@@ -15,10 +16,6 @@ const Prominent = () => (
 
 const Committees = () => (
   <h2>Committees</h2>
-)
-
-const Pricelist = () => (
-  <h2>Pricelist</h2>
 )
 
 const Statistics = () => (
@@ -39,7 +36,7 @@ const AppContent = () => (
         <Route exact path="/prominent" component={Prominent} />
         <Route exact path="/statistics" component={Statistics} />
         <Route exact path="/committees" component={Committees} />
-        <Route exact path="/pricelist" component={Pricelist} />
+        <Route exact path="/pricelist" component={PriceList} />
         <Route exact path="/recent" component={Recent} />
 
         <Route exact path="/products" component={AvailableProducts} />

@@ -26,9 +26,9 @@ const Category = ({ category, onClick }) => (
 )
 
 const Products = ({ products, addProductToOrder }) => {
-  const beer = products['Bier'];
-  const drinks = products['Fris'];
-  const food = products['Eten'];
+  const beer = products['Bier'] || [];
+  const drinks = products['Fris'] || [];
+  const food = products['Eten'] || [];
 
   return (
     <div className="h-100 d-flex flex-row">
