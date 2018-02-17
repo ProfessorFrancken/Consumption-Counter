@@ -1,15 +1,20 @@
 import { products as defaultProductsState, members as defaultMembersState } from './default_data.js'
 import { TYPES } from './../actions'
-import { chunk, first, last, take } from 'lodash'
+import { sortBy, groupBy, chunk, first, last, take } from 'lodash'
 
-export function products(state = defaultProductsState, action) {
+export function products(state = [], action) {
   switch (action.type) {
+      case TYPES.FETCH_PRODUCTS_SUCCESS:
+      return groupBy(
+        sortBy(action.products, (product) => product.position),
+        (product) => product.category
+      )
       default:
           return state;
   }
 }
 
-export function members(state = defaultMembersState, action) {
+export function members(state = [], action) {
   switch (action.type) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return action.members

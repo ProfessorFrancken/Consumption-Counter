@@ -151,10 +151,24 @@ function fetchProducts() {
       type: TYPES.FETCH_PRODUCTS_REQUEST
     })
 
+    const mapProducts = (product) => {
+      return {
+        id: product.id,
+        name: product.name,
+
+        // Note we parse the price and then convert it to fulll cents
+        price: 100 * parseFloat(product.prijs),
+        position: product.positie,
+        category: product.categorie,
+        image: product.afbeelding,
+        age_restriction: (product.categorie == "Bier" ? 18 : null)
+      }
+    }
+
     return api.get('/products')
        .then((response) => dispatch({
          type: TYPES.FETCH_PRODUCTS_SUCCESS,
-         products: response.products
+         products: response.products.map(mapProducts)
        }))
        .catch((ex) => dispatch({
          type: TYPES.FETCH_PRODUCTS_FAILURE
