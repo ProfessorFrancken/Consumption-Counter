@@ -1,4 +1,4 @@
-import { surnameRanges, selectedMemberRange, selectedMember, buyMore } from './reducer'
+import { surnameRanges, selectedMemberRange, selectedMember, buyMore, transactions } from './reducer'
 import { TYPES } from './../actions'
 import expect from 'expect'
 import faker from 'faker'
@@ -91,5 +91,65 @@ describe('buying products', () => {
     expect(buyMore(undefined, {})).toBe(false)
     expect(buyMore(undefined, { type: TYPES.BUY_MORE })).toBe(true)
     expect(buyMore(true, { type: TYPES.BUY_MORE })).toBe(false)
+  })
+
+})
+
+describe('keeping track of the latest transactions' , () => {
+  it('has no transactions by default', () => {
+    expect(transactions(undefined, {})).toEqual([]);
+  })
+
+  it('saves a transaction', () => {
+    expect(transactions(undefined, {
+      type: TYPES.BUY_ORDER_SUCCESS,
+      member: { id: 1 },
+      order: { id: 2 },
+    })).toEqual([
+      { member: { id: 1 }, order: { id: 2 } }
+    ]);
+  })
+
+  it('saves additional transactions', () => {
+    expect(
+      transactions(
+        [{ member: { id: 1 }, order: { id: 2 } }],
+        { type: TYPES.BUY_ORDER_SUCCESS, member: { id: 3 }, order: { id: 4 },}
+      )
+    ).toEqual([
+      { member: { id: 3 }, order: { id: 4 } },
+      { member: { id: 1 }, order: { id: 2 } },
+    ]);
+  })
+
+  it('only keeps track of the latest 10 transactions', () => {
+    expect(
+      transactions(
+        [
+          { member: { id: 9 }, order: { id: 2 } },
+          { member: { id: 8 }, order: { id: 2 } },
+          { member: { id: 7 }, order: { id: 2 } },
+          { member: { id: 6 }, order: { id: 2 } },
+          { member: { id: 5 }, order: { id: 2 } },
+          { member: { id: 4 }, order: { id: 2 } },
+          { member: { id: 3 }, order: { id: 2 } },
+          { member: { id: 2 }, order: { id: 2 } },
+          { member: { id: 1 }, order: { id: 2 } },
+          { member: { id: 0 }, order: { id: 2 } },
+        ],
+        { type: TYPES.BUY_ORDER_SUCCESS, member: { id: 33 }, order: { id: 33 },}
+      )
+    ).toEqual([
+          { member: { id: 33 }, order: { id: 33 } },
+          { member: { id: 9 }, order: { id: 2 } },
+          { member: { id: 8 }, order: { id: 2 } },
+          { member: { id: 7 }, order: { id: 2 } },
+          { member: { id: 6 }, order: { id: 2 } },
+          { member: { id: 5 }, order: { id: 2 } },
+          { member: { id: 4 }, order: { id: 2 } },
+          { member: { id: 3 }, order: { id: 2 } },
+          { member: { id: 2 }, order: { id: 2 } },
+          { member: { id: 1 }, order: { id: 2 } },
+    ]);
   })
 })

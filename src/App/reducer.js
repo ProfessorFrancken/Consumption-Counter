@@ -1,6 +1,6 @@
 import { products as defaultProductsState, members as defaultMembersState } from './default_data.js'
 import { TYPES } from './../actions'
-import { chunk, first, last } from 'lodash'
+import { chunk, first, last, take } from 'lodash'
 
 export function products(state = defaultProductsState, action) {
   switch (action.type) {
@@ -104,6 +104,19 @@ export function buyMore(state = false, action) {
       case TYPES.BUY_ORDER_FAILURE:
       case TYPES.GO_BACK:
         return false;
+      default:
+        return state;
+  }
+}
+
+const KEEP_TRACK_OF_N_TRANSCACTIONS = 10
+export function transactions(state = [], action) {
+  switch (action.type) {
+      case TYPES.BUY_ORDER_SUCCESS:
+      return take([
+        { member: action.member, order: action.order },
+        ...state,
+      ], KEEP_TRACK_OF_N_TRANSCACTIONS);
       default:
         return state;
   }
