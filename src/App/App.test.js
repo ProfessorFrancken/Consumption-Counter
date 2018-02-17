@@ -159,6 +159,7 @@ function mockedState() {
     },
     router: {
       locationBeforeTransitions: null
-    }
+    },
+    transactions: [],
   }
 }

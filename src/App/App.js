@@ -7,6 +7,7 @@ import Members from './../Selection/Members/MemberSelection'
 import AvailableProducts from './../Selection/Products/AvailableProducts'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Transactions from './Transactions'
 
 const Prominent = () => (
   <h2>Prominent</h2>
@@ -21,7 +22,10 @@ const Pricelist = () => (
 )
 
 const Statistics = () => (
-  <h2>Statistics</h2>
+  <div>
+    <h2>Statistics</h2>
+    <Transactions />
+  </div>
 )
 
 const Recent = () => (
