@@ -19,7 +19,7 @@ const cosmetics = (cosmetics) => {
     backgroundImage: cosmetics.image
                      ? `url(https:/old.professorfrancken.nl/database/streep/afbeeldingen/${cosmetics.image})`
                      : undefined,
-    backgroundSize: "contain",
+    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "50% 50%",
     ...cosmeticSize
