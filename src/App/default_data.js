@@ -10,7 +10,8 @@ export const products = groupBy(
       return {
         id: product.id,
         name: product.naam,
-        price: product.prijs,
+        // Note we parse the price and then convert it to fulll cents
+        price: 100 * parseFloat(product.prijs),
         position: product.positie,
         category: product.categorie,
         image: product.afbeelding,
