@@ -68,7 +68,7 @@ describe('selecting a member', () => {
 
   describe('selecting a member', () => {
     it('has no selected member by default', () => {
-      expect(selectedMember(undefined, {})).toEqual(null)
+      expect(selectedMember(undefined, {})).toEqual({ age: 0 })
     })
 
     it('selects a member', () => {
@@ -78,7 +78,7 @@ describe('selecting a member', () => {
     })
 
     it('can cancel selecting a member', () => {
-      expect(selectedMember({ name: 'mark' }, { type: TYPES.GO_BACK })).toEqual(null)
+      expect(selectedMember({ name: 'mark' }, { type: TYPES.GO_BACK })).toEqual({ age: 0 })
     })
   })
 })

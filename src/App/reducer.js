@@ -70,14 +70,14 @@ export function selectedMemberRange(state = { members: [] }, action) {
   }
 }
 
-export function selectedMember(state = null, action) {
+export function selectedMember(state = { age: 0 }, action) {
   switch (action.type) {
       case TYPES.SELECT_MEMBER:
         return action.member
       case TYPES.BUY_ORDER_SUCCESS:
       case TYPES.BUY_ORDER_FAILURE:
       case TYPES.GO_BACK:
-        return null;
+        return { age: 0 };
       default:
         return state;
   }
