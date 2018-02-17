@@ -2,7 +2,7 @@ import React from 'react';
 import LinkButton from './LinkButton'
 import './Header.css';
 import { Route, Switch } from 'react-router-dom'
-import BuyMore from './Products/BuyMore'
+import BuyMore from './Products/BuyMoreContainer'
 
 // The title of the header can be set when a member chooses a product
 // Note if recently an order was made, show a cancel button instead
