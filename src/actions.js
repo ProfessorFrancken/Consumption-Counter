@@ -1,4 +1,3 @@
-import api from './api.js'
 import { orderBy, take } from 'lodash'
 import { push } from "react-router-redux";
 
@@ -72,7 +71,7 @@ function buySingleProduct(member, product) {
 }
 
 export function buyOrder(member, order) {
-  return (dispatch) => {
+  return (dispatch, getState, api) => {
 
     dispatch({
       type: TYPES.BUY_ORDER_REQUEST,
@@ -87,12 +86,11 @@ export function buyOrder(member, order) {
            member,
            order
          })
-         dispatch(push('/'))
        }).catch((ex) => dispatch({
          type: TYPES.BUY_ORDER_FAILURE,
          member,
          order
-       }))
+       })).then(() => dispatch(push('/')))
   }
 }
 
@@ -107,7 +105,7 @@ export function selectMember(member) {
 }
 
 function fetchMembers() {
-  return (dispatch) => {
+  return (dispatch, getState, api) => {
     dispatch({
       type: TYPES.FETCH_MEMBERS_REQUEST
     })
@@ -148,7 +146,7 @@ function fetchMembers() {
 }
 
 function fetchProducts() {
-  return (dispatch) => {
+  return (dispatch, getState, api) => {
     dispatch({
       type: TYPES.FETCH_PRODUCTS_REQUEST
     })

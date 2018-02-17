@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import createHistory from "history/createBrowserHistory";
 import rootReducer from "./reducers";
 import { loadState, saveState } from './loadState'
+import api from './../api'
 
 export const history = createHistory();
 
@@ -17,7 +18,11 @@ if (process.env.NODE_ENV === "development") {
     }
 }
 
-const middleware = [thunk, routerMiddleware(history)];
+const middleware = [
+  thunk.withExtraArgument(api),
+  routerMiddleware(history)
+];
+
 const composedEnhancers = compose(applyMiddleware(...middleware), ...enhancers);
 
 const persistedState = loadState();

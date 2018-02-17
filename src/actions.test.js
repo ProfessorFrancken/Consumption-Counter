@@ -4,11 +4,12 @@ import { actions, TYPES } from './actions'
 import fetchMock from 'fetch-mock'
 import expect from 'expect' // You can use any testing library
 import { push } from "react-router-redux";
+import api from './api'
 
-const middlewares = [thunk]
+const middlewares = [thunk.withExtraArgument(api)]
 const mockStore = configureMockStore(middlewares)
 
-const api = process.env.REACT_APP_API_SERVER;
+const base_api = process.env.REACT_APP_API_SERVER;
 
 describe('Fetching initial data', () => {
   afterEach(() => {
@@ -18,8 +19,8 @@ describe('Fetching initial data', () => {
 
   it('Fetches members and products', (done) => {
     fetchMock
-      .mock(`${api}/members`, { body: { members: [] }, headers: { 'content-type': 'application/json' } })
-      .mock(`${api}/products`, { body: { products: [] }, headers: { 'content-type': 'application/json' } })
+      .mock(`${base_api}/members`, { body: { members: [] }, headers: { 'content-type': 'application/json' } })
+      .mock(`${base_api}/products`, { body: { products: [] }, headers: { 'content-type': 'application/json' } })
 
 
     const expectedActions = [
@@ -115,7 +116,6 @@ describe('cancelling', () => {
 })
 
 describe('buying products', () => {
-
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
@@ -131,7 +131,7 @@ describe('buying products', () => {
     const order = { products: []}
 
     fetchMock
-      .mock(`${api}/orders`, { body: {}, headers: { 'content-type': 'application/json' } })
+      .mock(`${base_api}/orders`, { body: {}, headers: { 'content-type': 'application/json' } })
     store.dispatch(actions.buyOrder(member, order))
          .then(() => {
            // then we buy a product
@@ -168,7 +168,7 @@ describe('buying products', () => {
     const store = mockStore({ selectedMember: member, buyMore: false })
 
     fetchMock
-      .mock(`${api}/orders`, { body: {}, headers: { 'content-type': 'application/json' } })
+      .mock(`${base_api}/orders`, { body: {}, headers: { 'content-type': 'application/json' } })
 
     // and when adding a product to order
     const product = { id: 2 }
