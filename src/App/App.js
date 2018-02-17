@@ -2,9 +2,9 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { Route, Switch } from 'react-router-dom'
-import SurnameRanges from './../Selection/SurnameRanges/SurnameRangeSelection'
-import Members from './../Selection/Members/MemberSelection'
-import AvailableProducts from './../Selection/Products/AvailableProducts'
+import SurnameRanges from './/SurnameRanges/SurnameRangeSelection'
+import Members from './/Members/MemberSelection'
+import AvailableProducts from './/Products/AvailableProducts'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Transactions from './Transactions/'

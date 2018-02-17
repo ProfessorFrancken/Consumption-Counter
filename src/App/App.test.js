@@ -7,7 +7,7 @@ import App from './App';
 import configureMockStore from 'redux-mock-store'
 import { push } from "react-router-redux";
 
-import AvailableProducts from './../Selection/Products/AvailableProducts'
+import AvailableProducts from './/Products/AvailableProducts'
 
 function setup(routes = ['/']) {
   const props = {}
