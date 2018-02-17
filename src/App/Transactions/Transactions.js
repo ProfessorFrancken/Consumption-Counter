@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Price from './Price'
 
 const Transaction = ({ member, order }) => (
@@ -26,5 +27,23 @@ const Transactions = ({ transactions }) => (
     )}
   </ol>
 )
+
+const TransactionPropType = PropTypes.shape({
+  member: PropTypes.shape({}).isRequired,
+  order: PropTypes.shape({
+    products: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+      })
+    )
+  }).isRequired,
+});
+
+Transactions.propTypes = {
+  transactions: PropTypes.arrayOf(
+    TransactionPropType.isRequired
+  ).isRequired,
+}
 
 export default Transactions
