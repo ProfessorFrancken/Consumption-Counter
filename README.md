@@ -1,4 +1,17 @@
-# Mark System
+# On routing
+
+Note that currently the routing system does not work nicely when our state is missing.
+We probably want to redirect users.
+Additionally we could add better routes that include the selected member, range etc.
+
+TODO: add test that check if user is redirected
+
+# Plus One System
+
+Make the text of buttons be dependent on the viewport height
+
+Make sure that api endpoints give the correct format
+
 
 ```
 Surname range selection
@@ -29,6 +42,8 @@ Don't show Gasten in member selection
 Authenticate Line Mark
 
 Member birthday
+
+ScreenSaver
 ```
 
 # Create React App
