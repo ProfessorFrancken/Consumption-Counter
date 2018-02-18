@@ -1,4 +1,4 @@
-import { orderBy, take } from 'lodash'
+import { orderBy, take, pick } from 'lodash'
 import { push } from "react-router-redux";
 
 export const actions = {
@@ -90,18 +90,22 @@ export function buyOrder(member, order) {
       order
     })
 
-    return api.post('/orders', { member, order })
-       .then((response) => {
-         dispatch({
-           type: TYPES.BUY_ORDER_SUCCESS,
-           member,
-           order
-         })
-       }).catch((ex) => dispatch({
-         type: TYPES.BUY_ORDER_FAILURE,
-         member,
-         order
-       })).then(() => dispatch(push('/')))
+    return api.post('/orders', {
+      member: pick(member, ['id', 'firstName', 'surname']),
+      order: {
+        products: order.products.map((product) => pick(product, ['id', 'name', 'price']))
+      }
+    }).then((response) => {
+      dispatch({
+        type: TYPES.BUY_ORDER_SUCCESS,
+        member,
+        order
+      })
+    }).catch((ex) => dispatch({
+      type: TYPES.BUY_ORDER_FAILURE,
+      member,
+      order
+    })).then(() => dispatch(push('/')))
   }
 }
 

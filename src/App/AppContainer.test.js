@@ -207,9 +207,6 @@ const mocks = {
         id: 314,
         firstName: "John",
         surname: "Snow",
-        age: 18,
-        prominent: null,
-        cosmetics: {color: null, image: null, nickname: null, button: {width: null, height: null}}
       },
       order: {
         products: [
@@ -217,10 +214,6 @@ const mocks = {
             id: 1,
             name: "Hertog Jan",
             price: 65,
-            position: 999,
-            category: "Bier",
-            image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-            age_restriction: 18
           }
         ]
       }
@@ -230,9 +223,6 @@ const mocks = {
         id: 314,
         firstName: "John",
         surname: "Snow",
-        age: 18,
-        prominent: null,
-        cosmetics: {color: null, image: null, nickname: null, button: {width: null, height: null}}
       },
       order: {
         products: [
@@ -240,28 +230,16 @@ const mocks = {
             id: 1,
             name: "Hertog Jan",
             price: 65,
-            position: 999,
-            category: "Bier",
-            image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-            age_restriction: 18
           },
           {
             id: 1,
             name: "Hertog Jan",
             price: 65,
-            position: 999,
-            category: "Bier",
-            image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-            age_restriction: 18
           },
           {
             id: 1,
             name: "Hertog Jan",
             price: 65,
-            position: 999,
-            category: "Bier",
-            image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-            age_restriction: 18
           }
         ]
       }
