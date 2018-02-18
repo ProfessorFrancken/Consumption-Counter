@@ -31,12 +31,6 @@ const prominent = state => {
     return [...members, ...board.map(member => member.member.id)];
   }, []);
 
-  console.log('Board members', boardMembersId);
-
-  console.log(
-    state.members.map(member => member.prominent).filter(p => p !== null)
-  );
-
   const prominent = take(
     sortBy(
       state.members.filter(member => member.prominent !== null),
