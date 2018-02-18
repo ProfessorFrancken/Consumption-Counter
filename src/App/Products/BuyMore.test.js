@@ -37,8 +37,8 @@ it('does not show a buy all button if no products were selected', () => {
   const mockStore = configureMockStore();
 
   const store = mockStore({
-    buyMore: true,
     order: {
+      buyMore: true,
       products: []
     }
   });
@@ -51,8 +51,8 @@ it('shows a button if multiple products were added to an order', () => {
   const mockStore = configureMockStore();
 
   const store = mockStore({
-    buyMore: true,
     order: {
+      buyMore: true,
       products: [{ id: 1 }]
     }
   });

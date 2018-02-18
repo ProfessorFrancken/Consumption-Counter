@@ -1,7 +1,6 @@
 import {
   surnameRanges,
   selectedMemberRange,
-  buyMore,
   order,
   transactions
 } from './reducer';
@@ -122,9 +121,11 @@ describe('cancelling choices', () => {});
 
 describe('buying products', () => {
   it('is possible to buy more products', () => {
-    expect(buyMore(undefined, {})).toBe(false);
-    expect(buyMore(undefined, { type: TYPES.BUY_MORE })).toBe(true);
-    expect(buyMore(true, { type: TYPES.BUY_MORE })).toBe(false);
+    expect(order(undefined, {}).buyMore).toBe(false);
+    expect(order(undefined, { type: TYPES.BUY_MORE }).buyMore).toBe(true);
+    expect(order({ buyMore: true }, { type: TYPES.BUY_MORE }).buyMore).toBe(
+      false
+    );
   });
 });
 

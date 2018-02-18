@@ -55,9 +55,9 @@ export function selectRangeOfSurnames(range) {
  */
 export function addProductToOrder(product) {
   return (dispatch, getState) => {
-    const { order, buyMore } = getState();
+    const { order } = getState();
 
-    if (!buyMore) {
+    if (!order.buyMore) {
       return dispatch(buySingleProduct(order.member, product));
     } else {
       dispatch({

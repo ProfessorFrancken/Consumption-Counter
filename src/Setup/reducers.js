@@ -6,7 +6,6 @@ import {
   members,
   surnameRanges,
   selectedMemberRange,
-  buyMore,
   transactions,
   order
 } from '../reducer.js';
@@ -17,7 +16,6 @@ export default combineReducers({
   surnameRanges,
   selectedMemberRange,
   products,
-  buyMore,
   transactions,
   order,
   router: routerReducer

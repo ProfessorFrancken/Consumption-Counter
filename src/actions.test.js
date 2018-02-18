@@ -333,7 +333,7 @@ describe('buying products', () => {
   it('does not inmediadly buy an order when buying multiple products', () => {
     // when a member is selected and we buy multiple products
     const member = { id: 1 };
-    const store = mockStore({ order: { member }, buyMore: true });
+    const store = mockStore({ order: { buyMore: true, member } });
 
     // and when adding a product to order
     const product = { id: 2 };
@@ -349,7 +349,7 @@ describe('buying products', () => {
     // when a member is selected
     // and we only buy one product
     const member = { id: 1 };
-    const store = mockStore({ order: { member }, buyMore: false });
+    const store = mockStore({ order: { buyMore: false, member } });
 
     fetchMock.mock(`${base_api}/orders`, {
       body: {},

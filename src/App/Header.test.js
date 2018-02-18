@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { MemoryRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import Header from './Header';
-import { mount } from 'enzyme'
-import configureMockStore from 'redux-mock-store'
+import { mount } from 'enzyme';
+import configureMockStore from 'redux-mock-store';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -18,14 +18,15 @@ it('renders without crashing', () => {
 });
 
 it('renders a buy more button when visiting the products page', () => {
-  const mockStore = configureMockStore([])
-  const store = mockStore()
+  const mockStore = configureMockStore([]);
+  const store = mockStore({ order: { buyMore: false } });
   const header = mount(
     <Provider store={store}>
       <MemoryRouter initialEntries={['/products']}>
         <Header />
       </MemoryRouter>
-    </Provider>)
+    </Provider>
+  );
 
-  expect(header.find('BuyMore').length).toBe(1)
-})
+  expect(header.find('BuyMore').length).toBe(1);
+});

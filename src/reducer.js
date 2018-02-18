@@ -82,26 +82,16 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
   }
 }
 
-export function buyMore(state = false, action) {
-  switch (action.type) {
-    case TYPES.BUY_MORE:
-      return !state;
-    case TYPES.BUY_ORDER_SUCCESS:
-    case TYPES.BUY_ORDER_FAILURE:
-    case TYPES.GO_BACK:
-      return false;
-    default:
-      return state;
-  }
-}
-
 const defaultOrder = {
+  buyMore: false,
   cancellable: false,
   member: { age: 0 },
   products: []
 };
 export function order(state = defaultOrder, action) {
   switch (action.type) {
+    case TYPES.BUY_MORE:
+      return { ...state, buyMore: !state.buyMore };
     case TYPES.SELECT_MEMBER:
       return { ...state, member: action.member };
     case TYPES.ADD_PRODUCT_TO_ORDER:
