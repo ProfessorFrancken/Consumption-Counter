@@ -8,7 +8,7 @@ const Range = ({ range, onClick }) => (
   >
   {range.surname_start}<br />
            -<br />
-  {range.surname_end}<br />
+  {range.surname_end}
   </button>
 )
 
