@@ -134,7 +134,130 @@ describe('fetching members', () => {
       .catch(e => done.fail(e));
   });
 
-  it("assumes a person is not allowed to buy beer if they don't have a birthday", () => {});
+  xit("assumes a person is not allowed to buy beer if they don't have a birthday", () => {});
+});
+
+describe('fetching board members', () => {
+  afterEach(() => {
+    fetchMock.reset();
+    fetchMock.restore();
+  });
+  it('maps board members from an http request', done => {
+    fetchMock.mock(`${base_api}/boards`, {
+      body: { boardMembers: [{ lid_id: 314, jaar: 2018, functie: 'King' }] },
+      headers: { 'content-type': 'application/json' }
+    });
+
+    const expectedActions = [
+      { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
+      {
+        type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS,
+        boardMembers: [{ member_id: 314, year: 2018, function: 'King' }]
+      }
+    ];
+
+    const store = mockStore();
+
+    store
+      .dispatch(actions.fetchBoardMembers())
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      })
+      .catch(e => done.fail(e));
+  });
+
+  it('it fails if the http request fails', done => {
+    fetchMock.mock(`${base_api}/boards`, {
+      status: 400,
+      headers: { 'content-type': 'application/json' }
+    });
+
+    const expectedActions = [
+      { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
+      { type: TYPES.FETCH_BOARD_MEMBERS_FAILURE }
+    ];
+
+    const store = mockStore();
+
+    store
+      .dispatch(actions.fetchBoardMembers())
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      })
+      .catch(e => done.fail(e));
+  });
+});
+
+describe('fetching committee members', () => {
+  afterEach(() => {
+    fetchMock.reset();
+    fetchMock.restore();
+  });
+  it('maps committee members from an http request', done => {
+    fetchMock.mock(`${base_api}/committees`, {
+      body: {
+        committees: [
+          {
+            lid_id: 314,
+            jaar: 2018,
+            functie: 'King',
+            naam: "Night's watch",
+            commissie_id: 1
+          }
+        ]
+      },
+      headers: { 'content-type': 'application/json' }
+    });
+
+    const expectedActions = [
+      { type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST },
+      {
+        type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS,
+        committees: [
+          {
+            member_id: 314,
+            year: 2018,
+            function: 'King',
+            committee: { id: 1, name: "Night's watch" }
+          }
+        ]
+      }
+    ];
+
+    const store = mockStore();
+
+    store
+      .dispatch(actions.fetchCommitteeMembers())
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      })
+      .catch(e => done.fail(e));
+  });
+
+  it('it fails if the http request fails', done => {
+    fetchMock.mock(`${base_api}/committees`, {
+      status: 400,
+      headers: { 'content-type': 'application/json' }
+    });
+
+    const expectedActions = [
+      { type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST },
+      { type: TYPES.FETCH_COMMITTEE_MEMBERS_FAILURE }
+    ];
+
+    const store = mockStore();
+
+    store
+      .dispatch(actions.fetchCommitteeMembers())
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      })
+      .catch(e => done.fail(e));
+  });
 });
 
 describe('fetching products', () => {

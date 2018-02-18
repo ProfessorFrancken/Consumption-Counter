@@ -13,7 +13,9 @@ export const actions = {
 
   fetchInitialData,
   fetchMembers,
-  fetchProducts
+  fetchProducts,
+  fetchBoardMembers,
+  fetchCommitteeMembers
 };
 
 export const TYPES = {
@@ -32,6 +34,14 @@ export const TYPES = {
   FETCH_MEMBERS_REQUEST: 'FETCH_MEMBERS_REQUEST',
   FETCH_MEMBERS_SUCCESS: 'FETCH_MEMBERS_SUCCESS',
   FETCH_MEMBERS_FAILURE: 'FETCH_MEMBERS_FAILURE',
+
+  FETCH_BOARD_MEMBERS_REQUEST: 'FETCH_BOARD_MEMBERS_REQUEST',
+  FETCH_BOARD_MEMBERS_SUCCESS: 'FETCH_BOARD_MEMBERS_SUCCESS',
+  FETCH_BOARD_MEMBERS_FAILURE: 'FETCH_BOARD_MEMBERS_FAILURE',
+
+  FETCH_COMMITTEE_MEMBERS_REQUEST: 'FETCH_COMMITTEE_MEMBERS_REQUEST',
+  FETCH_COMMITTEE_MEMBERS_SUCCESS: 'FETCH_COMMITTEE_MEMBERS_SUCCESS',
+  FETCH_COMMITTEE_MEMBERS_FAILURE: 'FETCH_COMMITTEE_MEMBERS_FAILURE',
 
   FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
   FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
@@ -204,6 +214,73 @@ export function fetchProducts() {
       .catch(ex =>
         dispatch({
           type: TYPES.FETCH_PRODUCTS_FAILURE
+        })
+      );
+  };
+}
+
+export function fetchBoardMembers() {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: TYPES.FETCH_BOARD_MEMBERS_REQUEST
+    });
+
+    const mapBoard = boardMember => {
+      return {
+        member_id: boardMember.lid_id,
+        year: boardMember.jaar,
+        function: boardMember.functie
+      };
+    };
+
+    return api
+      .get('/boards')
+      .then(response =>
+        dispatch({
+          type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS,
+          boardMembers: orderBy(
+            response.boardMembers.map(mapBoard),
+            boardMember => boardMember.year
+          )
+        })
+      )
+      .catch(ex =>
+        dispatch({
+          type: TYPES.FETCH_BOARD_MEMBERS_FAILURE
+        })
+      );
+  };
+}
+
+export function fetchCommitteeMembers() {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST
+    });
+
+    const mapCommittees = member => {
+      return {
+        member_id: member.lid_id,
+        year: member.jaar,
+        function: member.functie,
+        committee: {
+          id: member.commissie_id,
+          name: member.naam
+        }
+      };
+    };
+
+    return api
+      .get('/committees')
+      .then(response =>
+        dispatch({
+          type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS,
+          committees: response.committees.map(mapCommittees)
+        })
+      )
+      .catch(ex =>
+        dispatch({
+          type: TYPES.FETCH_COMMITTEE_MEMBERS_FAILURE
         })
       );
   };
