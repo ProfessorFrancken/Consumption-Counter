@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import App from './App';
 import configureMockStore from 'redux-mock-store';
-import AvailableProducts from './/Products/AvailableProducts';
+import AvailableProducts from './Products/AvailableProducts';
+import Prominent from './Prominent';
 
 function setup(routes = ['/']) {
   const props = {};
@@ -40,7 +41,7 @@ describe('rendering', () => {
   describe('rendering screens depending on state', () => {
     const screens = [
       { path: '/', component: 'SurnameRanges' },
-      { path: '/prominent', component: 'Prominent' },
+      { path: '/prominent', component: Prominent },
       { path: '/statistics', component: 'Statistics' },
       { path: '/committees', component: 'Committees' },
       { path: '/pricelist', component: 'PriceList' },
@@ -157,6 +158,8 @@ function mockedState() {
         age: 19
       }
     },
-    transactions: []
+    transactions: [],
+    boardMembers: [],
+    committeeMembers: []
   };
 }

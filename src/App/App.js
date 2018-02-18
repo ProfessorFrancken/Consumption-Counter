@@ -1,38 +1,31 @@
-import React from 'react'
-import Header from './Header'
-import Footer from './Footer'
-import { Route, Switch } from 'react-router-dom'
-import SurnameRanges from './/SurnameRanges/SurnameRangeSelection'
-import Members from './/Members/MemberSelection'
-import AvailableProducts from './/Products/AvailableProducts'
+import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import { Route, Switch } from 'react-router-dom';
+import SurnameRanges from './/SurnameRanges/SurnameRangeSelection';
+import Members from './/Members/MemberSelection';
+import AvailableProducts from './/Products/AvailableProducts';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import Transactions from './Transactions/'
-import PriceList from './PriceList/'
+import Transactions from './Transactions/';
+import PriceList from './PriceList/';
+import Prominent from './Prominent/';
 
-const Prominent = () => (
-  <h2>Prominent</h2>
-)
-
-const Committees = () => (
-  <h2>Committees</h2>
-)
+const Committees = () => <h2>Committees</h2>;
 
 const Statistics = () => (
   <div>
     <h2>Statistics</h2>
     <Transactions />
   </div>
-)
+);
 
-const Recent = () => (
-  <h2>Recent</h2>
-)
+const Recent = () => <h2>Recent</h2>;
 
 const AppContent = () => (
   <div className="App-main">
-      <div className="MainScreen h-100 py-3">
-        <Switch>
+    <div className="MainScreen h-100 py-3">
+      <Switch>
         <Route exact path="/prominent" component={Prominent} />
         <Route exact path="/statistics" component={Statistics} />
         <Route exact path="/committees" component={Committees} />
@@ -42,10 +35,10 @@ const AppContent = () => (
         <Route exact path="/products" component={AvailableProducts} />
         <Route exact path="/" component={SurnameRanges} />
         <Route exact path="/members" component={Members} />
-        </Switch>
-      </div>
+      </Switch>
     </div>
-)
+  </div>
+);
 
 const App = ({ title }) => (
   <div className="App">
@@ -53,6 +46,6 @@ const App = ({ title }) => (
     <AppContent />
     <Footer />
   </div>
-)
+);
 
 export default App;

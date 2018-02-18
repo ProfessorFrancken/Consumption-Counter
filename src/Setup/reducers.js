@@ -4,6 +4,8 @@ import {
   title,
   products,
   members,
+  boardMembers,
+  committeeMembers,
   surnameRanges,
   selectedMemberRange,
   transactions,
@@ -13,6 +15,8 @@ import {
 export default combineReducers({
   title,
   members,
+  boardMembers,
+  committeeMembers,
   surnameRanges,
   selectedMemberRange,
   products,

@@ -22,6 +22,24 @@ export function members(state = [], action) {
   }
 }
 
+export function boardMembers(state = [], action) {
+  switch (action.type) {
+    case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
+      return action.boardMembers;
+    default:
+      return state;
+  }
+}
+
+export function committeeMembers(state = [], action) {
+  switch (action.type) {
+    case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
+      return action.committees;
+    default:
+      return state;
+  }
+}
+
 const defaultRanges = {
   members_per_range: 6 * 5,
   ranges: []

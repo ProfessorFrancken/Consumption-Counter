@@ -26,13 +26,25 @@ describe('Fetching initial data', () => {
       .mock(`${base_api}/products`, {
         body: { products: [] },
         headers: { 'content-type': 'application/json' }
+      })
+      .mock(`${base_api}/boards`, {
+        body: { boardMembers: [] },
+        headers: { 'content-type': 'application/json' }
+      })
+      .mock(`${base_api}/committees`, {
+        body: { committees: [] },
+        headers: { 'content-type': 'application/json' }
       });
 
     const expectedActions = [
       { type: TYPES.FETCH_MEMBERS_REQUEST },
       { type: TYPES.FETCH_PRODUCTS_REQUEST },
+      { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
+      { type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST },
       { type: TYPES.FETCH_MEMBERS_SUCCESS, members: [] },
-      { type: TYPES.FETCH_PRODUCTS_SUCCESS, products: [] }
+      { type: TYPES.FETCH_PRODUCTS_SUCCESS, products: [] },
+      { type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS, boardMembers: [] },
+      { type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: [] }
     ];
 
     const store = mockStore({ members: [] });

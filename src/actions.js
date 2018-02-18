@@ -288,7 +288,12 @@ export function fetchCommitteeMembers() {
 
 export function fetchInitialData() {
   return dispatch =>
-    Promise.all([dispatch(fetchMembers()), dispatch(fetchProducts())]);
+    Promise.all([
+      dispatch(fetchMembers()),
+      dispatch(fetchProducts()),
+      dispatch(fetchBoardMembers()),
+      dispatch(fetchCommitteeMembers())
+    ]);
 }
 
 export function goBack() {
