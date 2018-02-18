@@ -75,9 +75,9 @@ function buySingleProduct(member, product) {
 
 export function buyAll() {
   return (dispatch, getState) => {
-    const { member, order } = getState()
+    const { selectedMember, order } = getState()
 
-    dispatch(buyOrder(member, order))
+    dispatch(buyOrder(selectedMember, { products: order.products }))
   }
 }
 

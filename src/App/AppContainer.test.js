@@ -63,7 +63,7 @@ describe('Plus One', () => {
     expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1)
     const calls = fetchMock.lastCall(`${base_api}/orders`, 'post')
 
-    expect(calls[1].body).toEqual(JSON.stringify(expectedOrder))
+    expect(JSON.parse(calls[1].body)).toEqual(expectedOrder)
   }
 
   it('allows a member to buy a product', (done) => {
@@ -226,8 +226,15 @@ const mocks = {
       }
     },
     multiple: {
+      member: {
+        id: 314,
+        firstName: "John",
+        surname: "Snow",
+        age: 18,
+        prominent: null,
+        cosmetics: {color: null, image: null, nickname: null, button: {width: null, height: null}}
+      },
       order: {
-        cancellable: false,
         products: [
           {
             id: 1,
