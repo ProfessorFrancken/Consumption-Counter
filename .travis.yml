@@ -7,3 +7,12 @@ cache:
 script:
   - npm run build
   - npm test
+addons:
+    apt:
+        packages:
+            - locales
+            - language-pack-nl
+env:
+    global:
+        - LANG=nl_NL.UTF-8
+        - LC_ALL=nl_NL.UTF-8
