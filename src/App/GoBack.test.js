@@ -17,6 +17,5 @@ it('renders', () => {
     .find('button')
     .simulate('click');
 
-  /* expect(goback.props().onClick).toBe(0)*/
   expect(store.getActions()).toEqual([push('/'), { type: TYPES.GO_BACK }]);
 });
