@@ -55,7 +55,7 @@ const Members = ({ members, selectMember }) => (
 Members.propTypes = {
   members: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
-    firstname: PropTypes.string.isRequired,
+    firstName: PropTypes.string.isRequired,
     surname: PropTypes.string.isRequired,
   })).isRequired
 }
