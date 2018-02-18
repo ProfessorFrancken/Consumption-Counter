@@ -77,24 +77,18 @@ describe('Plus One', () => {
       </Provider>
     )
 
-    setTimeout(() => {
-      try {
-        // Not sure why, but we need to manually update our app in order
-        // for app.find() to work correclty (otherwise we get an timeout exception)
-        app.update()
+    afterPromise(done, () => {
+      // Not sure why, but we need to manually update our app in order
+      // for app.find() to work correclty (otherwise we get an timeout exception)
+      app.update()
 
-        selectRangeIncludingJohnSnow(app)
+      selectRangeIncludingJohnSnow(app)
 
-        selectJohnSnow(app)
+      selectJohnSnow(app)
 
-        addHertogJanToOrder(app)
-        expectOrderToBeBought(app, mocks.orders.single)
-
-        done()
-      } catch (e) {
-        done.fail(e)
-      }
-    }, 0)
+      addHertogJanToOrder(app)
+      expectOrderToBeBought(app, mocks.orders.single)
+    })
   })
 
   it('allows buying multiple products', (done) => {
@@ -128,8 +122,7 @@ describe('Plus One', () => {
       expectOrderToBeBought(app, mocks.orders.multiple)
     }
 
-    setTimeout(() => {
-      try {
+    afterPromise(done, () => {
         // Not sure why, but we need to manually update our app in order
         // for app.find() to work correclty (otherwise we get an timeout exception)
         app.update()
@@ -147,12 +140,7 @@ describe('Plus One', () => {
         addHertogJanToOrder(app)
 
         buyAll(app)
-
-        done()
-      } catch (e) {
-        done.fail(e)
-      }
-    }, 0)
+    })
   })
 
   // Redirects
@@ -238,7 +226,6 @@ const mocks = {
       }
     },
     multiple: {
-
       order: {
         cancellable: false,
         products: [
