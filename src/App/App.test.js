@@ -1,44 +1,41 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { MemoryRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import { mount } from 'enzyme'
+import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { mount } from 'enzyme';
 import App from './App';
-import configureMockStore from 'redux-mock-store'
-import { push } from "react-router-redux";
-
-import AvailableProducts from './/Products/AvailableProducts'
+import configureMockStore from 'redux-mock-store';
+import AvailableProducts from './/Products/AvailableProducts';
 
 function setup(routes = ['/']) {
-  const props = {}
+  const props = {};
 
-  const mockStore = configureMockStore([])
-  const store = mockStore(mockedState())
+  const mockStore = configureMockStore([]);
+  const store = mockStore(mockedState());
   const app = mount(
     <Provider store={store}>
       <MemoryRouter initialEntries={routes}>
-        <App {...props}/>
+        <App {...props} />
       </MemoryRouter>
     </Provider>
-  )
+  );
 
-  return {props, app, store }
+  return { props, app, store };
 }
 
 describe('rendering', () => {
   it('renders without crashing', () => {
-    const { app } = setup()
+    const { app } = setup();
 
-    expect(app.find('Header').length).toBe(1)
-    expect(app.find('AppContent').length).toBe(1)
-    expect(app.find('Footer').length).toBe(1)
-  })
+    expect(app.find('Header').length).toBe(1);
+    expect(app.find('AppContent').length).toBe(1);
+    expect(app.find('Footer').length).toBe(1);
+  });
 
   it('shows a selection of surname ranges by default', () => {
-    const { app } = setup()
+    const { app } = setup();
 
-    expect(app.find('SurnameRanges').length).toBe(1)
-  })
+    expect(app.find('SurnameRanges').length).toBe(1);
+  });
 
   describe('rendering screens depending on state', () => {
     const screens = [
@@ -49,21 +46,20 @@ describe('rendering', () => {
       { path: '/pricelist', component: 'PriceList' },
       { path: '/recent', component: 'Recent' },
       { path: '/products', component: AvailableProducts },
-      { path: '/members', component: 'Members' },
-    ]
+      { path: '/members', component: 'Members' }
+    ];
 
-    screens.forEach((screen) => {
+    screens.forEach(screen => {
       it(`renders ${screen.path}`, () => {
-        const { app } = setup([screen.path])
+        const { app } = setup([screen.path]);
 
-        expect(app.find(screen.component).length).toBe(1)
-      })
-    })
-  })
-})
+        expect(app.find(screen.component).length).toBe(1);
+      });
+    });
+  });
+});
 
 /* xit('should show a loading message when refreshing the database')*/
-
 
 function mockedState() {
   return {
@@ -71,8 +67,8 @@ function mockedState() {
     members: [
       {
         id: 999,
-        firstName: "John",
-        surname: "Snow",
+        firstName: 'John',
+        surname: 'Snow',
         age: 18,
         prominent: null,
         cosmetics: {
@@ -84,17 +80,17 @@ function mockedState() {
             height: null
           }
         }
-      },
+      }
     ],
     surnameRanges: {
       members_per_range: 30,
       ranges: [
         {
           members: [
-		        {
-		   	      id: 1,
-              firstName: "John",
-              surname: "Snow",
+            {
+              id: 1,
+              firstName: 'John',
+              surname: 'Snow',
               age: 18,
               prominent: null,
               cosmetics: {
@@ -106,12 +102,11 @@ function mockedState() {
                   height: null
                 }
               }
-
-		        }
+            }
           ],
-          surname_start: "Snow",
-          surname_end: "Snow"
-        },
+          surname_start: 'Snow',
+          surname_end: 'Snow'
+        }
       ]
     },
     selectedMemberRange: {
@@ -119,47 +114,47 @@ function mockedState() {
     },
     selectedMember: {
       id: 1,
-      fullName: "Mark Redeman",
+      fullName: 'Mark Redeman',
       age: 19
     },
     products: {
       Bier: [
         {
           id: 3,
-          name: "Hertog Jan",
+          name: 'Hertog Jan',
           price: 68,
           position: 1,
-          category: "Bier",
-          image: "wCwnyLXTVdPEnKRXjw9I.png",
+          category: 'Bier',
+          image: 'wCwnyLXTVdPEnKRXjw9I.png',
           age_restriction: 18
-        },
+        }
       ],
       Fris: [
         {
           id: 27,
-          name: "Ice Tea",
+          name: 'Ice Tea',
           price: 60,
           position: 999,
-          category: "Fris",
-          image: "",
+          category: 'Fris',
+          image: '',
           age_restriction: 18
-        },
+        }
       ],
       Eten: [
         {
           id: 243,
-          name: "Kinder Bueno",
+          name: 'Kinder Bueno',
           price: 55,
           position: 999,
-          category: "Eten",
-          image: "utnCWM87tZclyENVrG03.jpg",
+          category: 'Eten',
+          image: 'utnCWM87tZclyENVrG03.jpg',
           age_restriction: 18
-        },
+        }
       ]
     },
     router: {
       locationBeforeTransitions: null
     },
-    transactions: [],
-  }
+    transactions: []
+  };
 }

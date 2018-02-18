@@ -1,5 +1,5 @@
-import { orderBy, take, pick } from 'lodash'
-import { push } from "react-router-redux";
+import { orderBy, pick } from 'lodash';
+import { push } from 'react-router-redux';
 
 export const actions = {
   goBack,
@@ -13,8 +13,8 @@ export const actions = {
 
   fetchInitialData,
   fetchMembers,
-  fetchProducts,
-}
+  fetchProducts
+};
 
 export const TYPES = {
   GO_BACK: 'BO_BACK',
@@ -35,17 +35,17 @@ export const TYPES = {
 
   FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
   FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
-  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE',
-}
+  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE'
+};
 
 export function selectRangeOfSurnames(range) {
-  return (dispatch) => {
-    dispatch(push('/members'))
+  return dispatch => {
+    dispatch(push('/members'));
     dispatch({
       type: TYPES.SELECT_SURNAME_RANGE,
       range
-    })
-  }
+    });
+  };
 }
 
 /**
@@ -57,77 +57,84 @@ export function addProductToOrder(product) {
   return (dispatch, getState) => {
     const { selectedMember, buyMore } = getState();
 
-    if (! buyMore) {
-      return dispatch(buySingleProduct(selectedMember, product))
+    if (!buyMore) {
+      return dispatch(buySingleProduct(selectedMember, product));
     } else {
       dispatch({
         type: TYPES.ADD_PRODUCT_TO_ORDER,
         product,
         member: selectedMember
-      })
+      });
     }
-  }
+  };
 }
 
 function buySingleProduct(member, product) {
-  return buyOrder(member, { products: [product]})
+  return buyOrder(member, { products: [product] });
 }
 
 export function buyAll() {
   return (dispatch, getState) => {
-    const { selectedMember, order } = getState()
+    const { selectedMember, order } = getState();
 
-    dispatch(buyOrder(selectedMember, { products: order.products }))
-  }
+    dispatch(buyOrder(selectedMember, { products: order.products }));
+  };
 }
 
 export function buyOrder(member, order) {
   return (dispatch, getState, api) => {
-
     dispatch({
       type: TYPES.BUY_ORDER_REQUEST,
       member,
       order
-    })
+    });
 
-    return api.post('/orders', {
-      member: pick(member, ['id', 'firstName', 'surname']),
-      order: {
-        products: order.products.map((product) => pick(product, ['id', 'name', 'price']))
-      }
-    }).then((response) => {
-      dispatch({
-        type: TYPES.BUY_ORDER_SUCCESS,
-        member,
-        order
+    return api
+      .post('/orders', {
+        member: pick(member, ['id', 'firstName', 'surname']),
+        order: {
+          products: order.products.map(product =>
+            pick(product, ['id', 'name', 'price'])
+          )
+        }
       })
-    }).catch((ex) => dispatch({
-      type: TYPES.BUY_ORDER_FAILURE,
-      member,
-      order
-    })).then(() => dispatch(push('/')))
-  }
+      .then(response => {
+        dispatch({
+          type: TYPES.BUY_ORDER_SUCCESS,
+          member,
+          order
+        });
+      })
+      .catch(ex =>
+        dispatch({
+          type: TYPES.BUY_ORDER_FAILURE,
+          member,
+          order
+        })
+      )
+      .then(() => dispatch(push('/')));
+  };
 }
 
 export function selectMember(member) {
-  return (dispatch) => {
-    dispatch(push('/products'))
+  return dispatch => {
+    dispatch(push('/products'));
     dispatch({
       type: TYPES.SELECT_MEMBER,
       member
-    })
-  }
+    });
+  };
 }
 
 export function fetchMembers() {
   return (dispatch, getState, api) => {
     dispatch({
       type: TYPES.FETCH_MEMBERS_REQUEST
-    })
+    });
 
-    const calculateAge = (birtday) => 18
+    const calculateAge = birtday => 18;
 
-    const mapMembers = (lid) => {
+    const mapMembers = lid => {
       return {
         id: lid.id,
         firstName: lid.voornaam,
@@ -144,29 +151,35 @@ export function fetchMembers() {
             height: lid.button_height
           }
         }
-      }
-    }
+      };
+    };
 
-    return api.get('/members')
-       .then((response) => dispatch({
-         type: TYPES.FETCH_MEMBERS_SUCCESS,
-         members: orderBy(
-           response.members.map(mapMembers),
-           (member) => member.surname
-         )
-       })).catch((ex) => dispatch({
-         type: TYPES.FETCH_MEMBERS_FAILURE
-       }))
-  }
+    return api
+      .get('/members')
+      .then(response =>
+        dispatch({
+          type: TYPES.FETCH_MEMBERS_SUCCESS,
+          members: orderBy(
+            response.members.map(mapMembers),
+            member => member.surname
+          )
+        })
+      )
+      .catch(ex =>
+        dispatch({
+          type: TYPES.FETCH_MEMBERS_FAILURE
+        })
+      );
+  };
 }
 
 export function fetchProducts() {
   return (dispatch, getState, api) => {
     dispatch({
       type: TYPES.FETCH_PRODUCTS_REQUEST
-    })
+    });
 
-    const mapProducts = (product) => {
+    const mapProducts = product => {
       return {
         id: product.id,
         name: product.naam,
@@ -176,37 +189,40 @@ export function fetchProducts() {
         position: product.positie,
         category: product.categorie,
         image: product.afbeelding,
-        age_restriction: (product.categorie == "Bier" ? 18 : null)
-      }
-    }
+        age_restriction: product.categorie === 'Bier' ? 18 : null
+      };
+    };
 
-    return api.get('/products')
-       .then((response) => dispatch({
-         type: TYPES.FETCH_PRODUCTS_SUCCESS,
-         products: response.products.map(mapProducts)
-       }))
-       .catch((ex) => dispatch({
-         type: TYPES.FETCH_PRODUCTS_FAILURE
-       }))
-  }
+    return api
+      .get('/products')
+      .then(response =>
+        dispatch({
+          type: TYPES.FETCH_PRODUCTS_SUCCESS,
+          products: response.products.map(mapProducts)
+        })
+      )
+      .catch(ex =>
+        dispatch({
+          type: TYPES.FETCH_PRODUCTS_FAILURE
+        })
+      );
+  };
 }
 
 export function fetchInitialData() {
-  return (dispatch) => Promise.all([
-      dispatch(fetchMembers()),
-      dispatch(fetchProducts())
-    ])
+  return dispatch =>
+    Promise.all([dispatch(fetchMembers()), dispatch(fetchProducts())]);
 }
 
 export function goBack() {
-  return (dispatch) => {
-    dispatch(push('/'))
-    dispatch({ type: TYPES.GO_BACK })
-  }
+  return dispatch => {
+    dispatch(push('/'));
+    dispatch({ type: TYPES.GO_BACK });
+  };
 }
 
 export function buyMore() {
-  return { type: TYPES.BUY_MORE }
+  return { type: TYPES.BUY_MORE };
 }
 
 export default actions;
