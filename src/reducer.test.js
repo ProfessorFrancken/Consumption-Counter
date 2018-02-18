@@ -1,8 +1,8 @@
 import {
   surnameRanges,
   selectedMemberRange,
-  selectedMember,
   buyMore,
+  order,
   transactions
 } from './reducer';
 import { TYPES } from './actions';
@@ -98,22 +98,22 @@ describe('selecting a member', () => {
 
   describe('selecting a member', () => {
     it('has no selected member by default', () => {
-      expect(selectedMember(undefined, {})).toEqual({ age: 0 });
+      expect(order(undefined, {}).member).toEqual({ age: 0 });
     });
 
     it('selects a member', () => {
       expect(
-        selectedMember(undefined, {
+        order(undefined, {
           type: TYPES.SELECT_MEMBER,
           member: { name: 'mark' }
-        })
+        }).member
       ).toEqual({ name: 'mark' });
     });
 
     it('can cancel selecting a member', () => {
-      expect(selectedMember({ name: 'mark' }, { type: TYPES.GO_BACK })).toEqual(
-        { age: 0 }
-      );
+      expect(order({ name: 'mark' }, { type: TYPES.GO_BACK }).member).toEqual({
+        age: 0
+      });
     });
   });
 });

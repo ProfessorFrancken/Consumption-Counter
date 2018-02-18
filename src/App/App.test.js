@@ -112,11 +112,6 @@ function mockedState() {
     selectedMemberRange: {
       members: []
     },
-    selectedMember: {
-      id: 1,
-      fullName: 'Mark Redeman',
-      age: 19
-    },
     products: {
       Bier: [
         {
@@ -154,6 +149,13 @@ function mockedState() {
     },
     router: {
       locationBeforeTransitions: null
+    },
+    order: {
+      member: {
+        id: 1,
+        fullName: 'Mark Redeman',
+        age: 19
+      }
     },
     transactions: []
   };
