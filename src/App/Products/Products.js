@@ -12,7 +12,6 @@ const Product = ({ product, onClick }) => (
   <button
     onClick={() => onClick(product)}
     className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center btn-product"
-    to="/products"
     style={{ backgroundImage: `url(https:/old.professorfrancken.nl/database/streep/afbeeldingen/${product.image})` }}
   >
     <ProductName product={product} />
