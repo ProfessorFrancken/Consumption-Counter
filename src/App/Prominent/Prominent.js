@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Member from './../Members/MemberButton';
+import { groupBy, sortBy, take, first } from 'lodash';
 
 const Prominent = ({ prominent, boards, selectMember }) => (
   <div className="d-flex flex-column justify-content-stretch h-100">
@@ -15,19 +16,21 @@ const Prominent = ({ prominent, boards, selectMember }) => (
     >
       {boards.map(board => (
         <div
-          className="d-flex flex-wrap flex-column bg-success"
+          className="d-flex flex-wrap flex-column"
           style={{ flexGrow: 1, width: '1%', gridTemplateColumns: '1fr' }}
         >
-          {board.map(member => (
-            <Member
-              member={member.member}
-              key={member.member.id}
-              onClick={selectMember}
-              // I'm not sure why, but setting the height of the button makes sure that all
-              // buttons in the same collumn get the same height
-              style={{ height: '1px' }}
-            />
-          ))}
+          {sortBy(board, board => board.function)
+            .reverse()
+            .map(member => (
+              <Member
+                member={member.member}
+                key={member.member.id}
+                onClick={selectMember}
+                // I'm not sure why, but setting the height of the button makes sure that all
+                // buttons in the same collumn get the same height
+                style={{ height: '1px' }}
+              />
+            ))}
         </div>
       ))}
     </nav>

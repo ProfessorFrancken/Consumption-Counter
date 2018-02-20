@@ -156,7 +156,8 @@ function mockedState() {
         id: 1,
         fullName: 'Mark Redeman',
         age: 19
-      }
+      },
+      products: []
     },
     transactions: [],
     boardMembers: [],
