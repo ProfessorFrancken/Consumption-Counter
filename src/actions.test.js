@@ -517,3 +517,19 @@ describe('buying products', () => {
 
   xit('waits a few seconds before buying an order so that a member can cancel its order', () => {});
 });
+
+describe('committees', () => {
+  it('selects a committee', () => {
+    const store = mockStore({});
+
+    store.dispatch(actions.selectCommittee({}));
+
+    expect(store.getActions()).toEqual([
+      push('/committee-members'),
+      {
+        type: TYPES.SELECT_COMMITTEE,
+        committee: {}
+      }
+    ]);
+  });
+});

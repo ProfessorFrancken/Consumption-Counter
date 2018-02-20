@@ -10,8 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Transactions from './Transactions/';
 import PriceList from './PriceList/';
 import Prominent from './Prominent/';
-
-const Committees = () => <h2>Committees</h2>;
+import Committees from './Committees/';
 
 const Statistics = () => (
   <div>

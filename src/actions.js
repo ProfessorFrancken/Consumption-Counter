@@ -10,6 +10,7 @@ export const actions = {
   addProductToOrder,
   selectRangeOfSurnames,
   selectMember,
+  selectCommittee,
 
   fetchInitialData,
   fetchMembers,
@@ -30,6 +31,7 @@ export const TYPES = {
 
   SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
   SELECT_MEMBER: 'SELECT_MEMBER',
+  SELECT_COMMITTEE: 'SELECT_COMMITTEE',
 
   FETCH_MEMBERS_REQUEST: 'FETCH_MEMBERS_REQUEST',
   FETCH_MEMBERS_SUCCESS: 'FETCH_MEMBERS_SUCCESS',
@@ -132,6 +134,16 @@ export function selectMember(member) {
     dispatch({
       type: TYPES.SELECT_MEMBER,
       member
+    });
+  };
+}
+
+export function selectCommittee(committee) {
+  return dispatch => {
+    dispatch(push('/committee-members'));
+    dispatch({
+      type: TYPES.SELECT_COMMITTEE,
+      committee: committee
     });
   };
 }
