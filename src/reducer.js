@@ -109,7 +109,7 @@ const defaultOrder = {
 export function order(state = defaultOrder, action) {
   switch (action.type) {
     case TYPES.BUY_MORE:
-      return { ...state, buyMore: !state.buyMore };
+      return { ...state, buyMore: !state.buyMore, products: [] };
     case TYPES.SELECT_MEMBER:
       return { ...state, member: action.member };
     case TYPES.ADD_PRODUCT_TO_ORDER:

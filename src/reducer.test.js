@@ -127,6 +127,18 @@ describe('buying products', () => {
       false
     );
   });
+
+  it('clears the order list when changing from buy more to buying single', () => {
+    expect(
+      order(
+        {
+          products: [{ id: 1 }],
+          buyMore: true
+        },
+        { type: TYPES.BUY_MORE }
+      ).products
+    ).toEqual([]);
+  });
 });
 
 describe('keeping track of the latest transactions', () => {
