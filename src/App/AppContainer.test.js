@@ -5,6 +5,7 @@ import fetchMock from 'fetch-mock';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { create, history } from './../Setup/store';
+import { TYPES } from './../actions';
 
 describe('Plus One', () => {
   let store, app;
@@ -221,41 +222,45 @@ describe('Plus One', () => {
     expectOrderToBeBought(app, mocks.orders.single);
   });
 
-  it('is possible to buy products using the recent list', done => {
-    const app = mount(
-      <Provider store={store}>
-        <Router history={history}>
-          <AppContainer />
-        </Router>
-      </Provider>
-    );
-
-    afterPromise(done, () => {
-      // Not sure why, but we need to manually update our app in order
-      // for app.find() to work correclty (otherwise we get an timeout exception)
-      app.update();
-
-      selectRangeIncludingJohnSnow(app);
-
-      selectJohnSnow(app);
-
-      addHertogJanToOrder(app);
-      expectOrderToBeBought(app, mocks.orders.single);
-
-      fetchMock.reset();
-      fetchMock.restore();
-
-      afterPromise(
-        () => {},
-        () => {
-          selectRecent(app);
-          selectJohnSnow(app);
-
-          addHertogJanToOrder(app);
-          expectOrderToBeBought(app, mocks.orders.single);
+  it('is possible to buy products using the recent list', () => {
+    const member = {
+      id: 314,
+      firstName: 'John',
+      surname: 'Snow',
+      age: 18,
+      prominent: null,
+      cosmetics: {
+        color: '',
+        image: 'xtCWQ7vaLKJdSndU1hlv.jpg',
+        nickname: '',
+        button: {
+          width: 0,
+          height: 0
         }
-      );
-    });
+      }
+    };
+
+    const product = {
+      id: 3,
+      name: 'Hertog Jan',
+      price: 68,
+      position: 1,
+      category: 'Bier',
+      image: 'wCwnyLXTVdPEnKRXjw9I.png',
+      age_restriction: 18,
+      ordered: 0
+    };
+
+    const order = { products: [product] };
+
+    store.dispatch({ type: TYPES.BUY_ORDER_REQUEST, member, order });
+    store.dispatch({ type: TYPES.BUY_ORDER_SUCCESS, member, order });
+
+    selectRecent(app);
+    selectJohnSnow(app);
+
+    addHertogJanToOrder(app);
+    expectOrderToBeBought(app, mocks.orders.single);
   });
 
   // Redirects
