@@ -45,7 +45,16 @@ const MemberPropType = PropTypes.shape({
 
 Prominent.propTypes = {
   prominent: PropTypes.arrayOf(MemberPropType).isRequired,
-  boards: PropTypes.arrayOf(MemberPropType).isRequired
+  boards: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        function: PropTypes.string,
+        member: MemberPropType.isRequired,
+        year: PropTypes.number.isRequired
+      })
+    )
+  ).isRequired
 };
 
 export default Prominent;
