@@ -78,6 +78,8 @@ export function selectedMemberRange(state = { members: [] }, action) {
   switch (action.type) {
     case TYPES.SELECT_SURNAME_RANGE:
       return { members: action.range.members };
+    case TYPES.SELECT_COMMITTEE:
+      return { members: action.committee.members };
     case TYPES.BUY_ORDER_SUCCESS:
     case TYPES.BUY_ORDER_FAILURE:
     case TYPES.GO_BACK:

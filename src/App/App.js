@@ -28,6 +28,7 @@ const AppContent = () => (
         <Route exact path="/prominent" component={Prominent} />
         <Route exact path="/statistics" component={Statistics} />
         <Route exact path="/committees" component={Committees} />
+        <Route exact path="/committee-members" component={Members} />
         <Route exact path="/pricelist" component={PriceList} />
         <Route exact path="/recent" component={Recent} />
 
