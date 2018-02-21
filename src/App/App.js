@@ -20,8 +20,6 @@ const Statistics = () => (
   </div>
 );
 
-const Recent = () => <h2>Recent</h2>;
-
 const AppContent = () => (
   <div className="App-main">
     <div className="MainScreen h-100 py-3">
