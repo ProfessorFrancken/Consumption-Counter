@@ -14,10 +14,11 @@ const Prominent = ({ prominent, boards, selectMember }) => (
       className="d-flex justify-content-stretch h-100"
       style={{ flexGrow: 1, height: '1%' }}
     >
-      {boards.map(board => (
+      {boards.map((board, idx) => (
         <div
           className="d-flex flex-wrap flex-column"
           style={{ flexGrow: 1, width: '1%', gridTemplateColumns: '1fr' }}
+          key={idx}
         >
           {sortBy(board, board => board.function)
             .reverse()
