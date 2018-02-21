@@ -11,6 +11,7 @@ import Transactions from './Transactions/';
 import PriceList from './PriceList/';
 import Prominent from './Prominent/';
 import Committees from './Committees/';
+import RecentMembers from './Recent/';
 
 const Statistics = () => (
   <div>
@@ -30,7 +31,7 @@ const AppContent = () => (
         <Route exact path="/committees" component={Committees} />
         <Route exact path="/committee-members" component={Members} />
         <Route exact path="/pricelist" component={PriceList} />
-        <Route exact path="/recent" component={Recent} />
+        <Route exact path="/recent" component={RecentMembers} />
 
         <Route exact path="/products" component={AvailableProducts} />
         <Route exact path="/" component={SurnameRanges} />

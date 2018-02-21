@@ -6,6 +6,7 @@ import App from './App';
 import configureMockStore from 'redux-mock-store';
 import AvailableProducts from './Products/AvailableProducts';
 import Prominent from './Prominent';
+import RecentMembers from './Recent';
 
 function setup(routes = ['/']) {
   const props = {};
@@ -45,7 +46,7 @@ describe('rendering', () => {
       { path: '/statistics', component: 'Statistics' },
       { path: '/committees', component: 'Committees' },
       { path: '/pricelist', component: 'PriceList' },
-      { path: '/recent', component: 'Recent' },
+      { path: '/recent', component: RecentMembers },
       { path: '/products', component: AvailableProducts },
       { path: '/members', component: 'Members' }
     ];
