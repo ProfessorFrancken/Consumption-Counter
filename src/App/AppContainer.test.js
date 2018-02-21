@@ -80,6 +80,14 @@ describe('Plus One', () => {
     const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
 
     expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
+
+    afterPromise(
+      () => {},
+      () => {
+        expect(history.location.pathname).toBe('/');
+        expect(app.props().store.getState().transactions.length).toBe(1);
+      }
+    );
   };
 
   it('allows a member to buy a product', done => {
@@ -210,8 +218,114 @@ describe('Plus One', () => {
       expectOrderToBeBought(app, mocks.orders.single);
     });
   });
-  xit('is possible to buy products using the committees list', () => {});
-  xit('is possible to buy products using the recent list', () => {});
+
+  it('is possible to buy products using the committees list', done => {
+    fetchMock.mock(`${base_api}/orders`, {});
+
+    const app = mount(
+      <Provider store={store}>
+        <Router history={history}>
+          <AppContainer />
+        </Router>
+      </Provider>
+    );
+
+    const selectCommittees = app => {
+      expect(app.find('Footer').length).toBe(1);
+
+      const committees = app.find('LinkButton[children="Committees"]');
+      expect(committees.length).toBe(1);
+
+      // https://github.com/airbnb/enzyme/issues/516
+      committees.simulate('click', { button: 0 });
+
+      expect(history.location.pathname).toBe('/committees');
+    };
+
+    const selectNightsWatch = app => {
+      expect(app.find('Committee').length).toBe(1);
+      app.find('Committee').simulate('click');
+      expect(history.location.pathname).toBe('/committee-members');
+    };
+
+    const selectJohnSnow = app => {
+      expect(app.find('Member').length).toBe(1);
+
+      app.find('Member').simulate('click');
+      expect(history.location.pathname).toBe('/products');
+    };
+
+    afterPromise(done, () => {
+      // Not sure why, but we need to manually update our app in order
+      // for app.find() to work correclty (otherwise we get an timeout exception)
+      app.update();
+
+      selectCommittees(app);
+      selectNightsWatch(app);
+      selectJohnSnow(app);
+
+      addHertogJanToOrder(app);
+      expectOrderToBeBought(app, mocks.orders.single);
+    });
+  });
+
+  it('is possible to buy products using the recent list', done => {
+    fetchMock.mock(`${base_api}/orders`, {});
+
+    const app = mount(
+      <Provider store={store}>
+        <Router history={history}>
+          <AppContainer />
+        </Router>
+      </Provider>
+    );
+
+    const selectRecent = app => {
+      expect(app.find('Footer').length).toBe(1);
+
+      const committees = app.find('LinkButton[children="Recent"]');
+      expect(committees.length).toBe(1);
+
+      // https://github.com/airbnb/enzyme/issues/516
+      committees.simulate('click', { button: 0 });
+
+      expect(history.location.pathname).toBe('/recent');
+    };
+
+    const selectJohnSnow = app => {
+      expect(app.find('Member').length).toBe(1);
+
+      app.find('Member').simulate('click');
+      expect(history.location.pathname).toBe('/products');
+    };
+
+    afterPromise(done, () => {
+      // Not sure why, but we need to manually update our app in order
+      // for app.find() to work correclty (otherwise we get an timeout exception)
+      app.update();
+
+      selectRangeIncludingJohnSnow(app);
+
+      selectJohnSnow(app);
+
+      addHertogJanToOrder(app);
+      expectOrderToBeBought(app, mocks.orders.single);
+
+      fetchMock.reset();
+      fetchMock.restore();
+
+      afterPromise(
+        () => {},
+        () => {
+          selectRecent(app);
+          selectJohnSnow(app);
+
+          addHertogJanToOrder(app);
+          expectOrderToBeBought(app, mocks.orders.single);
+        }
+      );
+    });
+  });
 
   // Redirects
   // Shows a list of transactions
