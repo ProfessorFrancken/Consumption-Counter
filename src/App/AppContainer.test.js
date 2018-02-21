@@ -4,13 +4,15 @@ import AppContainer from './AppContainer';
 import fetchMock from 'fetch-mock';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './../Setup/store';
-import { history } from './../Setup/store';
+import { create, history } from './../Setup/store';
 
+let store;
 describe('Plus One', () => {
   const base_api = process.env.REACT_APP_API_SERVER;
 
   beforeEach(() => {
+    store = create();
+
     fetchMock
       .mock(`${base_api}/members`, {
         body: { members: mocks.members },
@@ -21,14 +23,15 @@ describe('Plus One', () => {
         headers: { 'content-type': 'application/json' }
       })
       .mock(`${base_api}/boards`, {
-        body: { boardMembers: [] },
+        body: { boardMembers: mocks.boards },
         headers: { 'content-type': 'application/json' }
       })
       .mock(`${base_api}/committees`, {
-        body: { committees: [] },
+        body: { committees: mocks.committees },
         headers: { 'content-type': 'application/json' }
       });
   });
+
   afterEach(() => {
     fetchMock.reset();
     fetchMock.restore();
@@ -165,6 +168,51 @@ describe('Plus One', () => {
     });
   });
 
+  it('is possible to buy products using the prominent list', done => {
+    fetchMock.mock(`${base_api}/orders`, {});
+
+    const app = mount(
+      <Provider store={store}>
+        <Router history={history}>
+          <AppContainer />
+        </Router>
+      </Provider>
+    );
+
+    const selectProminent = app => {
+      expect(app.find('Footer').length).toBe(1);
+
+      const prominent = app.find('LinkButton[children="Prominent"]');
+      expect(prominent.length).toBe(1);
+
+      // https://github.com/airbnb/enzyme/issues/516
+      prominent.simulate('click', { button: 0 });
+
+      expect(history.location.pathname).toBe('/prominent');
+    };
+
+    const selectJohnSnow = app => {
+      expect(app.find('Member').length).toBe(1);
+
+      app.find('Member').simulate('click');
+      expect(history.location.pathname).toBe('/products');
+    };
+
+    afterPromise(done, () => {
+      // Not sure why, but we need to manually update our app in order
+      // for app.find() to work correclty (otherwise we get an timeout exception)
+      app.update();
+
+      selectProminent(app);
+      selectJohnSnow(app);
+
+      addHertogJanToOrder(app);
+      expectOrderToBeBought(app, mocks.orders.single);
+    });
+  });
+  xit('is possible to buy products using the committees list', () => {});
+  xit('is possible to buy products using the recent list', () => {});
+
   // Redirects
   // Shows a list of transactions
 
@@ -272,5 +320,16 @@ const mocks = {
         ]
       }
     }
-  }
+  },
+
+  committees: [
+    {
+      commissie_id: 14,
+      lid_id: 314,
+      jaar: 2018,
+      functie: 'King',
+      naam: "Night's Watch"
+    }
+  ],
+  boards: [{ lid_id: 314, jaar: 2018, functie: 'King' }]
 };
