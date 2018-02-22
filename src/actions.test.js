@@ -493,21 +493,14 @@ describe('buying products', () => {
 
     // and when adding a product to order
     const product = { id: 2 };
+    const order = { products: [product] };
     store
       .dispatch(actions.addProductToOrder(product))
       .then(() => {
         // then we buy a product
         expect(store.getActions()).toEqual([
-          {
-            type: TYPES.BUY_ORDER_REQUEST,
-            member,
-            order: { products: [product] }
-          },
-          {
-            type: TYPES.BUY_ORDER_SUCCESS,
-            member,
-            order: { products: [product] }
-          },
+          { type: TYPES.BUY_ORDER_REQUEST, member, order },
+          { type: TYPES.BUY_ORDER_SUCCESS, member, order },
           push('/')
         ]);
         done();
