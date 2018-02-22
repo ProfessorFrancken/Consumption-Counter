@@ -5,24 +5,19 @@ import fetchMock from 'fetch-mock';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { create, history } from './../Setup/store';
-import { TYPES } from './../actions';
+import { TYPES, fetchInitialData } from './../actions';
 
 describe('Plus One', () => {
   let store, app;
   const base_api = process.env.REACT_APP_API_SERVER;
 
-  const afterPromise = (done, fn) =>
-    setTimeout(function() {
-      try {
-        fn();
-        done();
-      } catch (e) {
-        done.fail(e);
-      }
-    }, 0);
+  // https://hackernoon.com/low-effort-high-value-integration-tests-in-redux-apps-d3a590bd9fd5
+  const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
 
   beforeEach(() => {
     store = create();
+
+    jest.useFakeTimers();
 
     fetchMock
       .mock(`${base_api}/members`, {
@@ -51,16 +46,9 @@ describe('Plus One', () => {
       </Provider>
     );
 
-    return new Promise((resolve, reject) => {
-      let done = resolve;
-      done.fail = reject;
-
-      afterPromise(done, () => {
-        // Not sure why, but we need to manually update our app in order
-        // for app.find() to work correclty (otherwise we get an timeout exception)
-        app.update();
-      });
-    });
+    // Not sure why, but we need to manually update our app in order
+    // for app.find() to work correclty (otherwise we get an timeout exception)
+    return flushAllPromises().then(() => app.update());
   });
 
   afterEach(() => {
@@ -94,19 +82,22 @@ describe('Plus One', () => {
     hertogJanButton.simulate('click');
   };
 
-  const expectOrderToBeBought = (app, expectedOrder) => {
-    expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
-    const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
+  const expectOrderToBeBought = (app, expectedOrder, done) => {
+    jest.runAllTimers();
+    flushAllPromises()
+      .then(() => {
+        expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
+        const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
 
-    expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
+        expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
 
-    afterPromise(
-      () => {},
-      () => {
         expect(history.location.pathname).toBe('/');
-        expect(app.props().store.getState().transactions.length).toBe(1);
-      }
-    );
+
+        done();
+      })
+      .catch(e => {
+        done.fail(e);
+      });
   };
 
   const selectBuyMore = app => {
@@ -127,7 +118,7 @@ describe('Plus One', () => {
     expect(select.props().checked).toBeTruthy();
   };
 
-  const buyAll = app => {
+  const buyAll = (app, done) => {
     expect(app.find('BuyMore').find('button').length).toBe(1);
     const buyAll = app
       .find('BuyMore')
@@ -135,7 +126,7 @@ describe('Plus One', () => {
       .first();
     buyAll.simulate('click');
 
-    expectOrderToBeBought(app, mocks.orders.multiple);
+    expectOrderToBeBought(app, mocks.orders.multiple, done);
   };
 
   const selectProminent = app => {
@@ -180,16 +171,16 @@ describe('Plus One', () => {
     expect(history.location.pathname).toBe('/recent');
   };
 
-  it('allows a member to buy a product', () => {
+  it('allows a member to buy a product', done => {
     selectRangeIncludingJohnSnow(app);
 
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single);
+    expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
-  it('allows buying multiple products', () => {
+  it('allows buying multiple products', done => {
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
 
@@ -202,27 +193,27 @@ describe('Plus One', () => {
     addHertogJanToOrder(app);
     addHertogJanToOrder(app);
 
-    buyAll(app);
+    buyAll(app, done);
   });
 
-  it('is possible to buy products using the prominent list', () => {
+  it('is possible to buy products using the prominent list', done => {
     selectProminent(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single);
+    expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
-  it('is possible to buy products using the committees list', () => {
+  it('is possible to buy products using the committees list', done => {
     selectCommittees(app);
     selectNightsWatch(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single);
+    expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
-  it('is possible to buy products using the recent list', () => {
+  it('is possible to buy products using the recent list', done => {
     const member = {
       id: 314,
       firstName: 'John',
@@ -260,7 +251,7 @@ describe('Plus One', () => {
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single);
+    expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
   // Redirects
