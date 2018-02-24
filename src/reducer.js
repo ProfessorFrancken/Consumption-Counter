@@ -140,4 +140,19 @@ export function transactions(state = [], action) {
   }
 }
 
+export function queuedOrder(state = null, action) {
+  switch (action.type) {
+    case TYPES.QUEUE_ORDER:
+      return {
+        ordered_at: action.ordered_at,
+        order: action.order
+      };
+    case TYPES.BUY_ORDER_REQUEST:
+    case TYPES.CANCEL_ORDER:
+      return null;
+    default:
+      return state;
+  }
+}
+
 export function screen(state, action) {}

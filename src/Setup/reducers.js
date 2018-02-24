@@ -9,7 +9,8 @@ import {
   surnameRanges,
   selectedMemberRange,
   transactions,
-  order
+  order,
+  queuedOrder
 } from '../reducer.js';
 
 export default combineReducers({
@@ -22,5 +23,6 @@ export default combineReducers({
   products,
   transactions,
   order,
+  queuedOrder,
   router: routerReducer
 });

@@ -2,7 +2,8 @@ import {
   surnameRanges,
   selectedMemberRange,
   order,
-  transactions
+  transactions,
+  queuedOrder
 } from './reducer';
 import { TYPES } from './actions';
 import expect from 'expect';
@@ -198,5 +199,56 @@ describe('keeping track of the latest transactions', () => {
       { member: { id: 2 }, order: { id: 2 } },
       { member: { id: 1 }, order: { id: 2 } }
     ]);
+  });
+});
+
+describe('buying products', () => {
+  it('has no order queued by default', () => {
+    expect(queuedOrder(undefined, {})).toEqual(null);
+  });
+
+  it('keeps track of a newly queued order', () => {
+    expect(
+      queuedOrder(undefined, {
+        type: TYPES.QUEUE_ORDER,
+        order: {},
+        ordered_at: 1
+      })
+    ).toEqual({ ordered_at: 1, order: {} });
+  });
+
+  it('empties the queue when an order was bought', () => {
+    expect(
+      queuedOrder(
+        { ordered_at: 1, order: {} },
+        {
+          type: TYPES.BUY_ORDER_REQUEST
+        }
+      )
+    ).toEqual(null);
+  });
+
+  it('empties the queue when an order was cancelled', () => {
+    expect(
+      queuedOrder(
+        { ordered_at: 1, order: {} },
+        {
+          type: TYPES.CANCEL_ORDER
+        }
+      )
+    ).toEqual(null);
+  });
+
+  it('replaces the queue with a new order', () => {
+    expect(
+      queuedOrder(
+        { ordered_at: 1, order: {} },
+        {
+          type: TYPES.QUEUE_ORDER,
+          order: { id: 2 },
+          ordered_at: 2
+        }
+      )
+    ).toEqual({ ordered_at: 2, order: { id: 2 } });
   });
 });
