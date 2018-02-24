@@ -83,7 +83,8 @@ describe('Plus One', () => {
   };
 
   const expectOrderToBeBought = (app, expectedOrder, done) => {
-    jest.runAllTimers();
+    jest.runTimersToTime(10000);
+
     flushAllPromises()
       .then(() => {
         expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);

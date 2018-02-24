@@ -4,6 +4,7 @@ import { push } from 'react-router-redux';
 export const actions = {
   goBack,
   buyMore,
+  makeOrder,
   buyOrder,
   buyAll,
 
@@ -24,6 +25,8 @@ export const TYPES = {
 
   BUY_MORE: 'TOGGLE_BUY_MORE_PRODUCTS',
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
+
+  QUEUE_ORDER: 'QUEUE_ORDER',
 
   BUY_ORDER_REQUEST: 'BUY_ORDER_REQUEST',
   BUY_ORDER_SUCCESS: 'BUY_ORDER_SUCCESS',
@@ -70,7 +73,7 @@ export function addProductToOrder(product) {
     const { order } = getState();
 
     if (!order.buyMore) {
-      return dispatch(buySingleProduct(order.member, product));
+      return dispatch(makeOrder({ member: order.member, products: [product] }));
     } else {
       dispatch({
         type: TYPES.ADD_PRODUCT_TO_ORDER,
@@ -81,24 +84,41 @@ export function addProductToOrder(product) {
   };
 }
 
-function buySingleProduct(member, product) {
-  return buyOrder(member, { products: [product] });
+export function buyAll() {
+  return makeOrder();
 }
 
-export function buyAll() {
+export function makeOrder(order = undefined) {
   return (dispatch, getState) => {
-    const { order } = getState();
+    return new Promise(resolve => {
+      const date = new Date();
 
-    dispatch(buyOrder(order.member, { products: order.products }));
+      order = order === undefined ? getState().order : order;
+
+      dispatch({
+        type: TYPES.QUEUE_ORDER,
+        order: pick(order, 'member', 'products'),
+        ordered_at: date.getTime()
+      });
+      dispatch(push('/'));
+
+      setTimeout(() => {
+        dispatch(buyOrder(order.member, order));
+      }, 1000);
+      resolve();
+    });
   };
 }
 
 export function buyOrder(member, order) {
   return (dispatch, getState, api) => {
+    const date = new Date();
+
     dispatch({
       type: TYPES.BUY_ORDER_REQUEST,
       member,
-      order
+      order,
+      ordered_at: date.getTime()
     });
 
     return api

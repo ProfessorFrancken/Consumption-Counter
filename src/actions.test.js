@@ -5,6 +5,7 @@ import fetchMock from 'fetch-mock';
 import expect from 'expect'; // You can use any testing library
 import { push } from 'react-router-redux';
 import api from './api';
+import clock from 'jest-plugin-clock';
 
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore(middlewares);
@@ -438,11 +439,15 @@ describe('buying products', () => {
     fetchMock.restore();
   });
 
+  clock.set('2018-02-23');
+
   it('is possible to toggle buying more products', () => {
     expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE });
   });
 
-  it('buys products', done => {
+  it('buys products', () => {
+    jest.useFakeTimers();
+
     const store = mockStore({});
     const member = { id: 1 };
     const order = { products: [] };
@@ -451,18 +456,22 @@ describe('buying products', () => {
       body: {},
       headers: { 'content-type': 'application/json' }
     });
-    store
-      .dispatch(actions.buyOrder(member, order))
-      .then(() => {
-        // then we buy a product
-        expect(store.getActions()).toEqual([
-          { type: TYPES.BUY_ORDER_REQUEST, member, order },
-          { type: TYPES.BUY_ORDER_SUCCESS, member, order },
-          push('/')
-        ]);
-        done();
-      })
-      .catch(e => done.fail(e));
+
+    store.dispatch(actions.buyOrder(member, order)).then(() => {
+      // then we buy a product
+      expect(store.getActions()).toEqual([
+        {
+          type: TYPES.BUY_ORDER_REQUEST,
+          member,
+          order,
+          ordered_at: 1519344000000
+        },
+        { type: TYPES.BUY_ORDER_SUCCESS, member, order },
+        push('/')
+      ]);
+    });
+
+    jest.runTimersToTime(1000);
   });
 
   it('does not inmediadly buy an order when buying multiple products', () => {
@@ -481,10 +490,18 @@ describe('buying products', () => {
   });
 
   it('buys an order after adding 1 product to an order', done => {
+    jest.useFakeTimers();
     // when a member is selected
     // and we only buy one product
     const member = { id: 1 };
-    const store = mockStore({ order: { buyMore: false, member } });
+    const product = { id: 2 };
+    const store = mockStore({
+      order: {
+        buyMore: false,
+        member,
+        products: [product]
+      }
+    });
 
     fetchMock.mock(`${base_api}/orders`, {
       body: {},
@@ -492,23 +509,109 @@ describe('buying products', () => {
     });
 
     // and when adding a product to order
-    const product = { id: 2 };
-    const order = { products: [product] };
-    store
-      .dispatch(actions.addProductToOrder(product))
-      .then(() => {
-        // then we buy a product
-        expect(store.getActions()).toEqual([
-          { type: TYPES.BUY_ORDER_REQUEST, member, order },
-          { type: TYPES.BUY_ORDER_SUCCESS, member, order },
-          push('/')
-        ]);
-        done();
-      })
-      .catch(e => done.fail(e));
+    const order = { products: [product], member };
+    const flushAllPromises = () =>
+      new Promise(resolve => setImmediate(resolve));
+    store.dispatch(actions.addProductToOrder(product)).then(() => {
+      jest.runTimersToTime(1000);
+
+      flushAllPromises()
+        .then(() => {
+          // then we buy a product
+          expect(store.getActions()).toEqual([
+            { type: TYPES.QUEUE_ORDER, order, ordered_at: 1519344000000 },
+            push('/'),
+            {
+              type: TYPES.BUY_ORDER_REQUEST,
+              member,
+              order,
+              ordered_at: 1519344000000
+            },
+            { type: TYPES.BUY_ORDER_SUCCESS, member, order },
+            push('/')
+          ]);
+        })
+        .then(done)
+        .catch(e => done.fail(e));
+    });
   });
 
-  xit('waits a few seconds before buying an order so that a member can cancel its order', () => {});
+  describe('making an order', () => {
+    beforeEach(() => jest.useFakeTimers());
+
+    it('makes an order', done => {
+      // and when adding a product to order
+      const products = [{ id: 2 }];
+      const member = { id: 1 };
+      const store = mockStore({ order: { buyMore: false, member, products } });
+      store
+        .dispatch(actions.makeOrder())
+        .then(() => {
+          // then we buy a product
+          expect(store.getActions()).toEqual([
+            {
+              type: TYPES.QUEUE_ORDER,
+              order: { products, member },
+              ordered_at: 1519344000000
+            },
+            push('/')
+          ]);
+        })
+        .then(done)
+        .catch(e => done.fail(e));
+
+      jest.clearAllTimers();
+    });
+
+    it('buys an order after x seconds', done => {
+      fetchMock.mock(`${base_api}/orders`, {
+        body: {},
+        headers: { 'content-type': 'application/json' }
+      });
+
+      const flushAllPromises = () =>
+        new Promise(resolve => setImmediate(resolve));
+
+      // and when adding a product to order
+      const product = { id: 2 };
+      const products = [product];
+      const member = { id: 1 };
+      const order = { products: [product], member: member };
+      const store = mockStore({ order });
+      store.dispatch(actions.makeOrder()).then(() => {
+        jest.runTimersToTime(1000);
+
+        flushAllPromises()
+          .then(() => {
+            // then we buy a product
+            expect(store.getActions()).toEqual([
+              {
+                type: TYPES.QUEUE_ORDER,
+                order: { products, member },
+                ordered_at: 1519344000000
+              },
+              push('/'),
+              {
+                type: TYPES.BUY_ORDER_REQUEST,
+                member,
+                order,
+                ordered_at: 1519344000000
+              },
+              { type: TYPES.BUY_ORDER_SUCCESS, member, order },
+              push('/')
+            ]);
+          })
+          .then(done)
+          .catch(e => done.fail(e));
+      });
+    });
+
+    xit('can cancel buying an order', () => {});
+  });
+
+  describe('cancelling orders', () => {
+    it('waits a few seconds before buying an order so that a member can cancel its order', () => {});
+  });
 });
 
 describe('committees', () => {
