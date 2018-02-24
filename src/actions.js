@@ -5,8 +5,8 @@ export const actions = {
   goBack,
   buyMore,
   makeOrder,
-  buyOrder,
   buyAll,
+  cancelOrder,
 
   addProductToOrder,
   selectRangeOfSurnames,
@@ -27,6 +27,7 @@ export const TYPES = {
   ADD_PRODUCT_TO_ORDER: 'ADD_PRODUCT_TO_ORDER',
 
   QUEUE_ORDER: 'QUEUE_ORDER',
+  CANCEL_ORDER: 'CANCEL_ORDER',
 
   BUY_ORDER_REQUEST: 'BUY_ORDER_REQUEST',
   BUY_ORDER_SUCCESS: 'BUY_ORDER_SUCCESS',
@@ -88,6 +89,8 @@ export function buyAll() {
   return makeOrder();
 }
 
+const orderQueue = {};
+
 export function makeOrder(order = undefined) {
   return (dispatch, getState) => {
     return new Promise(resolve => {
@@ -102,17 +105,30 @@ export function makeOrder(order = undefined) {
       });
       dispatch(push('/'));
 
-      setTimeout(() => {
-        dispatch(buyOrder(order.member, order));
+      orderQueue[date.getTime()] = setTimeout(() => {
+        dispatch(buyOrder(order.member, order, date));
       }, 1000);
       resolve();
     });
   };
 }
 
-export function buyOrder(member, order) {
+export function cancelOrder(order, ordered_at) {
+  return dispatch => {
+    clearTimeout(orderQueue[ordered_at]);
+    delete orderQueue[ordered_at];
+
+    dispatch({
+      type: TYPES.CANCEL_ORDER,
+      order: pick(order, 'member', 'products'),
+      ordered_at
+    });
+  };
+}
+
+function buyOrder(member, order, date) {
   return (dispatch, getState, api) => {
-    const date = new Date();
+    delete orderQueue[date.getTime()];
 
     dispatch({
       type: TYPES.BUY_ORDER_REQUEST,

@@ -445,35 +445,6 @@ describe('buying products', () => {
     expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE });
   });
 
-  it('buys products', () => {
-    jest.useFakeTimers();
-
-    const store = mockStore({});
-    const member = { id: 1 };
-    const order = { products: [] };
-
-    fetchMock.mock(`${base_api}/orders`, {
-      body: {},
-      headers: { 'content-type': 'application/json' }
-    });
-
-    store.dispatch(actions.buyOrder(member, order)).then(() => {
-      // then we buy a product
-      expect(store.getActions()).toEqual([
-        {
-          type: TYPES.BUY_ORDER_REQUEST,
-          member,
-          order,
-          ordered_at: 1519344000000
-        },
-        { type: TYPES.BUY_ORDER_SUCCESS, member, order },
-        push('/')
-      ]);
-    });
-
-    jest.runTimersToTime(1000);
-  });
-
   it('does not inmediadly buy an order when buying multiple products', () => {
     // when a member is selected and we buy multiple products
     const member = { id: 1 };
@@ -606,7 +577,40 @@ describe('buying products', () => {
       });
     });
 
-    xit('can cancel buying an order', () => {});
+    it('can cancel buying an order', done => {
+      const flushAllPromises = () =>
+        new Promise(resolve => setImmediate(resolve));
+
+      // and when adding a product to order
+      const products = [{ id: 2 }];
+      const member = { id: 1 };
+      const store = mockStore({ order: { buyMore: false, member, products } });
+
+      store
+        .dispatch(actions.makeOrder())
+        .then(() => {
+          store.dispatch(
+            actions.cancelOrder({ products, member }, 1519344000000)
+          );
+          jest.runTimersToTime(1000);
+
+          expect(store.getActions()).toEqual([
+            {
+              type: TYPES.QUEUE_ORDER,
+              order: { products, member },
+              ordered_at: 1519344000000
+            },
+            push('/'),
+            {
+              type: TYPES.CANCEL_ORDER,
+              order: { products, member },
+              ordered_at: 1519344000000
+            }
+          ]);
+        })
+        .then(done)
+        .catch(e => done.fail(e));
+    });
   });
 
   describe('cancelling orders', () => {
