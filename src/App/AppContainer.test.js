@@ -83,6 +83,8 @@ describe('Plus One', () => {
   };
 
   const expectOrderToBeBought = (app, expectedOrder, done) => {
+    // The cancel button should be shown until the timeout is run
+    expect(app.find('CancelOrder').find('button').length).toBe(1);
     jest.runTimersToTime(10000);
 
     flushAllPromises()
@@ -195,6 +197,32 @@ describe('Plus One', () => {
     addHertogJanToOrder(app);
 
     buyAll(app, done);
+  });
+
+  it('is possible to cancel an order', done => {
+    selectRangeIncludingJohnSnow(app);
+
+    selectJohnSnow(app);
+
+    addHertogJanToOrder(app);
+
+    const cancelOrder = app => {
+      app
+        .find('CancelOrder')
+        .find('button')
+        .simulate('click');
+      jest.runAllTimers();
+
+      flushAllPromises()
+        .then(() => {
+          expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(0);
+          expect(app.find('CancelOrder').find('button').length).toBe(0);
+        })
+        .then(done)
+        .catch(e => done.fail(e));
+    };
+
+    cancelOrder(app);
   });
 
   it('is possible to buy products using the prominent list', done => {
