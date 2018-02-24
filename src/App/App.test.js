@@ -162,6 +162,7 @@ function mockedState() {
     },
     transactions: [],
     boardMembers: [],
-    committeeMembers: []
+    committeeMembers: [],
+    queuedOrder: null
   };
 }
