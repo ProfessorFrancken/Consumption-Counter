@@ -1,18 +1,7 @@
 import { connect } from 'react-redux';
 import { selectCommittee } from '../../actions';
 import Committees from './Committees';
-import { groupBy, sortBy, take, first, union, uniqBy } from 'lodash';
-
-const loadBoards = (boardMembers, members) => {
-  return boardMembers.map(boardMember => {
-    return {
-      id: boardMember.member_id,
-      year: boardMember.year,
-      function: boardMember.function,
-      member: members.find(member => member.id === boardMember.member_id)
-    };
-  });
-};
+import { uniqBy } from 'lodash';
 
 const committees = (committeeMembers, members) => {
   return uniqBy(

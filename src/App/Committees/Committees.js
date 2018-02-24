@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Member from './../Members/MemberButton';
-import { groupBy, sortBy, take, first } from 'lodash';
 
 const Committee = ({ committee, onClick }) => (
   <button

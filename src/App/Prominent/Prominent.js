@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Member from './../Members/MemberButton';
-import { groupBy, sortBy, take, first } from 'lodash';
+import { sortBy } from 'lodash';
 
 const Prominent = ({ prominent, boards, selectMember }) => (
   <div className="d-flex flex-column justify-content-stretch h-100">
