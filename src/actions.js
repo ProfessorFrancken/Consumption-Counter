@@ -91,6 +91,7 @@ export function buyAll() {
 
 const orderQueue = {};
 
+export const TIME_TO_CANCEL = 7000;
 export function makeOrder(order = undefined) {
   return (dispatch, getState) => {
     return new Promise(resolve => {
@@ -107,7 +108,7 @@ export function makeOrder(order = undefined) {
 
       orderQueue[date.getTime()] = setTimeout(() => {
         dispatch(buyOrder(order.member, order, date));
-      }, 1000);
+      }, TIME_TO_CANCEL);
       resolve();
     });
   };

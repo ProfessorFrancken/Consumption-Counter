@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { actions, TYPES } from './actions';
+import { actions, TYPES, TIME_TO_CANCEL } from './actions';
 import fetchMock from 'fetch-mock';
 import expect from 'expect'; // You can use any testing library
 import { push } from 'react-router-redux';
@@ -484,7 +484,7 @@ describe('buying products', () => {
     const flushAllPromises = () =>
       new Promise(resolve => setImmediate(resolve));
     store.dispatch(actions.addProductToOrder(product)).then(() => {
-      jest.runTimersToTime(1000);
+      jest.runTimersToTime(TIME_TO_CANCEL);
 
       flushAllPromises()
         .then(() => {
@@ -550,7 +550,7 @@ describe('buying products', () => {
       const order = { products: [product], member: member };
       const store = mockStore({ order });
       store.dispatch(actions.makeOrder()).then(() => {
-        jest.runTimersToTime(1000);
+        jest.runTimersToTime(TIME_TO_CANCEL);
 
         flushAllPromises()
           .then(() => {
@@ -592,7 +592,7 @@ describe('buying products', () => {
           store.dispatch(
             actions.cancelOrder({ products, member }, 1519344000000)
           );
-          jest.runTimersToTime(1000);
+          jest.runTimersToTime(TIME_TO_CANCEL);
 
           expect(store.getActions()).toEqual([
             {
