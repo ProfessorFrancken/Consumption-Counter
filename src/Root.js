@@ -7,9 +7,11 @@ import { history } from './Setup/store';
 
 import './index.css';
 
+const basename = process.env.REACT_APP_ROUTER_BASENAME;
+
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router history={history}>
+    <Router history={history} basename={basename}>
       <AppContainer />
     </Router>
   </Provider>
