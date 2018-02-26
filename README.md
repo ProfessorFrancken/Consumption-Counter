@@ -1,12 +1,48 @@
-# On routing
+# Plus One System
+
+# Introduction
+What you're looking at is the source code of the Plus One system, previously
+known as the "Streepsysteem".
+After installing all dependencies (this requires running either `npm install` or
+`yarn`), you can start the Plus One System by running the following commands:
+```
+# Let's first check if all unit tests pass
+yarn test
+
+# Start a mock api
+yarn start-mockapi
+
+# In a different terminal than the one running the api
+yarn start
+```
+
+## Todo
+
+### Required
+- splashscreen
+- compucie screen
+- authentication
+- statistics
+- improve go back button (probably requries better routing)
+
+### Nice to have
+- redux select
+- routing (use pagination for members and committees)
+- redirect routes if data is missing
+- refactor css
+- better layouts / design
+- Move ordered_at into order object?
+- Look into the possibility to let a middleware make an order once products and
+  a member have been selected
+- Add end to end tests using cypress
+
+### On routing
 
 Note that currently the routing system does not work nicely when our state is missing.
 We probably want to redirect users.
 Additionally we could add better routes that include the selected member, range etc.
 
 TODO: add test that check if user is redirected
-
-# Plus One System
 
 Make the text of buttons be dependent on the viewport height
 
