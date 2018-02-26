@@ -17,6 +17,7 @@ const committees = (committeeMembers, members) => {
         .map(member => {
           return members.find(m => m.id === member.member_id);
         })
+        .filter(member => member !== undefined)
     };
   });
 };
