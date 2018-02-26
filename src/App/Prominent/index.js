@@ -4,14 +4,16 @@ import Prominent from './Prominent';
 import { groupBy, sortBy, take, first } from 'lodash';
 
 const loadBoards = (boardMembers, members) => {
-  return boardMembers.map(boardMember => {
-    return {
-      id: boardMember.member_id,
-      year: boardMember.year,
-      function: boardMember.function,
-      member: members.find(member => member.id === boardMember.member_id)
-    };
-  });
+  return boardMembers
+    .map(boardMember => {
+      return {
+        id: boardMember.member_id,
+        year: boardMember.year,
+        function: boardMember.function,
+        member: members.find(member => member.id === boardMember.member_id)
+      };
+    })
+    .filter(member => member.member !== undefined);
 };
 
 const SHOW_N_BOARDS = 5;
@@ -39,7 +41,7 @@ const prominent = state => {
       state.members.filter(member => member.prominent !== null),
       member => -member.prominent
     ).filter(member => !boardMembersId.includes(member.id)), // don't include members who are shown as a board member
-    200
+    10
   );
 
   return {

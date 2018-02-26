@@ -10,20 +10,34 @@ describe('prominent', () => {
     const mockStore = configureMockStore([thunk]);
 
     const state = {
-      members: [],
-      committeeMembers: [],
-      boardMembers: []
+      members: [
+        { id: 1, firstName: 'John', surname: 'Snow' },
+        { id: 2, firstName: 'John', surname: 'Snow' }
+      ],
+      boardMembers: [
+        { member_id: 1, year: 2017, function: 'King' },
+        { member_id: 2, year: 2017, function: 'King' }
+      ]
     };
     const store = mockStore({ ...state });
     const prominent = shallow(<Prominent store={store} />);
 
-    /* console.log(prominent.dive().html());*/
+    expect(prominent.props().boards[0].length).toBe(2);
+  });
 
-    /* goback
-     *   .dive()
-     *   .find('button')
-     *   .simulate('click');
+  it("it ignores members that aren't in the system", () => {
+    const mockStore = configureMockStore([thunk]);
 
-     * expect(store.getActions()).toEqual([push('/'), { type: TYPES.GO_BACK }]);*/
+    const state = {
+      members: [{ id: 1, firstName: 'John', surname: 'Snow' }],
+      boardMembers: [
+        { member_id: 1, year: 2017, function: 'King' },
+        { member_id: 2, year: 2017, function: 'King' }
+      ]
+    };
+    const store = mockStore({ ...state });
+    const prominent = shallow(<Prominent store={store} />);
+
+    expect(prominent.props().boards[0].length).toBe(1);
   });
 });
