@@ -36,7 +36,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "start-mockapi": "json-server --watch src/api/db.json --port 3001",
+    "start-mockapi": "json-server --watch db.json --port 3001",
     "prestart-mockapi": "npm run generate-mock-data",
     "generate-mock-data": "node ./generateMockData",
     "eject": "react-scripts eject"

@@ -16,11 +16,7 @@ const cosmetics = cosmetics => {
 
   return {
     backgroundColor: cosmetics.color,
-    backgroundImage: cosmetics.image
-      ? `url(https:/old.professorfrancken.nl/database/streep/afbeeldingen/${
-          cosmetics.image
-        })`
-      : undefined,
+    backgroundImage: cosmetics.image ? `url(${cosmetics.image})` : undefined,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: '50% 50%',

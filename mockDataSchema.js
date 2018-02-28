@@ -48,7 +48,7 @@ var schema = {
               },
               "afbeelding": {
                 "type": "string",
-                "faker": "image.imageUrl"
+                "faker": { "image.imageUrl": [300, 300, undefined, true, true] }
               },
               "bijnaam": {
                 "type": "string",
@@ -102,7 +102,7 @@ var schema = {
               },
               "afbeelding": {
                 "type": "string",
-                "faker": "image.imageUrl"
+                "faker": { "image.imageUrl": [300, 300, undefined, true, true] }
               },
               "kleur": {
                 "type": "string",
@@ -110,7 +110,7 @@ var schema = {
               },
               "splash_afbeelding": {
                 "type": "string",
-                "faker": "image.imageUrl"
+                "faker": { "image.imageUrl": [300, 300, undefined, true, true] }
               }
             },
             "required": ["id", "naam", "prijs", "categorie", "positie", "afbeelding", "kleur", "splash_afbeelding"]
