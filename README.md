@@ -3,6 +3,20 @@
 # Introduction
 What you're looking at is the source code of the Plus One system, previously
 known as the "Streepsysteem".
+
+The easiest way to run Plus One, is using docker-compose:
+```
+# First install dependencies
+docker-compose run node yarn
+
+# Check if all unit tests pass
+docker-compose run node yarn test
+
+# Start server and mock-api
+docker-compose up
+```
+
+## Running Plus One directly on your PC
 After installing all dependencies (this requires running either `npm install` or
 `yarn`), you can start the Plus One System by running the following commands:
 ```
