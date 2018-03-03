@@ -66,6 +66,9 @@ describe('fetching members', () => {
     fetchMock.reset();
     fetchMock.restore();
   });
+
+  clock.set('2018-01-01');
+
   it('maps members from an http request', done => {
     fetchMock.mock(`${base_api}/members`, {
       body: {
@@ -76,7 +79,21 @@ describe('fetching members', () => {
             initialen: '',
             tussenvoegsel: '',
             achternaam: 'Snow',
-            geboortedatum: '26-04-1993',
+            geboortedatum: '2000-04-26',
+            prominent: null,
+            kleur: null,
+            afbeelding: null,
+            bijnaam: null,
+            button_width: null,
+            button_height: null
+          },
+          {
+            id: 313,
+            voornaam: 'Arya',
+            initialen: '',
+            tussenvoegsel: '',
+            achternaam: 'Stark',
+            geboortedatum: null,
             prominent: null,
             kleur: null,
             afbeelding: null,
@@ -96,9 +113,25 @@ describe('fetching members', () => {
         members: [
           {
             id: 314,
-            age: 18,
+            age: 17,
             firstName: 'John',
             surname: 'Snow',
+            prominent: null,
+            cosmetics: {
+              color: null,
+              image: null,
+              nickname: null,
+              button: {
+                height: null,
+                width: null
+              }
+            }
+          },
+          {
+            id: 313,
+            age: 0,
+            firstName: 'Arya',
+            surname: 'Stark',
             prominent: null,
             cosmetics: {
               color: null,

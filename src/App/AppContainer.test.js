@@ -312,7 +312,7 @@ const mocks = {
       initialen: '',
       tussenvoegsel: '',
       achternaam: 'Snow',
-      geboortedatum: '26-04-1993',
+      geboortedatum: '1993-04-26',
       prominent: null,
       kleur: null,
       afbeelding: null,

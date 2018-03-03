@@ -19,7 +19,6 @@ yarn start
 ## Todo
 
 ### Required
-- Age
 - compucie screen
 - authentication
 - statistics
