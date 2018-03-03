@@ -5,7 +5,7 @@ import fetchMock from 'fetch-mock';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { create, history } from './../Setup/store';
-import { TYPES, fetchInitialData } from './../actions';
+import { TYPES } from './../actions';
 
 describe('Plus One', () => {
   let store, app;
@@ -283,6 +283,17 @@ describe('Plus One', () => {
     expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
+  it('shows a splashscreen when buying specific products', () => {
+    selectRangeIncludingJohnSnow(app);
+
+    selectJohnSnow(app);
+
+    addHertogJanToOrder(app);
+    const splash = 'Uo6qQC4Hm8TUqyNjw2G4.jpg';
+
+    expect(app.find('App').props().background).toBe(splash);
+  });
+
   // Redirects
   // Shows a list of transactions
 
@@ -320,7 +331,7 @@ const mocks = {
       positie: 999,
       beschikbaar: 1,
       afbeelding: 'Uo6qQC4Hm8TUqyNjw2G4.jpg',
-      splash_afbeelding: null,
+      splash_afbeelding: 'Uo6qQC4Hm8TUqyNjw2G4.jpg',
       kleur: null
     },
     {

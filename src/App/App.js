@@ -39,8 +39,19 @@ const AppContent = () => (
   </div>
 );
 
-const App = ({ title }) => (
-  <div className="App">
+const backgroundFromProduct = (background = null) => {
+  return background === null
+    ? {}
+    : {
+        backgroundImage: `url("${background}")`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: '50%'
+      };
+};
+
+const App = ({ title, background }) => (
+  <div className="App" style={backgroundFromProduct(background)}>
     <Header title={title} />
     <AppContent />
     <Footer />

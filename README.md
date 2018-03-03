@@ -19,7 +19,7 @@ yarn start
 ## Todo
 
 ### Required
-- splashscreen
+- Age
 - compucie screen
 - authentication
 - statistics

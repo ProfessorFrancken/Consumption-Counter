@@ -248,6 +248,7 @@ export function fetchProducts() {
         position: product.positie,
         category: product.categorie,
         image: product.afbeelding,
+        splash_image: product.splash_afbeelding,
         age_restriction: product.categorie === 'Bier' ? 18 : null
       };
     };

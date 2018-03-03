@@ -319,6 +319,7 @@ describe('fetching products', () => {
             category: 'Bier',
             id: 1,
             image: 'Uo6qQC4Hm8TUqyNjw2G4.jpg',
+            splash_image: null,
             name: 'Grolsch',
             position: 999,
             price: 65
@@ -328,6 +329,7 @@ describe('fetching products', () => {
             category: 'Bier',
             id: 2,
             image: '',
+            splash_image: null,
             name: 'Heineken',
             position: 999,
             price: 60
