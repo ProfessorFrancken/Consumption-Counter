@@ -23,8 +23,18 @@ const committees = (committeeMembers, members) => {
 };
 
 const mapStateToProps = state => {
+  // Only show committees and ther members of the current academic year
+  const today = new Date();
+
   return {
-    committees: committees(state.committeeMembers, state.members)
+    committees: committees(
+      state.committeeMembers.filter(member =>
+        [today.getUTCFullYear(), today.getUTCFullYear() - 1].includes(
+          member.year
+        )
+      ),
+      state.members
+    )
   };
 };
 

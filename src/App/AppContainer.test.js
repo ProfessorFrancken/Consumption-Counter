@@ -79,6 +79,7 @@ describe('Plus One', () => {
       .find('Product')
       .find('button')
       .first();
+
     hertogJanButton.simulate('click');
   };
 
@@ -157,8 +158,13 @@ describe('Plus One', () => {
   };
 
   const selectNightsWatch = app => {
-    expect(app.find('Committee').length).toBe(1);
-    app.find('Committee').simulate('click');
+    expect(app.find('Committee').length).toBe(2);
+
+    app
+      .find('Committee')
+      .findWhere(n => n.props().children === 'Compucie')
+      .simulate('click');
+
     expect(history.location.pathname).toBe('/committee-members');
   };
 
@@ -283,7 +289,7 @@ describe('Plus One', () => {
     expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
-  it('shows a splashscreen when buying specific products', () => {
+  it('shows a splashscreen when buying specific products', done => {
     selectRangeIncludingJohnSnow(app);
 
     selectJohnSnow(app);
@@ -292,6 +298,24 @@ describe('Plus One', () => {
     const splash = 'Uo6qQC4Hm8TUqyNjw2G4.jpg';
 
     expect(app.find('App').props().background).toBe(splash);
+    expectOrderToBeBought(app, mocks.orders.single, done);
+  });
+
+  it('is possible select members through the compucie screen', done => {
+    console.log('compuciecompucie');
+    const selectCompucie = app => {
+      app
+        .find('Header')
+        .find('h1')
+        .simulate('click');
+      expect(history.location.pathname).toBe('/compucie');
+    };
+
+    selectCompucie(app);
+    selectJohnSnow(app);
+
+    addHertogJanToOrder(app);
+    expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
   // Redirects
@@ -410,6 +434,13 @@ const mocks = {
       jaar: 2018,
       functie: 'King',
       naam: "Night's Watch"
+    },
+    {
+      commissie_id: 0,
+      lid_id: 314,
+      jaar: 2018,
+      functie: 'King',
+      naam: 'Compucie'
     }
   ],
   boards: [{ lid_id: 314, jaar: 2018, functie: 'King' }]

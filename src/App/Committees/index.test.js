@@ -4,8 +4,11 @@ import configureMockStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 import { TYPES } from './../../actions';
 import thunk from 'redux-thunk';
+import clock from 'jest-plugin-clock';
 
 describe('committees', () => {
+  clock.set('2018-01-01');
+
   it('renders', () => {
     const mockStore = configureMockStore([thunk]);
 

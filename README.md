@@ -33,7 +33,6 @@ yarn start
 ## Todo
 
 ### Required
-- compucie screen
 - authentication
 - statistics
 - improve go back button (probably requries better routing)

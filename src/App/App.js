@@ -12,6 +12,7 @@ import PriceList from './PriceList/';
 import Prominent from './Prominent/';
 import Committees from './Committees/';
 import RecentMembers from './Recent/';
+import Compucie from './Compucie/';
 
 const Statistics = () => (
   <div>
@@ -24,6 +25,7 @@ const AppContent = () => (
   <div className="App-main">
     <div className="MainScreen h-100 py-3">
       <Switch>
+        <Route exact path="/compucie" component={Compucie} />
         <Route exact path="/prominent" component={Prominent} />
         <Route exact path="/statistics" component={Statistics} />
         <Route exact path="/committees" component={Committees} />
@@ -50,9 +52,9 @@ const backgroundFromProduct = (background = null) => {
       };
 };
 
-const App = ({ title, background }) => (
+const App = ({ title, goToCompucieScreen, background }) => (
   <div className="App" style={backgroundFromProduct(background)}>
-    <Header title={title} />
+    <Header title={title} onClick={goToCompucieScreen} />
     <AppContent />
     <Footer />
   </div>

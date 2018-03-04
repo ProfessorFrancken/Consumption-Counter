@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchInitialData } from './../actions';
 import { withRouter } from 'react-router-dom';
+import { push } from 'react-router-redux';
 import App from './App';
 
 class AppContainer extends Component {
@@ -33,7 +34,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    fetchData: () => dispatch(fetchInitialData())
+    fetchData: () => dispatch(fetchInitialData()),
+    goToCompucieScreen: () => dispatch(push('/compucie'))
   };
 };
 
