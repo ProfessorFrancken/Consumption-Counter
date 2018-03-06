@@ -1,16 +1,17 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import Icon from './Icon';
 
 const Sidebar = ({ menuItems }) => (
   <div className="sidebar">
-    {menuItems.map((menuItem, i) => <MenuItem key={i} menuItem={menuItem} />)}
+    {menuItems.map((menuItem, i) => <MenuItem key={menuItem.icon} menuItem={menuItem} />)}
   </div>
 );
 
 const MenuItem = ({ menuItem }) => (
-  <div className={'menuButton ' + (menuItem.active ? 'active' : '')}>
+  <Link to={menuItem.url} className="button menuButton" activeClassName="active">
     <Icon name={menuItem.icon} />
-  </div>
+  </Link>
 );
 
 export default Sidebar;

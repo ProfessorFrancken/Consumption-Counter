@@ -1,11 +1,8 @@
 import React from 'react';
-import Header from './Header';
-import Footer from './Footer';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import SurnameRanges from './/SurnameRanges/SurnameRangeSelection';
 import Members from './/Members/MemberSelection';
 import AvailableProducts from './/Products/AvailableProducts';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Transactions from './Transactions/';
 import PriceList from './PriceList/';
@@ -15,7 +12,7 @@ import CommitteeMembers from './Committees/CommitteeMembers';
 import RecentMembers from './Recent/';
 import Compucie from './Compucie/';
 
-import Gerjan from './Gerjan';
+import GerrieApp from './Gerjan/App';
 
 const Statistics = () => (
   <div>
@@ -25,8 +22,6 @@ const Statistics = () => (
 );
 
 const AppContent = () => (
-  <div className="App-main">
-    <div className="MainScreen h-100 py-3">
       <Switch>
         <Route exact path="/compucie" component={Compucie} />
         <Route exact path="/prominent" component={Prominent} />
@@ -40,16 +35,8 @@ const AppContent = () => (
         <Route exact path="/members/:page(\d+)" component={Members} />
         <Redirect from="/members" to="/" />
       </Switch>
-    </div>
-  </div>
 );
 
-const DevWrapper = () => (
-  <Switch>
-    <Route exact path="/dev" component={Gerjan} />
-    <Route path="/" component={App} />
-  </Switch>
-);
 
 const backgroundFromProduct = (background = null) => {
   return background === null
@@ -63,11 +50,9 @@ const backgroundFromProduct = (background = null) => {
 };
 
 const App = ({ title, goToCompucieScreen, background }) => (
-  <div className="App" style={backgroundFromProduct(background)}>
-    <Header title={title} onClick={goToCompucieScreen} />
+  <GerrieApp>
     <AppContent />
-    <Footer />
-  </div>
+  </GerrieApp>
 );
 
-export default DevWrapper;
+export default App;

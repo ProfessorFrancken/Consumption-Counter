@@ -2,16 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Committee = ({ committee, onClick }) => (
-  <button
-    className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center"
-    onClick={() => onClick(committee)}
-  >
+  <div className="button tile" onClick={() => onClick(committee)}>
     {committee.name}
-  </button>
+  </div>
 );
 
 const Committees = ({ committees, selectCommittee }) => (
-  <nav className="SelectionGrid">
+  <nav className="tilesGrid">
     {committees.map((committee, idx) => (
       <Committee committee={committee} onClick={selectCommittee} key={idx} />
     ))}

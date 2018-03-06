@@ -1,22 +1,133 @@
 :root {
-  --primarhihi: #173249;
+  --primary: #2d2d2d;
+  --secondary: #efefef;
+  --tertiary: #173249;
+  --menuSize: 100px;
+  --footerSize: 100px;
+  --rowSize: 60px;
+  --arrowOverflow: 10px;
+  --gridCollumns: 6;
 }
 
 body {
-  margin: 0;
+  background-color: var(--secondary);
+}
+
+.wrapper {
   padding: 0;
-  font-family: sans-serif;
-
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: [sidebar] var(--menuSize) [content] 1fr;
+  grid-template-rows: [header] var(--rowSize) [content] auto [arrow-overflow] var(
+      --arrowOverflow
+    ) [footer] var(--footerSize) [footer-end];
+  background-color: var(--secondary);
+}
+.header {
+  color: var(--primary);
+  grid-column: content;
+  grid-row: header;
+  line-height: var(--rowSize);
+  text-align: right;
+  padding-right: 0.5em;
+  font-size: 24px;
+}
+.sidebar {
+  grid-column: sidebar;
+  grid-row: header / footer-end;
+  background-color: var(--primary);
+}
 
-  background-color: #eaeaea;
-  background-color: var(--primarhihi);
-  background-image: url('App/logo.png');
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-blend-mode: exclusion;
-  background-size: cover;
+.button {
+  color: var(--secondary);
+  background-color: var(--primary);
+  transition: 0.5s ease;
+}
 
-  color: white;
+.button:hover {
+  color: var(--primary);
+  background-color: var(--secondary);
+  transition: 0.5s ease;
+}
+
+.menuButton {
+  display: block;
+  height: var(--rowSize);
+  width: 100px;
+  line-height: var(--rowSize);
+  text-align: center;
+}
+.active {
+  background-color: var(--secondary) !important;
+  color: var(--primary) !important;
+}
+.content {
+  padding: 40px;
+  margin-top: -30px;
+  grid-row: content;
+  grid-column: content;
+  color: var(--primary);
+}
+
+.tilesGrid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--gridCollumns), 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.5em;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--secondary);
+  padding: 0.5em;
+  font-weight: bold;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.arrow {
+  margin-left: -100px;
+  width: 200px;
+  background-color: var(--tertiary);
+  height: calc(var(--footerSize) + var(--arrowOverflow));
+  display: inline-block;
+  transform: skewX(30deg);
+  transform-origin: bottom right;
+  border-radius: 0 10px 0 0;
+  z-index: 5;
+}
+
+.arrowContent {
+  color: var(--primary);
+  line-height: calc(var(--footerSize) + var(--arrowOverflow));
+  margin-left: 35px;
+  margin-right: 75px;
+  transform: skewX(-30deg);
+  transform-origin: bottom right;
+}
+
+.arrowContent > .franckenLogo {
+  color: var(--primary);
+  filter: brightness(0) invert(1);
+}
+
+.footer {
+  background-color: var(--primary);
+  line-height: var(--footerSize);
+  grid-row: footer / footer-end;
+  grid-column: content;
+  display: grid;
+  grid-template-columns: repeat(1, 3fr) [backButton] var(--footerSize);
+}
+
+.footer > .backButton {
+  grid-column: backButton;
+  text-align: center;
+  line-height: var(--footerSize);
 }

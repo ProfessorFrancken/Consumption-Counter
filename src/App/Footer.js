@@ -1,25 +1,12 @@
 import React from 'react';
-import './Footer.css';
-import LinkButton from './LinkButton';
-import GoBack from './GoBack';
-import Status from './Status';
+import Icon from './Icon';
 
 const Footer = () => (
-  <footer className="Footer">
-    <nav className="Footer-navigation">
-      <LinkButton to="/prominent" className="btn-lg mr-2">
-        Prominent
-      </LinkButton>
-      <LinkButton to="/committees" className="btn-lg mx-2">
-        Committees
-      </LinkButton>
-      <LinkButton to="/recent" className="btn-lg mx-2">
-        Recent
-      </LinkButton>
-    </nav>
-    <GoBack />
-    <Status />
-  </footer>
+  <div className="footer">
+    <div className="button backButton">
+      <Icon name="arrow-circle-left" />
+    </div>
+  </div>
 );
 
 export default Footer;
