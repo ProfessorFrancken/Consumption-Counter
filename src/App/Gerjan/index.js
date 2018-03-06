@@ -30,6 +30,8 @@ const Gerjan = ({ ranges }) => {
   );
 };
 
+let a;
+
 const mapStateToProps = state => ({
   ranges: state.surnameRanges.ranges
 });

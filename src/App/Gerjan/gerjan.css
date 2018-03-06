@@ -7,15 +7,28 @@
   --rowSize: 60px;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: [sidebar] var(--menuSize) [content] auto;
-  grid-template-rows: [header] var(--rowSize) [content] auto [footer] var(
-      --footerSize
-    ) [footer-end];
-  background-color: var(--secondary);
+html {
+  height: 100%;
+  width: 100%;
 }
 
+body {
+  min-width: 100%;
+  min-width: 100%;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: [sidebar] var(--menuSize) [content] auto;
+  grid-template-rows:
+    [header] var(--rowSize) [content] auto [footer] var(--footerSize)
+    [footer-end];
+  background-color: var(--secondary);
+}
 .header {
   color: var(--primary);
   grid-column: content;
@@ -25,13 +38,11 @@
   padding-right: 1em;
   font-size: 24px;
 }
-
 .sidebar {
   grid-column: sidebar;
   grid-row: header / footer-end;
   background-color: var(--primary);
 }
-
 .menuButton {
   height: var(--rowSize);
   width: 100px;
@@ -41,56 +52,47 @@
   background-color: var(--primary);
   transition: 0.5s ease;
 }
-
 .menuButton:hover {
   background-color: var(--secondary);
   color: var(--primary);
   transition: 0.5s ease;
 }
-
 .active {
   background-color: var(--secondary) !important;
   color: var(--primary) !important;
 }
-
 .content {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
+  padding: 20px;
+  margin-top: -20px;
   grid-row: content;
   grid-column: content;
   color: var(--primary);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-
   grid-column-gap: 0.5em;
   grid-row-gap: 0.5em;
   height: 100%;
   align-content: stretch;
 }
-
 .tile {
   background: var(--primary);
   color: white;
-
   padding: 0.5em;
   font-weight: bold;
   font-size: 1em;
   text-align: center;
-
   align-self: stretch;
 
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-
 .arrow {
   margin-left: calc(-1 * var(--menuSize));
-  width: 200px;
+  width: 150px;
   background-color: var(--tertiary);
   height: var(--footerSize);
   display: inline-block;
 }
-
 .footer {
   background-color: var(--primary);
   line-height: var(--footerSize);
