@@ -1,11 +1,9 @@
 import React from 'react';
-import Icon from './Icon';
+import GoBack from './GoBack';
 
 const Footer = () => (
   <div className="footer">
-    <div className="button backButton">
-      <Icon name="arrow-circle-left" />
-    </div>
+    <GoBack />
   </div>
 );
 

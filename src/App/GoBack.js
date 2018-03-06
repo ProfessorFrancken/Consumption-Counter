@@ -1,33 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { goBack } from './../actions';
-import { goBackText } from './../selectors';
-import { withRouter } from 'react-router-dom';
+import Icon from './Icon';
 
-const GoBack = ({ text, onClick, location }) => {
-  if (text === 'Go back' && location.pathname === '/') {
-    return null;
-  }
+const GoBack = ({ onClick }) => (
+  <div className="button backButton" onClick={onClick}>
+    <Icon name="arrow-circle-left" />
+  </div>
+);
 
-  return (
-    <div className="Footer-go-back">
-      <button
-        className="btn btn-outline-light btn-lg btn-block"
-        to="/"
-        onClick={onClick}
-      >
-        {text}
-      </button>
-    </div>
-  );
+const mapDispatchToProps = dispatch => {
+  return {
+    onClick: () => dispatch(goBack())
+  };
 };
 
-const mapStateToProps = state => ({
-  text: goBackText(state)
-});
-
-const mapDispatchToProps = dispatch => ({
-  onClick: () => dispatch(goBack())
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GoBack));
+export default connect(undefined, mapDispatchToProps)(GoBack);
