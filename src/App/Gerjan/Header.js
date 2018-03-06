@@ -1,9 +1,5 @@
 import React from 'react';
 
-const Header = () => {
-  const style = {};
-
-  return <div style={style}>Professor Francken</div>;
-};
+const Header = ({ title }) => <div className="header">{title}</div>;
 
 export default Header;
