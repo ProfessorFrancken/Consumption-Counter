@@ -1,18 +1,6 @@
 :root {
-  --primary: #173249;
+  --primarhihi: #173249;
 }
-
-@font-face {
-	font-family: "Gill Sans MT Pro";
-	src: url("assets/GillSansMTPro-Light.woff") format("woff");
-}
-
-@font-face {
-	font-family: "Gill Sans MT Pro";
-	src: url("assets/GillSansDisplayMTPro-Bold.woff") format("woff");
-	font-weight: bold;
-}
-
 
 body {
   margin: 0;
@@ -20,10 +8,10 @@ body {
   font-family: sans-serif;
 
   height: 100vh;
-  width: 100%;
+  width: 100vw;
 
   background-color: #eaeaea;
-  background-color: var(--primary);
+  background-color: var(--primarhihi);
   background-image: url('App/logo.png');
   background-repeat: no-repeat;
   background-position: 50% 50%;
@@ -31,9 +19,4 @@ body {
   background-size: cover;
 
   color: white;
-}
-
-
-h1, h2, h3, h4, h5, h6 {
-	font-family: Gill Sans MT Pro, sans-serif;
 }

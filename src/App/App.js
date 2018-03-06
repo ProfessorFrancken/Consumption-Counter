@@ -15,6 +15,8 @@ import CommitteeMembers from './Committees/CommitteeMembers';
 import RecentMembers from './Recent/';
 import Compucie from './Compucie/';
 
+import Gerjan from './Gerjan';
+
 const Statistics = () => (
   <div>
     <h2>Statistics</h2>
@@ -42,6 +44,13 @@ const AppContent = () => (
   </div>
 );
 
+const DevWrapper = () => (
+  <Switch>
+    <Route exact path="/dev" component={Gerjan} />
+    <Route path="/" component={App} />
+  </Switch>
+);
+
 const backgroundFromProduct = (background = null) => {
   return background === null
     ? {}
@@ -61,4 +70,4 @@ const App = ({ title, goToCompucieScreen, background }) => (
   </div>
 );
 
-export default App;
+export default DevWrapper;
