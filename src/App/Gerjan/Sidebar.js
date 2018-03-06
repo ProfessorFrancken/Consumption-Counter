@@ -1,19 +1,16 @@
 import React from 'react';
+import Icon from './Icon';
 
-const Sidebar = ({ menuItems }) => {
-  const style = {};
+const Sidebar = ({ menuItems }) => (
+  <div className="sidebar">
+    {menuItems.map((menuItem, i) => <MenuItem key={i} menuItem={menuItem} />)}
+  </div>
+);
 
-  return (
-    <div style={style}>
-      {menuItems.map(menuItem => <MenuButton menuItem={menuItem} />)}
-    </div>
-  );
-};
-
-const MenuButton = ({ menuItem }) => {
-  const style = {};
-
-  return <div style={style}>{menuItem.title}</div>;
-};
+const MenuItem = ({ menuItem }) => (
+  <div className={'menuButton ' + (menuItem.active ? 'active' : '')}>
+    <Icon name={menuItem.icon} />
+  </div>
+);
 
 export default Sidebar;

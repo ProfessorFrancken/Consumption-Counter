@@ -7,26 +7,15 @@
   --rowSize: 60px;
 }
 
-html {
-  height: 100%;
-  width: 100%;
-}
-
-body {
-  min-width: 100%;
-  min-width: 100%;
-}
-
 .container {
+  padding: 0;
   width: 100vw;
   height: 100vh;
-  margin: 0;
-  padding: 0;
   display: grid;
   grid-template-columns: [sidebar] var(--menuSize) [content] auto;
-  grid-template-rows:
-    [header] var(--rowSize) [content] auto [footer] var(--footerSize)
-    [footer-end];
+  grid-template-rows: [header] var(--rowSize) [content] auto [footer] var(
+      --footerSize
+    ) [footer-end];
   background-color: var(--secondary);
 }
 .header {
@@ -62,17 +51,16 @@ body {
   color: var(--primary) !important;
 }
 .content {
+  width: 100%;
+  display: grid;
   padding: 20px;
   margin-top: -20px;
   grid-row: content;
   grid-column: content;
   color: var(--primary);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-column-gap: 0.5em;
   grid-row-gap: 0.5em;
-  height: 100%;
-  align-content: stretch;
 }
 .tile {
   background: var(--primary);
