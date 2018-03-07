@@ -302,7 +302,6 @@ describe('Plus One', () => {
   });
 
   it('is possible select members through the compucie screen', done => {
-    console.log('compuciecompucie');
     const selectCompucie = app => {
       app
         .find('Header')
