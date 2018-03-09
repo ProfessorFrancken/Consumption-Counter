@@ -1,22 +1,12 @@
-import { connect } from 'react-redux'
-import { selectMember } from '../../actions'
-import Members from './Members'
+import { connect } from 'react-redux';
+import { selectMember } from '../../actions';
+import Members from './Members';
+import { rangeSelector } from './../../selectors';
 
-const mapStateToProps = state => {
-  return { members: state.selectedMemberRange.members }
-}
+const mapStateToProps = state => ({ members: rangeSelector(state) });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    selectMember: member => {
-      dispatch(selectMember(member))
-    }
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  selectMember: member => dispatch(selectMember(member))
+});
 
-const MemberSelection = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Members)
-
-export default MemberSelection
+export default connect(mapStateToProps, mapDispatchToProps)(Members);

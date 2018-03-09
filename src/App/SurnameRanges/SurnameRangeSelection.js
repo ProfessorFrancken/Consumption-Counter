@@ -1,22 +1,14 @@
-import { connect } from 'react-redux'
-import SurnameRanges from './SurnameRanges'
-import { selectRangeOfSurnames } from './../../actions'
+import { connect } from 'react-redux';
+import SurnameRanges from './SurnameRanges';
+import { selectRangeOfSurnames } from './../../actions';
+import { rangesSelector } from './../../selectors';
 
-const mapStateToProps = state => {
-  return { ranges: state.surnameRanges.ranges }
-}
+const mapStateToProps = state => ({
+  ranges: rangesSelector(state)
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    selectRange: range => {
-      dispatch(selectRangeOfSurnames(range))
-    }
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  selectRange: range => dispatch(selectRangeOfSurnames(range))
+});
 
-const SurnameRangesSelection = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SurnameRanges)
-
-export default SurnameRangesSelection
+export default connect(mapStateToProps, mapDispatchToProps)(SurnameRanges);

@@ -1,10 +1,8 @@
-import { connect } from 'react-redux'
-import PriceList from './PriceList'
+import { connect } from 'react-redux';
+import PriceList from './PriceList';
 
-const mapStateToProps = state => {
-  return {
-    products: state.products
-  }
-}
+const mapStateToProps = state => ({
+  products: state.products
+});
 
-export default connect(mapStateToProps)(PriceList)
+export default connect(mapStateToProps)(PriceList);

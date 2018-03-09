@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchInitialData } from './../actions';
+import { backgroundSelector } from './../selectors';
 import { withRouter } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import App from './App';
@@ -15,29 +16,15 @@ class AppContainer extends Component {
   }
 }
 
-const backgroundFromOrder = order => {
-  if (order === null) {
-    return null;
-  }
-  const product = order.order.products.find(
-    product => product.splash_image !== null
-  );
+const mapStateToProps = state => ({
+  title: state.title,
+  background: backgroundSelector(state)
+});
 
-  return product === undefined ? null : product.splash_image;
-};
-
-const mapStateToProps = state => {
-  return {
-    title: state.title,
-    background: backgroundFromOrder(state.queuedOrder)
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchData: () => dispatch(fetchInitialData()),
-    goToCompucieScreen: () => dispatch(push('/compucie'))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchData: () => dispatch(fetchInitialData()),
+  goToCompucieScreen: () => dispatch(push('/compucie'))
+});
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AppContainer)

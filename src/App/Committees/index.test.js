@@ -64,4 +64,30 @@ describe('committees', () => {
     let committee = committees.props().committees[0];
     expect(committee.members.length).toBe(1);
   });
+
+  it('ignores duplicated committee members', () => {
+    const mockStore = configureMockStore([thunk]);
+    const state = {
+      members: [{ id: 1 }],
+      committeeMembers: [
+        {
+          member_id: 1,
+          year: 2017,
+          function: 'King',
+          committee: { id: 1, name: 'Board' }
+        },
+        {
+          member_id: 1,
+          year: 2016,
+          function: 'King',
+          committee: { id: 1, name: 'Board' }
+        }
+      ]
+    };
+    const store = mockStore({ ...state });
+    const committees = shallow(<Committees store={store} />);
+
+    let committee = committees.props().committees[0];
+    expect(committee.members.length).toBe(1);
+  });
 });
