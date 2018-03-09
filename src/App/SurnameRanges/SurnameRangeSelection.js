@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import SurnameRanges from './SurnameRanges';
 import { selectRangeOfSurnames } from './../../actions';
-
-const rangesSelector = state => state.surnameRanges.ranges;
+import { rangesSelector } from './../../selectors';
 
 const mapStateToProps = state => ({
   ranges: rangesSelector(state)

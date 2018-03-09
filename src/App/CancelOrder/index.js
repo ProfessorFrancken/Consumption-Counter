@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { cancelOrder } from './../../actions';
+import { queuedOrderSelector } from './../../selectors';
 
 const CancelOrder = ({ onClick, queuedOrder }) =>
   queuedOrder === null ? null : (
@@ -19,7 +20,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  queuedOrder: state.queuedOrder
+  queuedOrder: queuedOrderSelector(state)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CancelOrder);
