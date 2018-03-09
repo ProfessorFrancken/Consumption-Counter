@@ -1,10 +1,8 @@
-import { connect } from 'react-redux'
-import Transactions from './Transactions'
+import { connect } from 'react-redux';
+import Transactions from './Transactions';
 
-const mapStateToProps = state => {
-  return {
-    transactions: state.transactions
-  }
-}
+const mapStateToProps = state => ({
+  transactions: state.transactions
+});
 
-export default connect(mapStateToProps)(Transactions)
+export default connect(mapStateToProps)(Transactions);
