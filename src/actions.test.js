@@ -411,6 +411,7 @@ describe('selecing a member', () => {
 
     store.dispatch(
       actions.selectRangeOfSurnames({
+        idx: 0,
         range: [],
         surname_start: 'A',
         surname_end: 'B'
@@ -418,10 +419,10 @@ describe('selecing a member', () => {
     );
 
     expect(store.getActions()).toEqual([
-      push('/members'),
+      push('/members/0'),
       {
         type: TYPES.SELECT_SURNAME_RANGE,
-        range: { range: [], surname_start: 'A', surname_end: 'B' }
+        range: { idx: 0, range: [], surname_start: 'A', surname_end: 'B' }
       }
     ]);
   });
@@ -455,6 +456,27 @@ describe('selecing a member', () => {
         member
       }
     ]);
+  });
+
+  describe('selecting guests', () => {
+    xit('can select a guest', () => {
+      const store = mockStore({});
+
+      store.dispatch(actions.selectGuest('guest'));
+
+      expect(store.getActions()).toEqual([
+        push('/products'),
+        {
+          type: TYPES.SELECT_MEMBER,
+          member: {
+            age: 100,
+            guest: true,
+            reason: 'guest',
+            id: 0
+          }
+        }
+      ]);
+    });
   });
 });
 
@@ -657,13 +679,13 @@ describe('committees', () => {
   it('selects a committee', () => {
     const store = mockStore({});
 
-    store.dispatch(actions.selectCommittee({}));
+    store.dispatch(actions.selectCommittee({ id: 0 }));
 
     expect(store.getActions()).toEqual([
-      push('/committee-members'),
+      push('/committees/0'),
       {
         type: TYPES.SELECT_COMMITTEE,
-        committee: {}
+        committee: { id: 0 }
       }
     ]);
   });

@@ -1,10 +1,4 @@
-import {
-  surnameRanges,
-  selectedMemberRange,
-  order,
-  transactions,
-  queuedOrder
-} from './reducer';
+import { surnameRanges, order, transactions, queuedOrder } from './reducer';
 import { TYPES } from './actions';
 import expect from 'expect';
 
@@ -36,7 +30,7 @@ describe('Surname selection reducer', () => {
       )
     ).toEqual({
       members_per_range: 6 * 5,
-      ranges: [{ members, surname_start: 'A', surname_end: 'F' }]
+      ranges: [{ idx: 0, members, surname_start: 'A', surname_end: 'F' }]
     });
   });
 
@@ -62,11 +56,13 @@ describe('Surname selection reducer', () => {
       members_per_range: 3,
       ranges: [
         {
+          idx: 0,
           members: [{ surname: 'A' }, { surname: 'B' }, { surname: 'C' }],
           surname_start: 'A',
           surname_end: 'C'
         },
         {
+          idx: 1,
           members: [{ surname: 'D' }, { surname: 'E' }, { surname: 'F' }],
           surname_start: 'D',
           surname_end: 'F'
@@ -77,25 +73,6 @@ describe('Surname selection reducer', () => {
 });
 
 describe('selecting a member', () => {
-  describe('selecting a range of members', () => {
-    it('should not have selected any range by default', () => {
-      expect(selectedMemberRange(undefined, {})).toEqual({
-        members: []
-      });
-    });
-
-    it('selects a range of members', () => {
-      expect(
-        selectedMemberRange(undefined, {
-          type: TYPES.SELECT_SURNAME_RANGE,
-          range: { members: ['Mark'] }
-        })
-      ).toEqual({
-        members: ['Mark']
-      });
-    });
-  });
-
   describe('selecting a member', () => {
     it('has no selected member by default', () => {
       expect(order(undefined, {}).member).toEqual({ age: 0 });

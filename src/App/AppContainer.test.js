@@ -165,7 +165,7 @@ describe('Plus One', () => {
       .findWhere(n => n.props().children === 'Compucie')
       .simulate('click');
 
-    expect(history.location.pathname).toBe('/committee-members');
+    expect(history.location.pathname).toBe('/committees/0');
   };
 
   const selectRecent = app => {

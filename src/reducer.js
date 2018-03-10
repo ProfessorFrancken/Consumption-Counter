@@ -59,31 +59,15 @@ export function surnameRanges(state = defaultRanges, action) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return {
         members_per_range: state.members_per_range,
-        ranges: chunk(action.members, state.members_per_range).map(range => {
-          const members = range;
-
-          return {
+        ranges: chunk(action.members, state.members_per_range).map(
+          (members, idx) => ({
+            idx,
             members,
             surname_start: first(members).surname,
             surname_end: last(members).surname
-          };
-        })
+          })
+        )
       };
-    default:
-      return state;
-  }
-}
-
-export function selectedMemberRange(state = { members: [] }, action) {
-  switch (action.type) {
-    case TYPES.SELECT_SURNAME_RANGE:
-      return { members: action.range.members };
-    case TYPES.SELECT_COMMITTEE:
-      return { members: action.committee.members };
-    case TYPES.BUY_ORDER_SUCCESS:
-    case TYPES.BUY_ORDER_FAILURE:
-    case TYPES.GO_BACK:
-      return { members: [] };
     default:
       return state;
   }

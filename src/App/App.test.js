@@ -45,10 +45,12 @@ describe('rendering', () => {
       { path: '/prominent', component: Prominent },
       { path: '/statistics', component: 'Statistics' },
       { path: '/committees', component: 'Committees' },
+      { path: '/committees/0', component: 'Members' },
       { path: '/pricelist', component: 'PriceList' },
       { path: '/recent', component: RecentMembers },
       { path: '/products', component: AvailableProducts },
-      { path: '/members', component: 'Members' }
+      { path: '/members', component: 'SurnameRanges' },
+      { path: '/members/0', component: 'Members' }
     ];
 
     screens.forEach(screen => {
@@ -88,6 +90,7 @@ function mockedState() {
       members_per_range: 30,
       ranges: [
         {
+          idx: 0,
           members: [
             {
               id: 1,
@@ -110,9 +113,6 @@ function mockedState() {
           surname_end: 'Snow'
         }
       ]
-    },
-    selectedMemberRange: {
-      members: []
     },
     products: {
       Bier: [
@@ -162,7 +162,15 @@ function mockedState() {
     },
     transactions: [],
     boardMembers: [],
-    committeeMembers: [],
+    committeeMembers: [
+      {
+        commissie_id: 0,
+        lid_id: 314,
+        jaar: 2018,
+        functie: 'King',
+        naam: 'Compucie'
+      }
+    ],
     queuedOrder: null
   };
 }

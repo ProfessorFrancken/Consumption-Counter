@@ -7,7 +7,6 @@ import {
   boardMembers,
   committeeMembers,
   surnameRanges,
-  selectedMemberRange,
   transactions,
   order,
   queuedOrder
@@ -19,7 +18,6 @@ export default combineReducers({
   boardMembers,
   committeeMembers,
   surnameRanges,
-  selectedMemberRange,
   products,
   transactions,
   order,

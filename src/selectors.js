@@ -10,13 +10,14 @@ const transactionsSelector = state => state.transactions;
 
 export const rangesSelector = state => state.surnameRanges.ranges;
 export const queuedOrderSelector = state => state.queuedOrder;
-export const rangeSelector = state => state.selectedMemberRange.members;
+export const membersInRangeSelector = (state, { page = 0 }) =>
+  state.surnameRanges.ranges[page].members;
 
 const activeMembersSelector = state => {
   const year = new Date().getUTCFullYear();
 
   return state.committeeMembers.filter(member =>
-    [year, year - 1].includes(member.year)
+    [year, year - 1, year - 2].includes(member.year)
   );
 };
 
@@ -34,7 +35,7 @@ const committeesSelector = createSelector(
 );
 
 // Get member info of all active members and filter out all members who don't streep
-const committeeeMembersWithMemberSelector = createSelector(
+const committeeMembersWithMemberSelector = createSelector(
   activeMembersSelector,
   membersSelector,
   (activeMembers, members) =>
@@ -100,7 +101,7 @@ export const backgroundSelector = createSelector(queuedOrderSelector, order => {
 
 export const committeesWithMembersSelector = createSelector(
   committeesSelector,
-  committeeeMembersWithMemberSelector,
+  committeeMembersWithMemberSelector,
   (committees, members) =>
     committees.map(committee => ({
       ...committee,
@@ -192,4 +193,14 @@ export const prominentSelector = createSelector(
     );
     return prominent;
   }
+);
+
+export const membersInCommitteesSelector = createSelector(
+  (state, { page }) => page,
+  committeeMembersWithMemberSelector,
+  (page, members) =>
+    uniqBy(
+      members.filter(member => member.committee_id === parseInt(page, 10)),
+      member => member.id
+    )
 );
