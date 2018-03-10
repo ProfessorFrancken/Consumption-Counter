@@ -317,6 +317,56 @@ describe('Plus One', () => {
     expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
+  // This test checks if we don't have any async issues
+  it('it is possible to buy a product after someone else has bought a product', done => {
+    selectRangeIncludingJohnSnow(app);
+
+    selectJohnSnow(app);
+
+    addHertogJanToOrder(app);
+
+    const selectOtherMemberAfterBuying = (app, expectedOrder, done) => {
+      // The cancel button should be shown until the timeout is run
+      expect(app.find('CancelOrder').find('button').length).toBe(1);
+
+      selectRangeIncludingJohnSnow(app);
+      selectJohnSnow(app);
+
+      jest.runTimersToTime(10000);
+
+      flushAllPromises()
+        .then(() => {
+          addHertogJanToOrder(app);
+
+          expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
+          const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
+
+          expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
+          expect(app.find('CancelOrder').find('button').length).toBe(1);
+
+          jest.runTimersToTime(10000);
+
+          flushAllPromises()
+            .then(() => {
+              expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(
+                2
+              );
+              const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
+
+              expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
+              done();
+            })
+            .catch(e => {
+              done.fail(e);
+            });
+        })
+        .catch(e => {
+          done.fail(e);
+        });
+    };
+
+    selectOtherMemberAfterBuying(app, mocks.orders.single, done);
+  });
   // Redirects
   // Shows a list of transactions
 

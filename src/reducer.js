@@ -88,7 +88,6 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
 
 const defaultOrder = {
   buyMore: false,
-  cancellable: false,
   member: { age: 0 },
   products: []
 };
@@ -97,15 +96,12 @@ export function order(state = defaultOrder, action) {
     case TYPES.BUY_MORE:
       return { ...state, buyMore: !state.buyMore, products: [] };
     case TYPES.SELECT_MEMBER:
-      return { ...state, member: action.member };
+      return { ...defaultOrder, member: action.member };
     case TYPES.ADD_PRODUCT_TO_ORDER:
       return { ...state, products: [...state.products, { ...action.product }] };
     case TYPES.GO_BACK:
+    case TYPES.QUEUE_ORDER:
       return defaultOrder;
-    case TYPES.BUY_ORDER_SUCCESS:
-    case TYPES.BUY_ORDER_FAILURE:
-      return { ...state, member: { age: 0 }, products: [] };
-    case TYPES.BUY_ORDER_REQUEST:
     default:
       return state;
   }
