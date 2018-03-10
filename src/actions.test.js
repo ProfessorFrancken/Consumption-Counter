@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { actions, TYPES, TIME_TO_CANCEL } from './actions';
 import fetchMock from 'fetch-mock';
 import expect from 'expect'; // You can use any testing library
-import { push } from 'react-router-redux';
+import { push, goBack } from 'react-router-redux';
 import api from './api';
 import clock from 'jest-plugin-clock';
 
@@ -486,7 +486,7 @@ describe('cancelling', () => {
 
     store.dispatch(actions.goBack());
 
-    expect(store.getActions()).toEqual([push('/'), { type: TYPES.GO_BACK }]);
+    expect(store.getActions()).toEqual([goBack(), { type: TYPES.GO_BACK }]);
   });
 });
 
@@ -555,8 +555,7 @@ describe('buying products', () => {
               order,
               ordered_at: 1519344000000
             },
-            { type: TYPES.BUY_ORDER_SUCCESS, member, order },
-            push('/')
+            { type: TYPES.BUY_ORDER_SUCCESS, member, order }
           ]);
         })
         .then(done)
@@ -625,8 +624,7 @@ describe('buying products', () => {
                 order,
                 ordered_at: 1519344000000
               },
-              { type: TYPES.BUY_ORDER_SUCCESS, member, order },
-              push('/')
+              { type: TYPES.BUY_ORDER_SUCCESS, member, order }
             ]);
           })
           .then(done)

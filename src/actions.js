@@ -1,5 +1,5 @@
 import { orderBy, pick } from 'lodash';
-import { push } from 'react-router-redux';
+import { push, goBack as goBackRoute } from 'react-router-redux';
 
 export const actions = {
   goBack,
@@ -161,8 +161,7 @@ function buyOrder(member, order, date) {
           member,
           order
         })
-      )
-      .then(() => dispatch(push('/')));
+      );
   };
 }
 
@@ -372,7 +371,7 @@ export function fetchInitialData() {
 
 export function goBack() {
   return dispatch => {
-    dispatch(push('/'));
+    dispatch(goBackRoute());
     dispatch({ type: TYPES.GO_BACK });
   };
 }
