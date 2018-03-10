@@ -134,5 +134,3 @@ export function queuedOrder(state = null, action) {
       return state;
   }
 }
-
-export function screen(state, action) {}
