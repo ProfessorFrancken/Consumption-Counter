@@ -370,9 +370,15 @@ export function fetchInitialData() {
 }
 
 export function goBack() {
-  return dispatch => {
-    dispatch(goBackRoute());
-    dispatch({ type: TYPES.GO_BACK });
+  return (dispatch, getState) => {
+    const { queuedOrder } = getState();
+
+    if (queuedOrder) {
+      dispatch(selectMember(queuedOrder.order.member));
+    } else {
+      dispatch(goBackRoute());
+      dispatch({ type: TYPES.GO_BACK });
+    }
   };
 }
 

@@ -204,3 +204,13 @@ export const membersInCommitteesSelector = createSelector(
       member => member.id
     )
 );
+
+export const goBackText = createSelector(queuedOrderSelector, queue => {
+  if (queue !== null) {
+    const member = queue.order.member;
+
+    return [member.firstName, member.surname].join(' ');
+  }
+
+  return 'Go back';
+});
