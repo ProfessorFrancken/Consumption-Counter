@@ -13,9 +13,8 @@ var schema = {
             "properties": {
               "id": {
                 "type": "integer",
-                "unique": true,
                 "minimum": 1,
-                "maximum": 1000
+                "autoIncrement": true
               },
               "voornaam": {
                 "type": "string",
@@ -80,8 +79,8 @@ var schema = {
             "properties": {
               "id": {
                 "type": "integer",
-                "unique": true,
-                "minimum": 1
+                "minimum": 1,
+                "autoIncrement": true
               },
               "naam": {
                 "type": "string",
