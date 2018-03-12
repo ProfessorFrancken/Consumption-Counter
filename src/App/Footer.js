@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
 import './Footer.css';
 import LinkButton from './LinkButton';
 import GoBack from './GoBack';
