@@ -199,10 +199,25 @@ describe('buying products', () => {
       queuedOrder(
         { ordered_at: 1, order: {} },
         {
-          type: TYPES.BUY_ORDER_REQUEST
+          type: TYPES.BUY_ORDER_REQUEST,
+          ordered_at: 1,
+          order: {}
         }
       )
     ).toEqual(null);
+  });
+
+  it('does not empty the queue if an order different than the current queued order is bought', () => {
+    expect(
+      queuedOrder(
+        { ordered_at: 1, order: {} },
+        {
+          type: TYPES.BUY_ORDER_REQUEST,
+          ordered_at: 2,
+          order: {}
+        }
+      )
+    ).toEqual({ ordered_at: 1, order: {} });
   });
 
   it('empties the queue when an order was cancelled', () => {

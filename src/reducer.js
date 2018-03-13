@@ -128,6 +128,11 @@ export function queuedOrder(state = null, action) {
         order: action.order
       };
     case TYPES.BUY_ORDER_REQUEST:
+      if (state === null) {
+        return null;
+      }
+
+      return state.ordered_at === action.ordered_at ? null : state;
     case TYPES.CANCEL_ORDER:
       return null;
     default:

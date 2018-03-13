@@ -277,7 +277,7 @@ describe('Plus One', () => {
       ordered: 0
     };
 
-    const order = { products: [product] };
+    const order = { products: [product], ordered_at: 1 };
 
     store.dispatch({ type: TYPES.BUY_ORDER_REQUEST, member, order });
     store.dispatch({ type: TYPES.BUY_ORDER_SUCCESS, member, order });
@@ -375,6 +375,41 @@ describe('Plus One', () => {
   // Keeps track of all transactions that went wrong
 
   // Retries transactions
+
+  it("does allows cancelling an order after an other order's timeout was handled", done => {
+    const cancelOrder = app => {
+      flushAllPromises()
+        .then(() => {
+          app.update();
+
+          app
+            .find('CancelOrder')
+            .find('button')
+            .simulate('click');
+
+          expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
+          expect(app.find('CancelOrder').find('button').length).toBe(0);
+        })
+        .then(done)
+        .catch(e => done.fail(e));
+    };
+
+    selectRangeIncludingJohnSnow(app);
+    selectJohnSnow(app);
+    addHertogJanToOrder(app);
+
+    // Run time forward a little so that the timeout of the first orders
+    // does not occur on the same time as the second
+    jest.runTimersToTime(4000);
+
+    selectRangeIncludingJohnSnow(app);
+    selectJohnSnow(app);
+    addHertogJanToOrder(app);
+
+    // Run the first timeout
+    jest.runTimersToTime(4000);
+    cancelOrder(app);
+  });
 });
 
 const mocks = {
