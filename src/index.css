@@ -7,6 +7,7 @@
   --rowSize: 60px;
   --arrowOverflow: 10px;
   --gridCollumns: 6;
+  --boards: 5;
 }
 
 body {
@@ -19,9 +20,9 @@ body {
   height: 100vh;
   display: grid;
   grid-template-columns: [sidebar] var(--menuSize) [content] 1fr;
-  grid-template-rows: [header] var(--rowSize) [content] auto [arrow-overflow] var(
-      --arrowOverflow
-    ) [footer] var(--footerSize) [footer-end];
+  grid-template-rows:
+    [header] var(--rowSize) [content] auto [arrow-overflow] var(--arrowOverflow)
+    [footer] var(--footerSize) [footer-end];
   background-color: var(--secondary);
 }
 .header {
@@ -77,6 +78,65 @@ body {
   grid-template-rows: auto;
   grid-column-gap: 0.5em;
   grid-row-gap: 0.5em;
+}
+
+.prominentGrid {
+  height: 100%;
+  display: grid;
+  grid-template-rows: [prominent] 1fr [boards] 4fr;
+}
+
+.prominentRow {
+  height: 100%;
+  grid-row: prominent;
+  display: flex;
+  flex-direction: row;
+  padding: 0.25em;
+}
+
+.prominentRow > .tile {
+  margin: 0.25em;
+}
+
+.boardsRow {
+  height: 100%;
+  grid-row: boards;
+  display: grid;
+  padding: 0.5em;
+  grid-column-gap: 0.5em;
+  grid-template-columns: repeat(var(--boards), 1fr);
+}
+
+.productsGrid {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25em;
+}
+
+.productsGrid > .categoryRow {
+  margin: 0.25em;
+}
+
+.categoryRow {
+  display: grid;
+  grid-template-columns: repeat(var(--gridCollumns), 1fr);
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.categoryRow > .tile {
+  margin: 0.25em;
+}
+
+.boardColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.boardColumn > .tile {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
 }
 
 .tile {

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Products.css';
+// import './Products.css';
 
 const AmountBeingOrdered = ({ product }) =>
   product.ordered > 0 ? (
     <span
-      className="btn-product-overlay text-white"
+      className=""
       style={{ top: 0, zIndex: 2, backgroundColor: 'rgba(198, 198, 198, 0.7)' }}
     >
       {product.ordered}
@@ -15,25 +15,23 @@ const AmountBeingOrdered = ({ product }) =>
     ''
   );
 
-const ProductName = ({ product }) => (
-  <span className="btn-product-overlay">{product.name}</span>
-);
+const ProductName = ({ product }) => <span>{product.name}</span>;
 
 const Product = ({ product, onClick }) => (
-  <button
+  <div
     onClick={() => onClick(product)}
-    className="SelectionItem btn btn-outline-light d-flex flex-column justify-content-center btn-product"
+    className="button tile"
     style={{
       backgroundImage: `url(${product.image})`
     }}
   >
     <AmountBeingOrdered product={product} />
     <ProductName product={product} />
-  </button>
+  </div>
 );
 
-const Category = ({ category, onClick }) => (
-  <nav className="SelectionGrid products-grid">
+const Category = ({ category, onClick, name }) => (
+  <nav className="categoryRow">
     {category.map(product => (
       <Product product={product} onClick={onClick} key={product.id} />
     ))}
@@ -46,10 +44,16 @@ const Products = ({ products, addProductToOrder }) => {
   const food = products['Eten'] || [];
 
   return (
-    <div className="h-100 d-flex flex-row">
-      <Category onClick={addProductToOrder} category={beer} />
-      <Category onClick={addProductToOrder} category={drinks} />
-      <Category onClick={addProductToOrder} category={food} />
+    <div className="productsGrid">
+      {drinks.length > 1 && (
+        <Category onClick={addProductToOrder} category={drinks} />
+      )}
+      {food.length > 1 && (
+        <Category onClick={addProductToOrder} category={food} />
+      )}
+      {beer.length > 1 && (
+        <Category onClick={addProductToOrder} category={beer} />
+      )}
     </div>
   );
 };
