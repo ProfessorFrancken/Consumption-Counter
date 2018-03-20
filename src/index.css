@@ -156,6 +156,7 @@ button {
 }
 
 .tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -221,4 +222,29 @@ button {
 
 .footer > .buyAllButton:hover {
   color: var(--secondary);
+}
+
+.productAmountOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productAmount {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border-radius: 50%;
+  width: 3em;
+  height: 3em;
+  line-height: 3em;
+}
+
+.productAmount > span {
+  color: var(--primary);
 }

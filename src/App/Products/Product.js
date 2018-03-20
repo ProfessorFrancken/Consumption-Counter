@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 
 const AmountBeingOrdered = ({ product }) =>
   product.ordered > 0 ? (
-    <span
-      className=""
-      style={{ top: 0, zIndex: 2, backgroundColor: 'rgba(198, 198, 198, 0.7)' }}
-    >
-      {product.ordered}
-      <br />
-    </span>
+    <div className="productAmountOverlay">
+      <div className="productAmount">
+        <span>{product.ordered}</span>
+      </div>
+    </div>
   ) : (
     ''
   );
@@ -65,7 +63,7 @@ class Product extends Component {
         }}
       >
         <AmountBeingOrdered product={product} />
-        <ProductName product={product} />
+        {product.ordered === 0 && <ProductName product={product} />}
       </button>
     );
   }
