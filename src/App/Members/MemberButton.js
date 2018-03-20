@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Member = ({ member, onClick, style = {} }) => (
-  <div
+  <button
     key={member.id}
     className="tile button"
     onClick={() => onClick(member)}
@@ -19,7 +19,7 @@ const Member = ({ member, onClick, style = {} }) => (
     {member.nickname
       ? member.nickname
       : member.firstName + ' ' + member.surname}
-  </div>
+  </button>
 );
 
 export default Member;

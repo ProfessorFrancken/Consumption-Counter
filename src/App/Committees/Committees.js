@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Committee = ({ committee, onClick }) => (
-  <div className="button tile" onClick={() => onClick(committee)}>
+  <button className="button tile" onClick={() => onClick(committee)}>
     {committee.name}
-  </div>
+  </button>
 );
 
 const Committees = ({ committees, selectCommittee }) => (

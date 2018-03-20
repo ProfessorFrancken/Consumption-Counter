@@ -18,16 +18,18 @@ const AmountBeingOrdered = ({ product }) =>
 const ProductName = ({ product }) => <span>{product.name}</span>;
 
 const Product = ({ product, onClick }) => (
-  <div
+  <button
     onClick={() => onClick(product)}
     className="button tile"
     style={{
-      backgroundImage: `url(${product.image})`
+      backgroundImage: `url(${product.image})`,
+      backgroundSize: 'cover',
+      backgroundPosition: '50% 50%'
     }}
   >
     <AmountBeingOrdered product={product} />
     <ProductName product={product} />
-  </div>
+  </button>
 );
 
 const Category = ({ category, onClick, name }) => (

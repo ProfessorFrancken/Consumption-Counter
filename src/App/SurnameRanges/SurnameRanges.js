@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Range = ({ range, onClick }) => (
-  <div className="button tile" onClick={() => onClick(range)}>
+  <button className="button tile" onClick={() => onClick(range)}>
     {range.surname_start}
     <br />
     -<br />
     {range.surname_end}
-  </div>
+  </button>
 );
 
 const SurnameRanges = ({ ranges, selectRange }) => (

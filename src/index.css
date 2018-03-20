@@ -14,6 +14,16 @@ body {
   background-color: var(--secondary);
 }
 
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
+}
+
 .wrapper {
   padding: 0;
   width: 100vw;
