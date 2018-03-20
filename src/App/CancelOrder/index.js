@@ -2,16 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { cancelOrder } from './../../actions';
 import { queuedOrderSelector } from './../../selectors';
+import Icon from './../Icon';
+import Price from './../Transactions/Price';
 
 const CancelOrder = ({ onClick, queuedOrder }) =>
   queuedOrder === null ? null : (
     <button
-      className="btn btn-outline-light btn-lg"
+      className="button cancelButton"
       onClick={() => onClick(queuedOrder)}
     >
-      {`Cancel ${queuedOrder.order.member.firstName} ${
-        queuedOrder.order.member.surname
-      }'s purchase`}
+      <Icon name="times-circle" />
+      <span style={{ marginLeft: '.5em' }}>
+        Cancel order (<Price products={queuedOrder.order.products} />)
+      </span>
     </button>
   );
 

@@ -10,6 +10,12 @@
   --boards: 5;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--secondary);
 }
@@ -193,12 +199,17 @@ button {
   line-height: var(--footerSize);
   grid-row: footer / footer-end;
   grid-column: content;
-  display: grid;
-  grid-template-columns: repeat(1, 3fr) [backButton] var(--footerSize);
+  display: flex;
+  justify-content: flex-end;
 }
 
-.footer > .backButton {
-  grid-column: backButton;
+.footer > .button {
   text-align: center;
   line-height: var(--footerSize);
+  padding: 0 2em;
+  font-weight: bold;
+}
+
+.footer > .cancelButton {
+  background-color: #e86161;
 }
