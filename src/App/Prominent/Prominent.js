@@ -11,15 +11,17 @@ const Prominent = ({ prominent, boards, selectMember }) => (
       ))}
     </div>
     <div className="boardsRow">
-      {boards.map(board => (
-        <div className="boardColumn">
-          {board.map(member => (
-            <Member
-              member={member.member}
-              key={member.member.id}
-              onClick={selectMember}
-            />
-          ))}
+      {boards.map((members, idx) => (
+        <div className="boardColumn" key={idx}>
+          {sortBy(members, member => member.function)
+            .reverse()
+            .map(member => (
+              <Member
+                member={member.member}
+                key={member.member.id}
+                onClick={selectMember}
+              />
+            ))}
         </div>
       ))}
     </div>

@@ -4,9 +4,9 @@ import { goBack } from './../actions';
 import Icon from './Icon';
 
 const GoBack = ({ onClick }) => (
-  <div className="button backButton" onClick={onClick}>
+  <button className="button backButton" onClick={onClick}>
     <Icon name="arrow-circle-left" />
-  </div>
+  </button>
 );
 
 const mapDispatchToProps = dispatch => {

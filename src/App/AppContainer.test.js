@@ -77,7 +77,15 @@ describe('Plus One', () => {
 
     const hertogJanButton = app
       .find('Product')
-      .find('button')
+      .findWhere(c => {
+        if (c.length === 0) {
+          return false;
+        }
+
+        const { product } = c.props();
+
+        return product !== undefined && product.id === 1;
+      })
       .first();
 
     hertogJanButton.simulate('click');
@@ -136,7 +144,7 @@ describe('Plus One', () => {
   const selectProminent = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const prominent = app.find('LinkButton[children="Prominent"]');
+    const prominent = app.find('NavLink[to="/prominent"]');
     expect(prominent.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
@@ -148,7 +156,7 @@ describe('Plus One', () => {
   const selectCommittees = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const committees = app.find('LinkButton[children="Committees"]');
+    const committees = app.find('NavLink[to="/committees"]');
     expect(committees.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
@@ -171,7 +179,7 @@ describe('Plus One', () => {
   const selectRecent = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const committees = app.find('LinkButton[children="Recent"]');
+    const committees = app.find('NavLink[to="/recent"]');
     expect(committees.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
@@ -297,16 +305,19 @@ describe('Plus One', () => {
     addHertogJanToOrder(app);
     const splash = 'Uo6qQC4Hm8TUqyNjw2G4.jpg';
 
-    expect(app.find('App').props().background).toBe(splash);
+    expect(
+      app
+        .find(`App`)
+        .first()
+        .props().background
+    ).toBe(splash);
     expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
   it('is possible select members through the compucie screen', done => {
     const selectCompucie = app => {
-      app
-        .find('Header')
-        .find('h1')
-        .simulate('click');
+      app.find('img').simulate('click');
+
       expect(history.location.pathname).toBe('/compucie');
     };
 

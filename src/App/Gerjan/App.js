@@ -29,8 +29,19 @@ const menuItems = [
   }
 ];
 
-const App = ({ children, title }) => (
-  <div className="wrapper">
+const backgroundFromProduct = (background = null) => {
+  return background === null
+    ? {}
+    : {
+        backgroundImage: `url("${background}")`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: '50%'
+      };
+};
+
+const App = ({ children, title, background, goToCompucieScreen }) => (
+  <div className="wrapper" style={backgroundFromProduct(background)}>
     <Header title={title} />
     <Sidebar menuItems={menuItems} />
     <Content>{children}</Content>
@@ -40,6 +51,8 @@ const App = ({ children, title }) => (
         <img
           src="https://professorfrancken.nl/images/LOGO_KAAL.png"
           className="franckenLogo img-fluid"
+          alt="Logo of T.F.V. 'Professor Francken'"
+          onClick={goToCompucieScreen}
         />
       </div>
     </div>

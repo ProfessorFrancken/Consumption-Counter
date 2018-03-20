@@ -22,35 +22,27 @@ const Statistics = () => (
 );
 
 const AppContent = () => (
-      <Switch>
-        <Route exact path="/compucie" component={Compucie} />
-        <Route exact path="/prominent" component={Prominent} />
-        <Route exact path="/statistics" component={Statistics} />
-        <Route exact path="/committees" component={Committees} />
-        <Route exact path="/committees/:page" component={CommitteeMembers} />
-        <Route exact path="/pricelist" component={PriceList} />
-        <Route exact path="/recent" component={RecentMembers} />
-        <Route exact path="/products" component={AvailableProducts} />
-        <Route exact path="/" component={SurnameRanges} />
-        <Route exact path="/members/:page(\d+)" component={Members} />
-        <Redirect from="/members" to="/" />
-      </Switch>
+  <Switch>
+    <Route exact path="/compucie" component={Compucie} />
+    <Route exact path="/prominent" component={Prominent} />
+    <Route exact path="/statistics" component={Statistics} />
+    <Route exact path="/committees" component={Committees} />
+    <Route exact path="/committees/:page" component={CommitteeMembers} />
+    <Route exact path="/pricelist" component={PriceList} />
+    <Route exact path="/recent" component={RecentMembers} />
+    <Route exact path="/products" component={AvailableProducts} />
+    <Route exact path="/" component={SurnameRanges} />
+    <Route exact path="/members/:page(\d+)" component={Members} />
+    <Redirect from="/members" to="/" />
+  </Switch>
 );
 
-
-const backgroundFromProduct = (background = null) => {
-  return background === null
-    ? {}
-    : {
-        backgroundImage: `url("${background}")`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: '50%'
-      };
-};
-
 const App = ({ title, goToCompucieScreen, background }) => (
-  <GerrieApp>
+  <GerrieApp
+    background={background}
+    title={title}
+    goToCompucieScreen={goToCompucieScreen}
+  >
     <AppContent />
   </GerrieApp>
 );

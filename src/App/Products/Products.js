@@ -47,13 +47,13 @@ const Products = ({ products, addProductToOrder }) => {
 
   return (
     <div className="productsGrid">
-      {drinks.length > 1 && (
+      {drinks.length > 0 && (
         <Category onClick={addProductToOrder} category={drinks} />
       )}
-      {food.length > 1 && (
+      {food.length > 0 && (
         <Category onClick={addProductToOrder} category={food} />
       )}
-      {beer.length > 1 && (
+      {beer.length > 0 && (
         <Category onClick={addProductToOrder} category={beer} />
       )}
     </div>
