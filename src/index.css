@@ -213,3 +213,12 @@ button {
 .footer > .cancelButton {
   background-color: #e86161;
 }
+
+.footer > .buyAllButton {
+  background-color: #61e86c;
+  color: var(--primary);
+}
+
+.footer > .buyAllButton:hover {
+  color: var(--secondary);
+}

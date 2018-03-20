@@ -1,36 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import './Products.css';
-
-const AmountBeingOrdered = ({ product }) =>
-  product.ordered > 0 ? (
-    <span
-      className=""
-      style={{ top: 0, zIndex: 2, backgroundColor: 'rgba(198, 198, 198, 0.7)' }}
-    >
-      {product.ordered}
-      <br />
-    </span>
-  ) : (
-    ''
-  );
-
-const ProductName = ({ product }) => <span>{product.name}</span>;
-
-const Product = ({ product, onClick }) => (
-  <button
-    onClick={() => onClick(product)}
-    className="button tile"
-    style={{
-      backgroundImage: `url(${product.image})`,
-      backgroundSize: 'cover',
-      backgroundPosition: '50% 50%'
-    }}
-  >
-    <AmountBeingOrdered product={product} />
-    <ProductName product={product} />
-  </button>
-);
+import Product from './ProductContainer';
 
 const Category = ({ category, onClick, name }) => (
   <nav className="categoryRow">

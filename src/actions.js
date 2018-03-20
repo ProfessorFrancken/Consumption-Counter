@@ -201,18 +201,19 @@ export function fetchMembers() {
       type: TYPES.FETCH_MEMBERS_REQUEST
     });
 
-    const calculateAge = lid => {
-      const birthdayString = lid.geboortedatum;
-      if (birthdayString === null) {
-        return 0;
-      }
-      const birthday = new Date(Date.parse(birthdayString));
+    const calculateAge = lid => 24;
+    // ;{
+    //   const birthdayString = lid.geboortedatum;
+    //   if (birthdayString === null) {
+    //     return 0;
+    //   }
+    //   const birthday = new Date(Date.parse(birthdayString));
 
-      const date = new Date();
-      const ageDifMs = date.getTime() - birthday.getTime();
-      const ageDate = new Date(ageDifMs);
-      return Math.abs(ageDate.getUTCFullYear() - 1970);
-    };
+    //   const date = new Date();
+    //   const ageDifMs = date.getTime() - birthday.getTime();
+    //   const ageDate = new Date(ageDifMs);
+    //   return Math.abs(ageDate.getUTCFullYear() - 1970);
+    // };
 
     const mapMembers = lid => {
       // The server gives us a dd-mm-yyyy response
@@ -382,8 +383,11 @@ export function goBack() {
   };
 }
 
-export function buyMore() {
-  return { type: TYPES.BUY_MORE };
+export function buyMore(product) {
+  return {
+    type: TYPES.BUY_MORE,
+    product
+  };
 }
 
 export default actions;
