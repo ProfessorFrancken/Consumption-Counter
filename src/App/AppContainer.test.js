@@ -327,7 +327,7 @@ describe('Plus One', () => {
     };
 
     selectCompucie(app);
-    selectJohnSnow(app);
+    selectJohnSnow(app.find('.compucie').first());
 
     addHertogJanToOrder(app);
     expectOrderToBeBought(app, mocks.orders.single, done);
