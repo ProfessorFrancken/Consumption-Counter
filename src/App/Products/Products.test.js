@@ -31,7 +31,8 @@ it('adds products to an order when clicked', () => {
 
   mount(products)
     .find('Product')
-    .simulate('click');
+    .simulate('mouseDown')
+    .simulate('mouseUp');
 
   expect(addToOrder).toBeCalledWith({ id: 1, name: 'Hertog-Jan', image: '' });
 });

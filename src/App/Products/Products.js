@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Product from './ProductContainer';
+import Product from './Product';
 
-const Category = ({ category, onClick, name }) => (
+const Category = ({ category, onClick, toggle, name }) => (
   <nav className="categoryRow">
     {category.map(product => (
-      <Product product={product} onClick={onClick} key={product.id} />
+      <Product
+        product={product}
+        onClick={onClick}
+        toggle={toggle}
+        key={product.id}
+      />
     ))}
   </nav>
 );
 
-const Products = ({ products, addProductToOrder }) => {
+const Products = ({ products, addProductToOrder, toggle }) => {
   const beer = products['Bier'] || [];
   const drinks = products['Fris'] || [];
   const food = products['Eten'] || [];
@@ -18,13 +23,17 @@ const Products = ({ products, addProductToOrder }) => {
   return (
     <div className="productsGrid">
       {drinks.length > 0 && (
-        <Category onClick={addProductToOrder} category={drinks} />
+        <Category
+          onClick={addProductToOrder}
+          toggle={toggle}
+          category={drinks}
+        />
       )}
       {food.length > 0 && (
-        <Category onClick={addProductToOrder} category={food} />
+        <Category onClick={addProductToOrder} toggle={toggle} category={food} />
       )}
       {beer.length > 0 && (
-        <Category onClick={addProductToOrder} category={beer} />
+        <Category onClick={addProductToOrder} toggle={toggle} category={beer} />
       )}
     </div>
   );

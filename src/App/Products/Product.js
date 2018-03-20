@@ -23,7 +23,7 @@ class Product extends Component {
   };
 
   onMouseUp = () => {
-    const { onClick, product, buyMore } = this.props;
+    const { onClick, product } = this.props;
 
     if (this.state.longPressed) {
       this.setState({
@@ -37,7 +37,7 @@ class Product extends Component {
   };
 
   onLongPress = () => {
-    const { toggle, onClick, product, buyMore } = this.props;
+    const { toggle, product } = this.props;
 
     this.setState({
       longPressed: true

@@ -88,7 +88,7 @@ describe('Plus One', () => {
       })
       .first();
 
-    hertogJanButton.simulate('click');
+    hertogJanButton.simulate('mouseDown').simulate('mouseUp');
   };
 
   const expectOrderToBeBought = (app, expectedOrder, done) => {
@@ -113,27 +113,33 @@ describe('Plus One', () => {
   };
 
   const selectBuyMore = app => {
-    expect(app.find('BuyMore').find('input').length).toBe(1);
-    const select = app
-      .find('BuyMore')
-      .find('input')
+    const hertogJanButton = app
+      .find('Product')
+      .findWhere(c => {
+        if (c.length === 0) {
+          return false;
+        }
+
+        const { product } = c.props();
+
+        return product !== undefined && product.id === 1;
+      })
       .first();
-    expect(select.props().checked).toBeFalsy();
-    select.simulate('change');
+
+    // Long press the product to select more of it
+    hertogJanButton.simulate('mouseDown');
+    jest.runTimersToTime(1000);
+    hertogJanButton.simulate('mouseUp');
   };
 
   const expectBuyMoreToBeSelected = app => {
-    const select = app
-      .find('BuyMore')
-      .find('input')
-      .first();
-    expect(select.props().checked).toBeTruthy();
+    expect(app.find('BuyAll').length).toBe(1);
   };
 
   const buyAll = (app, done) => {
-    expect(app.find('BuyMore').find('button').length).toBe(1);
+    expect(app.find('BuyAll').find('button').length).toBe(1);
     const buyAll = app
-      .find('BuyMore')
+      .find('BuyAll')
       .find('button')
       .first();
     buyAll.simulate('click');
@@ -206,7 +212,6 @@ describe('Plus One', () => {
     expectBuyMoreToBeSelected(app);
 
     // Let's buy some pils
-    addHertogJanToOrder(app);
     addHertogJanToOrder(app);
     addHertogJanToOrder(app);
 
