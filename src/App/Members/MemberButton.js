@@ -16,8 +16,8 @@ const Member = ({ member, onClick, style = {} }) => (
       flexGrow: 1
     }}
   >
-    {member.nickname
-      ? member.nickname
+    {member.cosmetics.nickname
+      ? member.cosmetics.nickname
       : member.firstName + ' ' + member.surname}
   </button>
 );
