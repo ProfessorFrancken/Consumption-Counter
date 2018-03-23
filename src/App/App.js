@@ -11,6 +11,7 @@ import Committees from './Committees/';
 import CommitteeMembers from './Committees/CommitteeMembers';
 import RecentMembers from './Recent/';
 import Compucie from './Compucie/';
+import Authenticate from './Authentication/';
 
 import GerrieApp from './Gerjan/App';
 
@@ -23,6 +24,7 @@ const Statistics = () => (
 
 const AppContent = () => (
   <Switch>
+    <Route exact path="/authenticate" component={Authenticate} />
     <Route exact path="/compucie" component={Compucie} />
     <Route exact path="/prominent" component={Prominent} />
     <Route exact path="/statistics" component={Statistics} />

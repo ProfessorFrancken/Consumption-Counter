@@ -143,3 +143,14 @@ export function queuedOrder(state = null, action) {
       return state;
   }
 }
+
+export function authenticationToken(state = null, action) {
+  switch (action.type) {
+    case TYPES.AUTHENTICATE_REQUEST:
+      return null;
+    case TYPES.AUTHENTICATE_SUCCESS:
+      return action.token;
+    default:
+      return state;
+  }
+}

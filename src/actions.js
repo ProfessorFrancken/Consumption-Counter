@@ -1,5 +1,6 @@
 import { orderBy, pick } from 'lodash';
 import { push, goBack as goBackRoute } from 'react-router-redux';
+import { setHeader } from './Setup/authHeader';
 
 export const actions = {
   goBack,
@@ -52,7 +53,11 @@ export const TYPES = {
 
   FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
   FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
-  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE'
+  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE',
+
+  AUTHENTICATE_REQUEST: 'AUTHENTICATE_REQUEST',
+  AUTHENTICATE_SUCCESS: 'AUTHENTICATE_SUCCESS',
+  AUTHENTICATE_FAILURE: 'AUTHENTICATE_FAILURE'
 };
 
 export function selectRangeOfSurnames(range) {
@@ -386,6 +391,26 @@ export function buyMore(product) {
   return {
     type: TYPES.BUY_MORE,
     product
+  };
+}
+
+export function authenticate(password) {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: TYPES.AUTHENTICATE_REQUEST,
+      password
+    });
+
+    return api
+      .post('/authenticate', { password })
+      .then(response => {
+        setHeader(response.token);
+        dispatch({
+          type: TYPES.AUTHENTICATE_SUCCESS,
+          token: response.token
+        });
+      })
+      .catch(ex => dispatch({ type: TYPES.AUTHENTICATE_FAILURE }));
   };
 }
 
