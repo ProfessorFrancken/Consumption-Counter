@@ -2,10 +2,10 @@
   --primary: #2d2d2d;
   --secondary: #efefef;
   --tertiary: #173249;
-  --menuSize: 100px;
+  --menuSize: 150px;
   --footerSize: 100px;
-  --rowSize: 60px;
-  --arrowOverflow: 10px;
+  --rowSize: 100px;
+  --arrowOverflow: 40px;
   --gridCollumns: 6;
   --boards: 5;
 }
@@ -71,7 +71,7 @@ button {
 .menuButton {
   display: block;
   height: var(--rowSize);
-  width: 100px;
+  width: var(--menuSize);
   line-height: var(--rowSize);
   text-align: center;
 }
@@ -170,8 +170,8 @@ button {
   overflow-wrap: break-word;
 }
 .arrow {
-  margin-left: -100px;
-  width: 200px;
+  margin-left: calc(-1 * var(--menuSize));
+  width: calc(220px + var(--arrowOverflow));
   background-color: var(--tertiary);
   height: calc(var(--footerSize) + var(--arrowOverflow));
   display: inline-block;
@@ -184,8 +184,8 @@ button {
 .arrowContent {
   color: var(--primary);
   line-height: calc(var(--footerSize) + var(--arrowOverflow));
-  margin-left: 35px;
-  margin-right: 75px;
+  margin-left: calc(var(--arrowOverflow) + 15px);
+  margin-right: calc(var(--arrowOverflow) + 45px);
   transform: skewX(-30deg);
   transform-origin: bottom right;
 }
