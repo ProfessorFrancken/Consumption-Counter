@@ -7,6 +7,7 @@
   --rowSize: 100px;
   --arrowOverflow: 40px;
   --gridCollumns: 6;
+  --productsGridCollumns: 3;
   --boards: 5;
 
   --padding: 40px;
@@ -133,17 +134,17 @@ button {
 .productsGrid {
   height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   padding: 0.25em;
 }
 
 .productsGrid > .categoryRow {
-  margin: 0.25em;
+  margin: 0.25em 0.5em;
 }
 
 .categoryRow {
   display: grid;
-  grid-template-columns: repeat(var(--gridCollumns), 1fr);
+  grid-template-columns: repeat(var(--productsGridCollumns), 1fr);
   flex-grow: 1;
   flex-basis: 0;
 }
