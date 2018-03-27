@@ -42,7 +42,7 @@ const backgroundFromProduct = (background = null) => {
 
 const App = ({ children, title, background, goToCompucieScreen }) => (
   <div className="wrapper" style={backgroundFromProduct(background)}>
-    <Header title={title} />
+    <Header title={title} onClick={goToCompucieScreen} />
     <Sidebar menuItems={menuItems} />
     <Content>{children}</Content>
     <Footer />

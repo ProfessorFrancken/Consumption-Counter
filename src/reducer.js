@@ -77,6 +77,8 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
   switch (action.type) {
     case TYPES.SELECT_MEMBER:
       return `${action.member.firstName} ${action.member.surname}`;
+    case TYPES.SELECT_COMMITTEE:
+      return action.committee.name;
     case TYPES.BUY_ORDER_SUCCESS:
     case TYPES.BUY_ORDER_FAILURE:
     case TYPES.GO_BACK:
@@ -111,7 +113,7 @@ export function order(state = defaultOrder, action) {
   }
 }
 
-const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
+const KEEP_TRACK_OF_N_TRANSCACTIONS = 40;
 export function transactions(state = [], action) {
   switch (action.type) {
     case TYPES.BUY_ORDER_SUCCESS:
