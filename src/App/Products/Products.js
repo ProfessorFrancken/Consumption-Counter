@@ -22,6 +22,9 @@ const Products = ({ products, addProductToOrder, toggle }) => {
 
   return (
     <div className="productsGrid">
+      {beer.length > 0 && (
+        <Category onClick={addProductToOrder} toggle={toggle} category={beer} />
+      )}
       {drinks.length > 0 && (
         <Category
           onClick={addProductToOrder}
@@ -31,9 +34,6 @@ const Products = ({ products, addProductToOrder, toggle }) => {
       )}
       {food.length > 0 && (
         <Category onClick={addProductToOrder} toggle={toggle} category={food} />
-      )}
-      {beer.length > 0 && (
-        <Category onClick={addProductToOrder} toggle={toggle} category={beer} />
       )}
     </div>
   );
