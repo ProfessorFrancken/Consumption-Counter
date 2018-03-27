@@ -25,7 +25,7 @@ const Compucie = ({ compucie, scriptcie, selectMember }) => (
 
       <Member
         member={{
-          id: 0,
+          id: 1098,
           firstName: 'Guest',
           surname: '',
           age: 101,
@@ -37,7 +37,7 @@ const Compucie = ({ compucie, scriptcie, selectMember }) => (
 
       <Member
         member={{
-          id: 0,
+          id: 1098,
           firstName: 'Overdue',
           surname: '',
           age: 101,
