@@ -23,7 +23,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchInitialData()),
-  goToCompucieScreen: () => dispatch(push('/compucie'))
+  goToCompucieScreen: () => dispatch(push('/compucie')),
+  goHome: () => dispatch(push('/'))
 });
 
 export default withRouter(
