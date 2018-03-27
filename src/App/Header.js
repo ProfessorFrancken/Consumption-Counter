@@ -9,6 +9,7 @@ const Header = ({ title, onClick }) => (
       <Route exact path="/prominent" render={() => <span>Prominent</span>} />
       <Route exact path="/recent" render={() => <span>Recent</span>} />
       <Route exact path="/committees" render={() => <span>Committees</span>} />
+      <Route exact path="/statistics" render={() => <span>Statistics</span>} />
       <Route
         exact
         path="/committees/:page(\d+)"

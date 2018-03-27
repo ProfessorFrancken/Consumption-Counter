@@ -15,12 +15,7 @@ import Authenticate from './Authentication/';
 
 import GerrieApp from './Gerjan/App';
 
-const Statistics = () => (
-  <div>
-    <h2>Statistics</h2>
-    <Transactions />
-  </div>
-);
+const Statistics = () => <Transactions />;
 
 const AppContent = () => (
   <Switch>
