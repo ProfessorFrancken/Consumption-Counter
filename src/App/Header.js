@@ -1,28 +1,24 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import LinkButton from './LinkButton';
-import BuyMore from './Products/BuyMoreContainer';
-import './Header.css';
-import CancelOrder from './CancelOrder/';
 
-// The title of the header can be set when a member chooses a product
-// Note if recently an order was made, show a cancel button instead
-const Header = ({ title = "T.F.V. 'Professor Francken'", onClick }) => (
-  <header className="App-header Header">
-    <h1 className="App-title Header-title mb-0" onClick={onClick}>
-      {title}
-    </h1>
-    <CancelOrder />
-    <Route exact path="/products" component={BuyMore} />
-    <nav className="Header-navigation">
-      <LinkButton to="/statistics" className="btn-lg mx-2">
-        Statistics
-      </LinkButton>
-      <LinkButton to="/pricelist" className="btn-lg ml-2">
-        Pricelist
-      </LinkButton>
-    </nav>
-  </header>
+const Header = ({ title, onClick }) => (
+  <div className="header">
+    <div className="titleName">
+      <Route exact path="/prominent" render={() => <span>Prominent</span>} />
+      <Route exact path="/recent" render={() => <span>Recent</span>} />
+      <Route exact path="/committees" render={() => <span>Committees</span>} />
+      <Route exact path="/statistics" render={() => <span>Statistics</span>} />
+      <Route
+        exact
+        path="/committees/:page(\d+)"
+        render={() => <span>{title}</span>}
+      />
+      <Route exact path="/products" render={() => <span>{title}</span>} />
+    </div>
+    <div className="association" onClick={onClick}>
+      T.F.V. 'Professor Francken'
+    </div>
+  </div>
 );
 
 export default Header;

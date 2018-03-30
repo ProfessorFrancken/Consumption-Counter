@@ -11,7 +11,7 @@ describe('<CancelOrder>', () => {
     const mockStore = configureMockStore([thunk]);
 
     const member = { id: 2, firstName: 'John', surname: 'Snow' };
-    const products = [{ id: 1 }];
+    const products = [{ id: 1, price: 100 }];
     const store = mockStore({
       queuedOrder: {
         order: { products, member },
@@ -26,7 +26,7 @@ describe('<CancelOrder>', () => {
 
     cancel.find('button').simulate('click');
 
-    expect(cancel.find('button').text()).toEqual("Cancel John Snow's purchase");
+    expect(cancel.find('button').text()).toEqual('Cancel order (€1.00)');
 
     expect(store.getActions()).toEqual([
       {

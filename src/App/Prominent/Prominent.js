@@ -4,37 +4,27 @@ import Member from './../Members/MemberButton';
 import { sortBy } from 'lodash';
 
 const Prominent = ({ prominent, boards, selectMember }) => (
-  <div className="d-flex flex-column justify-content-stretch h-100">
-    <nav className="SelectionGrid" style={{ flexShrink: 4 }}>
+  <div className="prominentGrid">
+    <div className="prominentRow">
       {prominent.map(member => (
         <Member member={member} key={member.id} onClick={selectMember} />
       ))}
-    </nav>
-    <nav
-      className="d-flex justify-content-stretch h-100"
-      style={{ flexGrow: 1, height: '1%' }}
-    >
-      {boards.map((board, idx) => (
-        <div
-          className="d-flex flex-wrap flex-column"
-          style={{ flexGrow: 1, width: '1%', gridTemplateColumns: '1fr' }}
-          key={idx}
-        >
-          {sortBy(board, board => board.function)
+    </div>
+    <div className="boardsRow">
+      {boards.map((members, idx) => (
+        <div className="boardColumn" key={idx}>
+          {sortBy(members, member => member.function)
             .reverse()
             .map(member => (
               <Member
                 member={member.member}
                 key={member.member.id}
                 onClick={selectMember}
-                // I'm not sure why, but setting the height of the button makes sure that all
-                // buttons in the same collumn get the same height
-                style={{ height: '1px' }}
               />
             ))}
         </div>
       ))}
-    </nav>
+    </div>
   </div>
 );
 

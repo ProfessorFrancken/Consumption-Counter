@@ -1,25 +1,14 @@
 import React from 'react';
-import './Footer.css';
-import LinkButton from './LinkButton';
+import BuyAll from './BuyAll';
 import GoBack from './GoBack';
-import Status from './Status';
+import CancelOrder from './CancelOrder';
 
 const Footer = () => (
-  <footer className="Footer">
-    <nav className="Footer-navigation">
-      <LinkButton to="/prominent" className="btn-lg mr-2">
-        Prominent
-      </LinkButton>
-      <LinkButton to="/committees" className="btn-lg mx-2">
-        Committees
-      </LinkButton>
-      <LinkButton to="/recent" className="btn-lg mx-2">
-        Recent
-      </LinkButton>
-    </nav>
+  <div className="footer">
+    <CancelOrder />
+    <BuyAll />
     <GoBack />
-    <Status />
-  </footer>
+  </div>
 );
 
 export default Footer;

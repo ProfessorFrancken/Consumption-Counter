@@ -6,6 +6,7 @@ import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { create, history } from './../Setup/store';
 import { TYPES } from './../actions';
+import MockDate from 'mockdate';
 
 describe('Plus One', () => {
   let store, app;
@@ -15,6 +16,8 @@ describe('Plus One', () => {
   const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
 
   beforeEach(() => {
+    MockDate.set(new Date(1514764800000));
+
     store = create();
 
     jest.useFakeTimers();
@@ -52,6 +55,7 @@ describe('Plus One', () => {
   });
 
   afterEach(() => {
+    MockDate.reset();
     fetchMock.reset();
     fetchMock.restore();
   });
@@ -77,10 +81,18 @@ describe('Plus One', () => {
 
     const hertogJanButton = app
       .find('Product')
-      .find('button')
+      .findWhere(c => {
+        if (c.length === 0) {
+          return false;
+        }
+
+        const { product } = c.props();
+
+        return product !== undefined && product.id === 1;
+      })
       .first();
 
-    hertogJanButton.simulate('click');
+    hertogJanButton.simulate('mouseDown').simulate('mouseUp');
   };
 
   const expectOrderToBeBought = (app, expectedOrder, done) => {
@@ -105,27 +117,33 @@ describe('Plus One', () => {
   };
 
   const selectBuyMore = app => {
-    expect(app.find('BuyMore').find('input').length).toBe(1);
-    const select = app
-      .find('BuyMore')
-      .find('input')
+    const hertogJanButton = app
+      .find('Product')
+      .findWhere(c => {
+        if (c.length === 0) {
+          return false;
+        }
+
+        const { product } = c.props();
+
+        return product !== undefined && product.id === 1;
+      })
       .first();
-    expect(select.props().checked).toBeFalsy();
-    select.simulate('change');
+
+    // Long press the product to select more of it
+    hertogJanButton.simulate('mouseDown');
+    jest.runTimersToTime(1000);
+    hertogJanButton.simulate('mouseUp');
   };
 
   const expectBuyMoreToBeSelected = app => {
-    const select = app
-      .find('BuyMore')
-      .find('input')
-      .first();
-    expect(select.props().checked).toBeTruthy();
+    expect(app.find('BuyAll').length).toBe(1);
   };
 
   const buyAll = (app, done) => {
-    expect(app.find('BuyMore').find('button').length).toBe(1);
+    expect(app.find('BuyAll').find('button').length).toBe(1);
     const buyAll = app
-      .find('BuyMore')
+      .find('BuyAll')
       .find('button')
       .first();
     buyAll.simulate('click');
@@ -136,7 +154,7 @@ describe('Plus One', () => {
   const selectProminent = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const prominent = app.find('LinkButton[children="Prominent"]');
+    const prominent = app.find('NavLink[to="/prominent"]');
     expect(prominent.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
@@ -148,7 +166,7 @@ describe('Plus One', () => {
   const selectCommittees = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const committees = app.find('LinkButton[children="Committees"]');
+    const committees = app.find('NavLink[to="/committees"]');
     expect(committees.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
@@ -171,7 +189,7 @@ describe('Plus One', () => {
   const selectRecent = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const committees = app.find('LinkButton[children="Recent"]');
+    const committees = app.find('NavLink[to="/recent"]');
     expect(committees.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
@@ -198,7 +216,6 @@ describe('Plus One', () => {
     expectBuyMoreToBeSelected(app);
 
     // Let's buy some pils
-    addHertogJanToOrder(app);
     addHertogJanToOrder(app);
     addHertogJanToOrder(app);
 
@@ -297,7 +314,12 @@ describe('Plus One', () => {
     addHertogJanToOrder(app);
     const splash = 'Uo6qQC4Hm8TUqyNjw2G4.jpg';
 
-    expect(app.find('App').props().background).toBe(splash);
+    expect(
+      app
+        .find(`App`)
+        .first()
+        .props().background
+    ).toBe(splash);
     expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
@@ -305,13 +327,14 @@ describe('Plus One', () => {
     const selectCompucie = app => {
       app
         .find('Header')
-        .find('h1')
+        .find('.association')
         .simulate('click');
+
       expect(history.location.pathname).toBe('/compucie');
     };
 
     selectCompucie(app);
-    selectJohnSnow(app);
+    selectJohnSnow(app.find('.compucie').first());
 
     addHertogJanToOrder(app);
     expectOrderToBeBought(app, mocks.orders.single, done);
@@ -402,6 +425,7 @@ describe('Plus One', () => {
     // does not occur on the same time as the second
     jest.runTimersToTime(4000);
 
+    MockDate.set(new Date(1514764800000 + 4000));
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
     addHertogJanToOrder(app);
@@ -468,28 +492,29 @@ const mocks = {
 
   orders: {
     single: {
-      member: {
-        id: 314,
-        firstName: 'John',
-        surname: 'Snow'
-      },
       order: {
+        member: {
+          id: 314,
+          firstName: 'John',
+          surname: 'Snow'
+        },
         products: [
           {
             id: 1,
             name: 'Hertog Jan',
             price: 65
           }
-        ]
+        ],
+        ordered_at: 1514764800000
       }
     },
     multiple: {
-      member: {
-        id: 314,
-        firstName: 'John',
-        surname: 'Snow'
-      },
       order: {
+        member: {
+          id: 314,
+          firstName: 'John',
+          surname: 'Snow'
+        },
         products: [
           {
             id: 1,
@@ -506,7 +531,8 @@ const mocks = {
             name: 'Hertog Jan',
             price: 65
           }
-        ]
+        ],
+        ordered_at: 1514764800000
       }
     }
   },

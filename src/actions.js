@@ -1,5 +1,6 @@
 import { orderBy, pick } from 'lodash';
 import { push, goBack as goBackRoute } from 'react-router-redux';
+import { setHeader } from './Setup/authHeader';
 
 export const actions = {
   goBack,
@@ -52,7 +53,11 @@ export const TYPES = {
 
   FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
   FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
-  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE'
+  FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE',
+
+  AUTHENTICATE_REQUEST: 'AUTHENTICATE_REQUEST',
+  AUTHENTICATE_SUCCESS: 'AUTHENTICATE_SUCCESS',
+  AUTHENTICATE_FAILURE: 'AUTHENTICATE_FAILURE'
 };
 
 export function selectRangeOfSurnames(range) {
@@ -93,6 +98,7 @@ export function buyAll() {
 const orderQueue = {};
 
 export const TIME_TO_CANCEL = 7000;
+// TODO don't make this exportable and m ake order not be optional
 export function makeOrder(order = undefined) {
   return (dispatch, getState) => {
     return new Promise(resolve => {
@@ -102,7 +108,7 @@ export function makeOrder(order = undefined) {
 
       dispatch({
         type: TYPES.QUEUE_ORDER,
-        order: pick(order, 'member', 'products'),
+        order: pick(order, 'member', 'products', 'ordered_at'),
         ordered_at: date.getTime()
       });
       dispatch(push('/'));
@@ -122,7 +128,7 @@ export function cancelOrder(order, ordered_at) {
 
     dispatch({
       type: TYPES.CANCEL_ORDER,
-      order: pick(order, 'member', 'products'),
+      order: pick(order, 'member', 'products', 'ordered_at'),
       ordered_at
     });
   };
@@ -132,34 +138,39 @@ function buyOrder(member, order, date) {
   return (dispatch, getState, api) => {
     delete orderQueue[date.getTime()];
 
+    const ordered_at = date.getTime();
+
     dispatch({
       type: TYPES.BUY_ORDER_REQUEST,
       member,
       order,
-      ordered_at: date.getTime()
+      ordered_at
     });
 
     return api
       .post('/orders', {
-        member: pick(member, ['id', 'firstName', 'surname']),
         order: {
+          member: pick(member, ['id', 'firstName', 'surname']),
           products: order.products.map(product =>
             pick(product, ['id', 'name', 'price'])
-          )
+          ),
+          ordered_at
         }
       })
       .then(response => {
         dispatch({
           type: TYPES.BUY_ORDER_SUCCESS,
           member,
-          order
+          order,
+          ordered_at
         });
       })
       .catch(ex =>
         dispatch({
           type: TYPES.BUY_ORDER_FAILURE,
           member,
-          order
+          order,
+          ordered_at
         })
       );
   };
@@ -382,8 +393,31 @@ export function goBack() {
   };
 }
 
-export function buyMore() {
-  return { type: TYPES.BUY_MORE };
+export function buyMore(product) {
+  return {
+    type: TYPES.BUY_MORE,
+    product
+  };
+}
+
+export function authenticate(password) {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: TYPES.AUTHENTICATE_REQUEST,
+      password
+    });
+
+    return api
+      .post('/authenticate', { password })
+      .then(response => {
+        setHeader(response.token);
+        dispatch({
+          type: TYPES.AUTHENTICATE_SUCCESS,
+          token: response.token
+        });
+      })
+      .catch(ex => dispatch({ type: TYPES.AUTHENTICATE_FAILURE }));
+  };
 }
 
 export default actions;

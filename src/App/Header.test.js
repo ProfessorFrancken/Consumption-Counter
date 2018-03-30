@@ -16,6 +16,4 @@ it('renders a buy more button when visiting the products page', () => {
       </MemoryRouter>
     </Provider>
   );
-
-  expect(header.find('BuyMore').length).toBe(1);
 });

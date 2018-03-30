@@ -77,6 +77,8 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
   switch (action.type) {
     case TYPES.SELECT_MEMBER:
       return `${action.member.firstName} ${action.member.surname}`;
+    case TYPES.SELECT_COMMITTEE:
+      return action.committee.name;
     case TYPES.BUY_ORDER_SUCCESS:
     case TYPES.BUY_ORDER_FAILURE:
     case TYPES.GO_BACK:
@@ -94,7 +96,11 @@ const defaultOrder = {
 export function order(state = defaultOrder, action) {
   switch (action.type) {
     case TYPES.BUY_MORE:
-      return { ...state, buyMore: !state.buyMore, products: [] };
+      return {
+        ...state,
+        buyMore: !state.buyMore,
+        products: !state.buyMore ? [action.product] : []
+      };
     case TYPES.SELECT_MEMBER:
       return { ...defaultOrder, member: action.member };
     case TYPES.ADD_PRODUCT_TO_ORDER:
@@ -135,6 +141,17 @@ export function queuedOrder(state = null, action) {
       return state.ordered_at === action.ordered_at ? null : state;
     case TYPES.CANCEL_ORDER:
       return null;
+    default:
+      return state;
+  }
+}
+
+export function authenticationToken(state = null, action) {
+  switch (action.type) {
+    case TYPES.AUTHENTICATE_REQUEST:
+      return null;
+    case TYPES.AUTHENTICATE_SUCCESS:
+      return action.token;
     default:
       return state;
   }

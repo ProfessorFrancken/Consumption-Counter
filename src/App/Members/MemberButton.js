@@ -1,50 +1,32 @@
 import React from 'react';
-import './Members.css';
 
-const cosmetics = cosmetics => {
-  const isPositive = number => Number.isInteger(number) && number > 0;
-
-  const cosmeticSize =
-    isPositive(cosmetics.button.width) && isPositive(cosmetics.button.height)
-      ? {
-          width: cosmetics.button.width,
-          height: cosmetics.button.height,
-          alignSelf: 'center',
-          justifySelf: 'center'
-        }
-      : {};
-
-  return {
-    backgroundColor: cosmetics.color,
-    backgroundImage: cosmetics.image ? `url(${cosmetics.image})` : undefined,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: '50% 50%',
-    flexGrow: 1,
-    margin: '.25em 0',
-    ...cosmeticSize
-  };
-};
-
-const MemberName = ({ member }) =>
-  !member.cosmetics.nickname ? (
-    <span>
-      {member.firstName}
-      <br /> {member.surname}
-    </span>
-  ) : (
-    <span>{member.cosmetics.nickname}</span>
-  );
+const isSet = property => ![undefined, null, 0].includes(property);
+const smallButton = (button = {}) =>
+  isSet(button.width) || isSet(button.height)
+    ? { transform: 'scale(0.5)' }
+    : {};
+const buttonStyle = member => ({
+  backgroundColor: member.cosmetics.color,
+  backgroundImage: member.cosmetics.image
+    ? `url(${member.cosmetics.image})`
+    : undefined,
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '50% 50%',
+  flexGrow: 1,
+  ...smallButton(member.cosmetics.button)
+});
 
 const Member = ({ member, onClick, style = {} }) => (
   <button
     key={member.id}
-    className="btn btn-outline-light"
-    to="/products"
-    style={{ ...cosmetics(member.cosmetics), ...style }}
+    className="tile button"
     onClick={() => onClick(member)}
+    style={buttonStyle(member)}
   >
-    <MemberName member={member} />
+    {member.cosmetics.nickname
+      ? member.cosmetics.nickname
+      : member.firstName + ' ' + member.surname}
   </button>
 );
 

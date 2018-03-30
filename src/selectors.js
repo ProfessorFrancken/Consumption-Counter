@@ -17,7 +17,7 @@ const activeMembersSelector = state => {
   const year = new Date().getUTCFullYear();
 
   return state.committeeMembers.filter(member =>
-    [year, year - 1, year - 2].includes(member.year)
+    [year, year - 1].includes(member.year)
   );
 };
 

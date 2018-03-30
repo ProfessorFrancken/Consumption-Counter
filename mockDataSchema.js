@@ -72,7 +72,7 @@ var schema = {
       "properties": {
         "products": {
           "type": "array",
-          "minItems": 10,
+          "minItems": 20,
           "maxItems": 30,
           "items": {
             "type": "object",
@@ -124,7 +124,7 @@ var schema = {
         "type": "object",
         "boardMembers": {
           "type": "array",
-          "minItems": 10,
+          "minItems": 30,
           "maxItems": 40,
           "items": {
             "type": "object",

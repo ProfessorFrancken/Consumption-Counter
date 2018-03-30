@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Member from './MemberButton';
 
 const Members = ({ members, selectMember }) => (
-  <nav className="SelectionGrid">
+  <nav className="tilesGrid">
     {members.map(member => (
       <Member member={member} key={member.id} onClick={selectMember} />
     ))}
