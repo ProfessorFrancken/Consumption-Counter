@@ -113,7 +113,7 @@ export function order(state = defaultOrder, action) {
   }
 }
 
-const KEEP_TRACK_OF_N_TRANSCACTIONS = 40;
+const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
 export function transactions(state = [], action) {
   switch (action.type) {
     case TYPES.BUY_ORDER_SUCCESS:

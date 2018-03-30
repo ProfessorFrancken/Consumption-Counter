@@ -6,6 +6,7 @@ import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { create, history } from './../Setup/store';
 import { TYPES } from './../actions';
+import MockDate from 'mockdate';
 
 describe('Plus One', () => {
   let store, app;
@@ -15,6 +16,8 @@ describe('Plus One', () => {
   const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
 
   beforeEach(() => {
+    MockDate.set(new Date(1514764800000));
+
     store = create();
 
     jest.useFakeTimers();
@@ -52,6 +55,7 @@ describe('Plus One', () => {
   });
 
   afterEach(() => {
+    MockDate.reset();
     fetchMock.reset();
     fetchMock.restore();
   });
@@ -321,7 +325,10 @@ describe('Plus One', () => {
 
   it('is possible select members through the compucie screen', done => {
     const selectCompucie = app => {
-      app.find('img').simulate('click');
+      app
+        .find('Header')
+        .find('.association')
+        .simulate('click');
 
       expect(history.location.pathname).toBe('/compucie');
     };
@@ -418,6 +425,7 @@ describe('Plus One', () => {
     // does not occur on the same time as the second
     jest.runTimersToTime(4000);
 
+    MockDate.set(new Date(1514764800000 + 4000));
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
     addHertogJanToOrder(app);
@@ -484,28 +492,29 @@ const mocks = {
 
   orders: {
     single: {
-      member: {
-        id: 314,
-        firstName: 'John',
-        surname: 'Snow'
-      },
       order: {
+        member: {
+          id: 314,
+          firstName: 'John',
+          surname: 'Snow'
+        },
         products: [
           {
             id: 1,
             name: 'Hertog Jan',
             price: 65
           }
-        ]
+        ],
+        ordered_at: 1514764800000
       }
     },
     multiple: {
-      member: {
-        id: 314,
-        firstName: 'John',
-        surname: 'Snow'
-      },
       order: {
+        member: {
+          id: 314,
+          firstName: 'John',
+          surname: 'Snow'
+        },
         products: [
           {
             id: 1,
@@ -522,7 +531,8 @@ const mocks = {
             name: 'Hertog Jan',
             price: 65
           }
-        ]
+        ],
+        ordered_at: 1514764800000
       }
     }
   },
