@@ -1,4 +1,10 @@
-import { surnameRanges, order, transactions, queuedOrder } from './reducer';
+import {
+  surnameRanges,
+  order,
+  transactions,
+  queuedOrder,
+  recentBuyers
+} from './reducer';
 import { TYPES } from './actions';
 import expect from 'expect';
 
@@ -176,6 +182,36 @@ describe('keeping track of the latest transactions', () => {
       { member: { id: 2 }, order: { id: 2 } },
       { member: { id: 1 }, order: { id: 2 } }
     ]);
+  });
+});
+
+describe('a list of members who recently made an order', () => {
+  it('keeps track of members that made an order', () => {
+    expect(recentBuyers(undefined, {})).toEqual([]);
+    expect(
+      recentBuyers([], {
+        type: TYPES.BUY_ORDER_SUCCESS,
+        order: { products: [], member: { id: 33 }, orderd_at: 1 }
+      })
+    ).toEqual([{ id: 33 }]);
+  });
+
+  it('sorts the members on the date of their last order', () => {
+    expect(
+      recentBuyers([{ id: 1 }], {
+        type: TYPES.BUY_ORDER_SUCCESS,
+        order: { products: [], member: { id: 33 }, orderd_at: 1 }
+      })
+    ).toEqual([{ id: 33 }, { id: 1 }]);
+  });
+
+  it('moves the most recent buyer to the top', () => {
+    expect(
+      recentBuyers([{ id: 1 }, { id: 33 }], {
+        type: TYPES.BUY_ORDER_SUCCESS,
+        order: { products: [], member: { id: 33 }, orderd_at: 1 }
+      })
+    ).toEqual([{ id: 33 }, { id: 1 }]);
   });
 });
 

@@ -9,6 +9,7 @@ import {
   committeeMembers,
   surnameRanges,
   transactions,
+  recentBuyers,
   order,
   queuedOrder
 } from '../reducer.js';
@@ -22,6 +23,7 @@ export default combineReducers({
   surnameRanges,
   products,
   transactions,
+  recentBuyers,
   order,
   queuedOrder,
   router: routerReducer

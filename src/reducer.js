@@ -1,5 +1,5 @@
 import { TYPES } from './actions';
-import { sortBy, groupBy, chunk, first, last, take } from 'lodash';
+import { sortBy, groupBy, chunk, first, last, take, uniqBy } from 'lodash';
 
 export function products(state = [], action) {
   switch (action.type) {
@@ -152,6 +152,19 @@ export function authenticationToken(state = null, action) {
       return null;
     case TYPES.AUTHENTICATE_SUCCESS:
       return action.token;
+    default:
+      return state;
+  }
+}
+
+const RECENT_MEBMERS = 6 * 5;
+export function recentBuyers(state = [], action) {
+  switch (action.type) {
+    case TYPES.BUY_ORDER_SUCCESS:
+      return take(
+        uniqBy([action.order.member, ...state], member => member.id),
+        RECENT_MEBMERS
+      );
     default:
       return state;
   }

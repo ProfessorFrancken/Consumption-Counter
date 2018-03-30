@@ -6,8 +6,8 @@ const committeeMembersSelector = state => state.committeeMembers;
 const boardMembersSelector = state => state.boardMembers;
 const categorySelector = state => state.products;
 const orderSelector = state => state.order;
-const transactionsSelector = state => state.transactions;
 
+export const recentSelector = state => state.recentBuyers;
 export const rangesSelector = state => state.surnameRanges.ranges;
 export const queuedOrderSelector = state => state.queuedOrder;
 export const membersInRangeSelector = (state, { page = 0 }) =>
@@ -74,18 +74,6 @@ const boardMembersWithMemberSelector = createSelector(
 
 const SHOW_N_BOARDS = 5;
 const SHOW_N_PROMINENT = 10;
-
-export const recentSelector = createSelector(
-  transactionsSelector,
-  transactions =>
-    take(
-      uniqBy(
-        transactions.map(transaction => transaction.member),
-        member => member.id
-      ),
-      6 * 6
-    )
-);
 
 export const backgroundSelector = createSelector(queuedOrderSelector, order => {
   if (order === null) {

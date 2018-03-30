@@ -294,7 +294,7 @@ describe('Plus One', () => {
       ordered: 0
     };
 
-    const order = { products: [product], ordered_at: 1 };
+    const order = { products: [product], ordered_at: 1, member };
 
     store.dispatch({ type: TYPES.BUY_ORDER_REQUEST, member, order });
     store.dispatch({ type: TYPES.BUY_ORDER_SUCCESS, member, order });

@@ -161,6 +161,7 @@ function mockedState() {
       products: []
     },
     transactions: [],
+    recentBuyers: [],
     boardMembers: [],
     committeeMembers: [
       {
