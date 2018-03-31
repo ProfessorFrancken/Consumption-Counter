@@ -540,20 +540,10 @@ describe('buying products', () => {
         .then(() => {
           // then we buy a product
           expect(store.getActions()).toEqual([
-            { type: TYPES.QUEUE_ORDER, order, ordered_at: 1519344000000 },
+            { type: TYPES.QUEUE_ORDER, order },
             push('/'),
-            {
-              type: TYPES.BUY_ORDER_REQUEST,
-              member,
-              order,
-              ordered_at: 1519344000000
-            },
-            {
-              type: TYPES.BUY_ORDER_SUCCESS,
-              member,
-              order,
-              ordered_at: 1519344000000
-            }
+            { type: TYPES.BUY_ORDER_REQUEST, order },
+            { type: TYPES.BUY_ORDER_SUCCESS, order }
           ]);
         })
         .then(done)
@@ -576,8 +566,7 @@ describe('buying products', () => {
           expect(store.getActions()).toEqual([
             {
               type: TYPES.QUEUE_ORDER,
-              order: { products, member, ordered_at: 1519344000000 },
-              ordered_at: 1519344000000
+              order: { products, member, ordered_at: 1519344000000 }
             },
             push('/')
           ]);
@@ -616,22 +605,11 @@ describe('buying products', () => {
             expect(store.getActions()).toEqual([
               {
                 type: TYPES.QUEUE_ORDER,
-                order,
-                ordered_at: 1519344000000
+                order
               },
               push('/'),
-              {
-                type: TYPES.BUY_ORDER_REQUEST,
-                member,
-                order,
-                ordered_at: 1519344000000
-              },
-              {
-                type: TYPES.BUY_ORDER_SUCCESS,
-                member,
-                order,
-                ordered_at: 1519344000000
-              }
+              { type: TYPES.BUY_ORDER_REQUEST, order },
+              { type: TYPES.BUY_ORDER_SUCCESS, order }
             ]);
           })
           .then(done)
@@ -657,8 +635,7 @@ describe('buying products', () => {
           expect(store.getActions()).toEqual([
             {
               type: TYPES.QUEUE_ORDER,
-              order: { products, member, ordered_at: 1519344000000 },
-              ordered_at: 1519344000000
+              order: { products, member, ordered_at: 1519344000000 }
             },
             push('/'),
             {

@@ -105,9 +105,9 @@ export function makeOrder(order) {
 
       dispatch({
         type: TYPES.QUEUE_ORDER,
-        order: pick(order, 'member', 'products', 'ordered_at'),
-        ordered_at: order.ordered_at
+        order: pick(order, 'member', 'products', 'ordered_at')
       });
+
       dispatch(push('/'));
 
       orderQueue[order.ordered_at] = setTimeout(() => {
@@ -135,14 +135,9 @@ function buyOrder(order) {
     const ordered_at = order.ordered_at;
     delete orderQueue[ordered_at];
 
-    const member = order.member;
-    dispatch({
-      type: TYPES.BUY_ORDER_REQUEST,
-      member,
-      order,
-      ordered_at
-    });
+    dispatch({ type: TYPES.BUY_ORDER_REQUEST, order });
 
+    const member = order.member;
     return api
       .post('/orders', {
         order: {
@@ -154,21 +149,9 @@ function buyOrder(order) {
         }
       })
       .then(response => {
-        dispatch({
-          type: TYPES.BUY_ORDER_SUCCESS,
-          member,
-          order,
-          ordered_at
-        });
+        dispatch({ type: TYPES.BUY_ORDER_SUCCESS, order });
       })
-      .catch(ex =>
-        dispatch({
-          type: TYPES.BUY_ORDER_FAILURE,
-          member,
-          order,
-          ordered_at
-        })
-      );
+      .catch(ex => dispatch({ type: TYPES.BUY_ORDER_FAILURE, order }));
   };
 }
 

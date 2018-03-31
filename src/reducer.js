@@ -128,7 +128,7 @@ export function queuedOrder(state = null, action) {
   switch (action.type) {
     case TYPES.QUEUE_ORDER:
       return {
-        ordered_at: action.ordered_at,
+        ordered_at: action.order.ordered_at,
         order: action.order
       };
     case TYPES.BUY_ORDER_REQUEST:
@@ -136,7 +136,7 @@ export function queuedOrder(state = null, action) {
         return null;
       }
 
-      return state.ordered_at === action.ordered_at ? null : state;
+      return state.ordered_at === action.order.ordered_at ? null : state;
     case TYPES.CANCEL_ORDER:
       return null;
     default:
@@ -174,17 +174,19 @@ export function queuedOrders(state = [], action) {
       return [
         ...state,
         {
-          ordered_at: action.ordered_at,
+          ordered_at: action.order.ordered_at,
           order: action.order,
           fails: 0
         }
       ];
     case TYPES.BUY_ORDER_SUCCESS:
     case TYPES.CANCEL_ORDER:
-      return [...state.filter(order => order.ordered_at !== action.ordered_at)];
+      return [
+        ...state.filter(order => order.ordered_at !== action.order.ordered_at)
+      ];
     case TYPES.BUY_ORDER_FAILURE:
       return state.map(order => {
-        return order.ordered_at === action.ordered_at
+        return order.ordered_at === action.order.ordered_at
           ? { ...order, fails: order.fails + 1 }
           : order;
       });
