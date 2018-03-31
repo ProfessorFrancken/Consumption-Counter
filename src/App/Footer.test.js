@@ -7,7 +7,7 @@ import configureMockStore from 'redux-mock-store';
 
 it('renders without crashing', () => {
   const mockStore = configureMockStore();
-  const store = mockStore({ queuedOrder: null, order: {} });
+  const store = mockStore({ queuedOrder: null, order: { products: [] } });
 
   const div = document.createElement('div');
   ReactDOM.render(
