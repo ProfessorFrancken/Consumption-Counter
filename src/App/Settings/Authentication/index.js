@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { authenticate } from '../../actions';
+import { authenticate } from '../../../actions';
+import Icon from './../../Icon';
 
 class Authenticate extends Component {
   constructor(props) {
@@ -23,7 +24,10 @@ class Authenticate extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <h2>Authenticate</h2>
+        <h2>
+          <Icon name="key" />
+          Authenticate
+        </h2>
         <label>
           Password
           <input

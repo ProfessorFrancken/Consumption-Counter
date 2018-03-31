@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Member from './../Members/MemberButton';
+import Icon from './../Icon';
 
-const Compucie = ({ compucie, scriptcie, selectMember }) => (
+const Compucie = ({
+  compucie,
+  scriptcie,
+  selectMember,
+  toSettings,
+  chwazi
+}) => (
   <div className="d-flex flex-column justify-content-stretch h-100">
     <nav className="compucie tilesGrid" style={{ flexShrink: 1 }}>
       {[...compucie, ...scriptcie].map(member => (
@@ -49,12 +56,20 @@ const Compucie = ({ compucie, scriptcie, selectMember }) => (
 
       <Member
         member={{
-          firstName: 'Schwazi',
+          firstName: 'Chwazi',
           surname: '',
           cosmetics: {}
         }}
-        onClick={() => console.log('Schwazi')}
+        onClick={chwazi}
       />
+      <div>
+        {/* This div is deliberately left empty so that the settings
+               button will be placed at the right most part of the grid
+             */}
+      </div>
+      <button className="tile button" onClick={toSettings}>
+        <Icon name="cogs" />
+      </button>
     </nav>
   </div>
 );

@@ -11,7 +11,8 @@ import Committees from './Committees/';
 import CommitteeMembers from './Committees/CommitteeMembers';
 import RecentMembers from './Recent/';
 import Compucie from './Compucie/';
-import Authenticate from './Authentication/';
+import Authenticate from './Settings/Authentication/';
+import Settings from './Settings/';
 
 import GerrieApp from './Gerjan/App';
 
@@ -19,6 +20,7 @@ const Statistics = () => <Transactions />;
 
 const AppContent = () => (
   <Switch>
+    <Route exact path="/settings" component={Settings} />
     <Route exact path="/authenticate" component={Authenticate} />
     <Route exact path="/compucie" component={Compucie} />
     <Route exact path="/prominent" component={Prominent} />
