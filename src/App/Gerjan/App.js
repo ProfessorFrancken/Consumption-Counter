@@ -40,7 +40,7 @@ const backgroundFromProduct = (background = null) => {
       };
 };
 
-const App = ({ children, title, background, goToCompucieScreen }) => (
+const App = ({ children, title, background, goToCompucieScreen, goHome }) => (
   <div className="wrapper" style={backgroundFromProduct(background)}>
     <Header title={title} onClick={goToCompucieScreen} />
     <Sidebar menuItems={menuItems} />
@@ -52,7 +52,7 @@ const App = ({ children, title, background, goToCompucieScreen }) => (
           src="https://professorfrancken.nl/images/LOGO_KAAL.png"
           className="franckenLogo img-fluid"
           alt="Logo of T.F.V. 'Professor Francken'"
-          onClick={goToCompucieScreen}
+          onClick={goHome}
         />
       </div>
     </div>
