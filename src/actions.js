@@ -92,22 +92,23 @@ export function addProductToOrder(product) {
 }
 
 export function buyAll() {
-  return makeOrder();
+  return (dispatch, getState) => {
+    const { order } = getState();
+
+    return dispatch(makeOrder(order));
+  };
 }
 
 const orderQueue = {};
 
 export const TIME_TO_CANCEL = 7000;
 // TODO don't make this exportable and m ake order not be optional
-export function makeOrder(order = undefined) {
+export function makeOrder(order) {
   return (dispatch, getState) => {
     return new Promise(resolve => {
       const date = new Date();
 
-      order = {
-        ...(order === undefined ? getState().order : order),
-        ordered_at: date.getTime()
-      };
+      order = { ...order, ordered_at: date.getTime() };
 
       dispatch({
         type: TYPES.QUEUE_ORDER,

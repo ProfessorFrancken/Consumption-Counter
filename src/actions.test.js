@@ -575,9 +575,9 @@ describe('buying products', () => {
       // and when adding a product to order
       const products = [{ id: 2 }];
       const member = { id: 1 };
-      const store = mockStore({ order: { buyMore: false, member, products } });
+      const store = mockStore();
       store
-        .dispatch(actions.makeOrder())
+        .dispatch(actions.makeOrder({ member, products }))
         .then(() => {
           // then we buy a product
           expect(store.getActions()).toEqual([
@@ -613,8 +613,8 @@ describe('buying products', () => {
         member: member,
         ordered_at: 1519344000000
       };
-      const store = mockStore({ order });
-      store.dispatch(actions.makeOrder()).then(() => {
+      const store = mockStore();
+      store.dispatch(actions.makeOrder(order)).then(() => {
         jest.runTimersToTime(TIME_TO_CANCEL);
 
         flushAllPromises()
@@ -650,12 +650,11 @@ describe('buying products', () => {
       // and when adding a product to order
       const products = [{ id: 2 }];
       const member = { id: 1 };
-      const store = mockStore({
-        order: { buyMore: false, member, products, ordered_at: 1519344000000 }
-      });
+      const order = { member, products, ordered_at: 1519344000000 };
+      const store = mockStore();
 
       store
-        .dispatch(actions.makeOrder())
+        .dispatch(actions.makeOrder(order))
         .then(() => {
           store.dispatch(
             actions.cancelOrder({ products, member, ordered_at: 1519344000000 })
