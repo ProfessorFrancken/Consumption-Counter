@@ -35,7 +35,6 @@ export const TYPES = {
   BUY_ORDER_SUCCESS: 'BUY_ORDER_SUCCESS',
   BUY_ORDER_FAILURE: 'BUY_ORDER_FAILURE',
 
-  SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
   SELECT_MEMBER: 'SELECT_MEMBER',
   SELECT_COMMITTEE: 'SELECT_COMMITTEE',
 
@@ -63,10 +62,6 @@ export const TYPES = {
 export function selectRangeOfSurnames(range) {
   return dispatch => {
     dispatch(push(`/members/${range.idx}`));
-    dispatch({
-      type: TYPES.SELECT_SURNAME_RANGE,
-      range
-    });
   };
 }
 

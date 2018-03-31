@@ -418,13 +418,7 @@ describe('selecing a member', () => {
       })
     );
 
-    expect(store.getActions()).toEqual([
-      push('/members/0'),
-      {
-        type: TYPES.SELECT_SURNAME_RANGE,
-        range: { idx: 0, range: [], surname_start: 'A', surname_end: 'B' }
-      }
-    ]);
+    expect(store.getActions()).toEqual([push('/members/0')]);
   });
 
   it('should select a member from a range of members', () => {
