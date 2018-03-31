@@ -90,6 +90,13 @@ export function buyAll() {
   };
 }
 
+export function buyMore(product) {
+  return {
+    type: TYPES.BUY_MORE,
+    product
+  };
+}
+
 const orderQueue = {};
 
 export const TIME_TO_CANCEL = 7000;
@@ -384,13 +391,6 @@ export function goBack() {
       dispatch(goBackRoute());
       dispatch({ type: TYPES.GO_BACK });
     }
-  };
-}
-
-export function buyMore(product) {
-  return {
-    type: TYPES.BUY_MORE,
-    product
   };
 }
 
