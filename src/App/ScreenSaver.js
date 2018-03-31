@@ -7,19 +7,34 @@ export default class ScreenSaver extends Component {
     screenSaver: null
   };
 
+  constructor(props) {
+    super(props);
+    this.screenSaver = this.screenSaver.bind(this);
+  }
+
   componentWillMount() {
-    this.props.listen(({ pathname }) => {
-      if (this.state.screenSaver) {
-        clearTimeout(this.state.screenSaver);
-      }
+    this.unlisten = this.props.listen(this.screenSaver);
+  }
 
-      const screenSaver =
-        pathname !== '/'
-          ? setTimeout(this.props.goHome, ScreenSaverTimeout)
-          : null;
+  componentWillUnmount() {
+    this.unlisten();
 
-      this.setState({ screenSaver });
-    });
+    if (this.state.screenSaver) {
+      clearTimeout(this.state.screenSaver);
+    }
+  }
+
+  screenSaver({ pathname }) {
+    if (this.state.screenSaver) {
+      clearTimeout(this.state.screenSaver);
+    }
+
+    const screenSaver =
+      pathname !== '/'
+        ? setTimeout(this.props.goHome, ScreenSaverTimeout)
+        : null;
+
+    this.setState({ screenSaver });
   }
 
   render() {
