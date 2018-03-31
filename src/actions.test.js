@@ -513,7 +513,7 @@ describe('buying products', () => {
 
     // then we buy a product
     expect(store.getActions()).toEqual([
-      { type: TYPES.ADD_PRODUCT_TO_ORDER, member, product }
+      { type: TYPES.ADD_PRODUCT_TO_ORDER, product }
     ]);
   });
 

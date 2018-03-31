@@ -70,11 +70,6 @@ export function selectRangeOfSurnames(range) {
   };
 }
 
-/**
- * TODO: currently we only have an option for adding products to
- * an order, however it should be possible to either add and buy, or
- * add multiple products and buy manually
- */
 export function addProductToOrder(product) {
   return (dispatch, getState) => {
     const { order } = getState();
@@ -82,11 +77,7 @@ export function addProductToOrder(product) {
     if (order.products.length === 0) {
       return dispatch(makeOrder({ member: order.member, products: [product] }));
     } else {
-      dispatch({
-        type: TYPES.ADD_PRODUCT_TO_ORDER,
-        product,
-        member: order.member
-      });
+      dispatch({ type: TYPES.ADD_PRODUCT_TO_ORDER, product });
     }
   };
 }
