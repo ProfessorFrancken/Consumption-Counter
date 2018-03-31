@@ -4,6 +4,7 @@ import { fetchInitialData } from './../actions';
 import { backgroundSelector } from './../selectors';
 import { withRouter } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import ScreenSaver from './ScreenSaver';
 import App from './App';
 
 class AppContainer extends Component {
@@ -12,7 +13,15 @@ class AppContainer extends Component {
   }
 
   render() {
-    return <App {...this.props} />;
+    return (
+      <div>
+        <ScreenSaver
+          listen={this.props.history.listen}
+          goHome={this.props.goHome}
+        />
+        <App {...this.props} />
+      </div>
+    );
   }
 }
 

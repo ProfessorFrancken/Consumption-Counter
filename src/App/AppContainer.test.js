@@ -434,6 +434,24 @@ describe('Plus One', () => {
     jest.runTimersToTime(4000);
     cancelOrder(app);
   });
+
+  describe('when the system is idle for a specific time', () => {
+    it('goes back to the main screen after 30 seconds', () => {
+      selectRangeIncludingJohnSnow(app);
+      jest.runTimersToTime(30000);
+      expect(history.location.pathname).toBe('/');
+    });
+
+    it('should reset the screensaver timer when going to a different route', () => {
+      selectRangeIncludingJohnSnow(app);
+      jest.runTimersToTime(20000);
+      selectRecent(app);
+      jest.runTimersToTime(20000);
+      expect(history.location.pathname).toBe('/recent');
+      jest.runTimersToTime(10000);
+      expect(history.location.pathname).toBe('/');
+    });
+  });
 });
 
 const mocks = {
