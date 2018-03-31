@@ -6,13 +6,7 @@ cache:
     - node_modules
 script:
   - npm run build
-  - npm test
-addons:
-    apt:
-        packages:
-            - locales
-            - language-pack-nl
-env:
-    global:
-        - LANG=nl_NL.UTF-8
-        - LC_ALL=nl_NL.UTF-8
+  - npm test --coverage
+
+after_script:
+   - COVERALLS_REPO_TOKEN=$coveralls_repo_token npm run coveralls

@@ -1,5 +1,7 @@
 # Plus One System
 
+[![Coverage Status](https://coveralls.io/repos/github/ProfessorFrancken/plus-one/badge.svg?branch=master)](https://coveralls.io/github/ProfessorFrancken/plus-one?branch=master)
+
 # Introduction
 What you're looking at is the source code of the Plus One system, previously
 known as the "Streepsysteem".
