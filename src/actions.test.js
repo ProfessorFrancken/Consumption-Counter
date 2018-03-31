@@ -502,10 +502,10 @@ describe('buying products', () => {
     expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE });
   });
 
-  it('does not inmediadly buy an order when buying multiple products', () => {
+  it('does not inmediadly make an order when a product was already added to the order', () => {
     // when a member is selected and we buy multiple products
     const member = { id: 1 };
-    const store = mockStore({ order: { buyMore: true, member } });
+    const store = mockStore({ order: { member, products: [{ id: 1 }] } });
 
     // and when adding a product to order
     const product = { id: 2 };
@@ -517,7 +517,7 @@ describe('buying products', () => {
     ]);
   });
 
-  it('buys an order after adding 1 product to an order', done => {
+  it('buys an order after only adding 1 product to an order', done => {
     jest.useFakeTimers();
     // when a member is selected
     // and we only buy one product
@@ -525,9 +525,8 @@ describe('buying products', () => {
     const product = { id: 2 };
     const store = mockStore({
       order: {
-        buyMore: false,
         member,
-        products: [product]
+        products: []
       }
     });
 

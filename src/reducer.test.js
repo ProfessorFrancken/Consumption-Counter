@@ -106,22 +106,15 @@ describe('cancelling choices', () => {});
 
 describe('buying products', () => {
   it('is possible to buy more products', () => {
-    expect(order(undefined, {}).buyMore).toBe(false);
-    expect(order(undefined, { type: TYPES.BUY_MORE }).buyMore).toBe(true);
-    expect(order({ buyMore: true }, { type: TYPES.BUY_MORE }).buyMore).toBe(
-      false
-    );
+    expect(
+      order({ products: [] }, { type: TYPES.BUY_MORE, product: { id: 1 } })
+        .products
+    ).toEqual([{ id: 1 }]);
   });
 
   it('clears the order list when changing from buy more to buying single', () => {
     expect(
-      order(
-        {
-          products: [{ id: 1 }],
-          buyMore: true
-        },
-        { type: TYPES.BUY_MORE }
-      ).products
+      order({ products: [{ id: 1 }] }, { type: TYPES.BUY_MORE }).products
     ).toEqual([]);
   });
 });

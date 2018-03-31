@@ -89,7 +89,6 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
 }
 
 const defaultOrder = {
-  buyMore: false,
   member: { age: 0 },
   products: []
 };
@@ -98,8 +97,7 @@ export function order(state = defaultOrder, action) {
     case TYPES.BUY_MORE:
       return {
         ...state,
-        buyMore: !state.buyMore,
-        products: !state.buyMore ? [action.product] : []
+        products: state.products.length === 0 ? [action.product] : []
       };
     case TYPES.SELECT_MEMBER:
       return { ...defaultOrder, member: action.member };

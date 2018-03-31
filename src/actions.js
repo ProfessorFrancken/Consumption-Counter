@@ -79,7 +79,7 @@ export function addProductToOrder(product) {
   return (dispatch, getState) => {
     const { order } = getState();
 
-    if (!order.buyMore) {
+    if (order.products.length === 0) {
       return dispatch(makeOrder({ member: order.member, products: [product] }));
     } else {
       dispatch({
