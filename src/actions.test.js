@@ -537,7 +537,7 @@ describe('buying products', () => {
     });
 
     // and when adding a product to order
-    const order = { products: [product], member };
+    const order = { products: [product], member, ordered_at: 1519344000000 };
     const flushAllPromises = () =>
       new Promise(resolve => setImmediate(resolve));
     store.dispatch(actions.addProductToOrder(product)).then(() => {
@@ -583,7 +583,7 @@ describe('buying products', () => {
           expect(store.getActions()).toEqual([
             {
               type: TYPES.QUEUE_ORDER,
-              order: { products, member },
+              order: { products, member, ordered_at: 1519344000000 },
               ordered_at: 1519344000000
             },
             push('/')
@@ -658,10 +658,7 @@ describe('buying products', () => {
         .dispatch(actions.makeOrder())
         .then(() => {
           store.dispatch(
-            actions.cancelOrder(
-              { products, member, ordered_at: 1519344000000 },
-              1519344000000
-            )
+            actions.cancelOrder({ products, member, ordered_at: 1519344000000 })
           );
           jest.runTimersToTime(TIME_TO_CANCEL);
 
@@ -674,8 +671,7 @@ describe('buying products', () => {
             push('/'),
             {
               type: TYPES.CANCEL_ORDER,
-              order: { products, member, ordered_at: 1519344000000 },
-              ordered_at: 1519344000000
+              order: { products, member, ordered_at: 1519344000000 }
             }
           ]);
         })

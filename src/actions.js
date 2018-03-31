@@ -104,12 +104,15 @@ export function makeOrder(order = undefined) {
     return new Promise(resolve => {
       const date = new Date();
 
-      order = order === undefined ? getState().order : order;
+      order = {
+        ...(order === undefined ? getState().order : order),
+        ordered_at: date.getTime()
+      };
 
       dispatch({
         type: TYPES.QUEUE_ORDER,
         order: pick(order, 'member', 'products', 'ordered_at'),
-        ordered_at: date.getTime()
+        ordered_at: order.ordered_at
       });
       dispatch(push('/'));
 
@@ -121,22 +124,21 @@ export function makeOrder(order = undefined) {
   };
 }
 
-export function cancelOrder(order, ordered_at) {
+export function cancelOrder(order) {
   return dispatch => {
-    clearTimeout(orderQueue[ordered_at]);
-    delete orderQueue[ordered_at];
+    clearTimeout(orderQueue[order.ordered_at]);
+    delete orderQueue[order.ordered_at];
 
     dispatch({
       type: TYPES.CANCEL_ORDER,
-      order: pick(order, 'member', 'products', 'ordered_at'),
-      ordered_at
+      order: pick(order, 'member', 'products', 'ordered_at')
     });
   };
 }
 
 function buyOrder(member, order, date) {
   return (dispatch, getState, api) => {
-    delete orderQueue[date.getTime()];
+    delete orderQueue[order.ordered_at];
 
     const ordered_at = date.getTime();
 

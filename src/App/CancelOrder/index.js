@@ -19,7 +19,7 @@ const CancelOrder = ({ onClick, queuedOrder }) =>
   );
 
 const mapDispatchToProps = dispatch => ({
-  onClick: order => dispatch(cancelOrder(order.order, order.ordered_at))
+  onClick: order => dispatch(cancelOrder(order.order))
 });
 
 const mapStateToProps = state => ({
