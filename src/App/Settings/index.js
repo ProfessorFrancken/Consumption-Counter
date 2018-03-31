@@ -4,6 +4,7 @@ import Authenticate from './Authentication';
 import Price from './../Transactions/Price';
 import { groupBy, map } from 'lodash';
 import moment from 'moment';
+import { cancelOrder, buyOrder } from './../../actions';
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = products =>
@@ -15,9 +16,9 @@ const listOfProducts = products =>
         : `${product[0].name} (${product.length}x)`
   ).join(', ');
 
-const status = order => 'Queued';
+const status = order => order.state;
 
-const Settings = ({ orders }) => (
+const Settings = ({ orders, cancel, buy }) => (
   <div>
     <Authenticate />
     <div>
@@ -46,11 +47,19 @@ const Settings = ({ orders }) => (
               </td>
               <td>{status(order)}</td>
               <td>
-                <button className="btn btn-outline-success mr-2">
+                <button
+                  className="btn btn-outline-success mr-2"
+                  onClick={() => buy(order.order)}
+                >
                   Retry now
                 </button>
 
-                <button className="btn btn-outline-danger">Cancel</button>
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={() => cancel(order.order)}
+                >
+                  Cancel
+                </button>
               </td>
             </tr>
           ))}
@@ -64,5 +73,9 @@ const mapStateToProps = state => ({
   orders: state.queuedOrders
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  cancel: order => dispatch(cancelOrder(order)),
+  buy: order => dispatch(buyOrder(order))
+});
+
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

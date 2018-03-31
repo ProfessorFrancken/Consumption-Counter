@@ -129,7 +129,7 @@ export function cancelOrder(order) {
   };
 }
 
-function buyOrder(order) {
+export function buyOrder(order) {
   return (dispatch, getState, api) => {
     const ordered_at = order.ordered_at;
     delete orderQueue[ordered_at];
