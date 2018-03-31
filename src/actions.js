@@ -12,7 +12,6 @@ export const actions = {
   addProductToOrder,
   selectRangeOfSurnames,
   selectMember,
-  selectGuest,
   selectCommittee,
 
   fetchInitialData,
@@ -161,16 +160,6 @@ export function selectMember(member) {
     dispatch({
       type: TYPES.SELECT_MEMBER,
       member
-    });
-  };
-}
-
-export function selectGuest(reason) {
-  return dispatch => {
-    dispatch(push('/products'));
-    dispatch({
-      type: TYPES.SELECT_MEMBER,
-      member: {}
     });
   };
 }

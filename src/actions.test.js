@@ -451,27 +451,6 @@ describe('selecing a member', () => {
       }
     ]);
   });
-
-  describe('selecting guests', () => {
-    xit('can select a guest', () => {
-      const store = mockStore({});
-
-      store.dispatch(actions.selectGuest('guest'));
-
-      expect(store.getActions()).toEqual([
-        push('/products'),
-        {
-          type: TYPES.SELECT_MEMBER,
-          member: {
-            age: 100,
-            guest: true,
-            reason: 'guest',
-            id: 0
-          }
-        }
-      ]);
-    });
-  });
 });
 
 describe('cancelling', () => {
