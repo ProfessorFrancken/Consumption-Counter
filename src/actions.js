@@ -12,7 +12,6 @@ export const actions = {
   addProductToOrder,
   selectRangeOfSurnames,
   selectMember,
-  selectGuest,
   selectCommittee,
 
   fetchInitialData,
@@ -35,7 +34,6 @@ export const TYPES = {
   BUY_ORDER_SUCCESS: 'BUY_ORDER_SUCCESS',
   BUY_ORDER_FAILURE: 'BUY_ORDER_FAILURE',
 
-  SELECT_SURNAME_RANGE: 'SELECT_SURNAME_RANGE',
   SELECT_MEMBER: 'SELECT_MEMBER',
   SELECT_COMMITTEE: 'SELECT_COMMITTEE',
 
@@ -63,90 +61,82 @@ export const TYPES = {
 export function selectRangeOfSurnames(range) {
   return dispatch => {
     dispatch(push(`/members/${range.idx}`));
-    dispatch({
-      type: TYPES.SELECT_SURNAME_RANGE,
-      range
-    });
   };
 }
 
-/**
- * TODO: currently we only have an option for adding products to
- * an order, however it should be possible to either add and buy, or
- * add multiple products and buy manually
- */
 export function addProductToOrder(product) {
   return (dispatch, getState) => {
     const { order } = getState();
 
-    if (!order.buyMore) {
+    if (order.products.length === 0) {
       return dispatch(makeOrder({ member: order.member, products: [product] }));
     } else {
-      dispatch({
-        type: TYPES.ADD_PRODUCT_TO_ORDER,
-        product,
-        member: order.member
-      });
+      dispatch({ type: TYPES.ADD_PRODUCT_TO_ORDER, product });
     }
   };
 }
 
 export function buyAll() {
-  return makeOrder();
+  return (dispatch, getState) => {
+    const { order } = getState();
+
+    return dispatch(makeOrder(order));
+  };
+}
+
+export function buyMore(product) {
+  return {
+    type: TYPES.BUY_MORE,
+    product
+  };
 }
 
 const orderQueue = {};
 
 export const TIME_TO_CANCEL = 7000;
 // TODO don't make this exportable and m ake order not be optional
-export function makeOrder(order = undefined) {
+export function makeOrder(order) {
   return (dispatch, getState) => {
     return new Promise(resolve => {
       const date = new Date();
 
-      order = order === undefined ? getState().order : order;
+      order = { ...order, ordered_at: date.getTime() };
 
       dispatch({
         type: TYPES.QUEUE_ORDER,
-        order: pick(order, 'member', 'products', 'ordered_at'),
-        ordered_at: date.getTime()
+        order: pick(order, 'member', 'products', 'ordered_at')
       });
+
       dispatch(push('/'));
 
-      orderQueue[date.getTime()] = setTimeout(() => {
-        dispatch(buyOrder(order.member, order, date));
+      orderQueue[order.ordered_at] = setTimeout(() => {
+        dispatch(buyOrder(order));
       }, TIME_TO_CANCEL);
       resolve();
     });
   };
 }
 
-export function cancelOrder(order, ordered_at) {
+export function cancelOrder(order) {
   return dispatch => {
-    clearTimeout(orderQueue[ordered_at]);
-    delete orderQueue[ordered_at];
+    clearTimeout(orderQueue[order.ordered_at]);
+    delete orderQueue[order.ordered_at];
 
     dispatch({
       type: TYPES.CANCEL_ORDER,
-      order: pick(order, 'member', 'products', 'ordered_at'),
-      ordered_at
+      order: pick(order, 'member', 'products', 'ordered_at')
     });
   };
 }
 
-function buyOrder(member, order, date) {
+function buyOrder(order) {
   return (dispatch, getState, api) => {
-    delete orderQueue[date.getTime()];
+    const ordered_at = order.ordered_at;
+    delete orderQueue[ordered_at];
 
-    const ordered_at = date.getTime();
+    dispatch({ type: TYPES.BUY_ORDER_REQUEST, order });
 
-    dispatch({
-      type: TYPES.BUY_ORDER_REQUEST,
-      member,
-      order,
-      ordered_at
-    });
-
+    const member = order.member;
     return api
       .post('/orders', {
         order: {
@@ -158,21 +148,9 @@ function buyOrder(member, order, date) {
         }
       })
       .then(response => {
-        dispatch({
-          type: TYPES.BUY_ORDER_SUCCESS,
-          member,
-          order,
-          ordered_at
-        });
+        dispatch({ type: TYPES.BUY_ORDER_SUCCESS, order });
       })
-      .catch(ex =>
-        dispatch({
-          type: TYPES.BUY_ORDER_FAILURE,
-          member,
-          order,
-          ordered_at
-        })
-      );
+      .catch(ex => dispatch({ type: TYPES.BUY_ORDER_FAILURE, order }));
   };
 }
 
@@ -182,16 +160,6 @@ export function selectMember(member) {
     dispatch({
       type: TYPES.SELECT_MEMBER,
       member
-    });
-  };
-}
-
-export function selectGuest(reason) {
-  return dispatch => {
-    dispatch(push('/products'));
-    dispatch({
-      type: TYPES.SELECT_MEMBER,
-      member: {}
     });
   };
 }
@@ -390,13 +358,6 @@ export function goBack() {
       dispatch(goBackRoute());
       dispatch({ type: TYPES.GO_BACK });
     }
-  };
-}
-
-export function buyMore(product) {
-  return {
-    type: TYPES.BUY_MORE,
-    product
   };
 }
 

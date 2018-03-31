@@ -4,8 +4,8 @@ import { buyAll } from '../../actions';
 import Price from './../Transactions/Price';
 import Icon from './../Icon';
 
-const BuyAll = ({ buyAll, buyMore, products }) =>
-  !buyMore ? null : (
+const BuyAll = ({ buyAll, products = [] }) =>
+  products.length === 0 ? null : (
     <button className="button buyAllButton" onClick={buyAll}>
       <Icon name="check-circle" />
       <span style={{ marginLeft: '.5em' }}>
@@ -15,7 +15,6 @@ const BuyAll = ({ buyAll, buyMore, products }) =>
   );
 
 const mapStateToProps = ({ order }) => ({
-  buyMore: order.buyMore,
   products: order.products
 });
 

@@ -89,7 +89,6 @@ export function title(state = "T.F.V. 'Professor Francken'", action) {
 }
 
 const defaultOrder = {
-  buyMore: false,
   member: { age: 0 },
   products: []
 };
@@ -98,8 +97,7 @@ export function order(state = defaultOrder, action) {
     case TYPES.BUY_MORE:
       return {
         ...state,
-        buyMore: !state.buyMore,
-        products: !state.buyMore ? [action.product] : []
+        products: state.products.length === 0 ? [action.product] : []
       };
     case TYPES.SELECT_MEMBER:
       return { ...defaultOrder, member: action.member };
@@ -130,7 +128,7 @@ export function queuedOrder(state = null, action) {
   switch (action.type) {
     case TYPES.QUEUE_ORDER:
       return {
-        ordered_at: action.ordered_at,
+        ordered_at: action.order.ordered_at,
         order: action.order
       };
     case TYPES.BUY_ORDER_REQUEST:
@@ -138,7 +136,7 @@ export function queuedOrder(state = null, action) {
         return null;
       }
 
-      return state.ordered_at === action.ordered_at ? null : state;
+      return state.ordered_at === action.order.ordered_at ? null : state;
     case TYPES.CANCEL_ORDER:
       return null;
     default:
@@ -176,17 +174,19 @@ export function queuedOrders(state = [], action) {
       return [
         ...state,
         {
-          ordered_at: action.ordered_at,
+          ordered_at: action.order.ordered_at,
           order: action.order,
           fails: 0
         }
       ];
     case TYPES.BUY_ORDER_SUCCESS:
     case TYPES.CANCEL_ORDER:
-      return [...state.filter(order => order.ordered_at !== action.ordered_at)];
+      return [
+        ...state.filter(order => order.ordered_at !== action.order.ordered_at)
+      ];
     case TYPES.BUY_ORDER_FAILURE:
       return state.map(order => {
-        return order.ordered_at === action.ordered_at
+        return order.ordered_at === action.order.ordered_at
           ? { ...order, fails: order.fails + 1 }
           : order;
       });

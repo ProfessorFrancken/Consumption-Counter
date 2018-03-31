@@ -418,13 +418,7 @@ describe('selecing a member', () => {
       })
     );
 
-    expect(store.getActions()).toEqual([
-      push('/members/0'),
-      {
-        type: TYPES.SELECT_SURNAME_RANGE,
-        range: { idx: 0, range: [], surname_start: 'A', surname_end: 'B' }
-      }
-    ]);
+    expect(store.getActions()).toEqual([push('/members/0')]);
   });
 
   it('should select a member from a range of members', () => {
@@ -457,27 +451,6 @@ describe('selecing a member', () => {
       }
     ]);
   });
-
-  describe('selecting guests', () => {
-    xit('can select a guest', () => {
-      const store = mockStore({});
-
-      store.dispatch(actions.selectGuest('guest'));
-
-      expect(store.getActions()).toEqual([
-        push('/products'),
-        {
-          type: TYPES.SELECT_MEMBER,
-          member: {
-            age: 100,
-            guest: true,
-            reason: 'guest',
-            id: 0
-          }
-        }
-      ]);
-    });
-  });
 });
 
 describe('cancelling', () => {
@@ -502,10 +475,10 @@ describe('buying products', () => {
     expect(actions.buyMore()).toEqual({ type: TYPES.BUY_MORE });
   });
 
-  it('does not inmediadly buy an order when buying multiple products', () => {
+  it('does not inmediadly make an order when a product was already added to the order', () => {
     // when a member is selected and we buy multiple products
     const member = { id: 1 };
-    const store = mockStore({ order: { buyMore: true, member } });
+    const store = mockStore({ order: { member, products: [{ id: 1 }] } });
 
     // and when adding a product to order
     const product = { id: 2 };
@@ -513,11 +486,11 @@ describe('buying products', () => {
 
     // then we buy a product
     expect(store.getActions()).toEqual([
-      { type: TYPES.ADD_PRODUCT_TO_ORDER, member, product }
+      { type: TYPES.ADD_PRODUCT_TO_ORDER, product }
     ]);
   });
 
-  it('buys an order after adding 1 product to an order', done => {
+  it('buys an order after only adding 1 product to an order', done => {
     jest.useFakeTimers();
     // when a member is selected
     // and we only buy one product
@@ -525,9 +498,8 @@ describe('buying products', () => {
     const product = { id: 2 };
     const store = mockStore({
       order: {
-        buyMore: false,
         member,
-        products: [product]
+        products: []
       }
     });
 
@@ -537,7 +509,7 @@ describe('buying products', () => {
     });
 
     // and when adding a product to order
-    const order = { products: [product], member };
+    const order = { products: [product], member, ordered_at: 1519344000000 };
     const flushAllPromises = () =>
       new Promise(resolve => setImmediate(resolve));
     store.dispatch(actions.addProductToOrder(product)).then(() => {
@@ -547,20 +519,10 @@ describe('buying products', () => {
         .then(() => {
           // then we buy a product
           expect(store.getActions()).toEqual([
-            { type: TYPES.QUEUE_ORDER, order, ordered_at: 1519344000000 },
+            { type: TYPES.QUEUE_ORDER, order },
             push('/'),
-            {
-              type: TYPES.BUY_ORDER_REQUEST,
-              member,
-              order,
-              ordered_at: 1519344000000
-            },
-            {
-              type: TYPES.BUY_ORDER_SUCCESS,
-              member,
-              order,
-              ordered_at: 1519344000000
-            }
+            { type: TYPES.BUY_ORDER_REQUEST, order },
+            { type: TYPES.BUY_ORDER_SUCCESS, order }
           ]);
         })
         .then(done)
@@ -575,16 +537,15 @@ describe('buying products', () => {
       // and when adding a product to order
       const products = [{ id: 2 }];
       const member = { id: 1 };
-      const store = mockStore({ order: { buyMore: false, member, products } });
+      const store = mockStore();
       store
-        .dispatch(actions.makeOrder())
+        .dispatch(actions.makeOrder({ member, products }))
         .then(() => {
           // then we buy a product
           expect(store.getActions()).toEqual([
             {
               type: TYPES.QUEUE_ORDER,
-              order: { products, member },
-              ordered_at: 1519344000000
+              order: { products, member, ordered_at: 1519344000000 }
             },
             push('/')
           ]);
@@ -613,8 +574,8 @@ describe('buying products', () => {
         member: member,
         ordered_at: 1519344000000
       };
-      const store = mockStore({ order });
-      store.dispatch(actions.makeOrder()).then(() => {
+      const store = mockStore();
+      store.dispatch(actions.makeOrder(order)).then(() => {
         jest.runTimersToTime(TIME_TO_CANCEL);
 
         flushAllPromises()
@@ -623,22 +584,11 @@ describe('buying products', () => {
             expect(store.getActions()).toEqual([
               {
                 type: TYPES.QUEUE_ORDER,
-                order,
-                ordered_at: 1519344000000
+                order
               },
               push('/'),
-              {
-                type: TYPES.BUY_ORDER_REQUEST,
-                member,
-                order,
-                ordered_at: 1519344000000
-              },
-              {
-                type: TYPES.BUY_ORDER_SUCCESS,
-                member,
-                order,
-                ordered_at: 1519344000000
-              }
+              { type: TYPES.BUY_ORDER_REQUEST, order },
+              { type: TYPES.BUY_ORDER_SUCCESS, order }
             ]);
           })
           .then(done)
@@ -650,32 +600,26 @@ describe('buying products', () => {
       // and when adding a product to order
       const products = [{ id: 2 }];
       const member = { id: 1 };
-      const store = mockStore({
-        order: { buyMore: false, member, products, ordered_at: 1519344000000 }
-      });
+      const order = { member, products, ordered_at: 1519344000000 };
+      const store = mockStore();
 
       store
-        .dispatch(actions.makeOrder())
+        .dispatch(actions.makeOrder(order))
         .then(() => {
           store.dispatch(
-            actions.cancelOrder(
-              { products, member, ordered_at: 1519344000000 },
-              1519344000000
-            )
+            actions.cancelOrder({ products, member, ordered_at: 1519344000000 })
           );
           jest.runTimersToTime(TIME_TO_CANCEL);
 
           expect(store.getActions()).toEqual([
             {
               type: TYPES.QUEUE_ORDER,
-              order: { products, member, ordered_at: 1519344000000 },
-              ordered_at: 1519344000000
+              order: { products, member, ordered_at: 1519344000000 }
             },
             push('/'),
             {
               type: TYPES.CANCEL_ORDER,
-              order: { products, member, ordered_at: 1519344000000 },
-              ordered_at: 1519344000000
+              order: { products, member, ordered_at: 1519344000000 }
             }
           ]);
         })

@@ -14,7 +14,7 @@ describe('<CancelOrder>', () => {
     const products = [{ id: 1, price: 100 }];
     const store = mockStore({
       queuedOrder: {
-        order: { products, member },
+        order: { products, member, ordered_at: 1 },
         ordered_at: 1
       }
     });
@@ -31,8 +31,7 @@ describe('<CancelOrder>', () => {
     expect(store.getActions()).toEqual([
       {
         type: TYPES.CANCEL_ORDER,
-        order: { products, member },
-        ordered_at: 1
+        order: { products, member, ordered_at: 1 }
       }
     ]);
   });

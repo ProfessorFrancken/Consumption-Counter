@@ -106,22 +106,15 @@ describe('cancelling choices', () => {});
 
 describe('buying products', () => {
   it('is possible to buy more products', () => {
-    expect(order(undefined, {}).buyMore).toBe(false);
-    expect(order(undefined, { type: TYPES.BUY_MORE }).buyMore).toBe(true);
-    expect(order({ buyMore: true }, { type: TYPES.BUY_MORE }).buyMore).toBe(
-      false
-    );
+    expect(
+      order({ products: [] }, { type: TYPES.BUY_MORE, product: { id: 1 } })
+        .products
+    ).toEqual([{ id: 1 }]);
   });
 
   it('clears the order list when changing from buy more to buying single', () => {
     expect(
-      order(
-        {
-          products: [{ id: 1 }],
-          buyMore: true
-        },
-        { type: TYPES.BUY_MORE }
-      ).products
+      order({ products: [{ id: 1 }] }, { type: TYPES.BUY_MORE }).products
     ).toEqual([]);
   });
 });
@@ -225,10 +218,9 @@ describe('buying products', () => {
     expect(
       queuedOrder(undefined, {
         type: TYPES.QUEUE_ORDER,
-        order: {},
-        ordered_at: 1
+        order: { ordered_at: 1 }
       })
-    ).toEqual({ ordered_at: 1, order: {} });
+    ).toEqual({ ordered_at: 1, order: { ordered_at: 1 } });
   });
 
   it('empties the queue when an order was bought', () => {
@@ -237,8 +229,7 @@ describe('buying products', () => {
         { ordered_at: 1, order: {} },
         {
           type: TYPES.BUY_ORDER_REQUEST,
-          ordered_at: 1,
-          order: {}
+          order: { ordered_at: 1 }
         }
       )
     ).toEqual(null);
@@ -250,8 +241,7 @@ describe('buying products', () => {
         { ordered_at: 1, order: {} },
         {
           type: TYPES.BUY_ORDER_REQUEST,
-          ordered_at: 2,
-          order: {}
+          order: { ordered_at: 2 }
         }
       )
     ).toEqual({ ordered_at: 1, order: {} });
@@ -259,12 +249,7 @@ describe('buying products', () => {
 
   it('empties the queue when an order was cancelled', () => {
     expect(
-      queuedOrder(
-        { ordered_at: 1, order: {} },
-        {
-          type: TYPES.CANCEL_ORDER
-        }
-      )
+      queuedOrder({ ordered_at: 1, order: {} }, { type: TYPES.CANCEL_ORDER })
     ).toEqual(null);
   });
 
@@ -272,13 +257,9 @@ describe('buying products', () => {
     expect(
       queuedOrder(
         { ordered_at: 1, order: {} },
-        {
-          type: TYPES.QUEUE_ORDER,
-          order: { id: 2 },
-          ordered_at: 2
-        }
+        { type: TYPES.QUEUE_ORDER, order: { id: 2, ordered_at: 2 } }
       )
-    ).toEqual({ ordered_at: 2, order: { id: 2 } });
+    ).toEqual({ ordered_at: 2, order: { id: 2, ordered_at: 2 } });
   });
 });
 
@@ -291,42 +272,38 @@ describe('keeping track of orders', () => {
     expect(
       queuedOrders(undefined, {
         type: TYPES.QUEUE_ORDER,
-        order: {},
-        ordered_at: 1
+        order: { ordered_at: 1 }
       })
-    ).toEqual([{ ordered_at: 1, order: {}, fails: 0 }]);
+    ).toEqual([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }]);
   });
 
   it('empties the queue when an order was bought', () => {
     expect(
-      queuedOrders([{ ordered_at: 1, order: {}, fails: 0 }], {
+      queuedOrders([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }], {
         type: TYPES.BUY_ORDER_SUCCESS,
-        ordered_at: 1,
-        order: {}
+        order: { ordered_at: 1 }
       })
     ).toEqual([]);
   });
 
   it('removes orders from the queue when they are cancelled', () => {
     expect(
-      queuedOrders([{ ordered_at: 1, order: {}, fails: 0 }], {
+      queuedOrders([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }], {
         type: TYPES.CANCEL_ORDER,
-        ordered_at: 1,
-        order: {}
+        order: { ordered_at: 1 }
       })
     ).toEqual([]);
   });
 
   it('keeps track of multiple orders', () => {
     expect(
-      queuedOrders([{ ordered_at: 1, order: {}, fails: 0 }], {
+      queuedOrders([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }], {
         type: TYPES.QUEUE_ORDER,
-        ordered_at: 2,
-        order: {}
+        order: { ordered_at: 2 }
       })
     ).toEqual([
-      { ordered_at: 1, order: {}, fails: 0 },
-      { ordered_at: 2, order: {}, fails: 0 }
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 0 },
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
     ]);
   });
 
@@ -334,35 +311,33 @@ describe('keeping track of orders', () => {
     expect(
       queuedOrders(
         [
-          { ordered_at: 1, order: {}, fails: 0 },
-          { ordered_at: 2, order: {}, fails: 0 }
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0 },
+          { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
         ],
         {
           type: TYPES.BUY_ORDER_FAILURE,
-          ordered_at: 1,
-          order: {}
+          order: { ordered_at: 1 }
         }
       )
     ).toEqual([
-      { ordered_at: 1, order: {}, fails: 1 },
-      { ordered_at: 2, order: {}, fails: 0 }
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 1 },
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
     ]);
 
     expect(
       queuedOrders(
         [
-          { ordered_at: 1, order: {}, fails: 2 },
-          { ordered_at: 2, order: {}, fails: 0 }
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 2 },
+          { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
         ],
         {
           type: TYPES.BUY_ORDER_FAILURE,
-          ordered_at: 1,
-          order: {}
+          order: { ordered_at: 1 }
         }
       )
     ).toEqual([
-      { ordered_at: 1, order: {}, fails: 3 },
-      { ordered_at: 2, order: {}, fails: 0 }
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 3 },
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
     ]);
   });
 });
