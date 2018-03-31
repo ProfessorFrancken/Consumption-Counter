@@ -274,36 +274,53 @@ describe('keeping track of orders', () => {
         type: TYPES.QUEUE_ORDER,
         order: { ordered_at: 1 }
       })
-    ).toEqual([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }]);
+    ).toEqual([
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
+    ]);
   });
 
   it('empties the queue when an order was bought', () => {
     expect(
-      queuedOrders([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }], {
-        type: TYPES.BUY_ORDER_SUCCESS,
-        order: { ordered_at: 1 }
-      })
+      queuedOrders(
+        [
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
+        ],
+        {
+          type: TYPES.BUY_ORDER_SUCCESS,
+          order: { ordered_at: 1 }
+        }
+      )
     ).toEqual([]);
   });
 
   it('removes orders from the queue when they are cancelled', () => {
     expect(
-      queuedOrders([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }], {
-        type: TYPES.CANCEL_ORDER,
-        order: { ordered_at: 1 }
-      })
+      queuedOrders(
+        [
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
+        ],
+        {
+          type: TYPES.CANCEL_ORDER,
+          order: { ordered_at: 1 }
+        }
+      )
     ).toEqual([]);
   });
 
   it('keeps track of multiple orders', () => {
     expect(
-      queuedOrders([{ ordered_at: 1, order: { ordered_at: 1 }, fails: 0 }], {
-        type: TYPES.QUEUE_ORDER,
-        order: { ordered_at: 2 }
-      })
+      queuedOrders(
+        [
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
+        ],
+        {
+          type: TYPES.QUEUE_ORDER,
+          order: { ordered_at: 2 }
+        }
+      )
     ).toEqual([
-      { ordered_at: 1, order: { ordered_at: 1 }, fails: 0 },
-      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0, state: 'queued' },
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
     ]);
   });
 
@@ -311,8 +328,13 @@ describe('keeping track of orders', () => {
     expect(
       queuedOrders(
         [
-          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0 },
-          { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
+          {
+            ordered_at: 2,
+            order: { ordered_at: 2 },
+            fails: 0,
+            state: 'queued'
+          },
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
         ],
         {
           type: TYPES.BUY_ORDER_FAILURE,
@@ -320,15 +342,20 @@ describe('keeping track of orders', () => {
         }
       )
     ).toEqual([
-      { ordered_at: 1, order: { ordered_at: 1 }, fails: 1 },
-      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0, state: 'queued' },
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 1, state: 'queued' }
     ]);
 
     expect(
       queuedOrders(
         [
-          { ordered_at: 1, order: { ordered_at: 1 }, fails: 2 },
-          { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
+          {
+            ordered_at: 2,
+            order: { ordered_at: 2 },
+            fails: 0,
+            state: 'queued'
+          },
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 2, state: 'queued' }
         ],
         {
           type: TYPES.BUY_ORDER_FAILURE,
@@ -336,8 +363,31 @@ describe('keeping track of orders', () => {
         }
       )
     ).toEqual([
-      { ordered_at: 1, order: { ordered_at: 1 }, fails: 3 },
-      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0 }
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0, state: 'queued' },
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 3, state: 'queued' }
+    ]);
+  });
+
+  it('updates the state of an order when sending the order request', () => {
+    expect(
+      queuedOrders(
+        [
+          {
+            ordered_at: 2,
+            order: { ordered_at: 2 },
+            fails: 0,
+            state: 'queued'
+          },
+          { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'queued' }
+        ],
+        {
+          type: TYPES.BUY_ORDER_REQUEST,
+          order: { ordered_at: 1 }
+        }
+      )
+    ).toEqual([
+      { ordered_at: 2, order: { ordered_at: 2 }, fails: 0, state: 'queued' },
+      { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'requesting' }
     ]);
   });
 });
