@@ -3,6 +3,7 @@ import {
   order,
   transactions,
   queuedOrder,
+  queuedOrders,
   recentBuyers
 } from './reducer';
 import { TYPES } from './actions';
@@ -278,5 +279,90 @@ describe('buying products', () => {
         }
       )
     ).toEqual({ ordered_at: 2, order: { id: 2 } });
+  });
+});
+
+describe('keeping track of orders', () => {
+  it('has no order queued by default', () => {
+    expect(queuedOrders(undefined, {})).toEqual([]);
+  });
+
+  it('keeps track of a newly queued order', () => {
+    expect(
+      queuedOrders(undefined, {
+        type: TYPES.QUEUE_ORDER,
+        order: {},
+        ordered_at: 1
+      })
+    ).toEqual([{ ordered_at: 1, order: {}, fails: 0 }]);
+  });
+
+  it('empties the queue when an order was bought', () => {
+    expect(
+      queuedOrders([{ ordered_at: 1, order: {}, fails: 0 }], {
+        type: TYPES.BUY_ORDER_SUCCESS,
+        ordered_at: 1,
+        order: {}
+      })
+    ).toEqual([]);
+  });
+
+  it('removes orders from the queue when they are cancelled', () => {
+    expect(
+      queuedOrders([{ ordered_at: 1, order: {}, fails: 0 }], {
+        type: TYPES.CANCEL_ORDER,
+        ordered_at: 1,
+        order: {}
+      })
+    ).toEqual([]);
+  });
+
+  it('keeps track of multiple orders', () => {
+    expect(
+      queuedOrders([{ ordered_at: 1, order: {}, fails: 0 }], {
+        type: TYPES.QUEUE_ORDER,
+        ordered_at: 2,
+        order: {}
+      })
+    ).toEqual([
+      { ordered_at: 1, order: {}, fails: 0 },
+      { ordered_at: 2, order: {}, fails: 0 }
+    ]);
+  });
+
+  it('keeps track of failed requests', () => {
+    expect(
+      queuedOrders(
+        [
+          { ordered_at: 1, order: {}, fails: 0 },
+          { ordered_at: 2, order: {}, fails: 0 }
+        ],
+        {
+          type: TYPES.BUY_ORDER_FAILURE,
+          ordered_at: 1,
+          order: {}
+        }
+      )
+    ).toEqual([
+      { ordered_at: 1, order: {}, fails: 1 },
+      { ordered_at: 2, order: {}, fails: 0 }
+    ]);
+
+    expect(
+      queuedOrders(
+        [
+          { ordered_at: 1, order: {}, fails: 2 },
+          { ordered_at: 2, order: {}, fails: 0 }
+        ],
+        {
+          type: TYPES.BUY_ORDER_FAILURE,
+          ordered_at: 1,
+          order: {}
+        }
+      )
+    ).toEqual([
+      { ordered_at: 1, order: {}, fails: 3 },
+      { ordered_at: 2, order: {}, fails: 0 }
+    ]);
   });
 });

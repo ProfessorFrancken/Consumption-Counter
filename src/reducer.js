@@ -169,3 +169,28 @@ export function recentBuyers(state = [], action) {
       return state;
   }
 }
+
+export function queuedOrders(state = [], action) {
+  switch (action.type) {
+    case TYPES.QUEUE_ORDER:
+      return [
+        ...state,
+        {
+          ordered_at: action.ordered_at,
+          order: action.order,
+          fails: 0
+        }
+      ];
+    case TYPES.BUY_ORDER_SUCCESS:
+    case TYPES.CANCEL_ORDER:
+      return [...state.filter(order => order.ordered_at !== action.ordered_at)];
+    case TYPES.BUY_ORDER_FAILURE:
+      return state.map(order => {
+        return order.ordered_at === action.ordered_at
+          ? { ...order, fails: order.fails + 1 }
+          : order;
+      });
+    default:
+      return state;
+  }
+}
