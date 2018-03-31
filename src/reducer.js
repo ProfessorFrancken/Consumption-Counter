@@ -73,16 +73,12 @@ export function surnameRanges(state = defaultRanges, action) {
   }
 }
 
-export function title(state = "T.F.V. 'Professor Francken'", action) {
+export function title(state = '', action) {
   switch (action.type) {
     case TYPES.SELECT_MEMBER:
       return `${action.member.firstName} ${action.member.surname}`;
     case TYPES.SELECT_COMMITTEE:
       return action.committee.name;
-    case TYPES.BUY_ORDER_SUCCESS:
-    case TYPES.BUY_ORDER_FAILURE:
-    case TYPES.GO_BACK:
-      return "T.F.V. 'Professor Francken'";
     default:
       return state;
   }
