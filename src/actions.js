@@ -117,8 +117,8 @@ export function makeOrder(order) {
       });
       dispatch(push('/'));
 
-      orderQueue[date.getTime()] = setTimeout(() => {
-        dispatch(buyOrder(order.member, order, date));
+      orderQueue[order.ordered_at] = setTimeout(() => {
+        dispatch(buyOrder(order));
       }, TIME_TO_CANCEL);
       resolve();
     });
@@ -137,12 +137,12 @@ export function cancelOrder(order) {
   };
 }
 
-function buyOrder(member, order, date) {
+function buyOrder(order) {
   return (dispatch, getState, api) => {
-    delete orderQueue[order.ordered_at];
+    const ordered_at = order.ordered_at;
+    delete orderQueue[ordered_at];
 
-    const ordered_at = date.getTime();
-
+    const member = order.member;
     dispatch({
       type: TYPES.BUY_ORDER_REQUEST,
       member,
