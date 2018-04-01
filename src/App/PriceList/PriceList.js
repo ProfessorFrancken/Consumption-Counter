@@ -27,13 +27,10 @@ const PriceList = ({ products }) => {
   const food = products['Eten'];
 
   return (
-    <div>
-      <h2>Pricelist</h2>
-      <div className="h-100 d-flex flex-row justify-content-between">
-        <Category category={{ name: 'Beer', products: beer }} />
-        <Category category={{ name: 'Drinks', products: drinks }} />
-        <Category category={{ name: 'Food', products: food }} />
-      </div>
+    <div className="h-100 d-flex flex-row justify-content-between">
+      <Category category={{ name: 'Beer', products: beer }} />
+      <Category category={{ name: 'Drinks', products: drinks }} />
+      <Category category={{ name: 'Food', products: food }} />
     </div>
   );
 };

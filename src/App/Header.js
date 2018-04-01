@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 const Header = ({ title, onClick }) => (
   <div className="header">
     <div className="titleName">
+      <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
       <Route exact path="/settings" render={() => <span>Settings</span>} />
       <Route exact path="/prominent" render={() => <span>Prominent</span>} />
       <Route exact path="/recent" render={() => <span>Recent</span>} />
@@ -16,6 +17,11 @@ const Header = ({ title, onClick }) => (
       />
       <Route exact path="/products" render={() => <span>{title}</span>} />
     </div>
+    <Route
+      exact
+      path="/products"
+      render={() => <a href="/pricelist">Show prices</a>}
+    />
     <div className="association" onClick={onClick}>
       T.F.V. 'Professor Francken'
     </div>

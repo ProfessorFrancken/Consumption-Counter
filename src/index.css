@@ -59,6 +59,10 @@ button {
   justify-content: space-between;
   padding: 0 var(--padding);
 }
+
+.header a {
+  color: var(--primary);
+}
 .sidebar {
   grid-column: sidebar;
   grid-row: header / footer-end;
