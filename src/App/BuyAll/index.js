@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { buyAll } from '../../actions';
 import Price from './../Transactions/Price';
 import Icon from './../Icon';
 
-const BuyAll = ({ buyAll, products = [] }) =>
-  products.length === 0 ? null : (
+const BuyAll = ({ buyAll, products = [], location }) =>
+  location.pathname !== '/products' || products.length === 0 ? null : (
     <button className="button buyAllButton" onClick={buyAll}>
       <Icon name="check-circle" />
       <span style={{ marginLeft: '.5em' }}>
@@ -22,4 +23,4 @@ const mapDispatchToProps = dispatch => ({
   buyAll: () => dispatch(buyAll())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyAll);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BuyAll));
