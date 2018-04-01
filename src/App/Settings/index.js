@@ -23,7 +23,7 @@ const Settings = ({ orders, cancel, buy }) => (
     <Authenticate />
     <div>
       <h2>Queud Orders</h2>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">Ordered at</th>

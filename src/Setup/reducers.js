@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import {
-  authenticationToken,
+  authentication,
   title,
   products,
   members,
@@ -16,7 +16,7 @@ import {
 } from '../reducer.js';
 
 export default combineReducers({
-  authenticationToken,
+  authentication,
   title,
   members,
   boardMembers,

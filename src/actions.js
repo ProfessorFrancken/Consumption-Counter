@@ -377,7 +377,7 @@ export function authenticate(password) {
           token: response.token
         });
       })
-      .catch(ex => dispatch({ type: TYPES.AUTHENTICATE_FAILURE }));
+      .catch(ex => dispatch({ type: TYPES.AUTHENTICATE_FAILURE, error: ex }));
   };
 }
 

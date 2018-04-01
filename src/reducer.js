@@ -140,12 +140,17 @@ export function queuedOrder(state = null, action) {
   }
 }
 
-export function authenticationToken(state = null, action) {
+export function authentication(
+  state = { request: false, token: null },
+  action
+) {
   switch (action.type) {
     case TYPES.AUTHENTICATE_REQUEST:
-      return null;
+      return { request: true, token: state.token };
+    case TYPES.AUTHENTICATE_FAILURE:
+      return { request: false, error: action.error, token: state.token };
     case TYPES.AUTHENTICATE_SUCCESS:
-      return action.token;
+      return { request: false, token: action.token };
     default:
       return state;
   }
