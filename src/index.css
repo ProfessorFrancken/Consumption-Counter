@@ -249,15 +249,17 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .productAmount {
   background-color: var(--secondary);
   color: var(--primary);
   border-radius: 50%;
-  width: 3em;
-  height: 3em;
-  line-height: 3em;
+  width: 4em;
+  height: 4em;
+  line-height: 4em;
 }
 
 .productAmount > span {

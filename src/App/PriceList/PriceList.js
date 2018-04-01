@@ -3,22 +3,28 @@ import PropTypes from 'prop-types';
 import Price from './Price';
 
 const Product = ({ product }) => (
-  <span className="d-flex justify-content-between">
-    <strong>{product.name}</strong> <Price price={product.price} />
-  </span>
+  <button
+    className="button tile"
+    style={{
+      backgroundImage: `url(${product.image})`,
+      backgroundSize: 'cover',
+      backgroundPosition: '50% 50%'
+    }}
+  >
+    <div className="productAmountOverlay">
+      <div className="productAmount">
+        <Price price={product.price} />
+      </div>
+    </div>
+  </button>
 );
 
-const Category = ({ category }) => (
-  <div className="list-unstyled text-left w-100 mx-3">
-    <h3 className="text-center">{category.name}</h3>
-    <ul>
-      {category.products.map(product => (
-        <li key={product.id}>
-          <Product product={product} />
-        </li>
-      ))}
-    </ul>
-  </div>
+const Category = ({ category, onClick, toggle, name }) => (
+  <nav className="categoryRow">
+    {category.products.map(product => (
+      <Product product={product} key={product.id} />
+    ))}
+  </nav>
 );
 
 const PriceList = ({ products }) => {
@@ -27,7 +33,7 @@ const PriceList = ({ products }) => {
   const food = products['Eten'];
 
   return (
-    <div className="h-100 d-flex flex-row justify-content-between">
+    <div className="productsGrid">
       <Category category={{ name: 'Beer', products: beer }} />
       <Category category={{ name: 'Drinks', products: drinks }} />
       <Category category={{ name: 'Food', products: food }} />
