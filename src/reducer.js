@@ -99,7 +99,6 @@ export function order(state = defaultOrder, action) {
       return { ...defaultOrder, member: action.member };
     case TYPES.ADD_PRODUCT_TO_ORDER:
       return { ...state, products: [...state.products, { ...action.product }] };
-    case TYPES.GO_BACK:
     case TYPES.QUEUE_ORDER:
       return defaultOrder;
     default:
