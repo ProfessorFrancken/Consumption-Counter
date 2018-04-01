@@ -38,9 +38,7 @@ const Settings = ({ orders, cancel, buy }) => (
           {orders.map((order, idx) => (
             <tr key={idx}>
               <th scope="row">{moment(order.order.ordered_at).calendar()}</th>
-              <td>
-                {order.order.member.firstName} {order.order.member.surname}
-              </td>
+              <td>{order.order.member.fullname}</td>
               <td>{listOfProducts(order.order.products)}</td>
               <td>
                 <Price products={order.order.products} />

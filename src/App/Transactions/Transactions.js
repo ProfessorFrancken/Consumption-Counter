@@ -18,8 +18,7 @@ const Transaction = ({ order }) => (
   <span>
     <strong>{moment(order.ordered_at).calendar()}</strong>
     <br />
-    {order.member.firstName} {order.member.surname} bought{' '}
-    {listOfProducts(order.products)} for{' '}
+    {order.member.fullname} bought {listOfProducts(order.products)} for{' '}
     <Price
       products={order.products}
       price={order.products

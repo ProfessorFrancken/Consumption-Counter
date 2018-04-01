@@ -270,6 +270,7 @@ describe('Plus One', () => {
       id: 314,
       firstName: 'John',
       surname: 'Snow',
+      fullname: 'John Snow',
       age: 18,
       prominent: null,
       cosmetics: {

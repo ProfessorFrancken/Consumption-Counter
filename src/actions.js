@@ -202,6 +202,10 @@ export function fetchMembers() {
         id: lid.id,
         firstName: lid.voornaam,
         surname: lid.achternaam,
+        fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
+          .filter(name => ![undefined, ''].includes(name))
+          .join(' '),
+
         age: calculateAge(lid),
         prominent: lid.prominent,
 

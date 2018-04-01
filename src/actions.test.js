@@ -116,6 +116,7 @@ describe('fetching members', () => {
             age: 17,
             firstName: 'John',
             surname: 'Snow',
+            fullname: 'John Snow',
             prominent: null,
             cosmetics: {
               color: null,
@@ -132,6 +133,7 @@ describe('fetching members', () => {
             age: 0,
             firstName: 'Arya',
             surname: 'Stark',
+            fullname: 'Arya Stark',
             prominent: null,
             cosmetics: {
               color: null,

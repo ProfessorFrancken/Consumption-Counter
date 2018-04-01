@@ -26,7 +26,7 @@ const Member = ({ member, onClick, style = {} }) => (
   >
     &nbsp;{member.cosmetics.nickname
       ? member.cosmetics.nickname
-      : member.firstName + ' ' + member.surname}&nbsp;
+      : member.fullname}&nbsp;
   </button>
 );
 

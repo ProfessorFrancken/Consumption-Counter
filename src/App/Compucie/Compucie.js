@@ -21,8 +21,7 @@ const Compucie = ({
       <Member
         member={{
           id: -1,
-          firstName: 'Refresh',
-          surname: '',
+          fullname: 'Refresh',
           age: 101,
           prominent: 0,
           cosmetics: {}
@@ -33,8 +32,7 @@ const Compucie = ({
       <Member
         member={{
           id: 1098,
-          firstName: 'Guest',
-          surname: '',
+          fullname: 'Guest',
           age: 101,
           prominent: 0,
           cosmetics: {}
@@ -45,8 +43,7 @@ const Compucie = ({
       <Member
         member={{
           id: 1098,
-          firstName: 'Overdue',
-          surname: '',
+          fullname: 'Overdue',
           age: 101,
           prominent: 0,
           cosmetics: {}
@@ -56,8 +53,7 @@ const Compucie = ({
 
       <Member
         member={{
-          firstName: 'Chwazi',
-          surname: '',
+          fullname: 'Chwazi',
           cosmetics: {}
         }}
         onClick={chwazi}

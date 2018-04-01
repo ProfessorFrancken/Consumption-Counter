@@ -76,7 +76,7 @@ export function surnameRanges(state = defaultRanges, action) {
 export function title(state = '', action) {
   switch (action.type) {
     case TYPES.SELECT_MEMBER:
-      return `${action.member.firstName} ${action.member.surname}`;
+      return action.member.fullname;
     case TYPES.SELECT_COMMITTEE:
       return action.committee.name;
     default:
