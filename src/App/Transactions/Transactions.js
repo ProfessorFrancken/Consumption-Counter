@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Price from './Price';
 import { groupBy, map } from 'lodash';
+import moment from 'moment';
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = products =>
@@ -13,10 +14,12 @@ const listOfProducts = products =>
         : `${product[0].name} (${product.length}x)`
   ).join(', ');
 
-const Transaction = ({ member, order }) => (
+const Transaction = ({ order }) => (
   <span>
-    {member.firstName} {member.surname} bought {listOfProducts(order.products)}{' '}
-    for{' '}
+    <strong>{moment(order.ordered_at).calendar()}</strong>
+    <br />
+    {order.member.firstName} {order.member.surname} bought{' '}
+    {listOfProducts(order.products)} for{' '}
     <Price
       products={order.products}
       price={order.products
@@ -27,24 +30,25 @@ const Transaction = ({ member, order }) => (
 );
 
 const Transactions = ({ transactions }) => (
-  <ol>
+  <ul style={{ columnCount: 2, paddingLeft: 0 }}>
     {transactions.map((transaction, idx) => (
-      <li key={idx}>
+      <li key={idx} style={{ marginLeft: '1em' }}>
         <Transaction {...transaction} />
       </li>
     ))}
-  </ol>
+  </ul>
 );
 
 const TransactionPropType = PropTypes.shape({
-  member: PropTypes.shape({}).isRequired,
   order: PropTypes.shape({
+    member: PropTypes.shape({}).isRequired,
     products: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired
       })
-    )
+    ),
+    ordered_at: PropTypes.number.isRequired
   }).isRequired
 });
 
