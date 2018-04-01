@@ -93,12 +93,6 @@ describe('selecting a member', () => {
         }).member
       ).toEqual({ name: 'mark' });
     });
-
-    it('can cancel selecting a member', () => {
-      expect(order({ name: 'mark' }, { type: TYPES.GO_BACK }).member).toEqual({
-        age: 0
-      });
-    });
   });
 });
 
