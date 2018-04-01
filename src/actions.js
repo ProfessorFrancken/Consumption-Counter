@@ -18,7 +18,9 @@ export const actions = {
   fetchMembers,
   fetchProducts,
   fetchBoardMembers,
-  fetchCommitteeMembers
+  fetchCommitteeMembers,
+
+  chwazi
 };
 
 export const TYPES = {
@@ -378,6 +380,17 @@ export function authenticate(password) {
         });
       })
       .catch(ex => dispatch({ type: TYPES.AUTHENTICATE_FAILURE, error: ex }));
+  };
+}
+
+export function chwazi() {
+  return dispatch => {
+    // We don't really need to dispatch an action here so we only make the
+    // chwazi request
+    return fetch(
+      `https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+    );
   };
 }
 

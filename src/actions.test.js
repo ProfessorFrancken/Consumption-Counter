@@ -648,3 +648,20 @@ describe('committees', () => {
     ]);
   });
 });
+
+it('plays chwazi', () => {
+  fetchMock.mock(
+    `https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`,
+    {
+      headers: { 'content-type': 'application/json' }
+    }
+  );
+
+  const store = mockStore({});
+  store.dispatch(actions.chwazi());
+
+  expect(fetchMock.calls.length).toBe(1);
+
+  fetchMock.reset();
+  fetchMock.restore();
+});
