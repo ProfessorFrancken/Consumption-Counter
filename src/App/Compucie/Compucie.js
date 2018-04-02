@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 import Member from './../Members/MemberButton';
 import Icon from './../Icon';
 
@@ -63,9 +64,9 @@ const Compucie = ({
                button will be placed at the right most part of the grid
              */}
       </div>
-      <button className="tile button" onClick={toSettings}>
+      <NavLink exact to="/settings" className="tile button">
         <Icon name="cogs" />
-      </button>
+      </NavLink>
     </nav>
   </div>
 );

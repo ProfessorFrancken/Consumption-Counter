@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 
 const Header = ({ title, onClick }) => (
   <div className="header">
@@ -20,7 +20,12 @@ const Header = ({ title, onClick }) => (
     <Route
       exact
       path="/products"
-      render={() => <a href="/pricelist">Show prices</a>}
+      render={() => (
+        <NavLink exact to="/pricelist">
+          {' '}
+          Show prices{' '}
+        </NavLink>
+      )}
     />
     <div className="association" onClick={onClick}>
       T.F.V. 'Professor Francken'
