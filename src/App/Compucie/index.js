@@ -9,7 +9,7 @@ const mapStateToProps = state => compucieSelector(state);
 const mapDispatchToProps = dispatch => ({
   selectMember: member => dispatch(selectMember(member)),
   toSettings: () => dispatch(push('/settings')),
-  chwazi: () => dispatch(chwazi())
+  decreaseTempleCount: () => dispatch(chwazi())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compucie);

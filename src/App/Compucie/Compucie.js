@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Member from './../Members/MemberButton';
 import Icon from './../Icon';
+import TempleCountButton from './TempleCountButton';
 
 const Compucie = ({
   compucie,
   scriptcie,
   selectMember,
   toSettings,
-  chwazi
+  decreaseTempleCount
 }) => (
   <div className="d-flex flex-column justify-content-stretch h-100">
     <nav className="compucie tilesGrid" style={{ flexShrink: 1 }}>
@@ -52,13 +53,7 @@ const Compucie = ({
         onClick={selectMember}
       />
 
-      <Member
-        member={{
-          fullname: 'Chwazi',
-          cosmetics: {}
-        }}
-        onClick={chwazi}
-      />
+      <TempleCountButton decreaseTempleCount={decreaseTempleCount} />
       <div>
         {/* This div is deliberately left empty so that the settings
                button will be placed at the right most part of the grid
