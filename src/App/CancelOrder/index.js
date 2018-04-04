@@ -5,6 +5,9 @@ import { queuedOrderSelector } from './../../selectors';
 import Icon from './../Icon';
 import Price from './../Transactions/Price';
 
+const products = order =>
+  order.products.length === 1 ? order.products[0].name : 'multiple products';
+
 const CancelOrder = ({ onClick, queuedOrder }) =>
   queuedOrder === null ? null : (
     <button
@@ -13,7 +16,8 @@ const CancelOrder = ({ onClick, queuedOrder }) =>
     >
       <Icon name="times-circle" />
       <span style={{ marginLeft: '.5em' }}>
-        Cancel order (<Price products={queuedOrder.order.products} />)
+        Cancel buying {products(queuedOrder.order)} for{' '}
+        <Price products={queuedOrder.order.products} />
       </span>
     </button>
   );
