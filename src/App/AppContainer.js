@@ -33,6 +33,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchInitialData()),
   goToCompucieScreen: () => dispatch(push('/compucie')),
+  goToProminent: () => dispatch(push('/prominent')),
   goHome: () => dispatch(push('/'))
 });
 

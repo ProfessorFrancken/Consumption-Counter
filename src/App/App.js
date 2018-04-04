@@ -36,11 +36,18 @@ const AppContent = () => (
   </Switch>
 );
 
-const App = ({ title, goToCompucieScreen, background, goHome }) => (
+const App = ({
+  title,
+  goToCompucieScreen,
+  goToProminent,
+  background,
+  goHome
+}) => (
   <GerrieApp
     background={background}
     title={title}
     goToCompucieScreen={goToCompucieScreen}
+    goToProminent={goToProminent}
     goHome={goHome}
   >
     <AppContent />
