@@ -39,7 +39,11 @@ describe('Plus One', () => {
         body: { committees: mocks.committees },
         headers: { 'content-type': 'application/json' }
       })
-      .mock(`${base_api}/orders`, {});
+      .mock(`${base_api}/orders`, {})
+      .mock(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
+        body: { committees: mocks.committees },
+        headers: { 'content-type': 'application/json' }
+      });
 
     app = mount(
       <Provider store={store}>
