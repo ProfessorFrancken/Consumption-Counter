@@ -56,8 +56,22 @@ button {
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 var(--padding);
+}
+
+.header-item {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.header-item:first-child {
+  justify-content: flex-start;
+}
+
+.header-item:last-child {
+  justify-content: flex-end;
 }
 
 .header a {

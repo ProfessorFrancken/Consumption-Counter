@@ -3,7 +3,7 @@ import { Route, NavLink } from 'react-router-dom';
 
 const Header = ({ title, onClick }) => (
   <div className="header">
-    <div className="titleName">
+    <div className="titleName header-item">
       <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
       <Route exact path="/settings" render={() => <span>Settings</span>} />
       <Route exact path="/prominent" render={() => <span>Prominent</span>} />
@@ -17,17 +17,27 @@ const Header = ({ title, onClick }) => (
       />
       <Route exact path="/products" render={() => <span>{title}</span>} />
     </div>
-    <Route
-      exact
-      path="/products"
-      render={() => (
-        <NavLink exact to="/pricelist">
-          {' '}
-          Show prices{' '}
-        </NavLink>
-      )}
-    />
-    <div className="association" onClick={onClick}>
+    <div className="header-item">
+      <Route
+        exact
+        path="/products"
+        render={() => (
+          <NavLink exact to="/pricelist">
+            Show prices
+          </NavLink>
+        )}
+      />
+      <Route
+        exact
+        path="/pricelist"
+        render={() => (
+          <NavLink exact to="/products">
+            Buy products
+          </NavLink>
+        )}
+      />
+    </div>
+    <div className="association header-item" onClick={onClick}>
       T.F.V. 'Professor Francken'
     </div>
   </div>
