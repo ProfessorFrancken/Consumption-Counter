@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 class OnLongPress extends Component {
   state = {
-    longPressed: false
+    longPressed: false,
+    longPressTimeout: null
   };
 
   constructor(props) {
@@ -16,28 +17,31 @@ class OnLongPress extends Component {
 
   start(e) {
     e.preventDefault();
-    this.longPressTimeOut = setTimeout(this.onLongPress, this.props.timeout);
+
+    const longPressTimeOut = setTimeout(this.onLongPress, this.props.timeout);
+
+    this.setState({ longPressTimeOut, longPressed: false });
   }
 
   end(e) {
     e.preventDefault();
 
     if (this.state.longPressed) {
-      this.setState({ longPressed: false });
+      this.setState({ longPressed: false, longPressTimeOut: null });
       return;
     }
 
-    this.props.onClick();
+    clearTimeout(this.state.longPressTimeOut);
 
-    clearTimeout(this.longPressTimeOut);
+    this.props.onClick();
   }
 
   onLongPress() {
-    this.setState({ longPressed: true });
+    clearTimeout(this.state.longPressTimeOut);
+
+    this.setState({ longPressed: true, longPressTimeOut: null });
 
     this.props.onLongPress();
-
-    clearTimeout(this.longPressTimeOut);
   }
 
   render() {
