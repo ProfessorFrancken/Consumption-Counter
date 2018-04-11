@@ -14,11 +14,14 @@ class OnLongPress extends Component {
     this.onLongPress = this.onLongPress.bind(this);
   }
 
-  start() {
+  start(e) {
+    e.preventDefault();
     this.longPressTimeOut = setTimeout(this.onLongPress, this.props.timeout);
   }
 
-  end() {
+  end(e) {
+    e.preventDefault();
+
     if (this.state.longPressed) {
       this.setState({ longPressed: false });
       return;
