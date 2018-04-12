@@ -8,6 +8,14 @@ import { TYPES } from './actions';
    buixieval colors
 */
 const mapBuixieval = members => {
+  function handleResponse(response) {
+    if (!response.ok) {
+      return Promise.reject(response.statusText);
+    }
+
+    return response.json();
+  }
+
   const pink = { image: null, color: 'rgba(255, 153, 255, 255)' };
   const blue = { image: null, color: 'rgba(1, 255, 255, 255)' };
   const bored = {
@@ -32,14 +40,11 @@ const mapBuixieval = members => {
   return fetch('http://buixieval.nl/api/backers', {
     method: 'GET',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: 'ErWasEensEenBuixievalInGroningenEnIedereenHadPlezier!HYPE'
     }
   })
-    .then(
-      buixieval => buixieval.json(),
-      // Buixieval is not a crucial component of Plus One, so if it fails, ignore the rest
-      error => []
-    )
+    .then(handleResponse)
     .then(buixieval =>
       members.map(member => {
         // Check if the member is a buixieval backer
@@ -58,7 +63,10 @@ const mapBuixieval = members => {
                 // Normally a mmeber would be able to be recognized by their picture,
                 // but now we will overwrite the picture by a common background so
                 // we should display a nonempty nickname or their fullname
-                nickname: member.nickname === '' ? null : member.nickname
+                nickname:
+                  member.cosmetics.nickname === ''
+                    ? null
+                    : member.cosmetics.nickname
               },
               buixieval: {
                 id: buixievalMember.id,
@@ -73,7 +81,7 @@ const mapBuixieval = members => {
 
 const buixieval = (fetch, date) => {
   // if date not in buixieval period do nothing
-  if (!moment(date).isBetween('2010-04-14', '2018-04-22')) {
+  if (!moment(date).isBetween('2018-04-14', '2018-04-22')) {
     return store => next => action => next(action);
   }
 
@@ -81,9 +89,9 @@ const buixieval = (fetch, date) => {
     // When loading members, overwrite the cosmetics of members who've
     // contributed to buixieval
     if (action.type === TYPES.FETCH_MEMBERS_SUCCESS) {
-      return mapBuixieval(action.members).then(members =>
-        next({ ...action, members })
-      );
+      return mapBuixieval(action.members)
+        .then(members => next({ ...action, members }))
+        .catch(() => next(action));
     }
 
     return next(action);

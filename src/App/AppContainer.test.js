@@ -43,6 +43,10 @@ describe('Plus One', () => {
       .mock(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
         body: { committees: mocks.committees },
         headers: { 'content-type': 'application/json' }
+      })
+      .mock('http://buixieval.nl/api/backers', {
+        body: [],
+        headers: { 'content-type': 'application/json' }
       });
 
     app = mount(
