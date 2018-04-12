@@ -195,43 +195,39 @@ export function fetchMembers() {
       return Math.abs(ageDate.getUTCFullYear() - 1970);
     };
 
-    const mapMembers = lid => {
-      // The server gives us a dd-mm-yyyy response
+    const mapMembers = lid => ({
+      id: lid.id,
+      firstName: lid.voornaam,
+      surname: lid.achternaam,
+      fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
+        .filter(name => ![undefined, ''].includes(name))
+        .join(' '),
 
-      return {
-        id: lid.id,
-        firstName: lid.voornaam,
-        surname: lid.achternaam,
-        fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
-          .filter(name => ![undefined, ''].includes(name))
-          .join(' '),
+      age: calculateAge(lid),
+      prominent: lid.prominent,
 
-        age: calculateAge(lid),
-        prominent: lid.prominent,
-
-        cosmetics: {
-          color: lid.kleur,
-          image: lid.afbeelding,
-          nickname: lid.bijnaam,
-          button: {
-            width: lid.button_width,
-            height: lid.button_height
-          }
+      cosmetics: {
+        color: lid.kleur,
+        image: lid.afbeelding,
+        nickname: lid.bijnaam,
+        button: {
+          width: lid.button_width,
+          height: lid.button_height
         }
-      };
-    };
+      }
+    });
 
     return api
       .get('/members')
-      .then(response =>
+      .then(response => {
         dispatch({
           type: TYPES.FETCH_MEMBERS_SUCCESS,
           members: orderBy(
             response.members.map(mapMembers),
             member => member.surname
           )
-        })
-      )
+        });
+      })
       .catch(ex =>
         dispatch({
           type: TYPES.FETCH_MEMBERS_FAILURE

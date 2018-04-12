@@ -14,6 +14,8 @@ import Compucie from './Compucie/';
 import Authenticate from './Settings/Authentication/';
 import Settings from './Settings/';
 
+import Buixieval from './Buixieval/';
+
 import GerrieApp from './Gerjan/App';
 
 const Statistics = () => <Transactions />;
@@ -31,12 +33,14 @@ const AppContent = () => (
     <Route exact path="/recent" component={RecentMembers} />
     <Route exact path="/products" component={AvailableProducts} />
     <Route exact path="/" component={SurnameRanges} />
+    <Route exact path="/buixieval" component={Buixieval} />
     <Route exact path="/members/:page(\d+)" component={Members} />
     <Redirect from="/members" to="/" />
   </Switch>
 );
 
 const App = ({
+  menuItems,
   title,
   goToCompucieScreen,
   goToProminent,
@@ -44,6 +48,7 @@ const App = ({
   goHome
 }) => (
   <GerrieApp
+    menuItems={menuItems}
     background={background}
     title={title}
     goToCompucieScreen={goToCompucieScreen}

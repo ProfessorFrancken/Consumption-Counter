@@ -12,7 +12,8 @@ import {
   recentBuyers,
   order,
   queuedOrder,
-  queuedOrders
+  queuedOrders,
+  menuItems
 } from '../reducer.js';
 
 export default combineReducers({
@@ -28,5 +29,6 @@ export default combineReducers({
   order,
   queuedOrder,
   queuedOrders,
+  menuItems,
   router: routerReducer
 });

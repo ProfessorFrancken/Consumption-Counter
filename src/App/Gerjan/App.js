@@ -1,33 +1,8 @@
 import React from 'react';
-
 import Content from '../Content';
 import Footer from '../Footer';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
-
-const menuItems = [
-  {
-    icon: 'chess-queen',
-    url: '/prominent'
-  },
-  {
-    icon: 'home',
-    url: '/',
-    active: true
-  },
-  {
-    icon: 'users',
-    url: '/committees'
-  },
-  {
-    icon: 'chart-area',
-    url: '/statistics'
-  },
-  {
-    icon: 'clock',
-    url: '/recent'
-  }
-];
 
 const backgroundFromProduct = (background = null) => {
   return background === null
@@ -42,6 +17,7 @@ const backgroundFromProduct = (background = null) => {
 
 const App = ({
   children,
+  menuItems,
   title,
   background,
   goToCompucieScreen,

@@ -26,6 +26,7 @@ class AppContainer extends Component {
 }
 
 const mapStateToProps = state => ({
+  menuItems: state.menuItems,
   title: state.title,
   background: backgroundSelector(state)
 });
