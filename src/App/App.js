@@ -14,7 +14,7 @@ import Compucie from './Compucie/';
 import Authenticate from './Settings/Authentication/';
 import Settings from './Settings/';
 
-import Buixieval from './Buixieval/BuixievalSelection';
+import Buixieval from './Buixieval/';
 
 import GerrieApp from './Gerjan/App';
 
@@ -40,6 +40,7 @@ const AppContent = () => (
 );
 
 const App = ({
+  menuItems,
   title,
   goToCompucieScreen,
   goToProminent,
@@ -47,6 +48,7 @@ const App = ({
   goHome
 }) => (
   <GerrieApp
+    menuItems={menuItems}
     background={background}
     title={title}
     goToCompucieScreen={goToCompucieScreen}

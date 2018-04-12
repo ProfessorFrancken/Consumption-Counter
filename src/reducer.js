@@ -201,3 +201,47 @@ export function queuedOrders(state = [], action) {
       return state;
   }
 }
+
+const defaultMenuItems = [
+  {
+    icon: 'chess-queen',
+    url: '/prominent'
+  },
+  {
+    icon: 'home',
+    url: '/',
+    active: true
+  },
+  {
+    icon: 'users',
+    url: '/committees'
+  },
+  {
+    icon: 'chart-area',
+    url: '/statistics'
+  },
+  {
+    icon: 'clock',
+    url: '/recent'
+  }
+];
+export function menuItems(state = defaultMenuItems, action) {
+  if (action.type === TYPES.FETCH_MEMBERS_SUCCESS) {
+    if (
+      action.members.filter(member => member.buixieval !== undefined).length !==
+      0
+    ) {
+      return [
+        ...defaultMenuItems,
+        {
+          icon: 'bitcoin fab',
+          url: '/buixieval'
+        }
+      ];
+    }
+
+    return defaultMenuItems;
+  }
+
+  return state;
+}
