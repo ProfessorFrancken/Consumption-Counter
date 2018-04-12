@@ -2,6 +2,10 @@ import React from 'react';
 import Backer from './Backer';
 
 const Grid = ({ width, height, backers, selectMember }) => {
+  if (backers.length === 0) {
+    return 'Ga eens roze backen dan!';
+  }
+
   if (backers.length === 1) {
     return (
       <Backer
