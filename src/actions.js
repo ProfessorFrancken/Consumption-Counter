@@ -176,48 +176,6 @@ export function selectCommittee(committee) {
   };
 }
 
-const mapBuixieval = members => {
-  const teamColors = member => ({
-    color:
-      member.team === 'p'
-        ? 'rgba(255, 153, 255, 255)'
-        : 'rgba(1, 255, 255, 255)',
-    // Disable the custom image the member might use
-    image: null
-  });
-
-  return fetch('http://buixieval.nl/api/backers', {
-    method: 'GET',
-    headers: {
-      Authorization: 'ErWasEensEenBuixievalInGroningenEnIedereenHadPlezier!HYPE'
-    }
-  })
-    .then(
-      buixieval => buixieval.json(),
-      // Buixieval is not a crucial component of Plus One, so if it fails, ignore the rest
-      error => []
-    )
-    .then(buixieval =>
-      members.map(member => {
-        // Check if the member is a buixieval backer
-        const buixievalMember = buixieval.find(
-          b => parseInt(b.f_id, 10) === member.id
-        );
-
-        return !buixievalMember
-          ? member
-          : {
-              ...member,
-              cosmetics: {
-                ...member.cosmetics,
-                ...teamColors(buixievalMember),
-                nickname: member.nickname === '' ? null : member.nickname
-              }
-            };
-      })
-    );
-};
-
 export function fetchMembers() {
   return (dispatch, getState, api) => {
     dispatch({
@@ -261,14 +219,14 @@ export function fetchMembers() {
 
     return api
       .get('/members')
-      .then(response => response.members.map(mapMembers))
-      .then(members => {
-        mapBuixieval(members).then(members =>
-          dispatch({
-            type: TYPES.FETCH_MEMBERS_SUCCESS,
-            members: orderBy(members, member => member.surname)
-          })
-        );
+      .then(response => {
+        dispatch({
+          type: TYPES.FETCH_MEMBERS_SUCCESS,
+          members: orderBy(
+            response.members.map(mapMembers),
+            member => member.surname
+          )
+        });
       })
       .catch(ex =>
         dispatch({

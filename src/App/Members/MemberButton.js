@@ -6,10 +6,11 @@ const smallButton = (button = {}) =>
     ? { transform: 'scale(0.5)' }
     : {};
 const buttonStyle = member => ({
+  background: member.cosmetics.background,
   backgroundColor: member.cosmetics.color,
-  backgroundImage: member.cosmetics.image
-    ? `url(${member.cosmetics.image})`
-    : undefined,
+  ...(member.cosmetics.image
+    ? { backgroundImage: `url(${member.cosmetics.image})` }
+    : {}),
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   backgroundPosition: '50% 50%',
