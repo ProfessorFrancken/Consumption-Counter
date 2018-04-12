@@ -226,22 +226,23 @@ const defaultMenuItems = [
   }
 ];
 export function menuItems(state = defaultMenuItems, action) {
-  if (action.type === TYPES.FETCH_MEMBERS_SUCCESS) {
-    if (
-      action.members.filter(member => member.buixieval !== undefined).length !==
-      0
-    ) {
-      return [
-        ...defaultMenuItems,
-        {
-          icon: 'bitcoin fab',
-          url: '/buixieval'
-        }
-      ];
-    }
+  switch (action.type) {
+    case TYPES.FETCH_MEMBERS_SUCCESS:
+      // If at least one person has a buixieval property, then we should show the
+      // buixieval menu item
+      const buixievalIsEnabled =
+        action.members.filter(member => member.buixieval !== undefined)
+          .length !== 0;
 
-    return defaultMenuItems;
+      if (buixievalIsEnabled) {
+        return [
+          ...defaultMenuItems,
+          { icon: 'bitcoin fab', url: '/buixieval' }
+        ];
+      }
+
+      return defaultMenuItems;
+    default:
+      return state;
   }
-
-  return state;
 }

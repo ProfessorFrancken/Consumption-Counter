@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
+import { menuItems } from './../reducer';
 import App from './App';
 import configureMockStore from 'redux-mock-store';
 import AvailableProducts from './Products/AvailableProducts';
@@ -9,7 +10,7 @@ import Prominent from './Prominent';
 import RecentMembers from './Recent';
 
 function setup(routes = ['/']) {
-  const props = {};
+  const props = { menuItems: menuItems(undefined, {}) };
 
   const mockStore = configureMockStore([]);
   const store = mockStore(mockedState());
@@ -172,6 +173,7 @@ function mockedState() {
         naam: 'Compucie'
       }
     ],
-    queuedOrder: null
+    queuedOrder: null,
+    menuItems: menuItems(undefined, {})
   };
 }

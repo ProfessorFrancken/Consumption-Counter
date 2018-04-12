@@ -52,21 +52,24 @@ const mapBuixieval = members => {
           b => parseInt(b.f_id, 10) === member.id
         );
 
+        const cosmetics = member.cosmetics;
+
         return !buixievalMember
           ? member
           : {
               ...member,
               cosmetics: {
-                ...member.cosmetics,
+                ...cosmetics,
                 ...teamColors(buixievalMember),
 
                 // Normally a mmeber would be able to be recognized by their picture,
                 // but now we will overwrite the picture by a common background so
                 // we should display a nonempty nickname or their fullname
                 nickname:
-                  member.cosmetics.nickname === ''
+                  typeof cosmetics.nickname === 'string' &&
+                  cosmetics.nickname.trim() === ''
                     ? null
-                    : member.cosmetics.nickname
+                    : cosmetics.nickname
               },
               buixieval: {
                 id: buixievalMember.id,
