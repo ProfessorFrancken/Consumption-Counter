@@ -26,6 +26,10 @@ const menuItems = [
   {
     icon: 'clock',
     url: '/recent'
+  },
+  {
+    icon: 'bomb',
+    url: '/buixieval'
   }
 ];
 
