@@ -11,6 +11,9 @@
   --boards: 5;
 
   --padding: 40px;
+
+  --sidebar-primary: var(--primary);
+  --sidebar-seconary: var(--secondary);
 }
 
 *,
@@ -43,7 +46,7 @@ button {
   grid-template-rows:
     [header] var(--rowSize) [content] auto [arrow-overflow] var(--arrowOverflow)
     [footer] var(--footerSize) [footer-end];
-  background-color: var(--secondary);
+  background-color: none;
 }
 .header {
   color: var(--primary);
@@ -80,7 +83,7 @@ button {
 .sidebar {
   grid-column: sidebar;
   grid-row: header / footer-end;
-  background-color: var(--primary);
+  background-color: var(--sidebar-primary);
 }
 
 .button {
@@ -101,6 +104,7 @@ button {
   width: var(--menuSize);
   line-height: var(--rowSize);
   text-align: center;
+  background: none;
 }
 .active {
   background-color: var(--secondary) !important;
@@ -225,7 +229,7 @@ button {
 }
 
 .footer {
-  background-color: var(--primary);
+  background-color: var(--sidebar-primary);
   line-height: var(--footerSize);
   grid-row: footer / footer-end;
   grid-column: content;

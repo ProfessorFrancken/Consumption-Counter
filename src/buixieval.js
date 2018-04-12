@@ -7,6 +7,16 @@ import { TYPES } from './actions';
 
    buixieval colors
 */
+
+const pink = { image: null, color: 'rgba(255, 153, 255, 255)' };
+const blue = { image: null, color: 'rgba(1, 255, 255, 255)' };
+const bored = {
+  image: null,
+  background: `linear-gradient(to bottom right, ${blue.color} 50%, ${
+    pink.color
+  } 0%)`
+};
+
 const mapBuixieval = members => {
   function handleResponse(response) {
     if (!response.ok) {
@@ -15,15 +25,6 @@ const mapBuixieval = members => {
 
     return response.json();
   }
-
-  const pink = { image: null, color: 'rgba(255, 153, 255, 255)' };
-  const blue = { image: null, color: 'rgba(1, 255, 255, 255)' };
-  const bored = {
-    image: null,
-    background: `linear-gradient(to bottom right, ${blue.color} 50%, ${
-      pink.color
-    } 0%)`
-  };
 
   const teamColors = member => {
     if (member.team === 'p') {
@@ -74,12 +75,31 @@ const mapBuixieval = members => {
               buixieval: {
                 id: buixievalMember.id,
                 team: buixievalMember.team,
-                contributed: buixievalMember.contributed,
+                contributed: parseFloat(buixievalMember.contributed),
                 image: buixievalMember.img
               }
             };
       })
     );
+};
+
+const winningTeamColor = members => {
+  const contributed = members =>
+    members.reduce(
+      (total, member) =>
+        total + (member.buixieval ? member.buixieval.contributed : 0),
+      0.0
+    );
+
+  const team = (members, name) =>
+    members.filter(
+      member => member.buixieval && member.buixieval.team === name
+    );
+
+  const pinkContribution = contributed(team(members, 'p'));
+  const blueContribution = contributed(team(members, 'b'));
+
+  return blueContribution > pinkContribution ? blue.color : pink.color;
 };
 
 const buixieval = (fetch, date) => {
@@ -93,8 +113,17 @@ const buixieval = (fetch, date) => {
     // contributed to buixieval
     if (action.type === TYPES.FETCH_MEMBERS_SUCCESS) {
       return mapBuixieval(action.members)
-        .then(members => next({ ...action, members }))
-        .catch(() => next(action));
+        .then(members => {
+          const body = document.getElementsByTagName('body')[0];
+
+          body.style.setProperty(
+            '--sidebar-primary',
+            winningTeamColor(members)
+          );
+
+          return next({ ...action, members });
+        })
+        .catch(e => next(action));
     }
 
     return next(action);
