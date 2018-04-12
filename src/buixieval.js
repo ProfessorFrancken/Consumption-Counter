@@ -61,6 +61,7 @@ const mapBuixieval = members => {
                 nickname: member.nickname === '' ? null : member.nickname
               },
               buixieval: {
+                id: buixievalMember.id,
                 team: buixievalMember.team,
                 contributed: buixievalMember.contributed,
                 image: buixievalMember.img
