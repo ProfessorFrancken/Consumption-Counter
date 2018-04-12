@@ -29,7 +29,7 @@ describe('buixieval', () => {
   };
 
   it('adds buixieval information to members', done => {
-    const date = new Date('2018-04-14');
+    const date = new Date('2018-04-15');
 
     const members = [
       {
