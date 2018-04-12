@@ -332,23 +332,6 @@ describe('Plus One', () => {
     expectOrderToBeBought(app, mocks.orders.single, done);
   });
 
-  it('is possible select members through the compucie screen', done => {
-    const selectCompucie = app => {
-      app
-        .find('Header')
-        .find('.association')
-        .simulate('click');
-
-      expect(history.location.pathname).toBe('/compucie');
-    };
-
-    selectCompucie(app);
-    selectJohnSnow(app.find('.compucie').first());
-
-    addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single, done);
-  });
-
   // This test checks if we don't have any async issues
   it('it is possible to buy a product after someone else has bought a product', done => {
     selectRangeIncludingJohnSnow(app);
@@ -363,7 +346,6 @@ describe('Plus One', () => {
 
       selectRangeIncludingJohnSnow(app);
       selectJohnSnow(app);
-
       jest.runTimersToTime(10000);
 
       flushAllPromises()
@@ -459,6 +441,28 @@ describe('Plus One', () => {
       expect(history.location.pathname).toBe('/recent');
       jest.runTimersToTime(10000);
       expect(history.location.pathname).toBe('/');
+    });
+  });
+
+  it('is possible select members through the compucie screen', done => {
+    const selectCompucie = app => {
+      app
+        .find('Header')
+        .find('.association')
+        .simulate('click');
+
+      expect(history.location.pathname).toBe('/compucie');
+    };
+
+    selectCompucie(app);
+
+    flushAllPromises().then(() => {
+      app.update();
+      selectJohnSnow(app.find('.compucie').first());
+
+      addHertogJanToOrder(app);
+      expectOrderToBeBought(app, mocks.orders.single, done);
+      done();
     });
   });
 });
