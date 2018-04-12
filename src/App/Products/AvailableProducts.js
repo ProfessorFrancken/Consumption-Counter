@@ -5,7 +5,8 @@ import { buyMore } from '../../actions';
 import Products from './Products';
 
 const mapStateToProps = state => ({
-  products: productsWithOrderCountSelector(state)
+  products: productsWithOrderCountSelector(state),
+  hour: new Date().getHours()
 });
 
 const mapDispatchToProps = dispatch => ({

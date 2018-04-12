@@ -136,7 +136,7 @@ button {
   padding: 0.25em;
 }
 
-.prominentRow > .tile {
+.prominentRow .tile {
   margin: 0.25em;
 }
 
@@ -167,7 +167,7 @@ button {
   flex-basis: 0;
 }
 
-.categoryRow > .tile {
+.categoryRow .tile {
   margin: 0.25em;
 }
 
@@ -176,7 +176,7 @@ button {
   flex-direction: column;
 }
 
-.boardColumn > .tile {
+.boardColumn .tile {
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
@@ -278,4 +278,8 @@ button {
 
 .productAmount > span {
   color: var(--primary);
+}
+
+.locked .tile {
+  filter: opacity(25%);
 }

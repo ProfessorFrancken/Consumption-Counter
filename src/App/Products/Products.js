@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Product from './Product';
 
-const Category = ({ category, onClick, toggle, name }) => (
-  <nav className="categoryRow">
+const Category = ({ category, onClick, toggle, name, locked }) => (
+  <nav className={'categoryRow ' + (locked ? 'locked' : '')}>
     {category.map(product => (
       <Product
         product={product}
@@ -15,15 +15,22 @@ const Category = ({ category, onClick, toggle, name }) => (
   </nav>
 );
 
-const Products = ({ products, addProductToOrder, toggle }) => {
+const Products = ({ products, hour, addProductToOrder, toggle }) => {
   const beer = products['Bier'] || [];
   const drinks = products['Fris'] || [];
   const food = products['Eten'] || [];
 
+  const bierUur = ![4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(hour);
+
   return (
     <div className="productsGrid">
       {beer.length > 0 && (
-        <Category onClick={addProductToOrder} toggle={toggle} category={beer} />
+        <Category
+          onClick={addProductToOrder}
+          toggle={toggle}
+          category={beer}
+          locked={!bierUur}
+        />
       )}
       {drinks.length > 0 && (
         <Category
