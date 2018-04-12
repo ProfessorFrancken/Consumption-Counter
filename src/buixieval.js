@@ -37,7 +37,7 @@ const mapBuixieval = members => {
     }
   };
 
-  return fetch('http://buixieval.nl/api/backers', {
+  return fetch('https://buixieval.nl/api/backers', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

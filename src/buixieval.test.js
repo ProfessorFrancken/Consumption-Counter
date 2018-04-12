@@ -11,7 +11,7 @@ describe('buixieval', () => {
   });
 
   const create = (members, date) => {
-    fetchMock.mock('http://buixieval.nl/api/backers', {
+    fetchMock.mock('https://buixieval.nl/api/backers', {
       body: members,
       headers: { 'content-type': 'application/json' }
     });
