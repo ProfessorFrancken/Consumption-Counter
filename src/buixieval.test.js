@@ -91,7 +91,7 @@ describe('buixieval', () => {
               buixieval: {
                 id: 1,
                 team: 'p',
-                contributed: '33.33',
+                contributed: 33.33,
                 image: '1.jpeg'
               }
             }
