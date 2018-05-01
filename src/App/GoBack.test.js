@@ -32,6 +32,7 @@ describe('<GoBack />', () => {
       surname: 'Snow',
       age: 18,
       prominent: null,
+      latest_purchase_at: new Date(),
       cosmetics: {
         color: null,
         image: null,

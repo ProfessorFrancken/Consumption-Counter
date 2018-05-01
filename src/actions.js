@@ -158,6 +158,20 @@ export function buyOrder(order) {
 
 export function selectMember(member) {
   return dispatch => {
+    const today = new Date();
+    const timeDiff = Math.abs(
+      today.getTime() - member.latest_purchase_at.getTime()
+    );
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    if (diffDays > 90) {
+      if (
+        !window.confirm(`Are you sure you want to select ${member.fullname}`)
+      ) {
+        return;
+      }
+    }
+
     dispatch(push('/products'));
     dispatch({
       type: TYPES.SELECT_MEMBER,

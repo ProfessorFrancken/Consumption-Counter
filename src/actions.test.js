@@ -435,6 +435,7 @@ describe('selecing a member', () => {
       surname: 'Snow',
       age: 18,
       prominent: 0,
+      latest_purchase_at: new Date(),
 
       cosmetics: {
         color: undefined,

@@ -481,7 +481,8 @@ const mocks = {
       afbeelding: null,
       bijnaam: null,
       button_width: null,
-      button_height: null
+      button_height: null,
+      latest_purchase_at: '2018-01-01 00:00:00'
     }
   ],
 
