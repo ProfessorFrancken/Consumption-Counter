@@ -12,6 +12,11 @@ const Header = ({ title, onClick }) => (
       <Route exact path="/statistics" render={() => <span>Statistics</span>} />
       <Route
         exact
+        path="/screensaver"
+        render={() => <span>Screensaver</span>}
+      />
+      <Route
+        exact
         path="/committees/:page(\d+)"
         render={() => <span>{title}</span>}
       />

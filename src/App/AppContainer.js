@@ -18,6 +18,7 @@ class AppContainer extends Component {
         <ScreenSaver
           listen={this.props.history.listen}
           goHome={this.props.goHome}
+          goToScreenSaver={this.props.goToScreenSaver}
         />
         <App {...this.props} />
       </div>
@@ -35,7 +36,8 @@ const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchInitialData()),
   goToCompucieScreen: () => dispatch(push('/compucie')),
   goToProminent: () => dispatch(push('/prominent')),
-  goHome: () => dispatch(push('/'))
+  goHome: () => dispatch(push('/')),
+  goToScreenSaver: () => dispatch(push('/screensaver'))
 });
 
 export default withRouter(

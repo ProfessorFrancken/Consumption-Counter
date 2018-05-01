@@ -29,10 +29,17 @@ export default class ScreenSaver extends Component {
       clearTimeout(this.state.screenSaver);
     }
 
-    const screenSaver =
-      pathname !== '/'
-        ? setTimeout(this.props.goHome, ScreenSaverTimeout)
-        : null;
+    let screenSaver;
+    if (pathname === '/') {
+      screenSaver = setTimeout(
+        this.props.goToScreenSaver,
+        2 * ScreenSaverTimeout
+      );
+    } else {
+      if (pathname !== '/screensaver') {
+        screenSaver = setTimeout(this.props.goHome, ScreenSaverTimeout);
+      }
+    }
 
     this.setState({ screenSaver });
   }

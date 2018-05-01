@@ -20,6 +20,8 @@ import GerrieApp from './Gerjan/App';
 
 const Statistics = () => <Transactions />;
 
+const EmptyScreenSaver = () => <h1>Hoi</h1>;
+
 const AppContent = () => (
   <Switch>
     <Route exact path="/settings" component={Settings} />
@@ -35,6 +37,7 @@ const AppContent = () => (
     <Route exact path="/" component={SurnameRanges} />
     <Route exact path="/buixieval" component={Buixieval} />
     <Route exact path="/members/:page(\d+)" component={Members} />
+    <Route exact path="/screensaver" component={EmptyScreenSaver} />
     <Redirect from="/members" to="/" />
   </Switch>
 );
