@@ -37,7 +37,7 @@ const mapDispatchToProps = dispatch => ({
   goToCompucieScreen: () => dispatch(push('/compucie')),
   goToProminent: () => dispatch(push('/prominent')),
   goHome: () => dispatch(push('/')),
-  goToScreenSaver: () => dispatch(push('/screensaver'))
+  goToScreenSaver: () => dispatch(push('/statistics'))
 });
 
 export default withRouter(

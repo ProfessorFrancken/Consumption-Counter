@@ -36,7 +36,7 @@ export default class ScreenSaver extends Component {
         2 * ScreenSaverTimeout
       );
     } else {
-      if (pathname !== '/screensaver') {
+      if (pathname !== '/statistics') {
         screenSaver = setTimeout(this.props.goHome, ScreenSaverTimeout);
       }
     }
