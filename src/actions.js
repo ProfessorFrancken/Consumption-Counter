@@ -206,6 +206,10 @@ export function fetchMembers() {
       age: calculateAge(lid),
       prominent: lid.prominent,
 
+      latest_purchase_at: lid.latest_purchase_at
+        ? new Date(lid.latest_purchase_at)
+        : null,
+
       cosmetics: {
         color: lid.kleur,
         image: lid.afbeelding,

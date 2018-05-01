@@ -85,7 +85,8 @@ describe('fetching members', () => {
             afbeelding: null,
             bijnaam: null,
             button_width: null,
-            button_height: null
+            button_height: null,
+            lastest_purchase_at: undefined
           },
           {
             id: 313,
@@ -99,7 +100,8 @@ describe('fetching members', () => {
             afbeelding: null,
             bijnaam: null,
             button_width: null,
-            button_height: null
+            button_height: null,
+            lastest_purchase_at: undefined
           }
         ]
       },
@@ -118,6 +120,7 @@ describe('fetching members', () => {
             surname: 'Snow',
             fullname: 'John Snow',
             prominent: null,
+            latest_purchase_at: null,
             cosmetics: {
               color: null,
               image: null,
@@ -135,6 +138,7 @@ describe('fetching members', () => {
             surname: 'Stark',
             fullname: 'Arya Stark',
             prominent: null,
+            latest_purchase_at: null,
             cosmetics: {
               color: null,
               image: null,
