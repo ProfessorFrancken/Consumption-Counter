@@ -203,30 +203,14 @@ export function queuedOrders(state = [], action) {
 }
 
 const defaultMenuItems = [
-  {
-    icon: 'chess-queen',
-    url: '/prominent'
-  },
-  {
-    icon: 'home',
-    url: '/',
-    active: true
-  },
-  {
-    icon: 'users',
-    url: '/committees'
-  },
-  {
-    icon: 'chart-area',
-    url: '/statistics'
-  },
-  {
-    icon: 'clock',
-    url: '/recent'
-  }
+  { icon: 'home', url: '/', active: true },
+  { icon: 'chart-area', url: '/statistics' },
+  { icon: 'clock', url: '/recent' }
 ];
 export function menuItems(state = defaultMenuItems, action) {
   switch (action.type) {
+    case TYPES.FETCH_MEMBERS_REQUEST:
+      return defaultMenuItems;
     case TYPES.FETCH_MEMBERS_SUCCESS:
       // If at least one person has a buixieval property, then we should show the
       // buixieval menu item
@@ -235,13 +219,20 @@ export function menuItems(state = defaultMenuItems, action) {
           .length !== 0;
 
       if (buixievalIsEnabled) {
-        return [
-          ...defaultMenuItems,
-          { icon: 'bitcoin fab', url: '/buixieval' }
-        ];
+        return [...state, { icon: 'bitcoin fab', url: '/buixieval' }];
       }
 
-      return defaultMenuItems;
+      return state;
+
+    case TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST:
+      return state.filter(item => item.url !== '/committees');
+    case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
+      return [...state, { icon: 'users', url: '/committees' }];
+
+    case TYPES.FETCH_BOARD_MEMBERS_REQUEST:
+      return state.filter(item => item.url !== '/prominent');
+    case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
+      return [{ icon: 'chess-queen', url: '/prominent' }, ...state];
     default:
       return state;
   }

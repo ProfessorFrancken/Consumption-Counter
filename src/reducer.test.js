@@ -4,7 +4,8 @@ import {
   transactions,
   queuedOrder,
   queuedOrders,
-  recentBuyers
+  recentBuyers,
+  menuItems
 } from './reducer';
 import { TYPES } from './actions';
 import expect from 'expect';
@@ -382,6 +383,56 @@ describe('keeping track of orders', () => {
     ).toEqual([
       { ordered_at: 2, order: { ordered_at: 2 }, fails: 0, state: 'queued' },
       { ordered_at: 1, order: { ordered_at: 1 }, fails: 0, state: 'requesting' }
+    ]);
+  });
+});
+
+describe('menu items', () => {
+  it('has a default menu', () => {
+    expect(menuItems(undefined, {})).toEqual([
+      { icon: 'home', url: '/', active: true },
+      { icon: 'chart-area', url: '/statistics' },
+      { icon: 'clock', url: '/recent' }
+    ]);
+  });
+
+  it('adds buixieval when buixieval is enabled', () => {
+    expect(
+      menuItems(undefined, {
+        type: TYPES.FETCH_MEMBERS_SUCCESS,
+        members: [{ buixieval: true }]
+      })
+    ).toEqual([
+      { icon: 'home', url: '/', active: true },
+      { icon: 'chart-area', url: '/statistics' },
+      { icon: 'clock', url: '/recent' },
+      { icon: 'bitcoin fab', url: '/buixieval' }
+    ]);
+  });
+
+  it('adds committees when committees have been loaded', () => {
+    expect(
+      menuItems(undefined, {
+        type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS
+      })
+    ).toEqual([
+      { icon: 'home', url: '/', active: true },
+      { icon: 'chart-area', url: '/statistics' },
+      { icon: 'clock', url: '/recent' },
+      { icon: 'users', url: '/committees' }
+    ]);
+  });
+
+  it('adds prominent when board members have been loaded', () => {
+    expect(
+      menuItems(undefined, {
+        type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS
+      })
+    ).toEqual([
+      { icon: 'chess-queen', url: '/prominent' },
+      { icon: 'home', url: '/', active: true },
+      { icon: 'chart-area', url: '/statistics' },
+      { icon: 'clock', url: '/recent' }
     ]);
   });
 });
