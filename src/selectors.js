@@ -202,3 +202,10 @@ export const goBackText = createSelector(queuedOrderSelector, queue => {
 
   return 'Go back';
 });
+
+export const recentBuyersSelector = createSelector(
+  recentSelector,
+  membersSelector,
+  (recent, members) =>
+    recent.map(recent => members.find(member => member.id === recent))
+);

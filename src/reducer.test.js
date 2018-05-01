@@ -182,25 +182,25 @@ describe('a list of members who recently made an order', () => {
         type: TYPES.BUY_ORDER_SUCCESS,
         order: { products: [], member: { id: 33 }, orderd_at: 1 }
       })
-    ).toEqual([{ id: 33 }]);
+    ).toEqual([33]);
   });
 
   it('sorts the members on the date of their last order', () => {
     expect(
-      recentBuyers([{ id: 1 }], {
+      recentBuyers([1], {
         type: TYPES.BUY_ORDER_SUCCESS,
         order: { products: [], member: { id: 33 }, orderd_at: 1 }
       })
-    ).toEqual([{ id: 33 }, { id: 1 }]);
+    ).toEqual([33, 1]);
   });
 
   it('moves the most recent buyer to the top', () => {
     expect(
-      recentBuyers([{ id: 1 }, { id: 33 }], {
+      recentBuyers([1, 33], {
         type: TYPES.BUY_ORDER_SUCCESS,
         order: { products: [], member: { id: 33 }, orderd_at: 1 }
       })
-    ).toEqual([{ id: 33 }, { id: 1 }]);
+    ).toEqual([33, 1]);
   });
 });
 

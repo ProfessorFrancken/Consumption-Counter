@@ -160,7 +160,7 @@ export function recentBuyers(state = [], action) {
   switch (action.type) {
     case TYPES.BUY_ORDER_SUCCESS:
       return take(
-        uniqBy([action.order.member, ...state], member => member.id),
+        uniqBy([action.order.member.id, ...state], member => member),
         RECENT_MEBMERS
       );
     default:

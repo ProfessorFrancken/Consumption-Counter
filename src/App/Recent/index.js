@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { selectMember } from '../../actions';
-import { recentSelector } from './../../selectors';
+import { recentBuyersSelector } from './../../selectors';
 import Members from './../Members/Members';
 
 const mapStateToProps = state => ({
-  members: recentSelector(state)
+  members: recentBuyersSelector(state)
 });
 
 const mapDispatchToProps = dispatch => ({
