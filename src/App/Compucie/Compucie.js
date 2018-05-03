@@ -26,6 +26,7 @@ const Compucie = ({
           fullname: 'Refresh',
           age: 101,
           prominent: 0,
+          latest_purchase_at: new Date(),
           cosmetics: {}
         }}
         onClick={() => window.location.reload()}
@@ -37,6 +38,7 @@ const Compucie = ({
           fullname: 'Guest',
           age: 101,
           prominent: 0,
+          latest_purchase_at: new Date(),
           cosmetics: {}
         }}
         onClick={selectMember}
@@ -48,6 +50,7 @@ const Compucie = ({
           fullname: 'Overdue',
           age: 101,
           prominent: 0,
+          latest_purchase_at: new Date(),
           cosmetics: {}
         }}
         onClick={selectMember}
