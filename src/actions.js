@@ -158,16 +158,25 @@ export function buyOrder(order) {
 
 export function selectMember(member) {
   return dispatch => {
-    const today = new Date();
-    const timeDiff = Math.abs(
-      today.getTime() - member.latest_purchase_at.getTime()
-    );
-    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    function didNotRecentlyOrderAProduct(member) {
+      const latest_purchase_at = member.latest_purchase_at;
 
-    if (diffDays > 90) {
+      if (latest_purchase_at === null) {
+        return true;
+      }
+
+      const today = new Date();
+      const timeDiff = Math.abs(today.getTime() - latest_purchase_at.getTime());
+      const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+      return diffDays > 90;
+    }
+
+    if (didNotRecentlyOrderAProduct(member)) {
       if (
         !window.confirm(`Are you sure you want to select ${member.fullname}`)
       ) {
+        // Cancel the selection since selecting this member was a mistake
         return;
       }
     }
