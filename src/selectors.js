@@ -164,17 +164,35 @@ export const boardsSelector = createSelector(
 );
 
 export const prominentSelector = createSelector(
-  membersSelector,
+  boardMembersWithMemberSelector,
   boardsSelector,
-  (members, boards) => {
+  (boardMembers, boards) => {
+    function recentlyPurchasedAProduct(member) {
+      const latest_purchase_at = member.latest_purchase_at;
+
+      if (latest_purchase_at === null) {
+        return true;
+      }
+
+      const today = new Date();
+      const timeDiff = Math.abs(today.getTime() - latest_purchase_at.getTime());
+      const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+      return diffDays <= 90;
+    }
+
     // Filter out all members who are allready shown in the board collumns
     const boardMembersId = boards.reduce((members, board) => {
       return [...members, ...board.map(member => member.member.id)];
     }, []);
 
+    // Show all members that aren't shown in the boards grid and
+    // who have recently purchased something
     const prominent = take(
       sortBy(
-        members.filter(member => member.prominent !== null),
+        boardMembers
+          .map(boardMember => boardMember.member)
+          .filter(recentlyPurchasedAProduct),
         member => -member.prominent
       ).filter(member => !boardMembersId.includes(member.id)), // don't include members who are shown as a board member
       SHOW_N_PROMINENT
