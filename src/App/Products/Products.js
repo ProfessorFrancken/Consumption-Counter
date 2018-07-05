@@ -16,12 +16,10 @@ const Category = ({ category, onClick, toggle, name, locked }) => (
   </nav>
 );
 
-const Products = ({ products, hour, addProductToOrder, toggle }) => {
+const Products = ({ products, addProductToOrder, toggle }) => {
   const beer = products['Bier'] || [];
   const drinks = products['Fris'] || [];
   const food = products['Eten'] || [];
-
-  const bierUur = ![4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(hour);
 
   return (
     <div className="productsGrid">
@@ -30,7 +28,7 @@ const Products = ({ products, hour, addProductToOrder, toggle }) => {
           onClick={addProductToOrder}
           toggle={toggle}
           category={beer}
-          locked={!bierUur}
+          locked={false}
         />
       )}
       {drinks.length > 0 && (

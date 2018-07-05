@@ -131,16 +131,28 @@ export const compucieSelector = createSelector(
   }
 );
 
+const isProductLocked = (product, hour) => {
+  if (product.category === 'Bier') {
+    return [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(hour);
+  }
+
+  return false;
+};
+
+const hourSelector = (state, { hour }) => hour;
+
 export const productsWithOrderCountSelector = createSelector(
   allowedProductsSelector,
   orderSelector,
-  (categories, order) =>
+  hourSelector,
+  (categories, order, hour) =>
     mapValues(
       categories,
       // For each product in the category, count the mount of times it was ordered
       products =>
         products.map(product => ({
           ...product,
+          locked: isProductLocked(product, hour),
           ordered: order.products.filter(p => p.id === product.id).length
         }))
     )
