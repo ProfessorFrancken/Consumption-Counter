@@ -14,13 +14,13 @@ const AmountBeingOrdered = ({ product }) =>
 
 const ProductName = ({ product }) => <span>{product.name}</span>;
 
-const Product = ({ product, toggle, onClick }) => (
+const Product = ({ product, toggle, onClick, locked }) => (
   <OnLongPress
     onClick={() => onClick(product)}
     onLongPress={() => toggle(product)}
   >
     <button
-      className="button tile"
+      className={'button tile ' + (locked ? 'locked' : '')}
       style={{
         backgroundImage: `url(${product.image})`,
         backgroundSize: 'cover',

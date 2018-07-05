@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import Product from './Product';
 
 const Category = ({ category, onClick, toggle, name, locked }) => (
-  <nav className={'categoryRow ' + (locked ? 'locked' : '')}>
+  <nav className={'categoryRow'}>
     {category.map(product => (
       <Product
         product={product}
         onClick={onClick}
         toggle={toggle}
         key={product.id}
+        locked={product.locked || locked}
       />
     ))}
   </nav>

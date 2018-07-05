@@ -284,6 +284,6 @@ button {
   color: var(--primary);
 }
 
-.locked .tile {
+.locked {
   filter: opacity(25%);
 }
