@@ -133,6 +133,10 @@ export const compucieSelector = createSelector(
 
 const isProductLocked = (product, hour) => {
   if (product.category === 'Bier') {
+    if (['Almanak', 'Almanac'].includes(product.name)) {
+      return false;
+    }
+
     return [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(hour);
   }
 
