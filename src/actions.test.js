@@ -6,6 +6,7 @@ import expect from 'expect'; // You can use any testing library
 import { push, goBack } from 'react-router-redux';
 import api from './api';
 import clock from 'jest-plugin-clock';
+import moxios from 'moxios';
 
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore(middlewares);
@@ -13,47 +14,54 @@ const mockStore = configureMockStore(middlewares);
 const base_api = process.env.REACT_APP_API_SERVER;
 
 describe('Fetching initial data', () => {
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
+  clock.set('2018-01-01');
 
   it('Fetches members and products', done => {
-    fetchMock
-      .mock(`${base_api}/members`, {
-        body: { members: [] },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/products`, {
-        body: { products: [] },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/boards`, {
-        body: { boardMembers: [] },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/committees`, {
-        body: { committees: [] },
-        headers: { 'content-type': 'application/json' }
-      });
+    moxios.stubRequest(`${base_api}/members`, {
+      response: {
+        members: []
+      }
+    });
+    moxios.stubRequest(`${base_api}/products`, {
+      response: {
+        products: []
+      }
+    });
+    moxios.stubRequest(`${base_api}/boards`, {
+      response: {
+        boardMembers: []
+      }
+    });
+    moxios.stubRequest(`${base_api}/committees`, {
+      response: {
+        committees: []
+      }
+    });
+    moxios.stubRequest(`${base_api}/statistics?endDate=2018-01-01`, {
+      response: {
+        statistics: []
+      }
+    });
 
     const expectedActions = [
       { type: TYPES.FETCH_MEMBERS_REQUEST },
       { type: TYPES.FETCH_PRODUCTS_REQUEST },
       { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
       { type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST },
+      { type: TYPES.FETCH_STATISTICS_REQUEST },
       { type: TYPES.FETCH_MEMBERS_SUCCESS, members: [] },
       { type: TYPES.FETCH_PRODUCTS_SUCCESS, products: [] },
       { type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS, boardMembers: [] },
-      { type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: [] }
+      { type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: [] },
+      { type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: [] }
     ];
 
     const store = mockStore({ members: [] });
-
     store
       .dispatch(actions.fetchInitialData())
       .then(() => {
-        /* return of async actions*/
         expect(store.getActions()).toEqual(expectedActions);
         done();
       })
@@ -62,16 +70,14 @@ describe('Fetching initial data', () => {
 });
 
 describe('fetching members', () => {
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
 
   clock.set('2018-01-01');
 
   it('maps members from an http request', done => {
-    fetchMock.mock(`${base_api}/members`, {
-      body: {
+    moxios.stubRequest(`${base_api}/members`, {
+      response: {
         members: [
           {
             id: 314,
@@ -165,7 +171,7 @@ describe('fetching members', () => {
   });
 
   it('it fails if the http request fails', done => {
-    fetchMock.mock(`${base_api}/members`, {
+    moxios.stubRequest(`${base_api}/members`, {
       status: 400,
       headers: { 'content-type': 'application/json' }
     });
@@ -190,13 +196,14 @@ describe('fetching members', () => {
 });
 
 describe('fetching board members', () => {
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
+
   it('maps board members from an http request', done => {
-    fetchMock.mock(`${base_api}/boards`, {
-      body: { boardMembers: [{ lid_id: 314, jaar: 2018, functie: 'King' }] },
+    moxios.stubRequest(`${base_api}/boards`, {
+      response: {
+        boardMembers: [{ lid_id: 314, jaar: 2018, functie: 'King' }]
+      },
       headers: { 'content-type': 'application/json' }
     });
 
@@ -220,7 +227,7 @@ describe('fetching board members', () => {
   });
 
   it('it fails if the http request fails', done => {
-    fetchMock.mock(`${base_api}/boards`, {
+    moxios.stubRequest(`${base_api}/boards`, {
       status: 400,
       headers: { 'content-type': 'application/json' }
     });
@@ -243,13 +250,12 @@ describe('fetching board members', () => {
 });
 
 describe('fetching committee members', () => {
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
+
   it('maps committee members from an http request', done => {
-    fetchMock.mock(`${base_api}/committees`, {
-      body: {
+    moxios.stubRequest(`${base_api}/committees`, {
+      response: {
         committees: [
           {
             lid_id: 314,
@@ -290,7 +296,7 @@ describe('fetching committee members', () => {
   });
 
   it('it fails if the http request fails', done => {
-    fetchMock.mock(`${base_api}/committees`, {
+    moxios.stubRequest(`${base_api}/committees`, {
       status: 400,
       headers: { 'content-type': 'application/json' }
     });
@@ -313,13 +319,12 @@ describe('fetching committee members', () => {
 });
 
 describe('fetching products', () => {
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
+
   it('maps products from an http request', done => {
-    fetchMock.mock(`${base_api}/products`, {
-      body: {
+    moxios.stubRequest(`${base_api}/products`, {
+      response: {
         products: [
           {
             id: 1,
@@ -389,7 +394,7 @@ describe('fetching products', () => {
   });
 
   it('it fails if the http request fails', done => {
-    fetchMock.mock(`${base_api}/products`, {
+    moxios.stubRequest(`${base_api}/products`, {
       status: 400,
       headers: { 'content-type': 'application/json' }
     });
@@ -471,10 +476,8 @@ describe('cancelling', () => {
 });
 
 describe('buying products', () => {
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
 
   clock.set('2018-02-23');
 
@@ -510,8 +513,8 @@ describe('buying products', () => {
       }
     });
 
-    fetchMock.mock(`${base_api}/orders`, {
-      body: {},
+    moxios.stubRequest(`${base_api}/orders`, {
+      request: {},
       headers: { 'content-type': 'application/json' }
     });
 
@@ -564,8 +567,8 @@ describe('buying products', () => {
     });
 
     it('buys an order after x seconds', done => {
-      fetchMock.mock(`${base_api}/orders`, {
-        body: {},
+      moxios.stubRequest(`${base_api}/orders`, {
+        request: {},
         headers: { 'content-type': 'application/json' }
       });
 

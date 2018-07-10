@@ -1,6 +1,7 @@
 import { orderBy, pick } from 'lodash';
 import { push, goBack as goBackRoute } from 'react-router-redux';
 import { setHeader } from './Setup/authHeader';
+import moment from 'moment';
 
 export const actions = {
   goBack,
@@ -19,6 +20,7 @@ export const actions = {
   fetchProducts,
   fetchBoardMembers,
   fetchCommitteeMembers,
+  fetchStatistics,
 
   chwazi
 };
@@ -54,6 +56,10 @@ export const TYPES = {
   FETCH_PRODUCTS_REQUEST: 'FETCH_PRODUCTS_REQUEST',
   FETCH_PRODUCTS_SUCCESS: 'FETCH_PRODUCTS_SUCCESS',
   FETCH_PRODUCTS_FAILURE: 'FETCH_PRODUCTS_FAILURE',
+
+  FETCH_STATISTICS_REQUEST: 'FETCH_STATISTICS_REQUEST',
+  FETCH_STATISTICS_SUCCESS: 'FETCH_STATISTICS_SUCCESS',
+  FETCH_STATISTICS_FAILURE: 'FETCH_STATISTICS_FAILURE',
 
   AUTHENTICATE_REQUEST: 'AUTHENTICATE_REQUEST',
   AUTHENTICATE_SUCCESS: 'AUTHENTICATE_SUCCESS',
@@ -367,13 +373,41 @@ export function fetchCommitteeMembers() {
   };
 }
 
+export function fetchStatistics() {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: TYPES.FETCH_STATISTICS_REQUEST
+    });
+
+    return api
+      .get('/statistics', { endDate: moment().format('YYYY-MM-DD') })
+      .then(response => {
+        return dispatch({
+          type: TYPES.FETCH_STATISTICS_SUCCESS,
+          statistics: response.statistics.map(statistic => ({
+            date: new Date(statistic.date),
+            beer: parseInt(statistic.beer, 10),
+            soda: parseInt(statistic.soda, 10),
+            food: parseInt(statistic.food, 10)
+          }))
+        });
+      })
+      .catch(ex =>
+        dispatch({
+          type: TYPES.FETCH_STATISTICS_FAILURE
+        })
+      );
+  };
+}
+
 export function fetchInitialData() {
   return dispatch =>
     Promise.all([
       dispatch(fetchMembers()),
       dispatch(fetchProducts()),
       dispatch(fetchBoardMembers()),
-      dispatch(fetchCommitteeMembers())
+      dispatch(fetchCommitteeMembers()),
+      dispatch(fetchStatistics())
     ]);
 }
 

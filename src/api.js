@@ -1,4 +1,5 @@
 import { authHeader } from './Setup/authHeader';
+import axios from 'axios';
 
 const api = process.env.REACT_APP_API_SERVER;
 
@@ -7,35 +8,29 @@ export default {
   post
 };
 
-function get(uri) {
+function get(uri, params) {
   const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      ...authHeader()
-    }
-  };
-
-  return fetch(api + uri, requestOptions).then(handleResponse);
-}
-
-function post(uri, body) {
-  const requestOptions = {
-    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...authHeader()
     },
-    body: JSON.stringify(body)
+    params
   };
 
-  return fetch(api + uri, requestOptions).then(handleResponse);
+  return axios.get(api + uri, requestOptions).then(handleResponse);
+}
+
+function post(uri, body) {
+  return axios
+    .post(api + uri, body, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...authHeader()
+      }
+    })
+    .then(handleResponse);
 }
 
 function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
+  return Promise.resolve(response.data);
 }

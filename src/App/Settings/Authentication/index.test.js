@@ -2,11 +2,11 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
-import fetchMock from 'fetch-mock';
 import configureMockStore from 'redux-mock-store';
 import Authentication from './index';
 import api from './../../../api';
 import { TYPES } from './../../../actions';
+import moxios from 'moxios';
 
 describe('Authentication', () => {
   let store, app;
@@ -16,10 +16,8 @@ describe('Authentication', () => {
   const middlewares = [thunk.withExtraArgument(api)];
   const mockStore = configureMockStore(middlewares);
 
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
 
   it('Shows a warning that the system is not authenticated', () => {
     const store = mockStore({
@@ -43,8 +41,8 @@ describe('Authentication', () => {
     const token =
       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4';
 
-    fetchMock.mock(`${base_api}/authenticate`, {
-      body: { token },
+    moxios.stubRequest(`${base_api}/authenticate`, {
+      response: { token },
       headers: { 'content-type': 'application/json' }
     });
 

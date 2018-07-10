@@ -1,12 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import AppContainer from './AppContainer';
-import fetchMock from 'fetch-mock';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { create, history } from './../Setup/store';
 import { TYPES } from './../actions';
 import MockDate from 'mockdate';
+import moxios from 'moxios';
 
 describe('Plus One', () => {
   let store, app;
@@ -15,6 +15,8 @@ describe('Plus One', () => {
   // https://hackernoon.com/low-effort-high-value-integration-tests-in-redux-apps-d3a590bd9fd5
   const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
 
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
   beforeEach(() => {
     MockDate.set(new Date(1514764800000));
 
@@ -22,32 +24,35 @@ describe('Plus One', () => {
 
     jest.useFakeTimers();
 
-    fetchMock
-      .mock(`${base_api}/members`, {
-        body: { members: mocks.members },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/products`, {
-        body: { products: mocks.products },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/boards`, {
-        body: { boardMembers: mocks.boards },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/committees`, {
-        body: { committees: mocks.committees },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock(`${base_api}/orders`, {})
-      .mock(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
-        body: { committees: mocks.committees },
-        headers: { 'content-type': 'application/json' }
-      })
-      .mock('http://buixieval.nl/api/backers', {
-        body: [],
-        headers: { 'content-type': 'application/json' }
-      });
+    moxios.stubRequest(`${base_api}/members`, {
+      response: { members: mocks.members },
+      headers: { 'content-type': 'application/json' }
+    });
+    moxios.stubRequest(`${base_api}/products`, {
+      response: { products: mocks.products },
+      headers: { 'content-type': 'application/json' }
+    });
+    moxios.stubRequest(`${base_api}/boards`, {
+      response: { boardMembers: mocks.boards },
+      headers: { 'content-type': 'application/json' }
+    });
+    moxios.stubRequest(`${base_api}/committees`, {
+      response: { committees: mocks.committees },
+      headers: { 'content-type': 'application/json' }
+    });
+    moxios.stubRequest(`${base_api}/statistics`, {
+      response: { statistics: [] },
+      headers: { 'content-type': 'application/json' }
+    });
+    moxios.stubRequest(`${base_api}/orders`, {});
+    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
+      response: { committees: mocks.committees },
+      headers: { 'content-type': 'application/json' }
+    });
+    moxios.stubRequest('http://buixieval.nl/api/backers', {
+      response: [],
+      headers: { 'content-type': 'application/json' }
+    });
 
     app = mount(
       <Provider store={store}>
@@ -64,8 +69,6 @@ describe('Plus One', () => {
 
   afterEach(() => {
     MockDate.reset();
-    fetchMock.reset();
-    fetchMock.restore();
   });
 
   const selectRangeIncludingJohnSnow = app => {
@@ -110,11 +113,8 @@ describe('Plus One', () => {
 
     flushAllPromises()
       .then(() => {
-        expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
-        const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
-
-        expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
-
+        const latestCall = moxios.requests.get('post', `${base_api}/orders`);
+        expect(JSON.parse(latestCall.config.data)).toEqual(expectedOrder);
         expect(history.location.pathname).toBe('/');
 
         done();
@@ -246,7 +246,9 @@ describe('Plus One', () => {
 
       flushAllPromises()
         .then(() => {
-          expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(0);
+          expect(moxios.requests.get('post', `${base_api}/orders`)).toBe(
+            undefined
+          );
           expect(app.find('CancelOrder').find('button').length).toBe(0);
         })
         .then(done)
@@ -352,22 +354,23 @@ describe('Plus One', () => {
         .then(() => {
           addHertogJanToOrder(app);
 
-          expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
-          const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
+          expect(moxios.requests.get('post', `${base_api}/orders`)).not.toBe(
+            undefined
+          );
+          const latestCall = moxios.requests.get('post', `${base_api}/orders`);
 
-          expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
-          expect(app.find('CancelOrder').find('button').length).toBe(1);
+          expect(JSON.parse(latestCall.config.data)).toEqual(expectedOrder);
 
           jest.runTimersToTime(10000);
 
           flushAllPromises()
             .then(() => {
-              expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(
-                2
+              const latestCall = moxios.requests.get(
+                'post',
+                `${base_api}/orders`
               );
-              const calls = fetchMock.lastCall(`${base_api}/orders`, 'post');
 
-              expect(JSON.parse(calls[1].body)).toEqual(expectedOrder);
+              expect(JSON.parse(latestCall.config.data)).toEqual(expectedOrder);
               done();
             })
             .catch(e => {
@@ -401,7 +404,9 @@ describe('Plus One', () => {
             .find('button')
             .simulate('click');
 
-          expect(fetchMock.calls(`${base_api}/orders`, 'post').length).toBe(1);
+          expect(moxios.requests.get('post', `${base_api}/orders`)).not.toBe(
+            undefined
+          );
           expect(app.find('CancelOrder').find('button').length).toBe(0);
         })
         .then(done)
