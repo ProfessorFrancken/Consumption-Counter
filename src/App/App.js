@@ -13,12 +13,11 @@ import RecentMembers from './Recent/';
 import Compucie from './Compucie/';
 import Authenticate from './Settings/Authentication/';
 import Settings from './Settings/';
+import Statistics from './Statistics/';
 
 import Buixieval from './Buixieval/';
 
 import GerrieApp from './Gerjan/App';
-
-const Statistics = () => <Transactions />;
 
 const EmptyScreenSaver = () => <h1>Hoi</h1>;
 
@@ -38,6 +37,7 @@ const AppContent = () => (
     <Route exact path="/buixieval" component={Buixieval} />
     <Route exact path="/members/:page(\d+)" component={Members} />
     <Route exact path="/screensaver" component={EmptyScreenSaver} />
+    <Route exact path="/statistics" component={Statistics} />
     <Redirect from="/members" to="/" />
   </Switch>
 );

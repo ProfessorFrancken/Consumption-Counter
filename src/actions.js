@@ -380,12 +380,23 @@ export function fetchStatistics() {
     });
 
     return api
-      .get('/statistics', { endDate: moment().format('YYYY-MM-DD') })
+      .get('/statistics', {
+        startDate: moment()
+          .subtract(6, 'months')
+          .format('YYYY-MM-DD'),
+        endDate: moment()
+          .subtract(2, 'months')
+          .format('YYYY-MM-DD')
+      })
       .then(response => {
         return dispatch({
           type: TYPES.FETCH_STATISTICS_SUCCESS,
           statistics: response.statistics.map(statistic => ({
             date: new Date(statistic.date),
+            total:
+              parseInt(statistic.beer, 10) +
+              parseInt(statistic.soda, 10) +
+              parseInt(statistic.food, 10),
             beer: parseInt(statistic.beer, 10),
             soda: parseInt(statistic.soda, 10),
             food: parseInt(statistic.food, 10)

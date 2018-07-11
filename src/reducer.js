@@ -237,3 +237,12 @@ export function menuItems(state = defaultMenuItems, action) {
       return state;
   }
 }
+
+export function statistics(state = [], action) {
+  switch (action.type) {
+    case TYPES.FETCH_STATISTICS_SUCCESS:
+      return action.statistics;
+    default:
+      return state;
+  }
+}
