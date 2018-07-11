@@ -380,13 +380,9 @@ export function fetchStatistics() {
     });
 
     return api
-      .get('/statistics', {
-        startDate: moment()
-          .subtract(6, 'months')
-          .format('YYYY-MM-DD'),
-        endDate: moment()
-          .subtract(2, 'months')
-          .format('YYYY-MM-DD')
+      .get('/statistics/categories', {
+        startDate: moment().format('YYYY-MM-DD'),
+        endDate: moment().format('YYYY-MM-DD')
       })
       .then(response => {
         return dispatch({
