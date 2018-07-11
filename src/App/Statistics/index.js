@@ -75,8 +75,7 @@ const Transactions = ({ transactions }) => {
   );
 };
 
-const Statistics = ({ statistics, transactions }) => {
-  // console.log(statistics);
+const Statistics = ({ statistics = [], transactions }) => {
   const today = moment();
   const todayFormat = today.format('YYYY-MM-DD');
   const purchasesToday = statistics.find(
@@ -109,17 +108,7 @@ const Statistics = ({ statistics, transactions }) => {
     ),
     date: day.toDate()
   }));
-  console.log(
-    thisWeek().map(day => day.format('ddd')),
-    purchases.map(p => moment(p.date).format('ddd'))
-  );
 
-  console.log(purchases);
-  // console.log(purchasesThisWeek);
-
-  // const purchases = statistics.filter(
-  //   statistic => moment(statistic.date).week() === today.week()
-  // );
   return (
     <div>
       <div className="row">

@@ -39,11 +39,14 @@ describe('Fetching initial data', () => {
         committees: []
       }
     });
-    moxios.stubRequest(`${base_api}/statistics?endDate=2018-01-01`, {
-      response: {
-        statistics: []
+    moxios.stubRequest(
+      `${base_api}/statistics/categories?startDate=2017-07-01&endDate=2018-01-01`,
+      {
+        response: {
+          statistics: []
+        }
       }
-    });
+    );
 
     const expectedActions = [
       { type: TYPES.FETCH_MEMBERS_REQUEST },
