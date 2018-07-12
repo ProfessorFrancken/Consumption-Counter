@@ -1,10 +1,12 @@
 import {
   surnameRanges,
+  members,
   order,
   transactions,
   queuedOrder,
   queuedOrders,
   recentBuyers,
+  statistics,
   menuItems
 } from './reducer';
 import { TYPES } from './actions';
@@ -77,6 +79,46 @@ describe('Surname selection reducer', () => {
         }
       ]
     });
+  });
+});
+
+describe('members', () => {
+  it('fetches members', () => {
+    const fetchedMembers = [
+      {
+        id: 1,
+        latest_purchase_at: new Date('2018-05-25')
+      }
+    ];
+    expect(
+      members(undefined, {
+        type: TYPES.FETCH_MEMBERS_SUCCESS,
+        members: fetchedMembers
+      })
+    ).toEqual(fetchedMembers);
+  });
+
+  it('updates the latest purchase date of a member', () => {
+    const orderAction = {
+      type: TYPES.BUY_ORDER_SUCCESS,
+      order: {
+        member: { id: 1 },
+        ordered_at: 1531323576167
+      }
+    };
+
+    expect(
+      members(
+        [
+          { id: 1, latest_purchase_at: new Date('2018-05-25') },
+          { id: 2, latest_purchase_at: new Date('2018-06-25') }
+        ],
+        orderAction
+      )
+    ).toEqual([
+      { id: 1, latest_purchase_at: new Date(1531323576167) },
+      { id: 2, latest_purchase_at: new Date('2018-06-25') }
+    ]);
   });
 });
 
@@ -433,6 +475,50 @@ describe('menu items', () => {
       { icon: 'home', url: '/', active: true },
       { icon: 'chart-area', url: '/statistics' },
       { icon: 'clock', url: '/recent' }
+    ]);
+  });
+});
+
+describe('statistics', () => {
+  it('fetches statistics', () => {
+    expect(
+      statistics(undefined, {
+        type: TYPES.FETCH_STATISTICS_SUCCESS,
+        statistics: [
+          { date: new Date('2018-06-01'), total: 1, beer: 1, soda: 1, food: 1 }
+        ]
+      })
+    ).toEqual([
+      { date: new Date('2018-06-01'), total: 1, beer: 1, soda: 1, food: 1 }
+    ]);
+  });
+
+  fit('records statistics after a product is purchased', () => {
+    const orderAction = {
+      type: 'BUY_ORDER_SUCCESS',
+      order: {
+        member: { id: 1 },
+        products: [
+          { id: 3, category: 'Bier' },
+          { id: 4, category: 'Fris' },
+          { id: 4, category: 'Fris' },
+          { id: 5, category: 'Eten' }
+        ],
+        ordered_at: new Date('2018-06-01T18:00:00').getTime()
+      }
+    };
+
+    expect(
+      statistics(
+        [
+          { date: '2018-05-01', total: 1, beer: 1, soda: 0, food: 0 },
+          { date: '2018-06-01', total: 3, beer: 1, soda: 1, food: 1 }
+        ],
+        orderAction
+      )
+    ).toEqual([
+      { date: '2018-05-01', total: 1, beer: 1, soda: 0, food: 0 },
+      { date: '2018-06-01', total: 7, beer: 2, soda: 3, food: 2 }
     ]);
   });
 });
