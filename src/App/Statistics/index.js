@@ -29,9 +29,9 @@ const ProductIcon = ({ products }) => {
     case 'Bier':
       return <Icon name="beer fa-fw mr-2 text-muted" />;
     case 'Fris':
-      return <Icon name="coffee fa-fw mr-2 text-muted" />;
+      return <Icon name="gulp fab fa-fw mr-2 text-muted" />;
     case 'Eten':
-      return <Icon name=" fab fa-apple fa-fw mr-2 text-muted" />;
+      return <Icon name="utensils fa-fw mr-2 text-muted" />;
     default:
       return <Icon name="shopping-cart fa-fw mr-2 text-muted" />;
   }
@@ -110,7 +110,7 @@ const Statistics = ({ statistics = [], transactions }) => {
   }));
 
   return (
-    <div>
+    <div className="d-flex flex-column justify-content-between h-100">
       <div className="row">
         <div className="col">
           <div className="row">
@@ -136,7 +136,7 @@ const Statistics = ({ statistics = [], transactions }) => {
                 purchases={purchases}
                 today={purchasesToday}
                 type="soda"
-                icon="coffee"
+                icon="gulp fab"
               />
             </div>
             <div className="col">
@@ -144,7 +144,7 @@ const Statistics = ({ statistics = [], transactions }) => {
                 purchases={purchases}
                 today={purchasesToday}
                 type="food"
-                icon="apple fab"
+                icon="utensils"
               />
             </div>
           </div>
@@ -152,11 +152,8 @@ const Statistics = ({ statistics = [], transactions }) => {
             <Transactions transactions={transactions} />
           </div>
         </div>
-
-        <div className="col-2 d-none">
-          <HeatMap statistics={statistics} />
-        </div>
       </div>
+      <HeatMap statistics={statistics} />
     </div>
   );
 };
