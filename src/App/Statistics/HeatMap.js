@@ -68,7 +68,7 @@ const HeatMap = ({ statistics = [] }) => {
       console.log('moimoimoi');
     }
 
-    const total = [value.beer, value.soda, value.food].reduce(
+    const total = [2 * value.beer, value.soda, value.food].reduce(
       (sum, value) => sum + value ** 1,
       0
     );
@@ -78,17 +78,24 @@ const HeatMap = ({ statistics = [] }) => {
     const steps = 255;
 
     const normed = [
-      Math.floor(steps * value.beer ** 1 / total),
-      Math.floor(steps * value.soda ** 1 / total),
-      Math.floor(steps * value.food ** 1 / total)
+      Math.floor(2 * steps * value.beer ** 1 / total),
+      Math.floor(
+        steps * value.food ** 1 / total + steps * value.soda ** 1 / total
+      ),
+      0
     ];
 
     const bases = [
       // [243 / 255, 240 / 255, 77 / 255], // beer
-      [236 / 255, 118 / 255, 8 / 255], // beer
-      [191 / 255, 63 / 255, 174 / 255], // soda
-      [63 / 255, 191 / 255, 180 / 255] // food
-      // [0, 0, 0], // empty
+      // [236 / 255, 118 / 255, 8 / 255], // beer
+      // [191 / 255, 63 / 255, 174 / 255], // soda
+      // [63 / 255, 191 / 255, 180 / 255] // food
+
+      [23 / 255, 50 / 255, 73 / 255], // beer
+      // [191 / 255, 63 / 255, 174 / 255], // soda
+      // [63 / 255, 191 / 255, 180 / 255] // food
+      [140 / 255, 211 / 255, 203 / 255], // beer
+      [23 / 255, 50 / 255, 73 / 255] // beer
     ];
 
     // const bases = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
@@ -132,7 +139,7 @@ const HeatMap = ({ statistics = [] }) => {
 
   return (
     <CalendarHeatmap
-      horizontal={false}
+      horizontal={true}
       startDate={new Date(start.date)}
       endDate={new Date(end.date)}
       values={statistics}
@@ -142,6 +149,7 @@ const HeatMap = ({ statistics = [] }) => {
       classForValue={classToBeUsed}
       tooltipDataAttrs={tooltip}
       onClick={value => console.log(value, tooltip(value))}
+      showOutOfRangeDays={true}
     />
   );
 };
