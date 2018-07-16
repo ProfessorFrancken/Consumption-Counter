@@ -44,6 +44,10 @@ describe('Plus One', () => {
       response: { statistics: [] },
       headers: { 'content-type': 'application/json' }
     });
+    moxios.stubRequest(`${base_api}/activities`, {
+      response: { activities: [] },
+      headers: { 'content-type': 'application/json' }
+    });
     moxios.stubRequest(`${base_api}/orders`, {});
     moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
       response: { committees: mocks.committees },
@@ -197,11 +201,11 @@ describe('Plus One', () => {
   const selectRecent = app => {
     expect(app.find('Footer').length).toBe(1);
 
-    const committees = app.find('NavLink[to="/recent"]');
-    expect(committees.length).toBe(1);
+    const recent = app.find('NavLink[to="/recent"]');
+    expect(recent.length).toBe(1);
 
     // https://github.com/airbnb/enzyme/issues/516
-    committees.simulate('click', { button: 0 });
+    recent.simulate('click', { button: 0 });
 
     expect(history.location.pathname).toBe('/recent');
   };
@@ -305,7 +309,11 @@ describe('Plus One', () => {
       ordered: 0
     };
 
-    const order = { products: [product], ordered_at: 1, member };
+    const order = {
+      products: [product],
+      ordered_at: new Date().getTime(),
+      member
+    };
 
     store.dispatch({ type: TYPES.BUY_ORDER_REQUEST, member, order });
     store.dispatch({ type: TYPES.BUY_ORDER_SUCCESS, member, order });

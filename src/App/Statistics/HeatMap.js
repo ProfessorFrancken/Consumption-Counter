@@ -1,7 +1,7 @@
 import React from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 
-const HeatMap = ({ statistics = [] }) => {
+const HeatMap = ({ statistics = [], activities = [] }) => {
   if (statistics.length === 0) {
     return null;
   }
@@ -10,19 +10,39 @@ const HeatMap = ({ statistics = [] }) => {
   const start = statistics[statistics.length - 1];
 
   const titleForValue = value => {
-    return value
-      ? `Date: ${new Date(value.date).toDateString()} - Beer: ${
-          value.beer
-        }, Food: ${value.food}, Soda: ${value.soda}`
-      : null;
+    if (value === null) {
+      return null;
+    }
+    const activity = activities.find(
+      activity => activity.startDate === value.date
+    );
+
+    if (activity) {
+      return `Date: ${new Date(value.date).toDateString()} - Activty: ${
+        activity.title
+      }- Beer: ${value.beer}, Food: ${value.food}, Soda: ${value.soda}`;
+    }
+
+    return `Date: ${new Date(value.date).toDateString()} - Beer: ${
+      value.beer
+    }, Food: ${value.food}, Soda: ${value.soda}`;
   };
 
   const classToBeUsed = value => {
-    return 'color-empty';
     if (!value) {
       return 'color-empty';
     }
 
+    const activity = activities.find(
+      activity => activity.startDate === value.date
+    );
+    if (activity) {
+      console.log({ activity, value });
+
+      return 'activity';
+    }
+
+    return 'color-empty';
     const total = [value.beer, value.soda, value.food].reduce(
       (sum, value) => sum + value,
       0
@@ -148,7 +168,13 @@ const HeatMap = ({ statistics = [] }) => {
       showWeekdayLabels={true}
       classForValue={classToBeUsed}
       tooltipDataAttrs={tooltip}
-      onClick={value => console.log(value, tooltip(value))}
+      onClick={value =>
+        console.log(
+          value,
+          tooltip(value),
+          activities.find(activity => activity.startDate === value.date)
+        )
+      }
       showOutOfRangeDays={true}
     />
   );

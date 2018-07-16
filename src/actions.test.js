@@ -44,6 +44,11 @@ describe('Fetching initial data', () => {
         statistics: []
       }
     });
+    moxios.stubRequest(/statistics\/activities.*/, {
+      response: {
+        activities: []
+      }
+    });
 
     const expectedActions = [
       { type: TYPES.FETCH_MEMBERS_REQUEST },
@@ -51,11 +56,13 @@ describe('Fetching initial data', () => {
       { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
       { type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST },
       { type: TYPES.FETCH_STATISTICS_REQUEST },
+      { type: TYPES.FETCH_ACTIVITIES_REQUEST },
       { type: TYPES.FETCH_MEMBERS_SUCCESS, members: [] },
       { type: TYPES.FETCH_PRODUCTS_SUCCESS, products: [] },
       { type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS, boardMembers: [] },
       { type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: [] },
-      { type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: [] }
+      { type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: [] },
+      { type: TYPES.FETCH_ACTIVITIES_SUCCESS, activities: [] }
     ];
 
     const store = mockStore({ members: [] });

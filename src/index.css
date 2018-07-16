@@ -361,6 +361,11 @@ button {
   fill: #254e77;
 }
 
+.react-calendar-heatmap .activity {
+  stroke: black;
+  stroke-width: 1px;
+}
+
 /* .color-mostly-beer { */
 /*   fill: yellow; */
 /* } */

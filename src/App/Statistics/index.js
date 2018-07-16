@@ -75,7 +75,7 @@ const Transactions = ({ transactions }) => {
   );
 };
 
-const Statistics = ({ statistics = [], transactions }) => {
+const Statistics = ({ statistics = [], activities = [], transactions }) => {
   const today = moment();
   const todayFormat = today.format('YYYY-MM-DD');
   const purchasesToday = statistics.find(
@@ -153,13 +153,14 @@ const Statistics = ({ statistics = [], transactions }) => {
           </div>
         </div>
       </div>
-      <HeatMap statistics={statistics} />
+      <HeatMap statistics={statistics} activities={activities} />
     </div>
   );
 };
 
 const mapStateToProps = state => ({
   statistics: state.statistics,
+  activities: state.activities,
   transactions: state.transactions
 });
 

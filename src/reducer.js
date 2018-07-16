@@ -284,3 +284,12 @@ export function statistics(state = [], action) {
       return state;
   }
 }
+
+export function activities(state = [], action) {
+  switch (action.type) {
+    case TYPES.FETCH_ACTIVITIES_SUCCESS:
+      return action.activities;
+    default:
+      return state;
+  }
+}

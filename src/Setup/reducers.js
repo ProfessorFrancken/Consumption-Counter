@@ -14,7 +14,8 @@ import {
   queuedOrder,
   queuedOrders,
   menuItems,
-  statistics
+  statistics,
+  activities
 } from '../reducer.js';
 
 export default combineReducers({
@@ -32,5 +33,6 @@ export default combineReducers({
   queuedOrders,
   menuItems,
   statistics,
+  activities,
   router: routerReducer
 });

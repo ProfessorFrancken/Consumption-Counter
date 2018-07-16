@@ -21,6 +21,7 @@ export const actions = {
   fetchBoardMembers,
   fetchCommitteeMembers,
   fetchStatistics,
+  fetchActivities,
 
   chwazi
 };
@@ -60,6 +61,10 @@ export const TYPES = {
   FETCH_STATISTICS_REQUEST: 'FETCH_STATISTICS_REQUEST',
   FETCH_STATISTICS_SUCCESS: 'FETCH_STATISTICS_SUCCESS',
   FETCH_STATISTICS_FAILURE: 'FETCH_STATISTICS_FAILURE',
+
+  FETCH_ACTIVITIES_REQUEST: 'FETCH_ACTIVITIES_REQUEST',
+  FETCH_ACTIVITIES_SUCCESS: 'FETCH_ACTIVITIES_SUCCESS',
+  FETCH_ACTIVITIES_FAILURE: 'FETCH_ACTIVITIES_FAILURE',
 
   AUTHENTICATE_REQUEST: 'AUTHENTICATE_REQUEST',
   AUTHENTICATE_SUCCESS: 'AUTHENTICATE_SUCCESS',
@@ -411,6 +416,38 @@ export function fetchStatistics() {
   };
 }
 
+export function fetchActivities() {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: TYPES.FETCH_ACTIVITIES_REQUEST
+    });
+
+    return api
+      .get('/statistics/activities', {
+        after: moment()
+          .subtract(2, 'years')
+          .format('YYYY-MM-DD'),
+        before: moment().format('YYYY-MM-DD')
+      })
+      .then(response => {
+        return dispatch({
+          type: TYPES.FETCH_ACTIVITIES_SUCCESS,
+          activities: response.activities.map(activity => ({
+            ...activity,
+            startDate: moment(activity.startDate).format('YYYY-MM-DD'),
+            endDate: moment(activity.endDate).format('YYYY-MM-DD')
+          }))
+        });
+      })
+      .catch(ex =>
+        dispatch({
+          type: TYPES.FETCH_ACTIVITIES_FAILURE,
+          ex
+        })
+      );
+  };
+}
+
 export function fetchInitialData() {
   return dispatch =>
     Promise.all([
@@ -418,7 +455,8 @@ export function fetchInitialData() {
       dispatch(fetchProducts()),
       dispatch(fetchBoardMembers()),
       dispatch(fetchCommitteeMembers()),
-      dispatch(fetchStatistics())
+      dispatch(fetchStatistics()),
+      dispatch(fetchActivities())
     ]);
 }
 
