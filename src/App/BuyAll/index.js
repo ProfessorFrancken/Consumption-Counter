@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { buyAll } from '../../actions';
-import Price from './../Transactions/Price';
+import Price from './../Price';
 import Icon from './../Icon';
 
 const BuyAll = ({ buyAll, products = [], location }) =>

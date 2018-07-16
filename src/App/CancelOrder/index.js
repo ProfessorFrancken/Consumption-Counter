@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { cancelOrder } from './../../actions';
 import { queuedOrderSelector } from './../../selectors';
 import Icon from './../Icon';
-import Price from './../Transactions/Price';
+import Price from './../Price';
 
 const products = order =>
   order.products.length === 1 ? order.products[0].name : 'multiple products';

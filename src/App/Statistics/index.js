@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { groupBy, map } from 'lodash';
-import Price from './../Transactions/Price';
+import Price from './../Price';
 import moment from 'moment';
 import Icon from './../Icon';
-import { sortBy } from 'lodash';
 import HeatMap from './HeatMap';
 import PurchasesOfWeek from './PurchasesOfWeek';
 

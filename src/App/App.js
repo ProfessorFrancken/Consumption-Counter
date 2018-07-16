@@ -4,7 +4,6 @@ import SurnameRanges from './/SurnameRanges/SurnameRangeSelection';
 import Members from './/Members/MemberSelection';
 import AvailableProducts from './/Products/AvailableProducts';
 import 'bootstrap/dist/css/bootstrap.css';
-import Transactions from './Transactions/';
 import PriceList from './PriceList/';
 import Prominent from './Prominent/';
 import Committees from './Committees/';

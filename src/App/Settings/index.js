@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Authenticate from './Authentication';
-import Price from './../Transactions/Price';
+import Price from './../Price';
 import { groupBy, map } from 'lodash';
 import { cancelOrder, buyOrder } from './../../actions';
 import Moment from 'react-moment';
