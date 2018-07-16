@@ -212,8 +212,7 @@ export function queuedOrders(state = [], action) {
 }
 
 const defaultMenuItems = [
-  { icon: 'home', url: '/', active: true },
-  { icon: 'chart-area', url: '/statistics' },
+  { icon: 'home', url: '/', loading: false },
   { icon: 'clock', url: '/recent' }
 ];
 export function menuItems(state = defaultMenuItems, action) {
@@ -234,14 +233,34 @@ export function menuItems(state = defaultMenuItems, action) {
       return state;
 
     case TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST:
-      return state.filter(item => item.url !== '/committees');
+      return [...state, { icon: 'users', url: '/committees', loading: true }];
     case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
-      return [...state, { icon: 'users', url: '/committees' }];
+      return state.map(item => ({
+        ...item,
+        ...(item.url === '/committees' ? { loading: false } : {})
+      }));
+
+    case TYPES.FETCH_STATISTICS_REQUEST:
+      return [
+        ...state,
+        { icon: 'chart-area', url: '/statistics', loading: true }
+      ];
+    case TYPES.FETCH_STATISTICS_SUCCESS:
+      return state.map(item => ({
+        ...item,
+        ...(item.url === '/statistics' ? { loading: false } : {})
+      }));
 
     case TYPES.FETCH_BOARD_MEMBERS_REQUEST:
-      return state.filter(item => item.url !== '/prominent');
+      return [
+        { icon: 'chess-queen', url: '/prominent', loading: true },
+        ...state
+      ];
     case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
-      return [{ icon: 'chess-queen', url: '/prominent' }, ...state];
+      return state.map(item => ({
+        ...item,
+        ...(item.url === '/prominent' ? { loading: false } : {})
+      }));
     default:
       return state;
   }
