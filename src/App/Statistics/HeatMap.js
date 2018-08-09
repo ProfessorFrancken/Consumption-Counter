@@ -37,8 +37,6 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
       activity => activity.startDate === value.date
     );
     if (activity) {
-      console.log({ activity, value });
-
       return 'activity';
     }
 
@@ -85,7 +83,6 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
         0
       ) === 0
     ) {
-      console.log('moimoimoi');
     }
 
     const total = [2 * value.beer, value.soda, value.food].reduce(
