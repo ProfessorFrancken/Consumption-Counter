@@ -227,7 +227,7 @@ export function menuItems(state = defaultMenuItems, action) {
           .length !== 0;
 
       if (buixievalIsEnabled) {
-        return [...state, { icon: 'bitcoin fab', url: '/buixieval' }];
+        return [...state, { icon: ['fab', 'bitcoin'], url: '/buixieval' }];
       }
 
       return state;
@@ -243,7 +243,7 @@ export function menuItems(state = defaultMenuItems, action) {
     case TYPES.FETCH_STATISTICS_REQUEST:
       return [
         ...state,
-        { icon: 'chart-area', url: '/statistics', loading: true }
+        { icon: 'chart-bar', url: '/statistics', loading: true }
       ];
     case TYPES.FETCH_STATISTICS_SUCCESS:
       return state.map(item => ({

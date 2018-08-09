@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from './../../Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import decode from 'jwt-decode';
 import moment from 'moment';
 
@@ -41,8 +41,10 @@ const AuthenticationForm = ({
   return (
     <div className="mb-5 p-3 bg-light">
       <h2 className="h4 font-weight-normal">
-        {token ? null : <Icon name="exclamation-triangle mr-1" />} Authenticate
-        Plus One
+        {token ? null : (
+          <FontAwesomeIcon icon="exclamation-triangle" className="mr-1" />
+        )}{' '}
+        Authenticate Plus One
       </h2>
       <p className="lead">
         {token ? authenticated(token) : unauthenticated()}

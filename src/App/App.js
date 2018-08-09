@@ -17,6 +17,7 @@ import Statistics from './Statistics/';
 import Buixieval from './Buixieval/';
 
 import GerrieApp from './Gerjan/App';
+import library from './FontAwesome';
 
 const EmptyScreenSaver = () => <h1>Hoi</h1>;
 

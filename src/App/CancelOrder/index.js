@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { cancelOrder } from './../../actions';
 import { queuedOrderSelector } from './../../selectors';
-import Icon from './../Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Price from './../Price';
 
 const products = order =>
@@ -14,7 +14,7 @@ const CancelOrder = ({ onClick, queuedOrder }) =>
       className="button cancelButton"
       onClick={() => onClick(queuedOrder)}
     >
-      <Icon name="times-circle" />
+      <FontAwesomeIcon icon={'times-circle'} size="lg" />
       <span style={{ marginLeft: '.5em' }}>
         Cancel buying {products(queuedOrder.order)} for{' '}
         <Price products={queuedOrder.order.products} />

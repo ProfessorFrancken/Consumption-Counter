@@ -15,7 +15,6 @@ describe('<AuthenticationForm />', () => {
       />
     );
 
-    expect(app.find('Icon').length).toBe(1);
     expect(app.find('input[type="submit"]').props().value).toBe('Authenticate');
   });
 
@@ -34,7 +33,6 @@ describe('<AuthenticationForm />', () => {
       />
     );
 
-    expect(app.find('Icon').length).toBe(0);
     expect(app.find('input[type="submit"]').props().value).toBe(
       'Refresh token'
     );

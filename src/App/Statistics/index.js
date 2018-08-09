@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { groupBy, map } from 'lodash';
 import Price from './../Price';
 import moment from 'moment';
-import Icon from './../Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeatMap from './HeatMap';
 import PurchasesOfWeek from './PurchasesOfWeek';
 
@@ -19,20 +19,46 @@ const listOfProducts = products =>
 
 const ProductIcon = ({ products }) => {
   if (products.length > 1) {
-    return <Icon name="shopping-cart fa-fw mr-2 text-muted" />;
+    return (
+      <FontAwesomeIcon
+        icon="shopping-cart"
+        fixedWidth
+        className="mr-2 text-muted"
+      />
+    );
   }
 
   const category = products[0].category;
 
   switch (category) {
     case 'Bier':
-      return <Icon name="beer fa-fw mr-2 text-muted" />;
+      return (
+        <FontAwesomeIcon icon="beer" fixedWidth className="mr-2 text-muted" />
+      );
     case 'Fris':
-      return <Icon name="gulp fab fa-fw mr-2 text-muted" />;
+      return (
+        <FontAwesomeIcon
+          icon={['fab', 'gulp']}
+          fixedWidth
+          className="-fw mr-2 text-muted"
+        />
+      );
     case 'Eten':
-      return <Icon name="utensils fa-fw mr-2 text-muted" />;
+      return (
+        <FontAwesomeIcon
+          icon="utensils"
+          fixedWidth
+          className="mr-2 text-muted"
+        />
+      );
     default:
-      return <Icon name="shopping-cart fa-fw mr-2 text-muted" />;
+      return (
+        <FontAwesomeIcon
+          icon="shopping-cart"
+          fixedWidth
+          className="mr-2 text-muted"
+        />
+      );
   }
 };
 
@@ -135,7 +161,7 @@ const Statistics = ({ statistics = [], activities = [], transactions }) => {
                 purchases={purchases}
                 today={purchasesToday}
                 type="soda"
-                icon="gulp fab"
+                icon={['fab', 'gulp']}
               />
             </div>
             <div className="col">

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Member from './../Members/MemberButton';
-import Icon from './../Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TempleCountButton from './TempleCountButton';
 
 const Compucie = ({
@@ -63,7 +63,7 @@ const Compucie = ({
              */}
       </div>
       <NavLink exact to="/settings" className="tile button">
-        <Icon name="cogs" />
+        <FontAwesomeIcon icon={'cogs'} size="lg" />
       </NavLink>
     </nav>
   </div>

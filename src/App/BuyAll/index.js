@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { buyAll } from '../../actions';
 import Price from './../Price';
-import Icon from './../Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const BuyAll = ({ buyAll, products = [], location }) =>
   location.pathname !== '/products' || products.length === 0 ? null : (
     <button className="button buyAllButton" onClick={buyAll}>
-      <Icon name="check-circle" />
+      <FontAwesomeIcon icon={'check-circle'} size="lg" />
       <span style={{ marginLeft: '.5em' }}>
         Buy it all! (<Price products={products} />)
       </span>

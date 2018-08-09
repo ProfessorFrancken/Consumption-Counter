@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import React from 'react';
-import Icon from './Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Sidebar = ({ menuItems }) => (
   <div className="sidebar">
@@ -13,7 +13,7 @@ const Sidebar = ({ menuItems }) => (
 const MenuItem = ({ menuItem }) =>
   menuItem.loading ? (
     <span className="button menuButton">
-      <Icon name="spinner fa-pulse" />
+      <FontAwesomeIcon icon="spinner" pulse />
     </span>
   ) : (
     <NavLink
@@ -22,7 +22,7 @@ const MenuItem = ({ menuItem }) =>
       className="button menuButton"
       activeClassName="active"
     >
-      <Icon name={menuItem.icon} />
+      <FontAwesomeIcon icon={menuItem.icon} size="lg" />
     </NavLink>
   );
 

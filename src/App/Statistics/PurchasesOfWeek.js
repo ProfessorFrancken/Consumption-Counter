@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from './../Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import {
   VictoryLabel,
@@ -23,7 +23,7 @@ const PurchasesOfWeek = ({ purchases, today, icon, type }) => {
       >
         <h4 className="mb-1" style={{ color: '#a4afb9' }}>
           {purchases.reduce((total, purchases) => total + purchases[type], 0)}
-          <Icon name={`${icon} text-muted ml-2`} />
+          <FontAwesomeIcon icon={icon} size="lg" className="text-muted ml-2" />
         </h4>
         <small className="text-uppercase" style={{ color: '#a4afb9' }}>
           {today[type]} today

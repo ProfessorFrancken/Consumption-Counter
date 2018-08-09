@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { goBack } from './../actions';
 import { goBackText } from './../selectors';
 import { withRouter } from 'react-router-dom';
-import Icon from './Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const GoBack = ({ text, location, onClick }) => {
   if (text === 'Go back' && location.pathname === '/') {
@@ -12,7 +12,7 @@ const GoBack = ({ text, location, onClick }) => {
 
   return (
     <button className="button backButton" onClick={onClick}>
-      <Icon name="arrow-circle-left" />
+      <FontAwesomeIcon icon={'arrow-circle-left'} size="lg" />
       <span style={{ marginLeft: '.5em' }}>{text}</span>
     </button>
   );
