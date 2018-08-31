@@ -1,4 +1,5 @@
 import React from 'react';
+import Price from './../Price';
 
 const isSet = property => ![undefined, null, 0].includes(property);
 const smallButton = (button = {}) =>
@@ -28,7 +29,16 @@ const Member = ({ member, onClick, style = {} }) => (
     &nbsp;{member.cosmetics.nickname
       ? member.cosmetics.nickname
       : member.fullname}&nbsp;<br />
-    <span style={{ margin: '1em 0' }}>{member.total_coins}</span>
+    {member.total_spent ? (
+      <span style={{ margin: '1em 0' }}>
+        {new Intl.NumberFormat('en-EN', {
+          style: 'currency',
+          currency: 'EUR'
+        }).format(member.total_spent)}
+      </span>
+    ) : (
+      ''
+    )}
   </button>
 );
 

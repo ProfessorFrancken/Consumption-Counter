@@ -24,8 +24,8 @@ export function members(state = [], action) {
           return {
             ...member,
             latest_purchase_at: new Date(action.order.ordered_at),
-            total_coins:
-              member.total_coins +
+            total_spent:
+              member.total_spent +
               action.order.products.reduce(
                 (total, product) => total + product.price,
                 0
@@ -98,8 +98,8 @@ export function surnameRanges(state = defaultRanges, action) {
 
             return {
               ...member,
-              total_coins:
-                member.total_coins +
+              total_spent:
+                member.total_spent +
                 action.order.products.reduce(
                   (total, product) => total + product.price,
                   0
@@ -117,7 +117,7 @@ export function surnameRanges(state = defaultRanges, action) {
 export function title(state = '', action) {
   switch (action.type) {
     case TYPES.SELECT_MEMBER:
-      return action.member.fullname + ': ' + action.member.total_coins;
+      return action.member.fullname;
     case TYPES.SELECT_COMMITTEE:
       return action.committee.name;
     default:

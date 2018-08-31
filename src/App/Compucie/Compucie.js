@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TempleCountButton from './TempleCountButton';
 
 const Compucie = ({
+  members,
   compucie,
   scriptcie,
   selectMember,
@@ -31,6 +32,18 @@ const Compucie = ({
         <FontAwesomeIcon icon={'cogs'} size="lg" />
       </NavLink>
     </nav>
+
+    <ul className="list-unstyled">
+      {members.sort(member => member.fullname).map(member => (
+        <li className="d-flex justify-content-between p-2 my-3 bg-white">
+          <strong className="">{member.fullname}</strong>
+          <div>
+            <span className="px-3">{member.group}</span>
+            <button className="btn">Edit</button>
+          </div>
+        </li>
+      ))}
+    </ul>
 
     <nav className="compucie tilesGrid" style={{ flexShrink: 1 }}>
       {[...compucie, ...scriptcie].map(member => (

@@ -6,7 +6,7 @@ const Price = ({ price }) => (
     {new Intl.NumberFormat('en-EN', {
       style: 'currency',
       currency: 'EUR'
-    }).format(price / 100)}
+    }).format(price)}
   </span>
 );
 

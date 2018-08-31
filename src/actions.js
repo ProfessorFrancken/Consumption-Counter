@@ -235,7 +235,8 @@ export function fetchMembers() {
         ? new Date(lid.latest_purchase_at)
         : null,
 
-      total_coins: lid.total_coins,
+      total_spent: parseFloat(lid.total_spent, 10) / 100,
+      group: lid.group,
 
       cosmetics: {
         color: lid.kleur,
@@ -279,12 +280,12 @@ export function fetchProducts() {
         name: product.naam,
 
         // Note we parse the price and then convert it to fulll cents
-        price: parseInt(product.prijs, 10),
+        price: parseFloat(product.prijs, 10) / 100,
         position: product.positie,
         category: product.categorie,
         image: product.afbeelding,
         splash_image: product.splash_afbeelding,
-        age_restriction: product.categorie === 'Bier' ? 18 : null
+        age_restriction: null
       };
     };
 

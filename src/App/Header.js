@@ -32,6 +32,15 @@ const Header = ({ title, onClick }) => (
           </NavLink>
         )}
       />
+      <Route
+        exact
+        path="/products"
+        render={() => (
+          <NavLink exact to="/pricelist">
+            Show prices
+          </NavLink>
+        )}
+      />
     </div>
     <div className="association header-item" onClick={onClick}>
       Options

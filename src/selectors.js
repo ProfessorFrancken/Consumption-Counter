@@ -51,10 +51,19 @@ const committeeMembersWithMemberSelector = createSelector(
 const allowedProductsSelector = createSelector(
   categorySelector,
   orderSelector,
-  (categories, order) =>
-    mapValues(categories, products =>
+  (categories, order) => {
+    console.log(
+      'selector',
+      categories,
+      order,
+      mapValues(categories, products =>
+        products.filter(product => product.age_restriction <= order.member.age)
+      )
+    );
+    return mapValues(categories, products =>
       products.filter(product => product.age_restriction <= order.member.age)
-    )
+    );
+  }
 );
 
 // Get member data for all board members
@@ -126,7 +135,8 @@ export const compucieSelector = createSelector(
 
     return {
       compucie: committees['Compucie'] || [],
-      scriptcie: committees['s[ck]rip(t|t?c)ie'] || []
+      scriptcie: committees['s[ck]rip(t|t?c)ie'] || [],
+      members: members
     };
   }
 );
