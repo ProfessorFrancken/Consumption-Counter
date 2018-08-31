@@ -183,15 +183,6 @@ export function selectMember(member) {
       return diffDays > 90;
     }
 
-    if (didNotRecentlyOrderAProduct(member)) {
-      if (
-        !window.confirm(`Are you sure you want to select ${member.fullname}`)
-      ) {
-        // Cancel the selection since selecting this member was a mistake
-        return;
-      }
-    }
-
     dispatch(push('/products'));
     dispatch({
       type: TYPES.SELECT_MEMBER,
