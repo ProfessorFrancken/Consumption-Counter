@@ -27,7 +27,8 @@ const Member = ({ member, onClick, style = {} }) => (
   >
     &nbsp;{member.cosmetics.nickname
       ? member.cosmetics.nickname
-      : member.fullname}&nbsp;
+      : member.fullname}&nbsp;<br />
+    <span style={{ margin: '1em 0' }}>{member.total_coins}</span>
   </button>
 );
 

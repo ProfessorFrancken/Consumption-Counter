@@ -19,13 +19,22 @@ export function members(state = [], action) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
       return action.members;
     case TYPES.BUY_ORDER_SUCCESS:
-      return state.map(member => ({
-        ...member,
-        latest_purchase_at:
-          member.id === action.order.member.id
-            ? new Date(action.order.ordered_at)
-            : member.latest_purchase_at
-      }));
+      return state.map(member => {
+        if (member.id === action.order.member.id) {
+          return {
+            ...member,
+            latest_purchase_at: new Date(action.order.ordered_at),
+            total_coins:
+              member.total_coins +
+              action.order.products.reduce(
+                (total, product) => total + product.price,
+                0
+              )
+          };
+        }
+
+        return member;
+      });
     default:
       return state;
   }
@@ -77,6 +86,29 @@ export function surnameRanges(state = defaultRanges, action) {
           })
         )
       };
+    case TYPES.BUY_ORDER_SUCCESS:
+      return {
+        ...state,
+        ranges: state.ranges.map(range => ({
+          ...range,
+          members: range.members.map(member => {
+            if (member.id !== action.order.member.id) {
+              return member;
+            }
+
+            return {
+              ...member,
+              total_coins:
+                member.total_coins +
+                action.order.products.reduce(
+                  (total, product) => total + product.price,
+                  0
+                ),
+              latest_purchase_at: new Date(action.order.ordered_at)
+            };
+          })
+        }))
+      };
     default:
       return state;
   }
@@ -85,7 +117,7 @@ export function surnameRanges(state = defaultRanges, action) {
 export function title(state = '', action) {
   switch (action.type) {
     case TYPES.SELECT_MEMBER:
-      return action.member.fullname;
+      return action.member.fullname + ': ' + action.member.total_coins;
     case TYPES.SELECT_COMMITTEE:
       return action.committee.name;
     default:

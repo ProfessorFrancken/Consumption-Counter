@@ -235,6 +235,8 @@ export function fetchMembers() {
         ? new Date(lid.latest_purchase_at)
         : null,
 
+      total_coins: lid.total_coins,
+
       cosmetics: {
         color: lid.kleur,
         image: lid.afbeelding,
@@ -277,7 +279,7 @@ export function fetchProducts() {
         name: product.naam,
 
         // Note we parse the price and then convert it to fulll cents
-        price: 100 * parseFloat(product.prijs),
+        price: parseInt(product.prijs, 10),
         position: product.positie,
         category: product.categorie,
         image: product.afbeelding,
