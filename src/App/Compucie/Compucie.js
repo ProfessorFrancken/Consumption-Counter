@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Member from './../Members/MemberButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TempleCountButton from './TempleCountButton';
+import { sortBy } from 'lodash';
 
 const Compucie = ({
   members,
@@ -34,7 +35,7 @@ const Compucie = ({
     </nav>
 
     <ul className="list-unstyled">
-      {members.sort(member => member.fullname).map(member => (
+      {sortBy(members, member => member.fullname).map(member => (
         <li className="d-flex justify-content-between p-2 my-3 bg-white">
           <strong className="">{member.fullname}</strong>
           <div>
