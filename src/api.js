@@ -5,7 +5,8 @@ const api = process.env.REACT_APP_API_SERVER;
 
 export default {
   get,
-  post
+  post,
+  put
 };
 
 function get(uri, params) {
@@ -23,6 +24,17 @@ function get(uri, params) {
 function post(uri, body) {
   return axios
     .post(api + uri, body, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...authHeader()
+      }
+    })
+    .then(handleResponse);
+}
+
+function put(uri, body) {
+  return axios
+    .put(api + uri, body, {
       headers: {
         'Content-Type': 'application/json',
         ...authHeader()

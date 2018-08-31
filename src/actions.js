@@ -224,6 +224,8 @@ export function fetchMembers() {
       id: lid.id,
       firstName: lid.voornaam,
       surname: lid.achternaam,
+      insertion: lid.tussenvoegsel,
+
       fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
         .filter(name => ![undefined, ''].includes(name))
         .join(' '),

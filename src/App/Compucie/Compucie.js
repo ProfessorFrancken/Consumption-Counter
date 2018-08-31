@@ -5,6 +5,8 @@ import Member from './../Members/MemberButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TempleCountButton from './TempleCountButton';
 import { sortBy } from 'lodash';
+import MemberItem from './MemberItem';
+import AddMember from './AddMember';
 
 const Compucie = ({
   members,
@@ -35,14 +37,9 @@ const Compucie = ({
     </nav>
 
     <ul className="list-unstyled">
+      <AddMember />
       {sortBy(members, member => member.fullname).map(member => (
-        <li className="d-flex justify-content-between p-2 my-3 bg-white">
-          <strong className="">{member.fullname}</strong>
-          <div>
-            <span className="px-3">{member.group}</span>
-            <button className="btn">Edit</button>
-          </div>
-        </li>
+        <MemberItem member={member} key={member.id} />
       ))}
     </ul>
 
