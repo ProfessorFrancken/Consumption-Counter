@@ -25,15 +25,6 @@ const Header = ({ title, onClick }) => (
     <div className="header-item">
       <Route
         exact
-        path="/products"
-        render={() => (
-          <NavLink exact to="/pricelist">
-            Show prices
-          </NavLink>
-        )}
-      />
-      <Route
-        exact
         path="/pricelist"
         render={() => (
           <NavLink exact to="/products">
@@ -43,7 +34,7 @@ const Header = ({ title, onClick }) => (
       />
     </div>
     <div className="association header-item" onClick={onClick}>
-      T.F.V. 'Professor Francken'
+      Options
     </div>
   </div>
 );
