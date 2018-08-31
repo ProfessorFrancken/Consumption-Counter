@@ -6,9 +6,9 @@
   --footerSize: 100px;
   --rowSize: 100px;
   --arrowOverflow: 40px;
-  --gridCollumns: 6;
+  --gridCollumns: 3;
   --productsGridCollumns: 3;
-  --boards: 5;
+  --boards: 3;
 
   --padding: 40px;
 
@@ -129,7 +129,7 @@ button {
 .prominentGrid {
   height: 100%;
   display: grid;
-  grid-template-rows: [prominent] 1fr [boards] 4fr;
+  grid-template-rows: [boards] 4fr;
 }
 
 .prominentRow {

@@ -50,7 +50,7 @@ export function committeeMembers(state = [], action) {
 }
 
 const defaultRanges = {
-  members_per_range: 6 * 5,
+  members_per_range: 3 * 5,
   ranges: []
 };
 
