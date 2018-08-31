@@ -4,7 +4,6 @@ import { groupBy, map } from 'lodash';
 import Price from './../Price';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import HeatMap from './HeatMap';
 import PurchasesOfWeek from './PurchasesOfWeek';
 
 // Show all products that were bought and the amount of times they were bought
@@ -178,7 +177,6 @@ const Statistics = ({ statistics = [], activities = [], transactions }) => {
           </div>
         </div>
       </div>
-      <HeatMap statistics={statistics} activities={activities} />
     </div>
   );
 };
