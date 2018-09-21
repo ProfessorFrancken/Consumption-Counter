@@ -3,6 +3,7 @@ import Content from '../Content';
 import Footer from '../Footer';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
+import logo from './../logo.png';
 
 const backgroundFromProduct = (background = null) => {
   return background === null
@@ -32,7 +33,7 @@ const App = ({
     <div className="arrow">
       <div className="arrowContent">
         <img
-          src="https://professorfrancken.nl/images/LOGO_KAAL.png"
+          src={logo}
           className="franckenLogo img-fluid"
           alt="Logo of T.F.V. 'Professor Francken'"
           onClick={goHome}
