@@ -237,23 +237,23 @@ button {
   justify-content: flex-end;
 }
 
-.footer > .button {
+.footer .button {
   text-align: center;
   line-height: var(--footerSize);
   padding: 0 2em;
   font-weight: bold;
 }
 
-.footer > .cancelButton {
+.footer .cancelButton {
   background-color: #e86161;
 }
 
-.footer > .buyAllButton {
+.footer .buyAllButton {
   background-color: #61e86c;
   color: var(--primary);
 }
 
-.footer > .buyAllButton:hover {
+.footer .buyAllButton:hover {
   color: var(--secondary);
 }
 
