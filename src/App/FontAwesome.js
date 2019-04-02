@@ -1,6 +1,10 @@
 // FontAwesome configuration
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGulp, faBitcoin } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGulp,
+  faBitcoin,
+  faSlideshare
+} from '@fortawesome/free-brands-svg-icons';
 import {
   faCheckSquare,
   faCoffee,
@@ -16,7 +20,8 @@ import {
   faTimesCircle,
   faShoppingCart,
   faBeer,
-  faUtensils
+  faUtensils,
+  faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -37,7 +42,9 @@ library.add(
   faBeer,
   faUtensils,
   faGulp,
-  faBitcoin
+  faBitcoin,
+  faMapMarkerAlt,
+  faSlideshare
 );
 
 export default library;
