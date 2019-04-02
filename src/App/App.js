@@ -13,6 +13,7 @@ import Compucie from './Compucie/';
 import Authenticate from './Settings/Authentication/';
 import Settings from './Settings/';
 import Statistics from './Statistics/';
+import Present from './Present/';
 
 import Buixieval from './Buixieval/';
 
@@ -38,6 +39,7 @@ const AppContent = () => (
     <Route exact path="/members/:page(\d+)" component={Members} />
     <Route exact path="/screensaver" component={EmptyScreenSaver} />
     <Route exact path="/statistics" component={Statistics} />
+    <Route exact path="/present" component={Present} />
     <Redirect from="/members" to="/" />
   </Switch>
 );

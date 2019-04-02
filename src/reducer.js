@@ -229,9 +229,7 @@ export function menuItems(state = defaultMenuItems, action) {
       if (buixievalIsEnabled) {
         return [...state, { icon: ['fab', 'bitcoin'], url: '/buixieval' }];
       }
-
       return state;
-
     case TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST:
       return [...state, { icon: 'users', url: '/committees', loading: true }];
     case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:

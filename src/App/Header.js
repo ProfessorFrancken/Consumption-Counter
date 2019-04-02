@@ -21,6 +21,7 @@ const Header = ({ title, onClick }) => (
         render={() => <span>{title}</span>}
       />
       <Route exact path="/products" render={() => <span>{title}</span>} />
+      <Route exact path="/present" render={() => <span>Present</span>} />
     </div>
     <div className="header-item">
       <Route
