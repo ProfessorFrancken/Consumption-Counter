@@ -7,6 +7,7 @@ const Sidebar = ({ menuItems }) => (
     {menuItems.map((menuItem, i) => (
       <MenuItem key={menuItem.icon} menuItem={menuItem} />
     ))}
+    <MenuItem menuItem={{ icon: 'map-marker-alt', url: '/present' }} />
   </div>
 );
 
