@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchInitialData } from './../actions';
-import { backgroundSelector } from './../selectors';
+import { backgroundSelector, failedOrdersSelector } from './../selectors';
 import { withRouter } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import ScreenSaver from './ScreenSaver';
@@ -29,7 +29,8 @@ class AppContainer extends Component {
 const mapStateToProps = state => ({
   menuItems: state.menuItems,
   title: state.title,
-  background: backgroundSelector(state)
+  background: backgroundSelector(state),
+  failedOrders: failedOrdersSelector(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -41,7 +42,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(AppContainer)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AppContainer)
 );
 
 // TODO add lifecycle stuff so that we can load initial data

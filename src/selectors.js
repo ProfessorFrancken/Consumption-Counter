@@ -10,6 +10,7 @@ const orderSelector = state => state.order;
 export const recentSelector = state => state.recentBuyers;
 export const rangesSelector = state => state.surnameRanges.ranges;
 export const queuedOrderSelector = state => state.queuedOrder;
+export const queuedOrdersSelector = state => state.queuedOrders;
 export const membersInRangeSelector = (state, { page = 0 }) =>
   state.surnameRanges.ranges[page].members;
 
@@ -252,4 +253,11 @@ export const recentBuyersSelector = createSelector(
       .map(recent => members.find(member => member.id === recent))
       // exclude members that couldn't be found (for instance guests)
       .filter(m => m)
+);
+
+export const failedOrdersSelector = createSelector(
+  queuedOrdersSelector,
+  orders => {
+    return orders.filter(order => order.fails > 0).length;
+  }
 );

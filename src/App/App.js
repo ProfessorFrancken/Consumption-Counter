@@ -50,7 +50,8 @@ const App = ({
   goToCompucieScreen,
   goToProminent,
   background,
-  goHome
+  goHome,
+  failedOrders
 }) => (
   <GerrieApp
     menuItems={menuItems}
@@ -59,6 +60,7 @@ const App = ({
     goToCompucieScreen={goToCompucieScreen}
     goToProminent={goToProminent}
     goHome={goHome}
+    failedOrders={failedOrders}
   >
     <AppContent />
   </GerrieApp>

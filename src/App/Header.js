@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
-const Header = ({ title, onClick }) => (
+const Header = ({ title, onClick, failedOrders }) => (
   <div className="header">
     <div className="titleName header-item">
       <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
@@ -43,9 +43,16 @@ const Header = ({ title, onClick }) => (
         )}
       />
     </div>
-    <div className="association header-item" onClick={onClick}>
+    <div className="association header-item text-right" onClick={onClick}>
       T.F.V. 'Professor Francken'
     </div>
+    {failedOrders > 0 && (
+      <div className="ml-3">
+        <NavLink exact to="/settings">
+          <div className="badge badge-danger">{failedOrders}</div>
+        </NavLink>
+      </div>
+    )}
   </div>
 );
 

@@ -23,10 +23,15 @@ const App = ({
   background,
   goToCompucieScreen,
   goToProminent,
-  goHome
+  goHome,
+  failedOrders
 }) => (
   <div className="wrapper" style={backgroundFromProduct(background)}>
-    <Header title={title} onClick={goToCompucieScreen} />
+    <Header
+      title={title}
+      onClick={goToCompucieScreen}
+      failedOrders={failedOrders}
+    />
     <Sidebar menuItems={menuItems} />
     <Content>{children}</Content>
     <Footer />
