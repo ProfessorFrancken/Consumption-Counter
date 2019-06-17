@@ -2,9 +2,20 @@ import { TYPES } from './actions';
 import { sortBy, groupBy, chunk, first, last, take, uniqBy } from 'lodash';
 import moment from 'moment';
 
+const product_images = [];
+const member_images = [];
+
 export function products(state = [], action) {
   switch (action.type) {
     case TYPES.FETCH_PRODUCTS_SUCCESS:
+      // Refrehs images
+      product_images.splice(0, product_images);
+      action.products.forEach(product => {
+        let img = new Image();
+        img.src = product.image;
+        product_images.push(img);
+      });
+
       return groupBy(
         sortBy(action.products, product => product.position),
         product => product.category
@@ -17,6 +28,15 @@ export function products(state = [], action) {
 export function members(state = [], action) {
   switch (action.type) {
     case TYPES.FETCH_MEMBERS_SUCCESS:
+      // Refrehs images
+      member_images.splice(0, member_images);
+      action.members.forEach(member => {
+        let img = new Image();
+        if (member.cosmetics && member.cosmetics.image) {
+          img.src = member.cosmetics.image;
+          member_images.push(img);
+        }
+      });
       return action.members;
     case TYPES.BUY_ORDER_SUCCESS:
       return state.map(member => ({
