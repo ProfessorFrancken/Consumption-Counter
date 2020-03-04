@@ -15,7 +15,7 @@ describe('<AuthenticationForm />', () => {
       />
     );
 
-    expect(app.find('input[type="submit"]').props().value).toBe('Authenticate');
+    expect(app.find('button[type="submit"]').text()).toContain('Authenticate');
   });
 
   it('is possible to refresh a token if a token is already present', () => {
@@ -33,9 +33,7 @@ describe('<AuthenticationForm />', () => {
       />
     );
 
-    expect(app.find('input[type="submit"]').props().value).toBe(
-      'Refresh token'
-    );
+    expect(app.find('button[type="submit"]').text()).toContain('Refresh token');
   });
 
   it('shows a waiting message when authenticating', () => {
@@ -50,7 +48,7 @@ describe('<AuthenticationForm />', () => {
       />
     );
 
-    expect(app.find('input[type="submit"]').props().value).toBe('Waiting');
+    expect(app.find('button[type="submit"]').text()).toContain('Waiting');
   });
 
   describe('error messages', () => {

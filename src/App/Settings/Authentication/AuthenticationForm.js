@@ -30,6 +30,14 @@ const invalidFeedback = error => {
     : 'There probably was an unexpected error on the server, call the compucie to solve this.';
 };
 
+const AuthenticateButton = ({ request, token }) => {
+  return (
+    <button className="btn btn-secondary mb-2" type="submit">
+      {request ? 'Waiting' : token ? 'Refresh token' : 'Authenticate'}
+    </button>
+  );
+};
+
 const AuthenticationForm = ({
   changePassword,
   submit,
@@ -67,11 +75,7 @@ const AuthenticationForm = ({
             ) : null}
           </div>
         </div>
-        <input
-          type="submit"
-          value={request ? 'Waiting' : token ? 'Refresh token' : 'Authenticate'}
-          className="btn btn-secondary mb-2"
-        />
+        <AuthenticateButton request={request} token={token} />
       </form>
     </div>
   );
