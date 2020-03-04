@@ -22,6 +22,8 @@ import {
   faBeer,
   faUtensils,
   faMapMarkerAlt,
+  faSync,
+  faKey,
   faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,6 +48,8 @@ library.add(
   faBitcoin,
   faMapMarkerAlt,
   faSlideshare,
+  faSync,
+  faKey,
   faExclamationTriangle
 );
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthenticationForm from './AuthenticationForm';
 import { mount } from 'enzyme';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 describe('<AuthenticationForm />', () => {
   it('shows a warning if the system is not authenticated', () => {
@@ -34,6 +35,12 @@ describe('<AuthenticationForm />', () => {
     );
 
     expect(app.find('button[type="submit"]').text()).toContain('Refresh token');
+    expect(
+      app
+        .find('button[type="submit"]')
+        .find(FontAwesomeIcon)
+        .props().icon
+    ).toBe('sync');
   });
 
   it('shows a waiting message when authenticating', () => {

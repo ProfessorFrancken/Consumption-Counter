@@ -3,6 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import decode from 'jwt-decode';
 import moment from 'moment';
 
+const Button = ({ children, ...props }) => (
+  <button className="btn btn-secondary mb-2" {...props} type="submit">
+    {children}
+  </button>
+);
+
 const authenticated = token => {
   const decoded = decode(token);
   const expiration = new Date(decoded.exp * 1000);
@@ -31,10 +37,24 @@ const invalidFeedback = error => {
 };
 
 const AuthenticateButton = ({ request, token }) => {
+  if (request) {
+    return <Button>Waiting</Button>;
+  }
+
+  if (token) {
+    return (
+      <Button>
+        <FontAwesomeIcon icon="sync" className="mr-1" />
+        Refresh token
+      </Button>
+    );
+  }
+
   return (
-    <button className="btn btn-secondary mb-2" type="submit">
-      {request ? 'Waiting' : token ? 'Refresh token' : 'Authenticate'}
-    </button>
+    <Button>
+      <FontAwesomeIcon icon="key" className="mr-1" />
+      Authenticate
+    </Button>
   );
 };
 

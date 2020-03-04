@@ -31,7 +31,7 @@ describe('Authentication', () => {
       </Provider>
     );
 
-    expect(app.find(FontAwesomeIcon).length).toBe(1);
+    expect(app.find('h2').find(FontAwesomeIcon).length).toBe(1);
     expect(app.find('button[type="submit"]').text()).toContain('Authenticate');
   });
 
@@ -68,24 +68,5 @@ describe('Authentication', () => {
         done();
       })
       .catch(e => done.fail(e));
-  });
-
-  it('Shows a warning that the system is not authenticated', () => {
-    const store = mockStore({
-      authentication: {
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODMzMjg0MDksImV4cCI6MTYxNDg2NDQwOSwicGx1cy1vbmUiOnRydWV9.Kn-lwGAtDf1rflABmX6T3iHC6vIwFMwrkRbyskPjfmI',
-        request: false
-      }
-    });
-
-    app = mount(
-      <Provider store={store}>
-        <Authentication />
-      </Provider>
-    );
-
-    expect(app.find(FontAwesomeIcon).length).toBe(0);
-    expect(app.find('button[type="submit"]').text()).toContain('Refresh token');
   });
 });
