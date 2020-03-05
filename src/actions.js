@@ -2,6 +2,7 @@ import { orderBy, pick } from 'lodash';
 import { push, goBack as goBackRoute } from 'react-router-redux';
 import { setHeader } from './Setup/authHeader';
 import moment from 'moment';
+import axios from 'axios';
 
 export const actions = {
   goBack,
@@ -384,12 +385,18 @@ export function fetchStatistics() {
       type: TYPES.FETCH_STATISTICS_REQUEST
     });
 
+    const startDate = moment()
+      .subtract(4, 'years')
+      .format('YYYY-MM-DD');
+
+    const endDate = moment()
+      .subtract(2, 'years')
+      .format('YYYY-MM-DD');
+
     return api
       .get('/statistics/categories', {
-        startDate: moment()
-          .subtract(2, 'years')
-          .format('YYYY-MM-DD'),
-        endDate: moment().format('YYYY-MM-DD')
+        startDate,
+        endDate
       })
       .then(response => {
         return dispatch({
@@ -422,12 +429,16 @@ export function fetchActivities() {
       type: TYPES.FETCH_ACTIVITIES_REQUEST
     });
 
+    const after = moment()
+      .subtract(2, 'years')
+      .format('YYYY-MM-DD');
+
+    const before = moment().format('YYYY-MM-DD');
+
     return api
       .get('/statistics/activities', {
-        after: moment()
-          .subtract(2, 'years')
-          .format('YYYY-MM-DD'),
-        before: moment().format('YYYY-MM-DD')
+        after,
+        before
       })
       .then(response => {
         return dispatch({
@@ -497,9 +508,8 @@ export function chwazi() {
   return dispatch => {
     // We don't really need to dispatch an action here so we only make the
     // chwazi request
-    return fetch(
-      `https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+    return axios.post(
+      `https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`
     );
   };
 }

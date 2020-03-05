@@ -1,20 +1,20 @@
 import { TYPES } from './actions';
-import fetchMock from 'fetch-mock';
 import buixieval from './buixieval';
+import moxios from 'moxios';
+import moment from 'moment';
 
 describe('buixieval', () => {
   const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
 
-  afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
 
   const create = (members, date) => {
-    fetchMock.mock('https://buixieval.nl/api/backers', {
-      body: members,
-      headers: { 'content-type': 'application/json' }
-    });
+    if (moment(date).isBetween('2018-04-14', '2018-04-22')) {
+      moxios.stubRequest('https://buixieval.nl/api/backers', {
+        response: { members }
+      });
+    }
 
     const store = {
       getState: jest.fn(() => ({})),
