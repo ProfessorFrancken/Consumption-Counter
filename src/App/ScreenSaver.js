@@ -12,7 +12,7 @@ export default class ScreenSaver extends Component {
     this.screenSaver = this.screenSaver.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.unlisten = this.props.listen(this.screenSaver);
   }
 

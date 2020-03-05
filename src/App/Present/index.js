@@ -15,7 +15,7 @@ class Present extends Component {
     this.fetchMembers = this.fetchMembers.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.fetchMembers();
   }
 
