@@ -171,7 +171,10 @@ export function buyOrder(order) {
 export function selectMember(member) {
   return dispatch => {
     function didNotRecentlyOrderAProduct(member) {
-      const latest_purchase_at = member.latest_purchase_at;
+      const latest_purchase_at =
+        typeof member.latest_purchase_at === 'string'
+          ? new Date(member.latest_purchase_at)
+          : member.latest_purchase_at;
 
       if (latest_purchase_at === null) {
         return true;
