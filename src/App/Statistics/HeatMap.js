@@ -95,9 +95,9 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
     const steps = 255;
 
     const normed = [
-      Math.floor(2 * steps * value.beer ** 1 / total),
+      Math.floor((2 * steps * value.beer ** 1) / total),
       Math.floor(
-        steps * value.food ** 1 / total + steps * value.soda ** 1 / total
+        (steps * value.food ** 1) / total + (steps * value.soda ** 1) / total
       ),
       0
     ];
@@ -130,9 +130,9 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
     ];
 
     return `rgba(
-        ${255 * color[0] / steps},
-        ${255 * color[1] / steps},
-        ${255 * color[2] / steps},
+        ${(255 * color[0]) / steps},
+        ${(255 * color[1]) / steps},
+        ${(255 * color[2]) / steps},
         ${Math.min(1, total / averagePurchases)}
         )`;
   };
