@@ -19,7 +19,10 @@ const Compucie = ({
       ))}
     </nav>
 
-    <nav className="tilesGrid" style={{ flexShrink: 4, marginTop: '1em' }}>
+    <nav
+      className="tilesGrid compucie-buttons"
+      style={{ flexShrink: 4, marginTop: '1em' }}
+    >
       <Member
         member={{
           id: -1,
