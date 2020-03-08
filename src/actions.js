@@ -386,12 +386,10 @@ export function fetchStatistics() {
     });
 
     const startDate = moment()
-      .subtract(4, 'years')
-      .format('YYYY-MM-DD');
-
-    const endDate = moment()
       .subtract(2, 'years')
       .format('YYYY-MM-DD');
+
+    const endDate = moment().format('YYYY-MM-DD');
 
     return api
       .get('/statistics/categories', {
