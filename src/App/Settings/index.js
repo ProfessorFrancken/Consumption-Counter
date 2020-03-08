@@ -11,7 +11,7 @@ const Settings = ({ orders, cancel, buy }) => (
     <Authenticate />
     <div className="mb-5 bg-light">
       <div className="d-flex justify-content-between">
-        <h2 className="h4 font-weight-normal p-3">Queud Orders</h2>
+        <h2 className="h4 font-weight-normal p-3">Queued Orders</h2>
         {orders.length > 0 && (
           <div>
             <RetryAll orders={orders} buy={buy} />
@@ -54,7 +54,4 @@ const mapDispatchToProps = dispatch => ({
   buy: order => dispatch(buyOrder(order))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
