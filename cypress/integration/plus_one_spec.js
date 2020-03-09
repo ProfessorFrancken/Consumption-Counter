@@ -5,7 +5,8 @@ import { SCREEN_SAVER_TIMEOUT } from './../../src/App/ScreenSaver';
 
 let server;
 beforeEach(() => {
-  server = makeServer({ environment: 'test' });
+  server = makeServer({ environment: 'testing' });
+  server.logging = true;
 });
 
 afterEach(() => {
@@ -13,7 +14,7 @@ afterEach(() => {
 });
 
 describe('PlusOne.js', () => {
-  describe('Authentication', () => {
+  describe.only('Authentication', () => {
     it('Authenticates with the plus one API', () => {
       expect(localStorage.getItem('plus_one_authorization')).to.be.null;
       const password = 'bitterballen';
