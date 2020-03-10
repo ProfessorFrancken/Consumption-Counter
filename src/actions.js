@@ -234,7 +234,7 @@ export function fetchMembers() {
     };
 
     const mapMembers = lid => ({
-      id: lid.id,
+      id: parseInt(lid.id, 10),
       firstName: lid.voornaam,
       surname: lid.achternaam,
       fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
@@ -286,7 +286,7 @@ export function fetchProducts() {
 
     const mapProducts = product => {
       return {
-        id: product.id,
+        id: parseInt(product.id, 10),
         name: product.naam,
 
         // Note we parse the price and then convert it to fulll cents
@@ -323,7 +323,7 @@ export function fetchBoardMembers() {
 
     const mapBoard = boardMember => {
       return {
-        member_id: boardMember.lid_id,
+        member_id: parseInt(boardMember.lid_id, 10),
         year: boardMember.jaar,
         function: boardMember.functie
       };
@@ -356,11 +356,11 @@ export function fetchCommitteeMembers() {
 
     const mapCommittees = member => {
       return {
-        member_id: member.lid_id,
+        member_id: parseInt(member.lid_id, 10),
         year: member.jaar,
         function: member.functie,
         committee: {
-          id: member.commissie_id,
+          id: parseInt(member.commissie_id),
           name: member.naam
         }
       };

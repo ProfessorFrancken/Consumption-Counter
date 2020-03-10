@@ -34,7 +34,7 @@ Cypress.Commands.add('login', (email, password) => {
     })
   );
   cy.visit('/');
-  cy.get('.tilesGrid').should('contain', 'Admiraal');
+  cy.get('.tilesGrid').should('not.be.empty');
 });
 
 Cypress.Commands.add(
@@ -51,9 +51,19 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('buyIceTea', ({ product = 'Ice Tea' } = {}) => {
   cy.get('.productsGrid > :nth-child(2)').should('contain', product);
-  cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').should(
+  cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
     'contain',
     product
   );
-  cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').click();
+  cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').click();
+});
+
+Cypress.Commands.add('refreshApp', () => {
+  cy.visit('/compucie');
+  cy.get('.compucie-buttons')
+    .should('contain', 'Refresh')
+    .click();
+
+  cy.visit('/');
+  cy.get('.tilesGrid').should('not.be.empty');
 });

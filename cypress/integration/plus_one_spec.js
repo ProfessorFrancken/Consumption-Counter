@@ -2,11 +2,52 @@
 import { makeServer } from '../../src/server';
 import { TIME_TO_CANCEL } from './../../src/actions';
 import { SCREEN_SAVER_TIMEOUT } from './../../src/App/ScreenSaver';
+import { association } from 'miragejs';
+
+const member = {
+  firstName: 'Joris',
+  lastName: 'Aaaaadmiraal',
+  fullName: 'Joris Aaaaadmiraal'
+};
 
 let server;
 beforeEach(() => {
-  server = makeServer({ environment: 'testing' });
+  server = makeServer({ environment: 'test' });
   server.logging = true;
+  server.create('member', {
+    latest_purchase_at: '2020-03-08 22:05:49',
+    geboortedatum: '1993-04-26',
+    achternaam: member.lastName,
+    voornaam: member.firstName,
+    tussenvoegsel: '',
+    bijnaam: ''
+  });
+
+  server.create('member', {
+    id: 1403,
+    latest_purchase_at: '2020-03-08 22:05:49',
+    geboortedatum: '1993-04-26',
+    achternaam: 'Redeman',
+    voornaam: 'Mark',
+    tussenvoegsel: '',
+    bijnaam: ''
+  });
+
+  server.create('product', {
+    categorie: 'Bier',
+    naam: 'Hertog Jan'
+  });
+
+  server.create('product', {
+    categorie: 'Eten',
+    naam: 'Mars'
+  });
+
+  server.create('product', {
+    categorie: 'Fris',
+    naam: 'Ice Tea',
+    prijs: '0.6100'
+  });
 });
 
 afterEach(() => {
@@ -14,7 +55,7 @@ afterEach(() => {
 });
 
 describe('PlusOne.js', () => {
-  describe.only('Authentication', () => {
+  describe('Authentication', () => {
     it('Authenticates with the plus one API', () => {
       expect(localStorage.getItem('plus_one_authorization')).to.be.null;
       const password = 'bitterballen';
@@ -37,7 +78,7 @@ describe('PlusOne.js', () => {
         .contains('Refresh token');
 
       cy.visit('/');
-      cy.get('.tilesGrid').should('contain', 'Admiraal');
+      cy.get('.tilesGrid').should('contain', member.lastName);
     });
   });
 
@@ -48,39 +89,39 @@ describe('PlusOne.js', () => {
     describe('Striping soda & food', () => {
       it('Allows striping soda', () => {
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.tilesGrid').should('contain', 'Joris Admiraal');
+        cy.get('.tilesGrid').should('contain', member.fullName);
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.titleName > span').should('contain', 'Joris Admiraal');
+        cy.get('.titleName > span').should('contain', member.fullName);
         cy.get('.productsGrid > :nth-child(2)').should('contain', 'Ice Tea');
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').should(
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
           'contain',
           'Ice Tea'
         );
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').click();
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').click();
         cy.get('.cancelButton > [style="margin-left: 0.5em;"]').should(
           'contain',
           'Cancel buying Ice Tea for '
         );
-        cy.get('.backButton > span').should('contain', 'Joris Admiraal');
+        cy.get('.backButton > span').should('contain', member.fullName);
       });
 
       it('Buying two products using the back button', () => {
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.tilesGrid').should('contain', 'Joris Admiraal');
+        cy.get('.tilesGrid').should('contain', member.fullName);
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.titleName > span').should('contain', 'Joris Admiraal');
+        cy.get('.titleName > span').should('contain', member.fullName);
         cy.get('.productsGrid > :nth-child(2)').should('contain', 'Ice Tea');
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').should(
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
           'contain',
           'Ice Tea'
         );
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').click();
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').click();
         cy.get('.cancelButton > [style="margin-left: 0.5em;"]').should(
           'contain',
           'Cancel buying Ice Tea for '
         );
         cy.get('.backButton > span').click();
-        cy.get('.productsGrid > :nth-child(3) > :nth-child(3)').click();
+        cy.get('.productsGrid > :nth-child(3) > :nth-child(1)').click();
         cy.get('.cancelButton > [style="margin-left: 0.5em;"]').should(
           'contain',
           'Cancel buying Mars for '
@@ -89,17 +130,17 @@ describe('PlusOne.js', () => {
 
       it('Showing prices of products', () => {
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.tilesGrid').should('contain', 'Joris Admiraal');
+        cy.get('.tilesGrid').should('contain', member.fullName);
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.titleName > span').should('contain', 'Joris Admiraal');
+        cy.get('.titleName > span').should('contain', member.fullName);
         cy.get('.productsGrid > :nth-child(2)').should('contain', 'Ice Tea');
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').should(
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
           'contain',
           'Ice Tea'
         );
 
         cy.get('.header > :nth-child(2) > a').click();
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)').should(
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
           'contain',
           '0.61'
         );
@@ -107,15 +148,15 @@ describe('PlusOne.js', () => {
 
       it('Allows buying multiple products at once', () => {
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.tilesGrid').should('contain', 'Joris Admiraal');
+        cy.get('.tilesGrid').should('contain', member.fullName);
         cy.get('.tilesGrid > :nth-child(1)').click();
-        cy.get('.titleName > span').should('contain', 'Joris Admiraal');
+        cy.get('.titleName > span').should('contain', member.fullName);
         cy.get('.productsGrid > :nth-child(2)').should('contain', 'Ice Tea');
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)')
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)')
           .should('contain', 'Ice Tea')
           .trigger('mousedown');
         cy.wait(1000);
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(3)')
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(1)')
           .should('contain', '1')
           .click()
           .click()
@@ -141,9 +182,9 @@ describe('PlusOne.js', () => {
           .click()
           .then(() => {
             expect(stub.getCall(0)).to.be.calledWith(
-              `Are you sure you want to select Joris Admiraal`
+              `Are you sure you want to select ${member.fullName}`
             );
-            cy.get('.tilesGrid').should('contain', 'Joris Admiraal');
+            cy.get('.tilesGrid').should('contain', member.fullName);
           });
       });
 
@@ -160,9 +201,9 @@ describe('PlusOne.js', () => {
           .click()
           .then(() => {
             expect(stub.getCall(0)).to.be.calledWith(
-              `Are you sure you want to select Joris Admiraal`
+              `Are you sure you want to select ${member.fullName}`
             );
-            cy.get('.titleName > span').should('contain', 'Joris Admiraal');
+            cy.get('.titleName > span').should('contain', member.fullName);
             cy.location('pathname').should('eq', '/products');
           });
       });
@@ -170,8 +211,24 @@ describe('PlusOne.js', () => {
 
     describe('Prominent', () => {
       it('Buying via prominent', () => {
+        server.create('boardMember', {
+          board: association({
+            year: 2017
+          }),
+          member: association({
+            id: 1403,
+            latest_purchase_at: '2020-03-08 22:05:49',
+            geboortedatum: '1993-04-26',
+            achternaam: 'Redeman',
+            voornaam: 'Mark',
+            tussenvoegsel: '',
+            bijnaam: ''
+          })
+        });
+        cy.login();
+
         cy.get('[href="/prominent"]').click();
-        cy.get('.boardsRow > :nth-child(2) > :nth-child(5)')
+        cy.get('.boardsRow > :nth-child(1) > :nth-child(1)')
           .should('contain', 'Mark Redeman')
           .click();
 
@@ -184,63 +241,139 @@ describe('PlusOne.js', () => {
       });
 
       it('Board member from 5 years ago', () => {
+        server.create('boardMember', {
+          board: association({
+            year: 2010
+          }),
+          member: association({
+            id: 9999,
+            latest_purchase_at: '2020-03-08 22:05:49',
+            achternaam: 'Bosma',
+            voornaam: 'Tom',
+            tussenvoegsel: '',
+            bijnaam: 'Tom Bosma'
+          })
+        });
+        server.createList('boardMember', 5, {
+          board: association({ year: 2020 })
+        });
+        server.createList('boardMember', 5, {
+          board: association({ year: 2019 })
+        });
+        server.createList('boardMember', 5, {
+          board: association({ year: 2018 })
+        });
+        server.createList('boardMember', 5, {
+          board: association({ year: 2017 })
+        });
+        server.createList('boardMember', 5, {
+          board: association({ year: 2016 })
+        });
+        cy.login();
+
         cy.get('[href="/prominent"]').click();
-        cy.get('.prominentRow > .tile').should(
-          'contain',
-          'ir. Guus Berend Winter'
-        );
+        cy.get('.prominentRow > .tile').should('contain', 'Tom Bosma');
       });
     });
 
     describe('Recent', () => {
+      beforeEach(() => {
+        server.create('member', {
+          latest_purchase_at: '2020-03-08 22:05:49',
+          geboortedatum: '1993-04-26',
+          achternaam: 'Dalman',
+          voornaam: 'Pol',
+          tussenvoegsel: 'de',
+          bijnaam: ''
+        });
+        cy.login();
+      });
       it('Shows members that recently bought a product', () => {
         cy.clock();
 
-        cy.selectMember();
+        cy.selectMember({ name: member.fullName });
         cy.buyIceTea();
         cy.tick(TIME_TO_CANCEL);
 
         cy.selectMember({
-          nthSurname: 4,
-          nthFirstname: 1,
+          nthSurname: 1,
+          nthFirstname: 2,
           name: 'Pol de Dalman'
         });
         cy.buyIceTea();
         cy.tick(TIME_TO_CANCEL);
 
         cy.get('[href="/recent"]').click();
+        cy.tick(TIME_TO_CANCEL);
+
         cy.get('.titleName > span').should('contain', 'Recent');
+        cy.get('.tilesGrid > :nth-child(2)').should('contain', member.fullName);
         cy.get('.tilesGrid > :nth-child(1)').should('contain', 'Pol de Dalman');
-        cy.get('.tilesGrid > :nth-child(2)').should(
-          'contain',
-          'Joris Admiraal'
-        );
       });
     });
 
     describe('Present', () => {
-      it.skip('People currently at Francken', () => {
-        cy.get('.TilesGrid').should('contain', 'Ids');
+      it('People currently at Francken', () => {
+        cy.get('[href="/present"]').click();
+        cy.get('.tilesGrid').should('contain', 'Mark Redeman');
       });
     });
 
     describe('Commitees', () => {
       it('Allows selecting a member via committees', () => {
+        server.create('committeeMember', {
+          committee: association({
+            id: 1,
+            name: 'HOI'
+          }),
+          member: association({
+            id: 1403,
+            latest_purchase_at: '2020-03-08 22:05:49',
+            geboortedatum: '1993-04-26',
+            achternaam: 'Redeman',
+            voornaam: 'Mark',
+            tussenvoegsel: '',
+            bijnaam: ''
+          }),
+          year: 2020
+        });
+        cy.login();
+
         cy.get('[href="/committees"]').click();
         cy.get('.titleName > span').should('contain', 'Committees');
 
         cy.get('.tilesGrid > :nth-child(1)')
-          .should('contain', 'Lustrumweek')
+          .should('contain', 'HOI')
           .click();
-        cy.get('.titleName > span').should('contain', 'Lustrumweek');
+        cy.get('.titleName > span').should('contain', 'HOI');
 
-        cy.get('.tilesGrid').should('contain', "Le'âh!");
-        cy.get('.tilesGrid > :nth-child(2)').click();
-        cy.get('.titleName > span').should('contain', 'Arjen Kramer');
+        cy.get('.tilesGrid').should('contain', 'Mark Redeman');
+        cy.get('.tilesGrid > :nth-child(1)').click();
+        cy.get('.titleName > span').should('contain', 'Mark Redeman');
       });
     });
 
     describe('Compucie', () => {
+      beforeEach(() => {
+        server.create('committeeMember', {
+          committee: association({
+            id: 1,
+            name: 's[ck]rip(t|t?c)ie'
+          }),
+          member: association({
+            id: 33,
+            latest_purchase_at: '2020-03-08 22:05:49',
+            geboortedatum: '1993-04-26',
+            achternaam: 'Baars',
+            voornaam: 'Sven',
+            tussenvoegsel: '',
+            bijnaam: 'ir. Sven'
+          }),
+          year: 2020
+        });
+        cy.login();
+      });
+
       it('Shows all previous compucie members', () => {
         cy.get('.association').click();
         cy.get('.compucie').should('contain', 'ir. Sven');
@@ -259,10 +392,10 @@ describe('PlusOne.js', () => {
 
       describe('The settings page', () => {
         it('Can be used to see the queued orders', () => {
-          cy.selectMember();
+          cy.selectMember({ name: member.fullName });
           cy.buyIceTea();
           cy.visit('/settings');
-          cy.get('tbody > tr').should('contain', 'Joris Admiraal');
+          cy.get('tbody > tr').should('contain', member.fullName);
           cy.get('tbody > tr').should('contain', 'Ice Tea');
           cy.get('tbody > tr').should('contain', 'queued');
           cy.get('tbody > tr').should('contain', 'Retry now');
@@ -270,7 +403,7 @@ describe('PlusOne.js', () => {
         });
 
         it('Allows cancelling a queued order', () => {
-          cy.selectMember();
+          cy.selectMember({ name: member.fullName });
           cy.buyIceTea();
           cy.visit('/settings');
 
@@ -294,12 +427,15 @@ describe('PlusOne.js', () => {
         cy.clock();
 
         [1, 2, 3].forEach(category => {
-          cy.selectMember();
+          cy.selectMember({ name: member.fullName });
           cy.get(
             `.productsGrid > :nth-child(${category}) > :nth-child(1)`
           ).click();
-          cy.tick(2 * TIME_TO_CANCEL);
+          cy.tick(TIME_TO_CANCEL);
         });
+
+        cy.selectMember({ name: member.fullName });
+        cy.tick(TIME_TO_CANCEL);
 
         cy.get('[href="/statistics"]').click();
         cy.get('.titleName > span').should('contain', 'Statistics');
@@ -314,21 +450,21 @@ describe('PlusOne.js', () => {
             cy.log(orders);
             cy.wrap(Cypress.$(orders[0])).should(
               'contain',
-              'bought by Joris Admiraal'
+              `bought by ${member.fullName}`
             );
 
             cy.wrap(Cypress.$(orders[1])).should(
               'contain',
-              'bought by Joris Admiraal'
+              `bought by ${member.fullName}`
             );
 
             cy.wrap(Cypress.$(orders[2])).should(
               'contain',
-              'bought by Joris Admiraal'
+              `bought by ${member.fullName}`
             );
 
-            cy.wrap(Cypress.$(orders[0])).should('contain', 'M&Ms');
-            cy.wrap(Cypress.$(orders[1])).should('contain', 'Hero Cassis');
+            cy.wrap(Cypress.$(orders[0])).should('contain', 'Mars');
+            cy.wrap(Cypress.$(orders[1])).should('contain', 'Ice Tea');
             cy.wrap(Cypress.$(orders[2])).should('contain', 'Hertog Jan');
           });
       });
@@ -337,7 +473,7 @@ describe('PlusOne.js', () => {
     describe('Screensaver / Bug free zone', () => {
       it('Goes to the statistics page after a long idle time', () => {
         cy.clock();
-        cy.selectMember();
+        cy.selectMember({ name: member.fullName });
 
         // Should go back to the members page
         cy.tick(SCREEN_SAVER_TIMEOUT * 1);
@@ -351,13 +487,21 @@ describe('PlusOne.js', () => {
 
     describe('Easter eggs', () => {
       it('Shows a background of a product', () => {
-        cy.selectMember();
+        server.create('product', {
+          categorie: 'Fris',
+          naam: 'Pepsi max',
+          splash_afbeelding:
+            'https://old.professorfrancken.nl/database/streep/afbeeldingen/ECDOccDsQVmRRRpyBnN1.jpeg'
+        });
+        cy.login();
 
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(11)').should(
+        cy.selectMember({ name: member.fullName });
+
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(2)').should(
           'contain',
           'Pepsi max'
         );
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(11)').click();
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(2)').click();
         cy.get('.wrapper').should(
           'have.css',
           'background-image',
@@ -366,10 +510,20 @@ describe('PlusOne.js', () => {
       });
 
       it('Shows a small member button', () => {
-        cy.get(`.tilesGrid > :nth-child(14)`).click();
+        server.create('member', {
+          achternaam: 'Rutten',
+          voornaam: 'Nina',
+          tussenvoegsel: '',
+          bijnaam: 'Nina',
+          button_width: 70,
+          button_height: 40
+        });
+        cy.login();
+
+        cy.get(`.tilesGrid > :nth-child(1)`).click();
         cy.get('.tilesGrid').should('contain', 'Nina');
 
-        cy.get(`.tilesGrid > :nth-child(26)`).should(
+        cy.get(`.tilesGrid > :nth-child(3)`).should(
           'have.css',
           'transform',
           'matrix(0.5, 0, 0, 0.5, 0, 0)'
@@ -377,8 +531,20 @@ describe('PlusOne.js', () => {
       });
 
       it('Shows a member button with background', () => {
+        server.create('boardMember', {
+          board: association({
+            year: 2019
+          }),
+          member: association({
+            bijnaam: 'Dictadtor',
+            afbeelding:
+              'https://old.professorfrancken.nl/database/streep/afbeeldingen/nc1J3sNtthqGkeQy0tDf.jpeg'
+          })
+        });
+        cy.login();
+
         cy.get('[href="/prominent"]').click();
-        const jeanne = cy.get('.boardsRow > :nth-child(1) > :nth-child(4)');
+        const jeanne = cy.get('.boardsRow > :nth-child(1) > :nth-child(1)');
         jeanne.should('contain', 'Dictadtor');
         jeanne.should(
           'have.css',
@@ -388,11 +554,17 @@ describe('PlusOne.js', () => {
       });
 
       it('Locks goedemorgen after 12', () => {
+        server.create('product', {
+          categorie: 'Fris',
+          naam: 'Goede morgen!'
+        });
+        cy.login();
+
         const after12 = new Date(2020, 2, 2, 13).getTime();
         cy.clock(after12, ['Date']);
 
-        cy.selectMember();
-        cy.get('.productsGrid > :nth-child(2) > :nth-child(4)')
+        cy.selectMember({ name: member.fullName });
+        cy.get('.productsGrid > :nth-child(2) > :nth-child(2)')
           .should('contain', 'Goede morgen')
           .should('have.class', 'locked');
       });
@@ -412,7 +584,7 @@ describe('PlusOne.js', () => {
         const before4 = new Date(2020, 2, 2, 13).getTime();
         cy.clock(before4, ['Date']);
 
-        cy.selectMember();
+        cy.selectMember({ name: member.fullName });
 
         cy.get('.productsGrid > :nth-child(1) > :nth-child(1)').should(
           'have.class',
@@ -433,7 +605,7 @@ describe('PlusOne.js', () => {
         const after4 = new Date(2020, 2, 2, 17).getTime();
         cy.clock(after4, ['Date']);
 
-        cy.selectMember();
+        cy.selectMember({ name: member.fullName });
 
         cy.get('.productsGrid > :nth-child(1) > :nth-child(1)').should(
           'not.have.class',
@@ -448,6 +620,30 @@ describe('PlusOne.js', () => {
           'not.have.class',
           'locked'
         );
+      });
+
+      it(`A minor isn't allowed to buy alcohol`, () => {
+        server.create('member', {
+          achternaam: 'Sjaars',
+          voornaam: 'Sjaars',
+          tussenvoegsel: '',
+          bijnaam: 'Sjaars',
+          geboortedatum: '2003-01-01'
+        });
+        cy.login();
+
+        // Normally we should be able to see beer
+        cy.selectMember({ name: member.fullName });
+        cy.get('.productsGrid')
+          .find('nav')
+          .should('have.length', 3);
+
+        // But not if the member is a minor
+        cy.get('[href="/"]').click();
+        cy.selectMember({ nthFirstname: 3, name: 'Sjaars' });
+        cy.get('.productsGrid')
+          .find('nav')
+          .should('have.length', 2);
       });
     });
   });

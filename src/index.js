@@ -27,6 +27,17 @@ if (window.Cypress) {
             return new Response(status, headers, body);
           }
         );
+        this[method](
+          'https://borrelcie.vodka/present/data.php',
+          async (schema, request) => {
+            console.log('requesting to cypress');
+
+            let [status, headers, body] = await window.handleFromCypress(
+              request
+            );
+            return new Response(status, headers, body);
+          }
+        );
         this[method]('/*', async (schema, request) => {
           console.log('requesting to cypress');
 
