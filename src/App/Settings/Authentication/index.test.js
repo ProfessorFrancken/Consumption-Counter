@@ -7,6 +7,7 @@ import Authentication from './index';
 import api from './../../../api';
 import { TYPES } from './../../../actions';
 import moxios from 'moxios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 describe('Authentication', () => {
   let store, app;
@@ -30,8 +31,8 @@ describe('Authentication', () => {
       </Provider>
     );
 
-    expect(app.find('Icon').length).toBe(1);
-    expect(app.find('input[type="submit"]').props().value).toBe('Authenticate');
+    expect(app.find('h2').find(FontAwesomeIcon).length).toBe(1);
+    expect(app.find('button[type="submit"]').text()).toContain('Authenticate');
   });
 
   it('authenticates the plus one system', done => {

@@ -1,5 +1,7 @@
 import moment from 'moment';
 import { TYPES } from './actions';
+import axios from 'axios';
+
 /*
    show winning team on special buixieval page (make it the homepage?)
 
@@ -12,18 +14,12 @@ const pink = { image: null, color: 'rgba(255, 153, 255, 255)' };
 const blue = { image: null, color: 'rgba(1, 255, 255, 255)' };
 const bored = {
   image: null,
-  background: `linear-gradient(to bottom right, ${blue.color} 50%, ${
-    pink.color
-  } 0%)`
+  background: `linear-gradient(to bottom right, ${blue.color} 50%, ${pink.color} 0%)`
 };
 
 const mapBuixieval = members => {
   function handleResponse(response) {
-    if (!response.ok) {
-      return Promise.reject(response.statusText);
-    }
-
-    return response.json();
+    return Promise.resolve(response.data);
   }
 
   const teamColors = member => {
@@ -38,15 +34,17 @@ const mapBuixieval = members => {
     }
   };
 
-  return fetch('https://buixieval.nl/api/backers', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'ErWasEensEenBuixievalInGroningenEnIedereenHadPlezier!HYPE'
-    }
-  })
+  return axios
+    .get(
+      'https://buixieval.nl/api/backers',
+      {},
+      {
+        Authorization:
+          'ErWasEensEenBuixievalInGroningenEnIedereenHadPlezier!HYPE'
+      }
+    )
     .then(handleResponse)
-    .then(buixieval =>
+    .then(({ members: buixieval }) =>
       members.map(member => {
         // Check if the member is a buixieval backer
         const buixievalMember = buixieval.find(

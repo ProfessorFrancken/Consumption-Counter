@@ -41,24 +41,6 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
     }
 
     return 'color-empty';
-    const total = [value.beer, value.soda, value.food].reduce(
-      (sum, value) => sum + value,
-      0
-    );
-
-    if (value.beer >= value.soda && value.beer >= value.food) {
-      return `color-mostly-beer`;
-    }
-
-    if (value.soda >= value.beer && value.soda >= value.food) {
-      return `color-mostly-soda`;
-    }
-
-    if (value.food >= value.soda && value.food >= value.beer) {
-      return `color-mostly-food`;
-    }
-
-    return `color-scale-${value.count}`;
   };
 
   const totalPurchases = statistics.reduce(
@@ -90,14 +72,12 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
       0
     );
 
-    const totalSq = total * total;
-
     const steps = 255;
 
     const normed = [
-      Math.floor(2 * steps * value.beer ** 1 / total),
+      Math.floor((2 * steps * value.beer ** 1) / total),
       Math.floor(
-        steps * value.food ** 1 / total + steps * value.soda ** 1 / total
+        (steps * value.food ** 1) / total + (steps * value.soda ** 1) / total
       ),
       0
     ];
@@ -130,9 +110,9 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
     ];
 
     return `rgba(
-        ${255 * color[0] / steps},
-        ${255 * color[1] / steps},
-        ${255 * color[2] / steps},
+        ${(255 * color[0]) / steps},
+        ${(255 * color[1]) / steps},
+        ${(255 * color[2]) / steps},
         ${Math.min(1, total / averagePurchases)}
         )`;
   };

@@ -18,7 +18,7 @@ import Present from './Present/';
 import Buixieval from './Buixieval/';
 
 import GerrieApp from './Gerjan/App';
-import library from './FontAwesome';
+import './FontAwesome';
 
 const EmptyScreenSaver = () => <h1>Hoi</h1>;
 

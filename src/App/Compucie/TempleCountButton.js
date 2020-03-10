@@ -10,7 +10,7 @@ class TempleCountButton extends Component {
     this.decreaseTempleCount = this.decreaseTempleCount.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.fetchTempleCount();
   }
 

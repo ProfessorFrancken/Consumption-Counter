@@ -63,36 +63,34 @@ const ProductIcon = ({ products }) => {
 };
 
 const Transaction = ({ order }) => (
-  <div className="py-2">
-    <div className="d-flex justify-content-between">
-      <div>
-        <strong>
-          <ProductIcon products={order.products} />
-          {listOfProducts(order.products)} for{' '}
-          <Price
-            products={order.products}
-            price={order.products
-              .map(product => product.price)
-              .reduce((sum, price) => sum + price, 0)}
-          />
-        </strong>{' '}
-        <small>bought by {order.member.fullname}</small>
-      </div>
-      <span className="text-muted text-right">
-        {moment(order.ordered_at).calendar()}
-      </span>
+  <div className="recent-order d-flex justify-content-between">
+    <div>
+      <strong>
+        <ProductIcon products={order.products} />
+        {listOfProducts(order.products)} for{' '}
+        <Price
+          products={order.products}
+          price={order.products
+            .map(product => product.price)
+            .reduce((sum, price) => sum + price, 0)}
+        />
+      </strong>{' '}
+      <small>bought by {order.member.fullname}</small>
     </div>
+    <span className="text-muted text-right">
+      {moment(order.ordered_at).calendar()}
+    </span>
   </div>
 );
 
 const Transactions = ({ transactions }) => {
   return (
     <ul
-      className="list-unstyled"
+      className="list-unstyled recent-orders"
       style={{ columnCount: 2, paddingLeft: 0, fontSize: '0.95em' }}
     >
       {transactions.map((transaction, idx) => (
-        <li key={idx}>
+        <li key={idx} className="py-2">
           <Transaction {...transaction} />
         </li>
       ))}

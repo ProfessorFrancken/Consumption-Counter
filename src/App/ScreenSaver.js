@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-const ScreenSaverTimeout = 30000;
+export const SCREEN_SAVER_TIMEOUT = 30000;
 
 export default class ScreenSaver extends Component {
   state = {
@@ -12,7 +12,7 @@ export default class ScreenSaver extends Component {
     this.screenSaver = this.screenSaver.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.unlisten = this.props.listen(this.screenSaver);
   }
 
@@ -33,11 +33,11 @@ export default class ScreenSaver extends Component {
     if (pathname === '/') {
       screenSaver = setTimeout(
         this.props.goToScreenSaver,
-        2 * ScreenSaverTimeout
+        2 * SCREEN_SAVER_TIMEOUT
       );
     } else {
       if (pathname !== '/statistics') {
-        screenSaver = setTimeout(this.props.goHome, ScreenSaverTimeout);
+        screenSaver = setTimeout(this.props.goHome, SCREEN_SAVER_TIMEOUT);
       }
     }
 

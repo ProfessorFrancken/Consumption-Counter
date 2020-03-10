@@ -2,6 +2,7 @@ import { orderBy, pick } from 'lodash';
 import { push, goBack as goBackRoute } from 'react-router-redux';
 import { setHeader } from './Setup/authHeader';
 import moment from 'moment';
+import axios from 'axios';
 
 export const actions = {
   goBack,
@@ -170,7 +171,10 @@ export function buyOrder(order) {
 export function selectMember(member) {
   return dispatch => {
     function didNotRecentlyOrderAProduct(member) {
-      const latest_purchase_at = member.latest_purchase_at;
+      const latest_purchase_at =
+        typeof member.latest_purchase_at === 'string'
+          ? new Date(member.latest_purchase_at)
+          : member.latest_purchase_at;
 
       if (latest_purchase_at === null) {
         return true;
@@ -230,7 +234,7 @@ export function fetchMembers() {
     };
 
     const mapMembers = lid => ({
-      id: lid.id,
+      id: parseInt(lid.id, 10),
       firstName: lid.voornaam,
       surname: lid.achternaam,
       fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
@@ -282,7 +286,7 @@ export function fetchProducts() {
 
     const mapProducts = product => {
       return {
-        id: product.id,
+        id: parseInt(product.id, 10),
         name: product.naam,
 
         // Note we parse the price and then convert it to fulll cents
@@ -319,7 +323,7 @@ export function fetchBoardMembers() {
 
     const mapBoard = boardMember => {
       return {
-        member_id: boardMember.lid_id,
+        member_id: parseInt(boardMember.lid_id, 10),
         year: boardMember.jaar,
         function: boardMember.functie
       };
@@ -352,11 +356,11 @@ export function fetchCommitteeMembers() {
 
     const mapCommittees = member => {
       return {
-        member_id: member.lid_id,
+        member_id: parseInt(member.lid_id, 10),
         year: member.jaar,
         function: member.functie,
         committee: {
-          id: member.commissie_id,
+          id: parseInt(member.commissie_id, 10),
           name: member.naam
         }
       };
@@ -384,12 +388,16 @@ export function fetchStatistics() {
       type: TYPES.FETCH_STATISTICS_REQUEST
     });
 
+    const startDate = moment()
+      .subtract(2, 'years')
+      .format('YYYY-MM-DD');
+
+    const endDate = moment().format('YYYY-MM-DD');
+
     return api
       .get('/statistics/categories', {
-        startDate: moment()
-          .subtract(2, 'years')
-          .format('YYYY-MM-DD'),
-        endDate: moment().format('YYYY-MM-DD')
+        startDate,
+        endDate
       })
       .then(response => {
         return dispatch({
@@ -422,12 +430,16 @@ export function fetchActivities() {
       type: TYPES.FETCH_ACTIVITIES_REQUEST
     });
 
+    const after = moment()
+      .subtract(2, 'years')
+      .format('YYYY-MM-DD');
+
+    const before = moment().format('YYYY-MM-DD');
+
     return api
       .get('/statistics/activities', {
-        after: moment()
-          .subtract(2, 'years')
-          .format('YYYY-MM-DD'),
-        before: moment().format('YYYY-MM-DD')
+        after,
+        before
       })
       .then(response => {
         return dispatch({
@@ -497,9 +509,8 @@ export function chwazi() {
   return dispatch => {
     // We don't really need to dispatch an action here so we only make the
     // chwazi request
-    return fetch(
-      `https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+    return axios.post(
+      `https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`
     );
   };
 }

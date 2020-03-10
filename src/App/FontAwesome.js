@@ -21,7 +21,10 @@ import {
   faShoppingCart,
   faBeer,
   faUtensils,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faSync,
+  faKey,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -44,7 +47,10 @@ library.add(
   faGulp,
   faBitcoin,
   faMapMarkerAlt,
-  faSlideshare
+  faSlideshare,
+  faSync,
+  faKey,
+  faExclamationTriangle
 );
 
 export default library;

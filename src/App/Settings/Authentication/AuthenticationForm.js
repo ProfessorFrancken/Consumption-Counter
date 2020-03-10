@@ -3,6 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import decode from 'jwt-decode';
 import moment from 'moment';
 
+const Button = ({ children, ...props }) => (
+  <button className="btn btn-secondary mb-2" {...props} type="submit">
+    {children}
+  </button>
+);
+
 const authenticated = token => {
   const decoded = decode(token);
   const expiration = new Date(decoded.exp * 1000);
@@ -28,6 +34,28 @@ const invalidFeedback = error => {
   return error === 'Unauthorized'
     ? 'The given password was incorrect'
     : 'There probably was an unexpected error on the server, call the compucie to solve this.';
+};
+
+const AuthenticateButton = ({ request, token }) => {
+  if (request) {
+    return <Button>Waiting</Button>;
+  }
+
+  if (token) {
+    return (
+      <Button>
+        <FontAwesomeIcon icon="sync" className="mr-1" />
+        Refresh token
+      </Button>
+    );
+  }
+
+  return (
+    <Button>
+      <FontAwesomeIcon icon="key" className="mr-1" />
+      Authenticate
+    </Button>
+  );
 };
 
 const AuthenticationForm = ({
@@ -67,11 +95,7 @@ const AuthenticationForm = ({
             ) : null}
           </div>
         </div>
-        <input
-          type="submit"
-          value={request ? 'Waiting' : token ? 'Refresh token' : 'Authenticate'}
-          className="btn btn-secondary mb-2"
-        />
+        <AuthenticateButton request={request} token={token} />
       </form>
     </div>
   );
