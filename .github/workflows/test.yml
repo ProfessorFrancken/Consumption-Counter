@@ -1,16 +1,21 @@
-test:
-  name: Test
-  runs-on: ubuntu-latest
-  env:
-    NODE_ENV: test
+name: Jest tests
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
 
-  steps:
-  - name: Checkout
-    uses: actions/checkout@v1
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
 
-  - uses: actions/setup-node@v1.1.0
-    with:
-      node-version: '10.x'
+    - uses: actions/setup-node@v1.1.0
+      with:
+        node-version: '10.x'
 
-  - run: npm install
-  - run: npm run test
+    - run: npm install
+    - run: npm run test
