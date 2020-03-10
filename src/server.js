@@ -218,6 +218,20 @@ export function makeServer({ environment = 'development' } = {}) {
 
         board: association(),
         member: association()
+      }),
+      category: Factory.extend({
+        food() {
+          return faker.random.number({ min: 0, max: 200 });
+        },
+        soda() {
+          return faker.random.number({ min: 0, max: 100 });
+        },
+        beer() {
+          return faker.random.number({ min: 0, max: 400 });
+        },
+        date() {
+          return moment(faker.date.recent()).format('YYYY-MM-DD');
+        }
       })
     },
 
@@ -242,6 +256,29 @@ export function makeServer({ environment = 'development' } = {}) {
       server.createList('product', 30);
       server.createList('committeeMember', 100);
       server.createList('boardMember', 100);
+
+      const getDaysArray = function(start, end) {
+        console.log(start, end, start <= end);
+        const days = [];
+        for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
+          days.push(new Date(date));
+        }
+        return days;
+      };
+
+      const days = getDaysArray(
+        moment()
+          .subtract(2, 'years')
+          .toDate(),
+        moment().toDate()
+      ).reverse();
+
+      days.forEach(day => {
+        server.create('category', {
+          date: moment(day).format('YYYY-MM-DD')
+        });
+      });
+      // const startDate = moment();
     },
 
     routes() {
@@ -297,16 +334,11 @@ export function makeServer({ environment = 'development' } = {}) {
         };
       });
 
-      this.get('*/categories', () => ({
-        statistics: [
-          {
-            food: '1',
-            soda: '142',
-            beer: '9',
-            date: '2020-03-10'
-          }
-        ]
-      }));
+      this.get('*/categories', schema => {
+        const { models } = schema.categories.all();
+
+        return { statistics: models };
+      });
 
       this.get('*/activities', () => ({
         activities: [
