@@ -21,6 +21,10 @@ jobs:
     - run: npm test -- --coverage
       env:
         CI: true
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
     - run: npm run build
       env:
         CI: true
