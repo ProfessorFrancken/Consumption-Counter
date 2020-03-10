@@ -62,8 +62,6 @@
     "jest-cli": "24.9.0",
     "jest-enzyme": "^7.1.2",
     "jest-plugin-clock": "^2.7.0",
-    "json-schema-faker": "^0.5.0-rc13",
-    "json-server": "^0.16.1",
     "miragejs": "^0.1.35",
     "redux-devtools": "^3.5.0",
     "redux-mock-store": "^1.5.4"
