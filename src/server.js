@@ -52,7 +52,7 @@ export function makeServer({ environment = 'development' } = {}) {
         },
 
         tussenvoegsel(i) {
-          if (i % 3 == 0) {
+          if (i % 3 === 0) {
             return 'de';
           }
           return '';
@@ -63,7 +63,7 @@ export function makeServer({ environment = 'development' } = {}) {
         },
 
         latest_purchase_at(i) {
-          if (i % 10 == 0) {
+          if (i % 10 === 0) {
             return null;
           }
           return moment(faker.date.recent()).format('YYYY-MM-DD HH:MM:SS');
@@ -98,13 +98,13 @@ export function makeServer({ environment = 'development' } = {}) {
         }),
 
         button_height(i) {
-          if (i == 100) {
+          if (i === 100) {
             return 70;
           }
           return null;
         },
         button_width(i) {
-          if (i == 100) {
+          if (i === 100) {
             return 70;
           }
           return null;
@@ -140,7 +140,7 @@ export function makeServer({ environment = 'development' } = {}) {
         },
         kleur: null,
         splash_afbeelding(i) {
-          if (i % 5 == 0) {
+          if (i % 5 === 0) {
             return 'https://old.professorfrancken.nl/database/streep/afbeeldingen/33hu4fj5sXIkUHnW821p.png';
           }
           return null;
@@ -166,11 +166,9 @@ export function makeServer({ environment = 'development' } = {}) {
         },
         prijs() {
           return faker.commerce.price(0.01, 5.0, 4);
-          return '0.6900';
         },
         naam(i) {
           return faker.commerce.product();
-          return 'Hertog Jan';
         }
       }),
 
@@ -259,7 +257,6 @@ export function makeServer({ environment = 'development' } = {}) {
             { 'content-type': 'application/json' },
             { token }
           );
-          return { token };
         }
         return new Response(401, {}, { error: 'unauthorized' });
       });

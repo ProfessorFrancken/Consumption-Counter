@@ -20,11 +20,6 @@ const bored = {
 const mapBuixieval = members => {
   function handleResponse(response) {
     return Promise.resolve(response.data);
-    if (!response.ok) {
-      return Promise.reject(response.statusText);
-    }
-
-    return response.json();
   }
 
   const teamColors = member => {

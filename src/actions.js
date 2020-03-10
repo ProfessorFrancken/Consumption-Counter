@@ -360,7 +360,7 @@ export function fetchCommitteeMembers() {
         year: member.jaar,
         function: member.functie,
         committee: {
-          id: parseInt(member.commissie_id),
+          id: parseInt(member.commissie_id, 10),
           name: member.naam
         }
       };

@@ -1,13 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import {
-  VictoryLabel,
-  VictoryChart,
-  VictoryStack,
-  VictoryBar,
-  VictoryAxis
-} from 'victory';
+import { VictoryChart, VictoryBar, VictoryAxis } from 'victory';
 
 const PurchasesOfWeek = ({ purchases, today, icon, type }) => {
   return (

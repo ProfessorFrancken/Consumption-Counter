@@ -41,24 +41,6 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
     }
 
     return 'color-empty';
-    const total = [value.beer, value.soda, value.food].reduce(
-      (sum, value) => sum + value,
-      0
-    );
-
-    if (value.beer >= value.soda && value.beer >= value.food) {
-      return `color-mostly-beer`;
-    }
-
-    if (value.soda >= value.beer && value.soda >= value.food) {
-      return `color-mostly-soda`;
-    }
-
-    if (value.food >= value.soda && value.food >= value.beer) {
-      return `color-mostly-food`;
-    }
-
-    return `color-scale-${value.count}`;
   };
 
   const totalPurchases = statistics.reduce(
@@ -89,8 +71,6 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
       (sum, value) => sum + value ** 1,
       0
     );
-
-    const totalSq = total * total;
 
     const steps = 255;
 
