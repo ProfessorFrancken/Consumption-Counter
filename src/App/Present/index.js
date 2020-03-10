@@ -4,7 +4,9 @@ import Members from './../Members/Members';
 import { selectMember } from '../../actions';
 import nedap from './../../assets/nedap-logo.png';
 
-const names = [];
+const names = [
+  { francken_id: '1403', name: 'Mark', buixieval: 'pink', screen: true },
+];
 
 class Present extends Component {
   constructor(props) {
