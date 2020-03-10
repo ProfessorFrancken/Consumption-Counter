@@ -51,6 +51,7 @@
     "prestart-mockapi": "npm run generate-mock-data",
     "generate-mock-data": "node ./generateMockData",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "cypress": "cypress open",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
