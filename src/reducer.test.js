@@ -432,8 +432,7 @@ describe('keeping track of orders', () => {
 describe('menu items', () => {
   it('has a default menu', () => {
     expect(menuItems(undefined, {})).toEqual([
-      { icon: 'home', url: '/', active: true },
-      { icon: 'chart-area', url: '/statistics' },
+      { icon: 'home', url: '/', loading: false },
       { icon: 'clock', url: '/recent' }
     ]);
   });
@@ -445,35 +444,54 @@ describe('menu items', () => {
         members: [{ buixieval: true }]
       })
     ).toEqual([
-      { icon: 'home', url: '/', active: true },
-      { icon: 'chart-area', url: '/statistics' },
+      { icon: 'home', url: '/', loading: false },
       { icon: 'clock', url: '/recent' },
-      { icon: 'bitcoin fab', url: '/buixieval' }
+      { icon: ['fab', 'bitcoin'], url: '/buixieval' }
     ]);
   });
 
   it('adds committees when committees have been loaded', () => {
-    expect(
-      menuItems(undefined, {
-        type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS
-      })
-    ).toEqual([
-      { icon: 'home', url: '/', active: true },
-      { icon: 'chart-area', url: '/statistics' },
+    const menuItemsWhenLoadingCommittees = menuItems(undefined, {
+      type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST
+    });
+    expect(menuItemsWhenLoadingCommittees).toEqual([
+      { icon: 'home', url: '/', loading: false },
       { icon: 'clock', url: '/recent' },
-      { icon: 'users', url: '/committees' }
+      { icon: 'users', url: '/committees', loading: true }
+    ]);
+
+    const menuItemsAfterLoadingCommittees = menuItems(
+      menuItemsWhenLoadingCommittees,
+      {
+        type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS
+      }
+    );
+    expect(menuItemsAfterLoadingCommittees).toEqual([
+      { icon: 'home', url: '/', loading: false },
+      { icon: 'clock', url: '/recent' },
+      { icon: 'users', url: '/committees', loading: false }
     ]);
   });
 
   it('adds prominent when board members have been loaded', () => {
-    expect(
-      menuItems(undefined, {
+    const menuItemsWhenLoadingProminent = menuItems(undefined, {
+      type: TYPES.FETCH_BOARD_MEMBERS_REQUEST
+    });
+    expect(menuItemsWhenLoadingProminent).toEqual([
+      { icon: 'chess-queen', url: '/prominent', loading: true },
+      { icon: 'home', url: '/', loading: false },
+      { icon: 'clock', url: '/recent' }
+    ]);
+
+    const menuItemsAfterLoadingProminent = menuItems(
+      menuItemsWhenLoadingProminent,
+      {
         type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS
-      })
-    ).toEqual([
-      { icon: 'chess-queen', url: '/prominent' },
-      { icon: 'home', url: '/', active: true },
-      { icon: 'chart-area', url: '/statistics' },
+      }
+    );
+    expect(menuItemsAfterLoadingProminent).toEqual([
+      { icon: 'chess-queen', url: '/prominent', loading: false },
+      { icon: 'home', url: '/', loading: false },
       { icon: 'clock', url: '/recent' }
     ]);
   });
@@ -493,7 +511,7 @@ describe('statistics', () => {
     ]);
   });
 
-  fit('records statistics after a product is purchased', () => {
+  it('records statistics after a product is purchased', () => {
     const orderAction = {
       type: 'BUY_ORDER_SUCCESS',
       order: {
