@@ -3,6 +3,7 @@ import { makeServer } from '../../src/server';
 import { TIME_TO_CANCEL } from './../../src/actions';
 import { SCREEN_SAVER_TIMEOUT } from './../../src/App/ScreenSaver';
 import { association } from 'miragejs';
+import moment from 'moment';
 
 const member = {
   firstName: 'Joris',
@@ -446,8 +447,6 @@ describe('PlusOne.js', () => {
         cy.get('.recent-orders')
           .find('.recent-order')
           .then(orders => {
-            cy.log('hier hier hier');
-            cy.log(orders);
             cy.wrap(Cypress.$(orders[0])).should(
               'contain',
               `bought by ${member.fullName}`
@@ -467,6 +466,70 @@ describe('PlusOne.js', () => {
             cy.wrap(Cypress.$(orders[1])).should('contain', 'Ice Tea');
             cy.wrap(Cypress.$(orders[2])).should('contain', 'Hertog Jan');
           });
+      });
+
+      it('Shows the purchases from last week', () => {
+        const thisWeek = [
+          // The previous Sunday isn't displayed
+          new Date(2020, 2, 8),
+
+          // Start at Monday
+          new Date(2020, 2, 9),
+          new Date(2020, 2, 10),
+          new Date(2020, 2, 11),
+          // Up to Thursday
+          new Date(2020, 2, 12)
+        ];
+        thisWeek.forEach((day, idx) => {
+          server.create('category', {
+            date: moment(day).format('YYYY-MM-DD'),
+            beer: 100 * (idx + 1)
+          });
+        });
+        cy.clock(thisWeek[4].getTime(), ['Date']);
+        cy.login();
+
+        cy.get('[href="/statistics"]').click();
+        cy.get('.titleName > span').should('contain', 'Statistics');
+        cy.get(
+          ':nth-child(2) > .p-0 > [style="position: absolute; top: 1em; right: 1em; z-index: 100; text-align: right;"] > .mb-1'
+        ).should('contain', '1400');
+        cy.get(
+          ':nth-child(2) > .p-0 > [style="position: absolute; top: 1em; right: 1em; z-index: 100; text-align: right;"] > .text-uppercase'
+        ).should('contain', '500');
+      });
+
+      it('Shows a heatmap of busy days', () => {
+        const getDaysArray = function(start, end) {
+          const days = [];
+          for (
+            var date = start;
+            date <= end;
+            date.setDate(date.getDate() + 1)
+          ) {
+            days.push(new Date(date));
+          }
+          return days;
+        };
+
+        const days = getDaysArray(
+          moment()
+            .subtract(2, 'years')
+            .toDate(),
+          moment().toDate()
+        ).reverse();
+
+        days.forEach(day => {
+          server.create('category', {
+            date: moment(day).format('YYYY-MM-DD')
+          });
+        });
+        cy.clock(days[0].getTime(), ['Date']);
+
+        cy.login();
+
+        cy.get('[href="/statistics"]').click();
+        cy.get('.titleName > span').should('contain', 'Statistics');
       });
     });
 
