@@ -36,20 +36,12 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
     const activity = activities.find(
       activity => activity.startDate === value.date
     );
-    if (activity) {
-      return 'activity';
-    }
 
-    return 'color-empty';
+    return activity ? 'activity' : 'color-empty';
   };
 
   const totalPurchases = statistics.reduce(
-    (sum, statistic) =>
-      sum +
-      [statistic.beer, statistic.soda, statistic.food].reduce(
-        (sum, value) => sum + value ** 1,
-        0
-      ),
+    (sum, { beer, soda, food }) => sum + beer + soda + food,
     0
   );
   const averagePurchases = totalPurchases / statistics.length;

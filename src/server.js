@@ -258,7 +258,6 @@ export function makeServer({ environment = 'development' } = {}) {
       server.createList('boardMember', 100);
 
       const getDaysArray = function(start, end) {
-        console.log(start, end, start <= end);
         const days = [];
         for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
           days.push(new Date(date));
