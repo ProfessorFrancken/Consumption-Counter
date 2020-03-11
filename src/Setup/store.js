@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
 import rootReducer from './reducers';
@@ -25,15 +25,16 @@ const middleware = [
   buixieval(window.fetch, new Date())
 ];
 
-const composedEnhancers = compose(
-  applyMiddleware(...middleware),
-  ...enhancers
-);
+const composedEnhancers = compose(applyMiddleware(...middleware), ...enhancers);
 
 const persistedState = loadState();
 
 export const create = () => {
-  const store = createStore(rootReducer, persistedState, composedEnhancers);
+  const store = createStore(
+    rootReducer(history),
+    persistedState,
+    composedEnhancers
+  );
   store.subscribe(() => {
     saveState(store.getState());
   });

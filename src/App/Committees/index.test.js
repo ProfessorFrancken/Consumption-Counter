@@ -1,8 +1,10 @@
 import React from 'react';
-import Committees from './index.js';
+import { default as CommitteesContainer } from './index.js';
+import Committees from './Committees.js';
 import configureMockStore from 'redux-mock-store';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { TYPES } from './../../actions';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import clock from 'jest-plugin-clock';
 
@@ -30,12 +32,16 @@ describe('committees', () => {
       ]
     };
     const store = mockStore({ ...state });
-    const committees = shallow(<Committees store={store} />);
+    const committees = mount(
+      <Provider store={store}>
+        <CommitteesContainer store={store} />
+      </Provider>
+    );
 
-    expect(committees.props().committees.length).toBe(1);
-    expect(committees.dive().find('Committee').length).toBe(1);
+    expect(committees.find(Committees).props().committees.length).toBe(1);
+    expect(committees.find(Committees).find('Committee').length).toBe(1);
 
-    let committee = committees.props().committees[0];
+    let committee = committees.find(Committees).props().committees[0];
     expect(committee.members.length).toBe(2);
   });
 
@@ -59,9 +65,13 @@ describe('committees', () => {
       ]
     };
     const store = mockStore({ ...state });
-    const committees = shallow(<Committees store={store} />);
+    const committees = mount(
+      <Provider store={store}>
+        <CommitteesContainer store={store} />
+      </Provider>
+    );
 
-    let committee = committees.props().committees[0];
+    let committee = committees.find(Committees).props().committees[0];
     expect(committee.members.length).toBe(1);
   });
 
@@ -85,9 +95,13 @@ describe('committees', () => {
       ]
     };
     const store = mockStore({ ...state });
-    const committees = shallow(<Committees store={store} />);
+    const committees = mount(
+      <Provider store={store}>
+        <CommitteesContainer store={store} />
+      </Provider>
+    );
 
-    let committee = committees.props().committees[0];
+    let committee = committees.find(Committees).props().committees[0];
     expect(committee.members.length).toBe(1);
   });
 });

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchInitialData } from './../actions';
 import { backgroundSelector, failedOrdersSelector } from './../selectors';
 import { withRouter } from 'react-router-dom';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import ScreenSaver from './ScreenSaver';
 import App from './App';
 
@@ -42,10 +42,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(AppContainer)
+  connect(mapStateToProps, mapDispatchToProps)(AppContainer)
 );
 
 // TODO add lifecycle stuff so that we can load initial data

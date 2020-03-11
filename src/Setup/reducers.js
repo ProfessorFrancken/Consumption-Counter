@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router';
+
 import {
   authentication,
   title,
@@ -18,21 +19,22 @@ import {
   activities
 } from '../reducer.js';
 
-export default combineReducers({
-  authentication,
-  title,
-  members,
-  boardMembers,
-  committeeMembers,
-  surnameRanges,
-  products,
-  transactions,
-  recentBuyers,
-  order,
-  queuedOrder,
-  queuedOrders,
-  menuItems,
-  statistics,
-  activities,
-  router: routerReducer
-});
+export default history =>
+  combineReducers({
+    authentication,
+    title,
+    members,
+    boardMembers,
+    committeeMembers,
+    surnameRanges,
+    products,
+    transactions,
+    recentBuyers,
+    order,
+    queuedOrder,
+    queuedOrders,
+    menuItems,
+    statistics,
+    activities,
+    router: connectRouter(history)
+  });

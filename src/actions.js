@@ -1,5 +1,5 @@
 import { orderBy, pick } from 'lodash';
-import { push, goBack as goBackRoute } from 'react-router-redux';
+import { push, goBack as goBackRoute } from 'connected-react-router';
 import { setHeader } from './Setup/authHeader';
 import moment from 'moment';
 import axios from 'axios';

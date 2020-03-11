@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { actions, TYPES, TIME_TO_CANCEL } from './actions';
 import expect from 'expect'; // You can use any testing library
-import { push, goBack } from 'react-router-redux';
+import { push, goBack } from 'connected-react-router';
 import api from './api';
 import clock from 'jest-plugin-clock';
 import moxios from 'moxios';
