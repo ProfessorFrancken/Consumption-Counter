@@ -1,7 +1,9 @@
 import React from 'react';
 import AvailableProducts from './AvailableProducts.js';
+import Products from './Products.js';
 import configureMockStore from 'redux-mock-store';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 it('renders, and it does not include products that a member is not allowed to buy (due to age distriction)', () => {
@@ -18,10 +20,14 @@ it('renders, and it does not include products that a member is not allowed to bu
     },
     order: { member: { age: 17 }, products: [] }
   });
-  const products = shallow(<AvailableProducts store={store} />);
+  const products = mount(
+    <Provider store={store}>
+      <AvailableProducts store={store} />
+    </Provider>
+  );
 
-  expect(products.props().products.Bier.length).toBe(0);
-  expect(products.props().products.Fris.length).toBe(1);
+  expect(products.find(Products).props().products.Bier.length).toBe(0);
+  expect(products.find(Products).props().products.Fris.length).toBe(1);
 });
 
 it('shows the amount of products that are currently being orderd', () => {
@@ -53,12 +59,18 @@ it('shows the amount of products that are currently being orderd', () => {
     }
   });
 
-  const products = shallow(<AvailableProducts store={store} />);
+  const products = mount(
+    <Provider store={store}>
+      <AvailableProducts store={store} />
+    </Provider>
+  );
 
   const hertog = products
+    .find(Products)
     .props()
     .products.Bier.find(product => product.id === 1);
   const iceTea = products
+    .find(Products)
     .props()
     .products.Fris.find(product => product.id === 2);
 

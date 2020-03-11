@@ -1,9 +1,11 @@
 import React from 'react';
-import Prominent from './index.js';
+import { default as ProminentContainer } from './index.js';
+import Prominent from './Prominent.js';
 import configureMockStore from 'redux-mock-store';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { TYPES } from './../../actions';
 import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 import clock from 'jest-plugin-clock';
 
 describe('prominent', () => {
@@ -18,13 +20,15 @@ describe('prominent', () => {
           id: 1,
           firstName: 'John',
           surname: 'Snow',
-          latest_purchase_at: new Date('2017-12-01')
+          latest_purchase_at: new Date('2017-12-01'),
+          cosmetics: { button: {} }
         },
         {
           id: 2,
           firstName: 'John',
           surname: 'Snow',
-          latest_purchase_at: new Date('2017-12-01')
+          latest_purchase_at: new Date('2017-12-01'),
+          cosmetics: { button: {} }
         }
       ],
       boardMembers: [
@@ -33,9 +37,13 @@ describe('prominent', () => {
       ]
     };
     const store = mockStore({ ...state });
-    const prominent = shallow(<Prominent store={store} />);
+    const prominent = mount(
+      <Provider store={store}>
+        <ProminentContainer store={store} />
+      </Provider>
+    );
 
-    expect(prominent.props().boards[0].length).toBe(2);
+    expect(prominent.find(Prominent).props().boards[0].length).toBe(2);
   });
 
   it("it ignores members that aren't in the system", () => {
@@ -47,7 +55,8 @@ describe('prominent', () => {
           id: 1,
           firstName: 'John',
           surname: 'Snow',
-          latest_purchase_at: new Date('2017-12-01')
+          latest_purchase_at: new Date('2017-12-01'),
+          cosmetics: { button: {} }
         }
       ],
       boardMembers: [
@@ -56,9 +65,13 @@ describe('prominent', () => {
       ]
     };
     const store = mockStore({ ...state });
-    const prominent = shallow(<Prominent store={store} />);
+    const prominent = mount(
+      <Provider store={store}>
+        <ProminentContainer store={store} />
+      </Provider>
+    );
 
-    expect(prominent.props().boards[0].length).toBe(1);
+    expect(prominent.find(Prominent).props().boards[0].length).toBe(1);
   });
 
   it('Only shows prominent members if they bought a product recently', () => {
@@ -71,14 +84,16 @@ describe('prominent', () => {
           firstName: 'John',
           surname: 'Snow',
           latest_purchase_at: new Date('2017-12-01'),
-          prominent: 999
+          prominent: 999,
+          cosmetics: { button: {} }
         },
         {
           id: 2,
           firstName: 'Arya',
           surname: 'Snow',
           latest_purchase_at: new Date('2016-12-01'),
-          prominent: 999
+          prominent: 999,
+          cosmetics: { button: {} }
         }
       ],
       boardMembers: [
@@ -91,8 +106,12 @@ describe('prominent', () => {
       ]
     };
     const store = mockStore({ ...state });
-    const prominent = shallow(<Prominent store={store} />);
+    const prominent = mount(
+      <Provider store={store}>
+        <ProminentContainer store={store} />
+      </Provider>
+    );
 
-    expect(prominent.props().prominent.length).toBe(1);
+    expect(prominent.find(Prominent).props().prominent.length).toBe(1);
   });
 });

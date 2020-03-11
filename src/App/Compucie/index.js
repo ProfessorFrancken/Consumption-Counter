@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { selectMember, chwazi } from '../../actions';
 import { compucieSelector } from './../../selectors';
 import Compucie from './Compucie';

@@ -4,7 +4,7 @@ import configureMockStore from 'redux-mock-store';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import { TYPES } from './../actions';
-import { push, goBack } from 'react-router-redux';
+import { push, goBack } from 'connected-react-router';
 import thunk from 'redux-thunk';
 
 describe('<GoBack />', () => {
