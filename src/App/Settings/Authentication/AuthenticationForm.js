@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import decode from 'jwt-decode';
 import moment from 'moment';
+import { useForm } from 'react-hook-form';
 
 const Button = ({ children, ...props }) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
@@ -58,14 +59,14 @@ const AuthenticateButton = ({ request, token }) => {
   );
 };
 
-const AuthenticationForm = ({
-  changePassword,
-  submit,
-  password,
-  token,
-  request,
-  error
-}) => {
+const AuthenticationForm = props => {
+  const { handleSubmit, register, errors } = useForm();
+  const { authenticate, token, request, error } = props;
+
+  const onSubmit = handleSubmit(({ password }) => {
+    authenticate(password);
+  });
+
   return (
     <div className="mb-5 p-3 bg-light">
       <h2 className="h4 font-weight-normal">
@@ -80,16 +81,24 @@ const AuthenticationForm = ({
         If you don't know the passphrase you should shout "Compucie!" or
         something similar.
       </p>
-      <form onSubmit={submit}>
+      <form onSubmit={onSubmit}>
         <div className="row">
           <div className="form-group col-lg-5 col-md-8 col-sm-10 col-12">
             <input
               type="password"
-              value={password}
-              onChange={changePassword}
-              className={error ? 'form-control is-invalid' : 'form-control'}
+              name="password"
               placeholder="Passphrase"
+              className={error ? 'form-control is-invalid' : 'form-control'}
+              ref={register({
+                required: 'Required',
+                minLength: {
+                  value: 6,
+                  message: "That's not a good passphrase"
+                }
+              })}
             />
+            {errors.password && errors.password.message}
+
             {error ? (
               <p className="invalid-feedback">{invalidFeedback(error)}</p>
             ) : null}
