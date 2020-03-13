@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { makeServer } from '../../src/server';
+import { makeServer } from '../../src/server/';
 import { TIME_TO_CANCEL } from './../../src/actions';
 import { SCREEN_SAVER_TIMEOUT } from './../../src/App/ScreenSaver';
 import { association } from 'miragejs';
