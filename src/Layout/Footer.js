@@ -3,20 +3,29 @@ import BuyAll from './../App/BuyAll';
 import GoBack from './../App/GoBack';
 import CancelOrder from './../App/CancelOrder';
 import Sponsors from './../App/Sponsors';
+import styled from 'styled-components';
+
+const FooterActions = styled.div`
+  display: flex;
+`;
+
+const FooterContainer = styled.div`
+  padding-left: 110px;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--sidebar-primary);
+  line-height: var(--footerSize);
+`;
 
 const Footer = () => (
-  <div
-    className="footer d-flex justify-content-between"
-    style={{ paddingLeft: '110px' }}
-  >
+  <FooterContainer className="footer">
     <Sponsors />
-    <div className="flex-grow-2 d-flex">
-      {/* <img src={Demcon} className="h-100 py-4 img-fluid" /> */}
+    <FooterActions>
       <CancelOrder />
       <BuyAll />
       <GoBack />
-    </div>
-  </div>
+    </FooterActions>
+  </FooterContainer>
 );
 
 export default Footer;

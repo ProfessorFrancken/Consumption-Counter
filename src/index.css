@@ -229,12 +229,8 @@ button {
 }
 
 .footer {
-  background-color: var(--sidebar-primary);
-  line-height: var(--footerSize);
   grid-row: footer / footer-end;
   grid-column: content;
-  display: flex;
-  justify-content: flex-end;
 }
 
 .footer .button {
