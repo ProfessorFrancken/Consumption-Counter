@@ -8,6 +8,8 @@ import api from './../../../api';
 import { TYPES } from './../../../actions';
 import moxios from 'moxios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { render, fireEvent, waitForElement } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 
 describe('Authentication', () => {
   let store, app;
@@ -35,7 +37,7 @@ describe('Authentication', () => {
     expect(app.find('button[type="submit"]').text()).toContain('Authenticate');
   });
 
-  it('authenticates the plus one system', done => {
+  it('authenticates the plus one system', async done => {
     const store = mockStore({
       authentication: { token: null, request: false }
     });
@@ -47,26 +49,30 @@ describe('Authentication', () => {
       headers: { 'content-type': 'application/json' }
     });
 
-    app = mount(
+    const { getByText, getByPlaceholderText } = render(
       <Provider store={store}>
         <Authentication />
       </Provider>
     );
 
-    app
-      .find('input[type="password"]')
-      .simulate('change', { target: { value: 'hoi' } });
+    fireEvent.change(getByPlaceholderText('Passphrase'), {
+      target: { value: 'some long passphrase' }
+    });
+    fireEvent.submit(getByText('Authenticate'));
 
-    app.find('form').simulate('submit');
-
-    flushAllPromises()
-      .then(() => {
-        expect(store.getActions()).toEqual([
-          { type: TYPES.AUTHENTICATE_REQUEST, password: 'hoi' },
-          { type: TYPES.AUTHENTICATE_SUCCESS, token }
-        ]);
-        done();
-      })
-      .catch(e => done.fail(e));
+    await act(async () => {
+      await flushAllPromises()
+        .then(() => {
+          expect(store.getActions()).toEqual([
+            {
+              type: TYPES.AUTHENTICATE_REQUEST,
+              password: 'some long passphrase'
+            },
+            { type: TYPES.AUTHENTICATE_SUCCESS, token }
+          ]);
+          done();
+        })
+        .catch(e => done.fail(e));
+    });
   });
 });
