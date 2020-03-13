@@ -126,6 +126,7 @@ describe('PlusOne.js', () => {
     });
 
     it('Allows buying multiple products at once', () => {
+      cy.clock();
       cy.get('.tilesGrid > :nth-child(1)').click();
       cy.get('.tilesGrid').should('contain', member.fullName);
       cy.get('.tilesGrid > :nth-child(1)').click();
@@ -134,7 +135,8 @@ describe('PlusOne.js', () => {
       cy.get('.productsGrid > :nth-child(2) > :nth-child(1)')
         .should('contain', 'Ice Tea')
         .trigger('mousedown');
-      cy.wait(1000);
+
+      cy.tick(1000);
       cy.get('.productsGrid > :nth-child(2) > :nth-child(1)')
         .should('contain', '1')
         .click()
@@ -146,6 +148,13 @@ describe('PlusOne.js', () => {
         .should('contain', '1');
 
       cy.get('.buyAllButton').should('contain', 'Buy it all!');
+
+      cy.get('.buyAllButton').click();
+
+      cy.get('.cancelButton').should(
+        'contain',
+        'Cancel buying multiple products'
+      );
     });
 
     it('Shows a warning when selecting an inactive member', () => {
