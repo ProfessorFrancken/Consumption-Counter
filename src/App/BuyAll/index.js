@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation } from 'react-router-dom';
 
 const BuyAll = ({ buyAll, products = [] }) => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  if (location.pathname !== '/products') {
+  if (pathname !== '/products') {
     return null;
   }
 

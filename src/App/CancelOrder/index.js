@@ -8,8 +8,12 @@ import Price from './../Price';
 const products = order =>
   order.products.length === 1 ? order.products[0].name : 'multiple products';
 
-const CancelOrder = ({ onClick, queuedOrder }) =>
-  queuedOrder === null ? null : (
+const CancelOrder = ({ onClick, queuedOrder }) => {
+  if (queuedOrder === null) {
+    return null;
+  }
+
+  return (
     <button
       className="button cancelButton"
       onClick={() => onClick(queuedOrder)}
@@ -21,6 +25,7 @@ const CancelOrder = ({ onClick, queuedOrder }) =>
       </span>
     </button>
   );
+};
 
 const mapDispatchToProps = dispatch => ({
   onClick: order => dispatch(cancelOrder(order.order))

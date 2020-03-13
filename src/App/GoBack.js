@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { goBack } from './../actions';
 import { goBackText } from './../selectors';
-import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLocation } from 'react-router-dom';
 
-const GoBack = ({ text, location, onClick }) => {
-  if (text === 'Go back' && location.pathname === '/') {
+const GoBack = ({ text, onClick }) => {
+  const { pathname } = useLocation();
+
+  if (text === 'Go back' && pathname === '/') {
     return null;
   }
 
@@ -28,4 +30,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GoBack));
+export default connect(mapStateToProps, mapDispatchToProps)(GoBack);
