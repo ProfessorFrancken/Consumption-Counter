@@ -112,10 +112,16 @@ describe('PlusOne.js', () => {
         'Ice Tea'
       );
 
-      cy.get('.header > :nth-child(2) > a').click();
+      cy.contains('Show prices').click();
       cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
         'contain',
         '0.61'
+      );
+
+      cy.contains('Buy products').click();
+      cy.get('.productsGrid > :nth-child(2) > :nth-child(1)').should(
+        'contain',
+        'Ice Tea'
       );
     });
 
