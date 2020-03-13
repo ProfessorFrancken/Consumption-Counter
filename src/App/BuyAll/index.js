@@ -1,12 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { buyAll } from '../../actions';
 import Price from './../Price';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLocation } from 'react-router-dom';
 
-const BuyAll = ({ buyAll, products = [], location }) =>
-  location.pathname !== '/products' || products.length === 0 ? null : (
+const BuyAll = ({ buyAll, products = [] }) => {
+  const location = useLocation();
+
+  if (location.pathname !== '/products') {
+    return null;
+  }
+
+  if (products.length === 0) {
+    return null;
+  }
+
+  return (
     <button className="button buyAllButton" onClick={buyAll}>
       <FontAwesomeIcon icon={'check-circle'} size="lg" />
       <span style={{ marginLeft: '.5em' }}>
@@ -14,6 +24,7 @@ const BuyAll = ({ buyAll, products = [], location }) =>
       </span>
     </button>
   );
+};
 
 const mapStateToProps = ({ order }) => ({
   products: order.products
@@ -23,4 +34,4 @@ const mapDispatchToProps = dispatch => ({
   buyAll: () => dispatch(buyAll())
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BuyAll));
+export default connect(mapStateToProps, mapDispatchToProps)(BuyAll);
