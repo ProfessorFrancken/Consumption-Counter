@@ -679,7 +679,7 @@ describe('PlusOne.js', () => {
   });
 });
 
-describe.skip('Reloading the application', () => {
+describe('Reloading the application', () => {
   it('Reloads members when refreshing', () => {
     cy.visit('/compucie');
     cy.get('.compucie-buttons')

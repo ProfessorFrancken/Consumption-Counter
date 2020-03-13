@@ -10,6 +10,7 @@ const Compucie = ({
   scriptcie,
   selectMember,
   toSettings,
+  reloadApplication,
   decreaseTempleCount
 }) => (
   <div className="d-flex flex-column justify-content-stretch h-100">
@@ -32,7 +33,7 @@ const Compucie = ({
           latest_purchase_at: new Date(),
           cosmetics: {}
         }}
-        onClick={() => window.location.reload()}
+        onClick={() => reloadApplication()}
       />
 
       <Member
