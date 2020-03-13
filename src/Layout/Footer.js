@@ -1,8 +1,8 @@
 import React from 'react';
-import BuyAll from './BuyAll';
-import GoBack from './GoBack';
-import CancelOrder from './CancelOrder';
-import Sponsors from './Sponsors';
+import BuyAll from './../App/BuyAll';
+import GoBack from './../App/GoBack';
+import CancelOrder from './../App/CancelOrder';
+import Sponsors from './../App/Sponsors';
 
 const Footer = () => (
   <div

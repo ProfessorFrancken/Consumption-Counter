@@ -1,28 +1,28 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
+const HeaderTitle = ({ title }) => (
+  <div className="titleName header-item">
+    <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
+    <Route exact path="/settings" render={() => <span>Settings</span>} />
+    <Route exact path="/prominent" render={() => <span>Prominent</span>} />
+    <Route exact path="/recent" render={() => <span>Recent</span>} />
+    <Route exact path="/committees" render={() => <span>Committees</span>} />
+    <Route exact path="/statistics" render={() => <span>Statistics</span>} />
+    <Route exact path="/screensaver" render={() => <span>Screensaver</span>} />
+    <Route
+      exact
+      path="/committees/:page(\d+)"
+      render={() => <span>{title}</span>}
+    />
+    <Route exact path="/products" render={() => <span>{title}</span>} />
+    <Route exact path="/present" render={() => <span>Present</span>} />
+  </div>
+);
+
 const Header = ({ title, onClick, failedOrders }) => (
   <div className="header">
-    <div className="titleName header-item">
-      <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
-      <Route exact path="/settings" render={() => <span>Settings</span>} />
-      <Route exact path="/prominent" render={() => <span>Prominent</span>} />
-      <Route exact path="/recent" render={() => <span>Recent</span>} />
-      <Route exact path="/committees" render={() => <span>Committees</span>} />
-      <Route exact path="/statistics" render={() => <span>Statistics</span>} />
-      <Route
-        exact
-        path="/screensaver"
-        render={() => <span>Screensaver</span>}
-      />
-      <Route
-        exact
-        path="/committees/:page(\d+)"
-        render={() => <span>{title}</span>}
-      />
-      <Route exact path="/products" render={() => <span>{title}</span>} />
-      <Route exact path="/present" render={() => <span>Present</span>} />
-    </div>
+    <HeaderTitle title={title} />
     <div className="header-item">
       <Route
         exact
