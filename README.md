@@ -1,7 +1,7 @@
 # Plus One System
 
-![Jest tests](https://github.com/professorfrancken/plus-one/workflows/Jest%20tests/badge.svg)
-![End-to-end tests](https://github.com/professorfrancken/plus-one/workflows/End-to-end%20tests/badge.svg)
+[![Jest tests](https://github.com/professorfrancken/plus-one/workflows/Jest%20tests/badge.svg)](https://github.com/ProfessorFrancken/plus-one/actions?query=workflow%3A%22Jest+tests%22)
+[![End-to-end tests](https://github.com/professorfrancken/plus-one/workflows/End-to-end%20tests/badge.svg)](https://github.com/ProfessorFrancken/plus-one/actions?query=workflow%3A%22End-to-end+tests%22)
 [![Coverage Status](https://coveralls.io/repos/github/ProfessorFrancken/plus-one/badge.svg?branch=master)](https://coveralls.io/github/ProfessorFrancken/plus-one?branch=master)
 
 # Introduction
