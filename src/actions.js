@@ -500,6 +500,7 @@ export function authenticate(password) {
           type: TYPES.AUTHENTICATE_SUCCESS,
           token: response.token
         });
+        dispatch(fetchInitialData());
       })
       .catch(ex => dispatch({ type: TYPES.AUTHENTICATE_FAILURE, error: ex }));
   };

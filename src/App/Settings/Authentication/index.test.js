@@ -68,7 +68,13 @@ describe('Authentication', () => {
               type: TYPES.AUTHENTICATE_REQUEST,
               password: 'some long passphrase'
             },
-            { type: TYPES.AUTHENTICATE_SUCCESS, token }
+            { type: TYPES.AUTHENTICATE_SUCCESS, token },
+            { type: TYPES.FETCH_MEMBERS_REQUEST },
+            { type: TYPES.FETCH_PRODUCTS_REQUEST },
+            { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
+            { type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST },
+            { type: TYPES.FETCH_STATISTICS_REQUEST },
+            { type: TYPES.FETCH_ACTIVITIES_REQUEST }
           ]);
           done();
         })
