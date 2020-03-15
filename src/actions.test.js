@@ -51,6 +51,7 @@ describe('Fetching initial data', () => {
 
     const expectedActions = [
       { type: TYPES.LOAD_APPLICATION_REQUEST },
+      push('/loading'),
       { type: TYPES.FETCH_MEMBERS_REQUEST },
       { type: TYPES.FETCH_PRODUCTS_REQUEST },
       { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
@@ -63,8 +64,7 @@ describe('Fetching initial data', () => {
       { type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: [] },
       { type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: [] },
       { type: TYPES.FETCH_ACTIVITIES_SUCCESS, activities: [] },
-      { type: TYPES.LOAD_APPLICATION_SUCCESS },
-      push('/')
+      { type: TYPES.LOAD_APPLICATION_SUCCESS }
     ];
 
     const store = mockStore({ members: [] });
