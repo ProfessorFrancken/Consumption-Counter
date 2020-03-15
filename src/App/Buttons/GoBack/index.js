@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { goBack } from './../actions';
-import { goBackText } from './../selectors';
+import { goBack } from 'actions';
+import { goBackText } from 'selectors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation } from 'react-router-dom';
 

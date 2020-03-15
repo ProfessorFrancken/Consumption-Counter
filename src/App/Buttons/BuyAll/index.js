@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { buyAll } from '../../actions';
-import Price from './../Price';
+import { buyAll } from 'actions';
+import Price from 'App/Price';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation } from 'react-router-dom';
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import CancelOrder from './index';
+import CancelOrder from '.';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';
-import { TYPES } from './../../actions';
+import { TYPES } from 'actions';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 

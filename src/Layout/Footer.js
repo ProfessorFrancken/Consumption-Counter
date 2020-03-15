@@ -1,7 +1,7 @@
 import React from 'react';
-import BuyAll from './../App/BuyAll';
-import GoBack from './../App/GoBack';
-import CancelOrder from './../App/CancelOrder';
+import BuyAll from './../App/Buttons/BuyAll';
+import GoBack from './../App/Buttons/GoBack';
+import CancelOrder from './../App/Buttons/CancelOrder';
 import Sponsors from './../App/Sponsors';
 import styled from 'styled-components';
 
