@@ -61,6 +61,9 @@ describe('PlusOne.js', () => {
   });
   describe('Striping soda & food', () => {
     it('Allows striping soda', () => {
+      cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
+
       cy.get('.tilesGrid > :nth-child(1)').click();
       cy.get('.tilesGrid').should('contain', member.fullName);
       cy.get('.tilesGrid > :nth-child(1)').click();
@@ -79,6 +82,9 @@ describe('PlusOne.js', () => {
     });
 
     it('Buying two products using the back button', () => {
+      cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
+
       cy.get('.tilesGrid > :nth-child(1)').click();
       cy.get('.tilesGrid').should('contain', member.fullName);
       cy.get('.tilesGrid > :nth-child(1)').click();
@@ -102,6 +108,9 @@ describe('PlusOne.js', () => {
     });
 
     it('Showing prices of products', () => {
+      cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
+
       cy.get('.tilesGrid > :nth-child(1)').click();
       cy.get('.tilesGrid').should('contain', member.fullName);
       cy.get('.tilesGrid > :nth-child(1)').click();
@@ -127,6 +136,9 @@ describe('PlusOne.js', () => {
 
     it('Allows buying multiple products at once', () => {
       cy.clock();
+      cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
+
       cy.get('.tilesGrid > :nth-child(1)').click();
       cy.get('.tilesGrid').should('contain', member.fullName);
       cy.get('.tilesGrid > :nth-child(1)').click();
@@ -165,6 +177,9 @@ describe('PlusOne.js', () => {
       stub.onFirstCall().returns(false);
       cy.on('window:confirm', stub);
 
+      cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
+
       cy.get(`.tilesGrid > :nth-child(1)`).click();
       cy.get(`.tilesGrid > :nth-child(1)`)
         .click()
@@ -183,6 +198,9 @@ describe('PlusOne.js', () => {
       const stub = cy.stub();
       stub.onFirstCall().returns(true);
       cy.on('window:confirm', stub);
+
+      cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
 
       cy.get(`.tilesGrid > :nth-child(1)`).click();
       cy.get(`.tilesGrid > :nth-child(1)`)
@@ -213,7 +231,7 @@ describe('PlusOne.js', () => {
           bijnaam: ''
         })
       });
-      cy.login();
+      cy.refreshApp();
 
       cy.get('[href="/prominent"]').click();
       cy.get('.boardsRow > :nth-child(1) > :nth-child(1)')
@@ -257,7 +275,7 @@ describe('PlusOne.js', () => {
       server.createList('boardMember', 5, {
         board: association({ year: 2016 })
       });
-      cy.login();
+      cy.refreshApp();
 
       cy.get('[href="/prominent"]').click();
       cy.get('.prominentRow > .tile').should('contain', 'Tom Bosma');
@@ -325,7 +343,7 @@ describe('PlusOne.js', () => {
         }),
         year: 2020
       });
-      cy.login();
+      cy.refreshApp();
 
       cy.get('[href="/committees"]').click();
       cy.get('.titleName > span').should('contain', 'Committees');
@@ -359,7 +377,7 @@ describe('PlusOne.js', () => {
         }),
         year: 2020
       });
-      cy.login();
+      cy.refreshApp();
     });
 
     it('Shows all previous compucie members', () => {
@@ -474,7 +492,7 @@ describe('PlusOne.js', () => {
         });
       });
       cy.clock(thisWeek[4].getTime(), ['Date']);
-      cy.login();
+      cy.refreshApp();
 
       cy.get('[href="/statistics"]').click();
       cy.get('.titleName > span').should('contain', 'Statistics');
@@ -509,7 +527,7 @@ describe('PlusOne.js', () => {
       });
       cy.clock(days[0].getTime(), ['Date']);
 
-      cy.login();
+      cy.refreshApp();
 
       cy.get('[href="/statistics"]').click();
       cy.get('.titleName > span').should('contain', 'Statistics');
@@ -539,7 +557,7 @@ describe('PlusOne.js', () => {
         splash_afbeelding:
           'https://old.professorfrancken.nl/database/streep/afbeeldingen/ECDOccDsQVmRRRpyBnN1.jpeg'
       });
-      cy.login();
+      cy.refreshApp();
 
       cy.selectMember({ name: member.fullName });
 
@@ -564,7 +582,7 @@ describe('PlusOne.js', () => {
         button_width: 70,
         button_height: 40
       });
-      cy.login();
+      cy.refreshApp();
 
       cy.get(`.tilesGrid > :nth-child(1)`).click();
       cy.get('.tilesGrid').should('contain', 'Nina');
@@ -587,7 +605,7 @@ describe('PlusOne.js', () => {
             'https://old.professorfrancken.nl/database/streep/afbeeldingen/nc1J3sNtthqGkeQy0tDf.jpeg'
         })
       });
-      cy.login();
+      cy.refreshApp();
 
       cy.get('[href="/prominent"]').click();
       const jeanne = cy.get('.boardsRow > :nth-child(1) > :nth-child(1)');
@@ -604,7 +622,7 @@ describe('PlusOne.js', () => {
         categorie: 'Fris',
         naam: 'Goede morgen!'
       });
-      cy.login();
+      cy.refreshApp();
 
       const after12 = new Date(2020, 2, 2, 13).getTime();
       cy.clock(after12, ['Date']);
@@ -619,6 +637,8 @@ describe('PlusOne.js', () => {
   describe('Sponsor opportunities', () => {
     it('Shows logos of companies sponsoring the system', () => {
       cy.visit('/');
+      cy.get('.tilesGrid').should('not.be.empty');
+
       cy.get('.company-logos')
         .find('img')
         .should('have.length', 3);
@@ -676,7 +696,7 @@ describe('PlusOne.js', () => {
         bijnaam: 'Sjaars',
         geboortedatum: '2003-01-01'
       });
-      cy.login();
+      cy.refreshApp();
 
       // Normally we should be able to see beer
       cy.selectMember({ name: member.fullName });
