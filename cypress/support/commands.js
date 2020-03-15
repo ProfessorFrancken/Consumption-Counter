@@ -40,6 +40,9 @@ Cypress.Commands.add('login', (email, password) => {
 Cypress.Commands.add(
   'selectMember',
   ({ nthSurname = 1, nthFirstname = 1, name = 'Joris Admiraal' } = {}) => {
+    cy.location('pathname').should('eq', '/');
+    cy.get('.tilesGrid').should('not.be.empty');
+
     cy.get(`.tilesGrid > :nth-child(${nthSurname})`).click();
     cy.get('.tilesGrid').should('contain', name);
     cy.get(`.tilesGrid > :nth-child(${nthFirstname})`).click();
@@ -60,7 +63,8 @@ Cypress.Commands.add('buyIceTea', ({ product = 'Ice Tea' } = {}) => {
 
 Cypress.Commands.add('refreshApp', () => {
   cy.visit('/compucie');
-  cy.get('.compucie-buttons')
+
+  cy.get('.compucie-buttons > :nth-child(1)')
     .should('contain', 'Refresh')
     .click();
 
