@@ -466,7 +466,7 @@ export function fetchActivities() {
 
 export function fetchInitialData() {
   return dispatch => {
-    Promise.all([
+    return Promise.all([
       dispatch({ type: TYPES.LOAD_APPLICATION_REQUEST }),
       dispatch(push(`/loading`)),
       dispatch(fetchMembers()),
@@ -477,7 +477,7 @@ export function fetchInitialData() {
       dispatch(fetchActivities())
     ])
       .then(() => {
-        dispatch({ type: TYPES.LOAD_APPLICATION_SUCCESS });
+        return dispatch({ type: TYPES.LOAD_APPLICATION_SUCCESS });
         // dispatch(push(`/`));
       })
       .catch(ex => dispatch({ type: TYPES.LOAD_APPLICATION_FAILURE, ex }));

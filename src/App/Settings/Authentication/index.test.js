@@ -8,8 +8,9 @@ import api from './../../../api';
 import { TYPES } from './../../../actions';
 import moxios from 'moxios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { render, fireEvent, waitForElement } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
+import { push } from 'connected-react-router';
 
 describe('Authentication', () => {
   let store, app;
@@ -70,6 +71,7 @@ describe('Authentication', () => {
             },
             { type: TYPES.AUTHENTICATE_SUCCESS, token },
             { type: TYPES.LOAD_APPLICATION_REQUEST },
+            push('/loading'),
             { type: TYPES.FETCH_MEMBERS_REQUEST },
             { type: TYPES.FETCH_PRODUCTS_REQUEST },
             { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },
