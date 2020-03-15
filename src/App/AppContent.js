@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import SurnameRanges from './/SurnameRanges/SurnameRangeSelection';
+import SurnameRanges from 'App/SurnameRanges';
 import Members from './/Members/MemberSelection';
 import AvailableProducts from './/Products/AvailableProducts';
 import PriceList from 'App/Products/PriceList/';
