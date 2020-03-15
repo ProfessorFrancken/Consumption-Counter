@@ -1,5 +1,5 @@
 import React from 'react';
-import AvailableProducts from './AvailableProducts.js';
+import AvailableProducts from './index.js';
 import Products from './Products.js';
 import configureMockStore from 'redux-mock-store';
 import { mount } from 'enzyme';

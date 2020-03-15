@@ -5,7 +5,7 @@ import { mount } from 'enzyme';
 import { menuItems } from './../reducer';
 import App from './App';
 import configureMockStore from 'redux-mock-store';
-import AvailableProducts from './Products/AvailableProducts';
+import AvailableProducts from './Products/';
 import Prominent from './Prominent';
 import RecentMembers from './Recent';
 
