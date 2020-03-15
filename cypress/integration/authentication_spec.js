@@ -49,6 +49,7 @@ describe('Authentication', () => {
     cy.location('pathname').should('eq', '/loading');
     cy.get('.tile').should('contain', 'Open application');
     cy.get('.tile').click();
+    cy.location('pathname').should('eq', '/');
     cy.get('.tilesGrid').should('contain', member.lastName);
 
     cy.visit('/settings');

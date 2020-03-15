@@ -33,7 +33,7 @@ Cypress.Commands.add('login', (email, password) => {
         'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODM0MjQzMTAsImV4cCI6MTYxNDk2MDMxMCwicGx1cy1vbmUiOnRydWV9.fg_63iOQ64E3lrfhQaw0gSOAWtmviqWhpYl72ME_7sE'
     })
   );
-  cy.visit('/');
+  cy.refreshApp();
   cy.get('.tilesGrid').should('not.be.empty');
 });
 
@@ -67,6 +67,10 @@ Cypress.Commands.add('refreshApp', () => {
   cy.get('.compucie-buttons > :nth-child(1)')
     .should('contain', 'Refresh')
     .click();
+
+  cy.location('pathname').should('eq', '/loading');
+  cy.get('.tile').should('contain', 'Open application');
+  cy.get('.tile').click();
 
   cy.visit('/');
   cy.get('.tilesGrid').should('not.be.empty');

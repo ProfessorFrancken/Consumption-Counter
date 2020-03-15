@@ -8,10 +8,6 @@ import ScreenSaver from './ScreenSaver';
 import App from './App';
 
 class AppContainer extends Component {
-  UNSAFE_componentWillMount() {
-    this.props.fetchData();
-  }
-
   render() {
     return (
       <>
