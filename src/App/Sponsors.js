@@ -1,7 +1,7 @@
 import React from 'react';
-import Demcon from './../assets/sponsors/DEMCON-gray.png';
-import Thales from './../assets/sponsors/Thales-gray.png';
-import ASML from './../assets/sponsors/ASML.png';
+import Demcon from 'assets/sponsors/DEMCON-gray.png';
+import Thales from 'assets/sponsors/Thales-gray.png';
+import ASML from 'assets/sponsors/ASML.png';
 
 const Sponsors = () => (
   <ul className="company-logos list-unstyled my-0 flex-grow-0 d-flex">
