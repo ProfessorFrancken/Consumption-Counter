@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { cancelOrder } from './../../actions';
-import { queuedOrderSelector } from './../../selectors';
+import { cancelOrder } from 'actions';
+import { queuedOrderSelector } from 'selectors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Price from './../Price';
+import Price from 'App/Price';
 
 const products = order =>
   order.products.length === 1 ? order.products[0].name : 'multiple products';
