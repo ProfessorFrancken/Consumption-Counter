@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import SurnameRanges from 'App/SurnameRanges';
 import Members from './/Members/MemberSelection';
-import AvailableProducts from './/Products/AvailableProducts';
+import AvailableProducts from 'App/Products/';
 import PriceList from 'App/Products/PriceList/';
 import Prominent from './Prominent/';
 import Committees from './Committees/';
