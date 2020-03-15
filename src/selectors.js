@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { mapValues, uniqBy, groupBy, sortBy, take, first } from 'lodash';
+export { loadingScreenSelector } from './Loading/selector';
 
 const membersSelector = state => state.members;
 const committeeMembersSelector = state => state.committeeMembers;

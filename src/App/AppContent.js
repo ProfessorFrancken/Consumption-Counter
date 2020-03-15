@@ -14,11 +14,13 @@ import Settings from './Settings/';
 import Statistics from './Statistics/';
 import Present from './Present/';
 import Buixieval from './Buixieval/';
+import Loading from 'Loading';
 
 const EmptyScreenSaver = () => <h1>Hoi</h1>;
 
 export const AppContent = () => (
   <Switch>
+    <Route exact path="/loading" component={Loading} />
     <Route exact path="/settings" component={Settings} />
     <Route exact path="/authenticate" component={Authenticate} />
     <Route exact path="/compucie" component={Compucie} />

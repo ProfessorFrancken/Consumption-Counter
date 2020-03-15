@@ -69,6 +69,7 @@ describe('Authentication', () => {
               password: 'some long passphrase'
             },
             { type: TYPES.AUTHENTICATE_SUCCESS, token },
+            { type: TYPES.LOAD_APPLICATION_REQUEST },
             { type: TYPES.FETCH_MEMBERS_REQUEST },
             { type: TYPES.FETCH_PRODUCTS_REQUEST },
             { type: TYPES.FETCH_BOARD_MEMBERS_REQUEST },

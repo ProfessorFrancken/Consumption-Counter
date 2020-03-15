@@ -43,6 +43,10 @@ export const TYPES = {
   SELECT_MEMBER: 'SELECT_MEMBER',
   SELECT_COMMITTEE: 'SELECT_COMMITTEE',
 
+  LOAD_APPLICATION_REQUEST: 'LOAD_APPLICATION_REQUEST',
+  LOAD_APPLICATION_SUCCESS: 'LOAD_APPLICATION_SUCCESS',
+  LOAD_APPLICATION_FAILURE: 'LOAD_APPLICATION_FAILURE',
+
   FETCH_MEMBERS_REQUEST: 'FETCH_MEMBERS_REQUEST',
   FETCH_MEMBERS_SUCCESS: 'FETCH_MEMBERS_SUCCESS',
   FETCH_MEMBERS_FAILURE: 'FETCH_MEMBERS_FAILURE',
@@ -461,15 +465,23 @@ export function fetchActivities() {
 }
 
 export function fetchInitialData() {
-  return dispatch =>
+  return dispatch => {
     Promise.all([
+      dispatch({ type: TYPES.LOAD_APPLICATION_REQUEST }),
+      dispatch(push(`/loading`)),
       dispatch(fetchMembers()),
       dispatch(fetchProducts()),
       dispatch(fetchBoardMembers()),
       dispatch(fetchCommitteeMembers()),
       dispatch(fetchStatistics()),
       dispatch(fetchActivities())
-    ]);
+    ])
+      .then(() => {
+        dispatch({ type: TYPES.LOAD_APPLICATION_SUCCESS });
+        // dispatch(push(`/`));
+      })
+      .catch(ex => dispatch({ type: TYPES.LOAD_APPLICATION_FAILURE, ex }));
+  };
 }
 
 export function goBack() {
