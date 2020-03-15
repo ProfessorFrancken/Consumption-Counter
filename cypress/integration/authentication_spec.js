@@ -46,11 +46,14 @@ describe('Authentication', () => {
         expect(token).to.not.be.null;
       });
 
+    cy.location('pathname').should('eq', '/loading');
+    cy.get('.tile').should('contain', 'Open application');
+    cy.get('.tile').click();
+    cy.get('.tilesGrid').should('contain', member.lastName);
+
+    cy.visit('/settings');
     cy.get('.mb-5.p-3')
       .get('.btn')
       .contains('Refresh token');
-
-    cy.visit('/');
-    cy.get('.tilesGrid').should('contain', member.lastName);
   });
 });
