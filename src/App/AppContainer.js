@@ -14,14 +14,14 @@ class AppContainer extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <ScreenSaver
           listen={this.props.history.listen}
           goHome={this.props.goHome}
           goToScreenSaver={this.props.goToScreenSaver}
         />
         <App {...this.props} />
-      </div>
+      </>
     );
   }
 }
