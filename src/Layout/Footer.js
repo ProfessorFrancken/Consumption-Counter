@@ -1,8 +1,8 @@
 import React from 'react';
-import BuyAll from './../App/Buttons/BuyAll';
-import GoBack from './../App/Buttons/GoBack';
-import CancelOrder from './../App/Buttons/CancelOrder';
-import Sponsors from './../App/Sponsors';
+import BuyAll from 'Layout/Buttons/BuyAll';
+import GoBack from 'Layout/Buttons/GoBack';
+import CancelOrder from 'Layout/Buttons/CancelOrder';
+import Sponsors from 'App/Sponsors';
 import styled from 'styled-components';
 
 const FooterActions = styled.div`
