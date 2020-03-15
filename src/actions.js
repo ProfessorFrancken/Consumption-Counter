@@ -181,7 +181,7 @@ export function selectMember(member) {
       }
 
       const today = new Date();
-      const timeDiff = Math.abs(today.getTime() - latest_purchase_at.getTime());
+      const timeDiff = today.getTime() - latest_purchase_at.getTime();
       const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
       return diffDays > 90;
