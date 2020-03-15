@@ -16,8 +16,6 @@ import Present from './Present/';
 import Buixieval from './Buixieval/';
 import Loading from 'Loading';
 
-const EmptyScreenSaver = () => <h1>Hoi</h1>;
-
 export const AppContent = () => (
   <Switch>
     <Route exact path="/loading" component={Loading} />
@@ -34,7 +32,6 @@ export const AppContent = () => (
     <Route exact path="/" component={SurnameRanges} />
     <Route exact path="/buixieval" component={Buixieval} />
     <Route exact path="/members/:page(\d+)" component={Members} />
-    <Route exact path="/screensaver" component={EmptyScreenSaver} />
     <Route exact path="/statistics" component={Statistics} />
     <Route exact path="/present" component={Present} />
     <Redirect from="/members" to="/" />
