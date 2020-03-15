@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import SurnameRanges from './/SurnameRanges/SurnameRangeSelection';
 import Members from './/Members/MemberSelection';
 import AvailableProducts from './/Products/AvailableProducts';
-import PriceList from './PriceList/';
+import PriceList from 'App/Products/PriceList/';
 import Prominent from './Prominent/';
 import Committees from './Committees/';
 import CommitteeMembers from './Committees/CommitteeMembers';
