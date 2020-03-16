@@ -6,7 +6,7 @@ const membersSelector = state => state.members;
 const committeeMembersSelector = state => state.committeeMembers;
 const boardMembersSelector = state => state.boardMembers;
 const categorySelector = state => state.products;
-const orderSelector = state => state.order;
+export const orderSelector = state => state.order;
 
 export const recentSelector = state => state.recentBuyers;
 export const rangesSelector = state => state.surnameRanges.ranges;
@@ -24,7 +24,7 @@ const activeMembersSelector = state => {
 };
 
 // From the list of all committee members, select all committees
-const committeesSelector = createSelector(
+export const committeesSelector = createSelector(
   activeMembersSelector,
   activeMembers =>
     uniqBy(
