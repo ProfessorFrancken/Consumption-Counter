@@ -1,14 +1,13 @@
 import { createSelector } from 'reselect';
 import { mapValues, uniqBy, groupBy, sortBy, take, first } from 'lodash';
-export { loadingScreenSelector } from './Loading/selector';
+export { loadingScreenSelector } from 'Loading/selector';
 
-const membersSelector = state => state.members;
+export const membersSelector = state => state.members;
 const committeeMembersSelector = state => state.committeeMembers;
 const boardMembersSelector = state => state.boardMembers;
 const categorySelector = state => state.products;
 export const orderSelector = state => state.order;
 
-export const recentSelector = state => state.recentBuyers;
 export const rangesSelector = state => state.surnameRanges.ranges;
 export const queuedOrderSelector = state => state.queuedOrder;
 export const queuedOrdersSelector = state => state.queuedOrders;
@@ -245,16 +244,6 @@ export const goBackText = createSelector(queuedOrderSelector, queue => {
 
   return 'Go back';
 });
-
-export const recentBuyersSelector = createSelector(
-  recentSelector,
-  membersSelector,
-  (recent, members) =>
-    recent
-      .map(recent => members.find(member => member.id === recent))
-      // exclude members that couldn't be found (for instance guests)
-      .filter(m => m)
-);
 
 export const failedOrdersSelector = createSelector(
   queuedOrdersSelector,

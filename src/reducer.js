@@ -1,8 +1,9 @@
 import { TYPES } from 'actions';
 import { sortBy, groupBy, chunk, first, last, take, uniqBy } from 'lodash';
 import moment from 'moment';
-export { loading } from './Loading/reducer';
-export { menuItems } from './Layout/Sidebar/reducer';
+export { loading } from 'Loading/reducer';
+export { menuItems } from 'Layout/Sidebar/reducer';
+export { recentBuyers } from 'App/Recent/reducers';
 
 const product_images = [];
 const member_images = [];
@@ -170,19 +171,6 @@ export function authentication(
       return { request: false, error: action.error, token: state.token };
     case TYPES.AUTHENTICATE_SUCCESS:
       return { request: false, token: action.token };
-    default:
-      return state;
-  }
-}
-
-const RECENT_MEBMERS = 6 * 5;
-export function recentBuyers(state = [], action) {
-  switch (action.type) {
-    case TYPES.BUY_ORDER_SUCCESS:
-      return take(
-        uniqBy([action.order.member.id, ...state], member => member),
-        RECENT_MEBMERS
-      );
     default:
       return state;
   }
