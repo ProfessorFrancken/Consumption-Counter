@@ -19,7 +19,6 @@ const Content = props => <div className="content">{props.children}</div>;
 
 export const Layout = ({
   menuItems,
-  title,
   goToCompucieScreen,
   goToProminent,
   background,
@@ -28,11 +27,7 @@ export const Layout = ({
   children
 }) => (
   <div className="wrapper" style={backgroundFromProduct(background)}>
-    <Header
-      title={title}
-      onClick={goToCompucieScreen}
-      failedOrders={failedOrders}
-    />
+    <Header onClick={goToCompucieScreen} failedOrders={failedOrders} />
     <Sidebar menuItems={menuItems} />
     <Content>{children}</Content>
     <Footer />

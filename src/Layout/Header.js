@@ -30,7 +30,7 @@ const BuyProductsForMemberTitle = ({
   return <span>{order.member.fullname}</span>;
 };
 
-const HeaderTitle = ({ title }) => (
+const HeaderTitle = () => (
   <div className="titleName header-item">
     <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
     <Route exact path="/settings" render={() => <span>Settings</span>} />
@@ -45,9 +45,9 @@ const HeaderTitle = ({ title }) => (
   </div>
 );
 
-const Header = ({ title, onClick, failedOrders }) => (
+const Header = ({ onClick, failedOrders }) => (
   <div className="header">
-    <HeaderTitle title={title} />
+    <HeaderTitle />
     <div className="header-item">
       <Route
         exact
