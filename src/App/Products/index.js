@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
-import { addProductToOrder } from '../../actions';
-import { productsWithOrderCountSelector } from './../../selectors';
-import { buyMore } from '../../actions';
+import { addProductToOrder, buyMore } from 'actions';
+import { productsWithOrderCountSelector } from 'selectors';
 import Products from './Products';
 
 const mapStateToProps = state => ({
