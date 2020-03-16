@@ -4,7 +4,6 @@ import { connectRouter } from 'connected-react-router';
 import {
   authentication,
   loading,
-  title,
   products,
   members,
   boardMembers,
@@ -24,7 +23,6 @@ export default history =>
   combineReducers({
     authentication,
     loading,
-    title,
     members,
     boardMembers,
     committeeMembers,

@@ -1,5 +1,34 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { committeesSelector, orderSelector } from 'selectors';
+
+const CommitteeTitle = ({
+  match: {
+    params: { page }
+  }
+}) => {
+  const committees = useSelector(committeesSelector);
+  const selectedCommittee = committees.find(
+    ({ id }) => id === parseInt(page, 10)
+  );
+
+  return (
+    <span>
+      {selectedCommittee ? selectedCommittee.name : 'Unkown committee'}
+    </span>
+  );
+};
+
+const BuyProductsForMemberTitle = ({
+  match: {
+    params: { page }
+  }
+}) => {
+  const order = useSelector(orderSelector);
+
+  return <span>{order.member.fullname}</span>;
+};
 
 const HeaderTitle = ({ title }) => (
   <div className="titleName header-item">
@@ -10,12 +39,8 @@ const HeaderTitle = ({ title }) => (
     <Route exact path="/committees" render={() => <span>Committees</span>} />
     <Route exact path="/statistics" render={() => <span>Statistics</span>} />
     <Route exact path="/screensaver" render={() => <span>Screensaver</span>} />
-    <Route
-      exact
-      path="/committees/:page(\d+)"
-      render={() => <span>{title}</span>}
-    />
-    <Route exact path="/products" render={() => <span>{title}</span>} />
+    <Route exact path="/committees/:page(\d+)" component={CommitteeTitle} />
+    <Route exact path="/products" component={BuyProductsForMemberTitle} />
     <Route exact path="/present" render={() => <span>Present</span>} />
   </div>
 );
