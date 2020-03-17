@@ -4,7 +4,7 @@ export { loading } from 'Loading/reducers';
 export { menuItems } from 'Layout/Sidebar/reducers';
 export { recentBuyers } from 'App/Recent/reducers';
 export { committeeMembers } from 'App/Committees/reducers';
-export { statistics, activities } from 'App/Statistics/reducers';
+export { transactions, statistics, activities } from 'App/Statistics/reducers';
 
 const product_images = [];
 const member_images = [];
@@ -114,19 +114,6 @@ export function order(state = defaultOrder, action) {
       return { ...state, products: [...state.products, { ...action.product }] };
     case TYPES.QUEUE_ORDER:
       return defaultOrder;
-    default:
-      return state;
-  }
-}
-
-const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
-export function transactions(state = [], action) {
-  switch (action.type) {
-    case TYPES.BUY_ORDER_SUCCESS:
-      return take(
-        [{ member: action.member, order: action.order }, ...state],
-        KEEP_TRACK_OF_N_TRANSCACTIONS
-      );
     default:
       return state;
   }
