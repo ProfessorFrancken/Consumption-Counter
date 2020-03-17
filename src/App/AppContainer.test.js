@@ -8,7 +8,7 @@ import { TYPES } from './../actions';
 import MockDate from 'mockdate';
 import moxios from 'moxios';
 
-describe('Plus One', () => {
+xdescribe('Plus One', () => {
   let store, app;
   const base_api = process.env.REACT_APP_API_SERVER;
 
