@@ -1,34 +1,14 @@
 import { TYPES } from 'actions';
-import { sortBy, groupBy, chunk, first, last, take  } from 'lodash';
+import { chunk, first, last  } from 'lodash';
 export { loading } from 'Loading/reducers';
+export { products } from 'App/Products/reducers';
 export { menuItems } from 'Layout/Sidebar/reducers';
 export { recentBuyers } from 'App/Recent/reducers';
 export { boardMembers } from 'App/Prominent/reducers';
 export { committeeMembers } from 'App/Committees/reducers';
 export { transactions, statistics, activities } from 'App/Statistics/reducers';
 
-const product_images = [];
 const member_images = [];
-
-export function products(state = [], action) {
-  switch (action.type) {
-    case TYPES.FETCH_PRODUCTS_SUCCESS:
-      // Refrehs images
-      product_images.splice(0, product_images);
-      action.products.forEach(product => {
-        let img = new Image();
-        img.src = product.image;
-        product_images.push(img);
-      });
-
-      return groupBy(
-        sortBy(action.products, product => product.position),
-        product => product.category
-      );
-    default:
-      return state;
-  }
-}
 
 export function members(state = [], action) {
   switch (action.type) {
