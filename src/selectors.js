@@ -8,6 +8,7 @@ export {
   compucieSelector
 } from 'App/Committees/selectors';
 export { boardsSelector, prominentSelector } from 'App/Prominent/selectors';
+export { goBackText } from 'Layout/Buttons/GoBack/selectors';
 
 export const membersSelector = state => state.members;
 const categorySelector = state => state.products;
@@ -75,16 +76,6 @@ export const productsWithOrderCountSelector = createSelector(
         }))
     )
 );
-
-export const goBackText = createSelector(queuedOrderSelector, queue => {
-  if (queue !== null) {
-    const member = queue.order.member;
-
-    return [member.firstName, member.surname].join(' ');
-  }
-
-  return 'Go back';
-});
 
 export const failedOrdersSelector = createSelector(
   queuedOrdersSelector,
