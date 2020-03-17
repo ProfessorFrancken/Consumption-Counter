@@ -3,6 +3,7 @@ import { sortBy, groupBy, chunk, first, last, take  } from 'lodash';
 export { loading } from 'Loading/reducers';
 export { menuItems } from 'Layout/Sidebar/reducers';
 export { recentBuyers } from 'App/Recent/reducers';
+export { boardMembers } from 'App/Prominent/reducers';
 export { committeeMembers } from 'App/Committees/reducers';
 export { transactions, statistics, activities } from 'App/Statistics/reducers';
 
@@ -50,15 +51,6 @@ export function members(state = [], action) {
             ? new Date(action.order.ordered_at)
             : member.latest_purchase_at
       }));
-    default:
-      return state;
-  }
-}
-
-export function boardMembers(state = [], action) {
-  switch (action.type) {
-    case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
-      return action.boardMembers;
     default:
       return state;
   }
