@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchInitialData } from './../actions';
-import { backgroundSelector, failedOrdersSelector } from './../selectors';
+import { backgroundSelector, failedOrdersSelector } from './selectors';
 import { withRouter } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import ScreenSaver from './ScreenSaver';
