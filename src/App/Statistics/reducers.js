@@ -1,5 +1,19 @@
 import { TYPES } from 'actions';
 import moment from 'moment';
+import { take } from 'lodash';
+
+const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
+export function transactions(state = [], action) {
+  switch (action.type) {
+    case TYPES.BUY_ORDER_SUCCESS:
+      return take(
+        [{ member: action.member, order: action.order }, ...state],
+        KEEP_TRACK_OF_N_TRANSCACTIONS
+      );
+    default:
+      return state;
+  }
+}
 
 export function statistics(state = [], action) {
   switch (action.type) {
