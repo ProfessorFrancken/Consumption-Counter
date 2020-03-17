@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Authenticate from './Authentication';
-import { cancelOrder, buyOrder } from './../../actions';
+import { cancelOrder, buyOrder } from 'actions';
 import FailedOrder from './FailedOrder';
 import RetryAll from './RetryAll';
 

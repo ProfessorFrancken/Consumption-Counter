@@ -8,7 +8,7 @@ import Prominent from './Prominent/';
 import Committees from './Committees/';
 import SelectMemberFromCommittee from './Committees/SelectMemberFromCommittee';
 import RecentMembers from './Recent/';
-import Compucie from './Compucie/';
+import Compucie from './Committees/Compucie/';
 import Authenticate from './Settings/Authentication/';
 import Settings from './Settings/';
 import Statistics from './Statistics/';
