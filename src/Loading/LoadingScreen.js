@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { LOADING_STATE } from './reducer';
+import { LOADING_STATE } from './reducers';
 
 const LoadingScreen = ({ state, features, done }) => {
   return (

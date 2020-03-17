@@ -1,8 +1,8 @@
 import { TYPES } from 'actions';
 import { sortBy, groupBy, chunk, first, last, take  } from 'lodash';
 import moment from 'moment';
-export { loading } from 'Loading/reducer';
-export { menuItems } from 'Layout/Sidebar/reducer';
+export { loading } from 'Loading/reducers';
+export { menuItems } from 'Layout/Sidebar/reducers';
 export { recentBuyers } from 'App/Recent/reducers';
 export { committeeMembers } from 'App/Committees/reducers';
 

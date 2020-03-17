@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
-import { menuItems } from './../reducer';
+import { menuItems } from 'reducer';
 import App from './App';
 import configureMockStore from 'redux-mock-store';
 import AvailableProducts from './Products/';
