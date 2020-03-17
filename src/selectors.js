@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect';
 export const membersSelector = state => state.members;
 export const orderSelector = state => state.order;
 export const rangesSelector = state => state.surnameRanges.ranges;
