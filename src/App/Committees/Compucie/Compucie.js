@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import Member from './../Members/MemberButton';
+import Member from 'App/Members/MemberButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TempleCountButton from './TempleCountButton';
 
