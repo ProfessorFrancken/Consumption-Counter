@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectMember } from '../../actions';
-import { boardsSelector, prominentSelector } from './../../selectors';
+import { boardsSelector, prominentSelector } from './selectors';
 import Prominent from './Prominent';
 
 const mapStateToProps = state => ({
