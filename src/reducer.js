@@ -1,73 +1,15 @@
 import { TYPES } from 'actions';
-import { chunk, first, last  } from 'lodash';
 export { loading } from 'Loading/reducers';
+export { members } from 'App/Members/reducers';
+export { authentication } from 'Login/reducers';
 export { products } from 'App/Products/reducers';
-export { menuItems } from 'Layout/Sidebar/reducers';
 export { recentBuyers } from 'App/Recent/reducers';
+export { menuItems } from 'Layout/Sidebar/reducers';
 export { boardMembers } from 'App/Prominent/reducers';
+export { surnameRanges } from 'App/SurnameRanges/reducers'
 export { committeeMembers } from 'App/Committees/reducers';
 export { transactions, statistics, activities } from 'App/Statistics/reducers';
 
-const member_images = [];
-
-export function members(state = [], action) {
-  switch (action.type) {
-    case TYPES.FETCH_MEMBERS_SUCCESS:
-      // Refrehs images
-      member_images.splice(0, member_images);
-      action.members.forEach(member => {
-        let img = new Image();
-        if (member.cosmetics && member.cosmetics.image) {
-          img.src = member.cosmetics.image;
-          member_images.push(img);
-        }
-      });
-      return action.members;
-    case TYPES.BUY_ORDER_SUCCESS:
-      return state.map(member => ({
-        ...member,
-        latest_purchase_at:
-          member.id === action.order.member.id
-            ? new Date(action.order.ordered_at)
-            : member.latest_purchase_at
-      }));
-    default:
-      return state;
-  }
-}
-
-const defaultRanges = {
-  members_per_range: 6 * 5,
-  ranges: []
-};
-
-const SETTINGS_TYPES = {
-  SET_MEMBERS_PER_RANGE: 'SET_MEMBERS_PER_RANGE'
-};
-
-export function surnameRanges(state = defaultRanges, action) {
-  switch (action.type) {
-    case SETTINGS_TYPES.SET_MEMBERS_PER_RANGE:
-      return {
-        members_per_range: action.members_per_range,
-        ranges: state.ranges
-      };
-    case TYPES.FETCH_MEMBERS_SUCCESS:
-      return {
-        members_per_range: state.members_per_range,
-        ranges: chunk(action.members, state.members_per_range).map(
-          (members, idx) => ({
-            idx,
-            members,
-            surname_start: first(members).surname,
-            surname_end: last(members).surname
-          })
-        )
-      };
-    default:
-      return state;
-  }
-}
 
 const defaultOrder = {
   member: { age: 0 },
@@ -106,22 +48,6 @@ export function queuedOrder(state = null, action) {
       return state.ordered_at === action.order.ordered_at ? null : state;
     case TYPES.CANCEL_ORDER:
       return null;
-    default:
-      return state;
-  }
-}
-
-export function authentication(
-  state = { request: false, token: null },
-  action
-) {
-  switch (action.type) {
-    case TYPES.AUTHENTICATE_REQUEST:
-      return { request: true, token: state.token };
-    case TYPES.AUTHENTICATE_FAILURE:
-      return { request: false, error: action.error, token: state.token };
-    case TYPES.AUTHENTICATE_SUCCESS:
-      return { request: false, token: action.token };
     default:
       return state;
   }
