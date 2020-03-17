@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { selectCommittee } from '../../actions';
-import { committeesWithMembersSelector } from './../../selectors';
+import { selectCommittee } from 'actions';
+import { committeesWithMembersSelector } from './selectors';
 import Committees from './Committees';
 
 const mapStateToProps = state => ({

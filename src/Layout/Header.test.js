@@ -8,7 +8,10 @@ import configureMockStore from 'redux-mock-store';
 
 it('renders a buy more button when visiting the products page', () => {
   const mockStore = configureMockStore([]);
-  const store = mockStore({ order: { buyMore: false }, queuedOrder: null });
+  const store = mockStore({
+    order: { buyMore: false, member: { fullname: 'Mark Redeman' } },
+    queuedOrder: null
+  });
   const header = mount(
     <Provider store={store}>
       <MemoryRouter initialEntries={['/products']}>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { committeesSelector, orderSelector } from 'selectors';
+import { committeesSelector } from 'App/Committees/selectors';
+import { orderSelector } from 'selectors';
 
 const CommitteeTitle = ({
   match: {
