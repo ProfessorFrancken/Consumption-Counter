@@ -1,9 +1,10 @@
 import { TYPES } from 'actions';
-import { sortBy, groupBy, chunk, first, last, take, uniqBy } from 'lodash';
+import { sortBy, groupBy, chunk, first, last, take  } from 'lodash';
 import moment from 'moment';
 export { loading } from 'Loading/reducer';
 export { menuItems } from 'Layout/Sidebar/reducer';
 export { recentBuyers } from 'App/Recent/reducers';
+export { committeeMembers } from 'App/Committees/reducers';
 
 const product_images = [];
 const member_images = [];
@@ -58,15 +59,6 @@ export function boardMembers(state = [], action) {
   switch (action.type) {
     case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
       return action.boardMembers;
-    default:
-      return state;
-  }
-}
-
-export function committeeMembers(state = [], action) {
-  switch (action.type) {
-    case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
-      return action.committees;
     default:
       return state;
   }
