@@ -1,23 +1,23 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import decode from 'jwt-decode';
-import moment from 'moment';
-import { useForm } from 'react-hook-form';
+import React from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import decode from "jwt-decode";
+import moment from "moment";
+import {useForm} from "react-hook-form";
 
-const Button = ({ children, ...props }) => (
+const Button = ({children, ...props}) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
     {children}
   </button>
 );
 
-const authenticated = token => {
+const authenticated = (token) => {
   const decoded = decode(token);
   const expiration = new Date(decoded.exp * 1000);
 
   return (
     <span>
-      The system is authentiated until {moment(expiration).calendar()}. You can
-      refresh the token by reauthenticating the system.
+      The system is authentiated until {moment(expiration).calendar()}. You can refresh
+      the token by reauthenticating the system.
     </span>
   );
 };
@@ -25,19 +25,18 @@ const authenticated = token => {
 const unauthenticated = () => {
   return (
     <span>
-      You need to authenticate with our server in order to connect the Plus One
-      system.
+      You need to authenticate with our server in order to connect the Plus One system.
     </span>
   );
 };
 
-const invalidFeedback = error => {
-  return error === 'Unauthorized'
-    ? 'The given password was incorrect'
-    : 'There probably was an unexpected error on the server, call the compucie to solve this.';
+const invalidFeedback = (error) => {
+  return error === "Unauthorized"
+    ? "The given password was incorrect"
+    : "There probably was an unexpected error on the server, call the compucie to solve this.";
 };
 
-const AuthenticateButton = ({ request, token }) => {
+const AuthenticateButton = ({request, token}) => {
   if (request) {
     return <Button>Waiting</Button>;
   }
@@ -59,27 +58,25 @@ const AuthenticateButton = ({ request, token }) => {
   );
 };
 
-const AuthenticationForm = props => {
-  const { handleSubmit, register, errors } = useForm();
-  const { authenticate, token, request, error } = props;
+const AuthenticationForm = (props) => {
+  const {handleSubmit, register, errors} = useForm();
+  const {authenticate, token, request, error} = props;
 
-  const onSubmit = handleSubmit(({ password }) => {
+  const onSubmit = handleSubmit(({password}) => {
     authenticate(password);
   });
 
   return (
     <div className="mb-5 p-3 bg-light">
       <h2 className="h4 font-weight-normal">
-        {token ? null : (
-          <FontAwesomeIcon icon="exclamation-triangle" className="mr-1" />
-        )}{' '}
+        {token ? null : <FontAwesomeIcon icon="exclamation-triangle" className="mr-1" />}{" "}
         Authenticate Plus One
       </h2>
       <p className="lead">
         {token ? authenticated(token) : unauthenticated()}
         <br />
-        If you don't know the passphrase you should shout "Compucie!" or
-        something similar.
+        If you don't know the passphrase you should shout "Compucie!" or something
+        similar.
       </p>
       <form onSubmit={onSubmit}>
         <div className="row">
@@ -88,20 +85,18 @@ const AuthenticationForm = props => {
               type="password"
               name="password"
               placeholder="Passphrase"
-              className={error ? 'form-control is-invalid' : 'form-control'}
+              className={error ? "form-control is-invalid" : "form-control"}
               ref={register({
-                required: 'Required',
+                required: "Required",
                 minLength: {
                   value: 6,
-                  message: "That's not a good passphrase"
-                }
+                  message: "That's not a good passphrase",
+                },
               })}
             />
             {errors.password && errors.password.message}
 
-            {error ? (
-              <p className="invalid-feedback">{invalidFeedback(error)}</p>
-            ) : null}
+            {error ? <p className="invalid-feedback">{invalidFeedback(error)}</p> : null}
           </div>
         </div>
         <AuthenticateButton request={request} token={token} />

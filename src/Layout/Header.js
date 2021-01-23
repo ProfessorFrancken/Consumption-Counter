@@ -1,30 +1,24 @@
-import React from 'react';
-import { Route, NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { committeesSelector } from 'App/Committees/selectors';
-import { orderSelector } from 'selectors';
+import React from "react";
+import {Route, NavLink} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {committeesSelector} from "App/Committees/selectors";
+import {orderSelector} from "selectors";
 
 const CommitteeTitle = ({
   match: {
-    params: { page }
-  }
+    params: {page},
+  },
 }) => {
   const committees = useSelector(committeesSelector);
-  const selectedCommittee = committees.find(
-    ({ id }) => id === parseInt(page, 10)
-  );
+  const selectedCommittee = committees.find(({id}) => id === parseInt(page, 10));
 
-  return (
-    <span>
-      {selectedCommittee ? selectedCommittee.name : 'Unkown committee'}
-    </span>
-  );
+  return <span>{selectedCommittee ? selectedCommittee.name : "Unkown committee"}</span>;
 };
 
 const BuyProductsForMemberTitle = ({
   match: {
-    params: { page }
-  }
+    params: {page},
+  },
 }) => {
   const order = useSelector(orderSelector);
 
@@ -46,7 +40,7 @@ const HeaderTitle = () => (
   </div>
 );
 
-const Header = ({ onClick, failedOrders }) => (
+const Header = ({onClick, failedOrders}) => (
   <div className="header">
     <HeaderTitle />
     <div className="header-item">

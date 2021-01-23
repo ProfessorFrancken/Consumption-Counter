@@ -1,22 +1,22 @@
-import React from 'react';
-import Price from './../Price';
-import { groupBy, map } from 'lodash';
-import Moment from 'react-moment';
+import React from "react";
+import Price from "./../Price";
+import {groupBy, map} from "lodash";
+import Moment from "react-moment";
 
 // Show all products that were bought and the amount of times they were bought
-const listOfProducts = products =>
+const listOfProducts = (products) =>
   map(
-    groupBy(products, product => product.id),
-    product =>
+    groupBy(products, (product) => product.id),
+    (product) =>
       product.length === 1
         ? `${product[0].name}`
         : `${product[0].name} (${product.length}x)`
-  ).join(', ');
+  ).join(", ");
 
-const status = order =>
-  order.state + (order.fails > 0 ? ` (failed ${order.fails}x)` : '');
+const status = (order) =>
+  order.state + (order.fails > 0 ? ` (failed ${order.fails}x)` : "");
 
-const FailedOrder = ({ order, buy, cancel }) => (
+const FailedOrder = ({order, buy, cancel}) => (
   <tr>
     <th scope="row">
       <Moment fromNow interval={1000} unix>
@@ -30,17 +30,11 @@ const FailedOrder = ({ order, buy, cancel }) => (
     </td>
     <td className="text-right">{status(order)}</td>
     <td className="text-right">
-      <button
-        className="btn btn-link text-success mr-2"
-        onClick={() => buy(order.order)}
-      >
+      <button className="btn btn-link text-success mr-2" onClick={() => buy(order.order)}>
         Retry now
       </button>
 
-      <button
-        className="btn btn-link text-danger"
-        onClick={() => cancel(order.order)}
-      >
+      <button className="btn btn-link text-danger" onClick={() => cancel(order.order)}>
         Cancel
       </button>
     </td>

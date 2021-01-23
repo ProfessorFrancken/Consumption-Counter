@@ -1,11 +1,11 @@
-import { createSelector } from 'reselect';
-import { membersSelector } from 'selectors';
-import { groupBy, sortBy, take, first } from 'lodash';
+import {createSelector} from "reselect";
+import {membersSelector} from "selectors";
+import {groupBy, sortBy, take, first} from "lodash";
 
 const SHOW_N_PROMINENT = 10;
 const SHOW_N_BOARDS = 5;
 
-const boardMembersSelector = state => state.boardMembers;
+const boardMembersSelector = (state) => state.boardMembers;
 
 // Get member data for all board members
 const boardMembersWithMemberSelector = createSelector(
@@ -13,29 +13,29 @@ const boardMembersWithMemberSelector = createSelector(
   membersSelector,
   (boardMembers, members) =>
     boardMembers
-      .map(boardMember => ({
+      .map((boardMember) => ({
         id: boardMember.member_id,
         year: boardMember.year,
         function: boardMember.function,
-        member: members.find(member => member.id === boardMember.member_id)
+        member: members.find((member) => member.id === boardMember.member_id),
       }))
-      .filter(member => member.member !== undefined)
+      .filter((member) => member.member !== undefined)
 );
 
 export const boardsSelector = createSelector(
   boardMembersWithMemberSelector,
-  boardMembers =>
+  (boardMembers) =>
     sortBy(
       // Take the latest SHOW_N_BOARDS
       take(
         sortBy(
-          groupBy(boardMembers, boardMember => boardMember.year),
-          board => -first(board).year
+          groupBy(boardMembers, (boardMember) => boardMember.year),
+          (board) => -first(board).year
         ),
         SHOW_N_BOARDS
       ),
       // Make sure that a board member is always placed on the same collumn
-      board => -((first(board).year + 1) % SHOW_N_BOARDS)
+      (board) => -((first(board).year + 1) % SHOW_N_BOARDS)
     )
 );
 
@@ -45,7 +45,7 @@ export const prominentSelector = createSelector(
   (boardMembers, boards) => {
     function recentlyPurchasedAProduct(member) {
       const latest_purchase_at =
-        typeof member.latest_purchase_at === 'string'
+        typeof member.latest_purchase_at === "string"
           ? new Date(member.latest_purchase_at)
           : member.latest_purchase_at;
 
@@ -62,7 +62,7 @@ export const prominentSelector = createSelector(
 
     // Filter out all members who are allready shown in the board collumns
     const boardMembersId = boards.reduce((members, board) => {
-      return [...members, ...board.map(member => member.member.id)];
+      return [...members, ...board.map((member) => member.member.id)];
     }, []);
 
     // Show all members that aren't shown in the boards grid and
@@ -70,10 +70,10 @@ export const prominentSelector = createSelector(
     const prominent = take(
       sortBy(
         boardMembers
-          .map(boardMember => boardMember.member)
+          .map((boardMember) => boardMember.member)
           .filter(recentlyPurchasedAProduct),
-        member => -member.prominent
-      ).filter(member => !boardMembersId.includes(member.id)), // don't include members who are shown as a board member
+        (member) => -member.prominent
+      ).filter((member) => !boardMembersId.includes(member.id)), // don't include members who are shown as a board member
       SHOW_N_PROMINENT
     );
     return prominent;

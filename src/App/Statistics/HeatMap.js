@@ -1,7 +1,7 @@
-import React from 'react';
-import CalendarHeatmap from 'react-calendar-heatmap';
+import React from "react";
+import CalendarHeatmap from "react-calendar-heatmap";
 
-const HeatMap = ({ statistics = [], activities = [] }) => {
+const HeatMap = ({statistics = [], activities = []}) => {
   if (statistics.length === 0) {
     return null;
   }
@@ -9,13 +9,11 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
   const end = statistics[0];
   const start = statistics[statistics.length - 1];
 
-  const titleForValue = value => {
+  const titleForValue = (value) => {
     if (value === null) {
       return null;
     }
-    const activity = activities.find(
-      activity => activity.startDate === value.date
-    );
+    const activity = activities.find((activity) => activity.startDate === value.date);
 
     if (activity) {
       return `Date: ${new Date(value.date).toDateString()} - Activty: ${
@@ -23,39 +21,34 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
       }- Beer: ${value.beer}, Food: ${value.food}, Soda: ${value.soda}`;
     }
 
-    return `Date: ${new Date(value.date).toDateString()} - Beer: ${
-      value.beer
-    }, Food: ${value.food}, Soda: ${value.soda}`;
+    return `Date: ${new Date(value.date).toDateString()} - Beer: ${value.beer}, Food: ${
+      value.food
+    }, Soda: ${value.soda}`;
   };
 
-  const classToBeUsed = value => {
+  const classToBeUsed = (value) => {
     if (!value) {
-      return 'color-empty';
+      return "color-empty";
     }
 
-    const activity = activities.find(
-      activity => activity.startDate === value.date
-    );
+    const activity = activities.find((activity) => activity.startDate === value.date);
 
-    return activity ? 'activity' : 'color-empty';
+    return activity ? "activity" : "color-empty";
   };
 
   const totalPurchases = statistics.reduce(
-    (sum, { beer, soda, food }) => sum + beer + soda + food,
+    (sum, {beer, soda, food}) => sum + beer + soda + food,
     0
   );
   const averagePurchases = totalPurchases / statistics.length;
 
-  const colorToBeUsed = value => {
+  const colorToBeUsed = (value) => {
     if (value.date === null) {
-      return 'rgba(0, 0, 0, 0)';
+      return "rgba(0, 0, 0, 0)";
     }
 
     if (
-      [value.beer, value.soda, value.food].reduce(
-        (sum, value) => sum + value,
-        0
-      ) === 0
+      [value.beer, value.soda, value.food].reduce((sum, value) => sum + value, 0) === 0
     ) {
     }
 
@@ -68,10 +61,8 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
 
     const normed = [
       Math.floor((2 * steps * value.beer ** 1) / total),
-      Math.floor(
-        (steps * value.food ** 1) / total + (steps * value.soda ** 1) / total
-      ),
-      0
+      Math.floor((steps * value.food ** 1) / total + (steps * value.soda ** 1) / total),
+      0,
     ];
 
     const bases = [
@@ -84,21 +75,15 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
       // [191 / 255, 63 / 255, 174 / 255], // soda
       // [63 / 255, 191 / 255, 180 / 255] // food
       [140 / 255, 211 / 255, 203 / 255], // beer
-      [23 / 255, 50 / 255, 73 / 255] // beer
+      [23 / 255, 50 / 255, 73 / 255], // beer
     ];
 
     // const bases = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 
     const color = [
-      bases[0][0] * normed[0] +
-        bases[1][0] * normed[1] +
-        bases[2][0] * normed[2],
-      bases[0][1] * normed[0] +
-        bases[1][1] * normed[1] +
-        bases[2][1] * normed[2],
-      bases[0][2] * normed[0] +
-        bases[1][2] * normed[1] +
-        bases[2][2] * normed[2]
+      bases[0][0] * normed[0] + bases[1][0] * normed[1] + bases[2][0] * normed[2],
+      bases[0][1] * normed[0] + bases[1][1] * normed[1] + bases[2][1] * normed[2],
+      bases[0][2] * normed[0] + bases[1][2] * normed[1] + bases[2][2] * normed[2],
     ];
 
     return `rgba(
@@ -109,21 +94,18 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
         )`;
   };
 
-  const tooltip = value => {
+  const tooltip = (value) => {
     if (value === null || value.date === null) {
       return undefined;
     }
 
     if (
-      [value.beer, value.soda, value.food].reduce(
-        (sum, value) => sum + value,
-        0
-      ) === 0
+      [value.beer, value.soda, value.food].reduce((sum, value) => sum + value, 0) === 0
     ) {
       return undefined;
     }
 
-    return { style: { fill: colorToBeUsed(value) } };
+    return {style: {fill: colorToBeUsed(value)}};
   };
 
   return (
@@ -137,11 +119,11 @@ const HeatMap = ({ statistics = [], activities = [] }) => {
       showWeekdayLabels={true}
       classForValue={classToBeUsed}
       tooltipDataAttrs={tooltip}
-      onClick={value =>
+      onClick={(value) =>
         console.log(
           value,
           tooltip(value),
-          activities.find(activity => activity.startDate === value.date)
+          activities.find((activity) => activity.startDate === value.date)
         )
       }
       showOutOfRangeDays={true}

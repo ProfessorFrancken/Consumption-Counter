@@ -1,10 +1,10 @@
-import { Component } from 'react';
+import {Component} from "react";
 
 export const SCREEN_SAVER_TIMEOUT = 30000;
 
 export default class ScreenSaver extends Component {
   state = {
-    screenSaver: null
+    screenSaver: null,
   };
 
   constructor(props) {
@@ -24,24 +24,21 @@ export default class ScreenSaver extends Component {
     }
   }
 
-  screenSaver({ pathname }) {
+  screenSaver({pathname}) {
     if (this.state.screenSaver) {
       clearTimeout(this.state.screenSaver);
     }
 
     let screenSaver;
-    if (pathname === '/') {
-      screenSaver = setTimeout(
-        this.props.goToScreenSaver,
-        2 * SCREEN_SAVER_TIMEOUT
-      );
+    if (pathname === "/") {
+      screenSaver = setTimeout(this.props.goToScreenSaver, 2 * SCREEN_SAVER_TIMEOUT);
     } else {
-      if (pathname !== '/statistics') {
+      if (pathname !== "/statistics") {
         screenSaver = setTimeout(this.props.goHome, SCREEN_SAVER_TIMEOUT);
       }
     }
 
-    this.setState({ screenSaver });
+    this.setState({screenSaver});
   }
 
   render() {

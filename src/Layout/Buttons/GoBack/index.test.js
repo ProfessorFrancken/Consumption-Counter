@@ -1,35 +1,35 @@
-import React from 'react';
-import GoBack from '.';
-import configureMockStore from 'redux-mock-store';
-import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
-import { TYPES } from 'actions';
-import { push, goBack } from 'connected-react-router';
-import thunk from 'redux-thunk';
+import React from "react";
+import GoBack from ".";
+import configureMockStore from "redux-mock-store";
+import {MemoryRouter} from "react-router-dom";
+import {mount} from "enzyme";
+import {TYPES} from "actions";
+import {push, goBack} from "connected-react-router";
+import thunk from "redux-thunk";
 
-describe('<GoBack />', () => {
-  it('renders', () => {
+describe("<GoBack />", () => {
+  it("renders", () => {
     const mockStore = configureMockStore([thunk]);
 
-    const store = mockStore({ queuedOrder: null });
+    const store = mockStore({queuedOrder: null});
     const goback = mount(
-      <MemoryRouter initialEntries={['/products']}>
+      <MemoryRouter initialEntries={["/products"]}>
         <GoBack store={store} />
       </MemoryRouter>
     );
 
-    goback.find('button').simulate('click');
+    goback.find("button").simulate("click");
 
-    expect(store.getActions()).toEqual([goBack(), { type: TYPES.GO_BACK }]);
+    expect(store.getActions()).toEqual([goBack(), {type: TYPES.GO_BACK}]);
   });
 
-  it('goes back to a previous customer', () => {
+  it("goes back to a previous customer", () => {
     const mockStore = configureMockStore([thunk]);
 
     const member = {
       id: 1,
-      firstName: 'John',
-      surname: 'Snow',
+      firstName: "John",
+      surname: "Snow",
       age: 18,
       prominent: null,
       latest_purchase_at: new Date(),
@@ -39,18 +39,18 @@ describe('<GoBack />', () => {
         nickname: null,
         button: {
           width: null,
-          height: null
-        }
-      }
+          height: null,
+        },
+      },
     };
     const store = mockStore({
       queuedOrder: {
         ordered_at: 1,
         order: {
           member: member,
-          products: []
-        }
-      }
+          products: [],
+        },
+      },
     });
     const goback = mount(
       <MemoryRouter>
@@ -58,11 +58,11 @@ describe('<GoBack />', () => {
       </MemoryRouter>
     );
 
-    goback.find('button').simulate('click');
+    goback.find("button").simulate("click");
 
     expect(store.getActions()).toEqual([
-      push('/products'),
-      { type: TYPES.SELECT_MEMBER, member }
+      push("/products"),
+      {type: TYPES.SELECT_MEMBER, member},
     ]);
   });
 });

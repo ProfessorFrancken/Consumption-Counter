@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-const Committee = ({ committee, onClick }) => (
+const Committee = ({committee, onClick}) => (
   <button className="button tile" onClick={() => onClick(committee)}>
     {committee.name}
   </button>
 );
 
-const Committees = ({ committees, selectCommittee }) => (
+const Committees = ({committees, selectCommittee}) => (
   <nav className="tilesGrid">
     {committees.map((committee, idx) => (
       <Committee committee={committee} onClick={selectCommittee} key={idx} />
@@ -20,9 +20,9 @@ Committees.propTypes = {
     PropTypes.shape({
       members: PropTypes.arrayOf(PropTypes.shape({})),
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired
+      name: PropTypes.string.isRequired,
     })
-  ).isRequired
+  ).isRequired,
 };
 
 export default Committees;

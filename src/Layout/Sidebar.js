@@ -1,17 +1,17 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import {NavLink} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-const Sidebar = ({ menuItems }) => (
+const Sidebar = ({menuItems}) => (
   <div className="sidebar">
     {menuItems.map((menuItem, i) => (
       <MenuItem key={menuItem.icon} menuItem={menuItem} />
     ))}
-    <MenuItem menuItem={{ icon: 'map-marker-alt', url: '/present' }} />
+    <MenuItem menuItem={{icon: "map-marker-alt", url: "/present"}} />
   </div>
 );
 
-const MenuItem = ({ menuItem }) =>
+const MenuItem = ({menuItem}) =>
   menuItem.loading ? (
     <span className="button menuButton">
       <FontAwesomeIcon icon="spinner" pulse />

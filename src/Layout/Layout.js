@@ -1,21 +1,21 @@
-import React from 'react';
-import Footer from './Footer';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import logo from 'assets/logo.png';
+import React from "react";
+import Footer from "./Footer";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import logo from "assets/logo.png";
 
 const backgroundFromProduct = (background = null) => {
   return background === null
     ? {}
     : {
         backgroundImage: `url("${background}")`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: '50%'
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "50%",
       };
 };
 
-const Content = props => <div className="content">{props.children}</div>;
+const Content = (props) => <div className="content">{props.children}</div>;
 
 export const Layout = ({
   menuItems,
@@ -24,7 +24,7 @@ export const Layout = ({
   background,
   goHome,
   failedOrders,
-  children
+  children,
 }) => (
   <div className="wrapper" style={backgroundFromProduct(background)}>
     <Header onClick={goToCompucieScreen} failedOrders={failedOrders} />

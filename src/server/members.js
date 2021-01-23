@@ -1,9 +1,9 @@
-import { Factory, trait } from 'miragejs';
-import faker from 'faker';
-import moment from 'moment';
+import {Factory, trait} from "miragejs";
+import faker from "faker";
+import moment from "moment";
 
 export const MemberFactory = Factory.extend({
-  id: i => parseInt(i, 10),
+  id: (i) => parseInt(i, 10),
 
   achternaam() {
     return faker.name.lastName();
@@ -15,9 +15,9 @@ export const MemberFactory = Factory.extend({
 
   tussenvoegsel(i) {
     if (i % 3 === 0) {
-      return 'de';
+      return "de";
     }
-    return '';
+    return "";
   },
 
   initialen() {
@@ -28,32 +28,32 @@ export const MemberFactory = Factory.extend({
     if (i % 10 === 0) {
       return null;
     }
-    return moment(faker.date.recent()).format('YYYY-MM-DD HH:MM:SS');
+    return moment(faker.date.recent()).format("YYYY-MM-DD HH:MM:SS");
   },
   geboortedatum(i) {
     const birthdate =
       i % 5 === 0
-        ? faker.date.past(2, moment().subtract(15, 'years'))
-        : faker.date.past(10, moment().subtract(18, 'years'));
+        ? faker.date.past(2, moment().subtract(15, "years"))
+        : faker.date.past(10, moment().subtract(18, "years"));
 
-    return moment(birthdate).format('YYYY-MM-DD');
+    return moment(birthdate).format("YYYY-MM-DD");
   },
 
   minor: trait({
     birthdate() {
-      const birthdate = faker.date.past(2, moment().subtract(15, 'years'));
+      const birthdate = faker.date.past(2, moment().subtract(15, "years"));
 
-      return moment(birthdate).format('YYYY-MM-DD');
-    }
+      return moment(birthdate).format("YYYY-MM-DD");
+    },
   }),
 
   withCommittee: trait({
-    afterCreate(member, server) {}
+    afterCreate(member, server) {},
   }),
 
   small_button: trait({
     button_height: 40,
-    button_width: 70
+    button_width: 70,
   }),
 
   button_height(i) {
@@ -69,25 +69,25 @@ export const MemberFactory = Factory.extend({
     return null;
   },
   bijnaam(i) {
-    const nicknames = [null, null, null, null, null, 'hoi'];
+    const nicknames = [null, null, null, null, null, "hoi"];
 
     return nicknames[i % nicknames.length];
   },
   afbeelding(i) {
     const backgrounds = [
       null,
-      'https://old.professorfrancken.nl/database/streep/afbeeldingen/c538yFPOCdcXhZ6Xqz2l.jpg',
+      "https://old.professorfrancken.nl/database/streep/afbeeldingen/c538yFPOCdcXhZ6Xqz2l.jpg",
       null,
       null,
-      null
+      null,
     ];
 
     return backgrounds[i % backgrounds.length];
   },
   kleur(i) {
-    const colors = [null, null, null, '#e50000'];
+    const colors = [null, null, null, "#e50000"];
 
     return colors[i % colors.length];
   },
-  prominent: null
+  prominent: null,
 });

@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Members from './../Members/Members';
-import { selectMember } from '../../actions';
-import nedap from './../../assets/nedap-logo.png';
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import Members from "./../Members/Members";
+import {selectMember} from "../../actions";
+import nedap from "./../../assets/nedap-logo.png";
 
-const names = [
-  { francken_id: '1403', name: 'Mark', buixieval: 'pink', screen: true }
-];
+const names = [{francken_id: "1403", name: "Mark", buixieval: "pink", screen: true}];
 
 class Present extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { members: [] };
+    this.state = {members: []};
 
     this.fetchMembers = this.fetchMembers.bind(this);
   }
@@ -25,8 +23,8 @@ class Present extends Component {
     fetch(`https://borrelcie.vodka/present/data.php`)
       .then(this.handleResponse)
       .then(
-        members => this.setState({ members }),
-        error => this.setState({ members: [] })
+        (members) => this.setState({members}),
+        (error) => this.setState({members: []})
       );
   }
 
@@ -40,16 +38,16 @@ class Present extends Component {
 
   render() {
     const filteredMembers = this.state.members
-      .map(memberName => {
-        return names.find(name => name.name === memberName);
+      .map((memberName) => {
+        return names.find((name) => name.name === memberName);
       })
-      .filter(member => member !== undefined)
-      .map(presentMember => {
+      .filter((member) => member !== undefined)
+      .map((presentMember) => {
         return this.props.members.find(
-          member => member.id === parseInt(presentMember.francken_id, 10)
+          (member) => member.id === parseInt(presentMember.francken_id, 10)
         );
       })
-      .filter(member => member !== undefined);
+      .filter((member) => member !== undefined);
 
     const selectMember = this.props.selectMember;
 
@@ -62,7 +60,7 @@ class Present extends Component {
             src={nedap}
             className="ml-3 img-fluid"
             alt="Logo of Nedap"
-            style={{ width: '150px' }}
+            style={{width: "150px"}}
           />
         </div>
       </div>
@@ -70,12 +68,12 @@ class Present extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  members: state.members
+const mapStateToProps = (state) => ({
+  members: state.members,
 });
 
-const mapDispatchToProps = dispatch => ({
-  selectMember: member => dispatch(selectMember(member))
+const mapDispatchToProps = (dispatch) => ({
+  selectMember: (member) => dispatch(selectMember(member)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Present);

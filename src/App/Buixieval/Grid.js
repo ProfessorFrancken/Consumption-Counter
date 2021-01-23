@@ -1,9 +1,9 @@
-import React from 'react';
-import Backer from './Backer';
+import React from "react";
+import Backer from "./Backer";
 
-const Grid = ({ width, height, backers, selectMember }) => {
+const Grid = ({width, height, backers, selectMember}) => {
   if (backers.length === 0) {
-    return 'Ga eens roze backen dan!';
+    return "Ga eens roze backen dan!";
   }
 
   if (backers.length === 1) {
@@ -21,7 +21,7 @@ const Grid = ({ width, height, backers, selectMember }) => {
     (sum, backer) => sum + backer.buixieval.contributed,
     0
   );
-  const direction = width > height ? 'row' : 'col';
+  const direction = width > height ? "row" : "col";
 
   const split = () => {
     let i = 2;
@@ -50,17 +50,17 @@ const Grid = ({ width, height, backers, selectMember }) => {
     sliced[0].reduce((sum, backer) => sum + backer.buixieval.contributed, 0) /
     totalContributed;
 
-  const width1 = direction === 'col' ? width : width * partition1;
-  const width2 = direction === 'col' ? width : width - width1;
-  const height1 = direction === 'row' ? height : height * partition1;
-  const height2 = direction === 'row' ? height : height - height1;
+  const width1 = direction === "col" ? width : width * partition1;
+  const width2 = direction === "col" ? width : width - width1;
+  const height1 = direction === "row" ? height : height * partition1;
+  const height2 = direction === "row" ? height : height - height1;
 
   return (
-    <div style={{ width: width, height: height, overflow: 'hidden' }}>
+    <div style={{width: width, height: height, overflow: "hidden"}}>
       <div
         style={{
-          display: direction === 'row' ? 'inline-block' : 'block',
-          overflow: 'hidden'
+          display: direction === "row" ? "inline-block" : "block",
+          overflow: "hidden",
         }}
       >
         <Grid
@@ -72,8 +72,8 @@ const Grid = ({ width, height, backers, selectMember }) => {
       </div>
       <div
         style={{
-          display: direction === 'row' ? 'inline-block' : 'block',
-          overflow: 'hidden'
+          display: direction === "row" ? "inline-block" : "block",
+          overflow: "hidden",
         }}
       >
         <Grid

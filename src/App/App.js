@@ -1,14 +1,14 @@
-import React from 'react';
-import { Layout } from './../Layout/Layout';
-import { AppContent } from './AppContent';
-import 'bootstrap/dist/css/bootstrap.css';
-import './FontAwesome';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import {Layout} from "./../Layout/Layout";
+import {AppContent} from "./AppContent";
+import "bootstrap/dist/css/bootstrap.css";
+import "./FontAwesome";
+import {useLocation} from "react-router-dom";
 
-const App = props => {
-  const { pathname } = useLocation();
+const App = (props) => {
+  const {pathname} = useLocation();
 
-  if (pathname === '/loading') {
+  if (pathname === "/loading") {
     return <AppContent />;
   }
 

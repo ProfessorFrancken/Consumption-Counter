@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-const Range = ({ range, onClick }) => (
+const Range = ({range, onClick}) => (
   <button className="button tile" onClick={() => onClick(range)}>
     {range.surname_start}
     <br />
@@ -10,7 +10,7 @@ const Range = ({ range, onClick }) => (
   </button>
 );
 
-const SurnameRanges = ({ ranges, selectRange }) => (
+const SurnameRanges = ({ranges, selectRange}) => (
   <div className="tilesGrid">
     {ranges.map((range, idx) => (
       <Range range={range} onClick={selectRange} key={idx} />
@@ -23,9 +23,9 @@ SurnameRanges.propTypes = {
     PropTypes.shape({
       members: PropTypes.arrayOf(PropTypes.shape({})),
       surname_start: PropTypes.string.isRequired,
-      surname_end: PropTypes.string.isRequired
+      surname_end: PropTypes.string.isRequired,
     })
-  ).isRequired
+  ).isRequired,
 };
 
 export default SurnameRanges;

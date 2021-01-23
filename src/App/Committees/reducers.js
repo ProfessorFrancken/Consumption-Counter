@@ -1,4 +1,4 @@
-import { TYPES } from 'actions';
+import {TYPES} from "actions";
 
 export function committeeMembers(state = [], action) {
   switch (action.type) {

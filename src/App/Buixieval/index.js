@@ -1,27 +1,27 @@
-import { connect } from 'react-redux';
-import { selectMember } from '../../actions';
+import {connect} from "react-redux";
+import {selectMember} from "../../actions";
 
-import Buixieval from './Buixieval';
+import Buixieval from "./Buixieval";
 
-const mapStateToProps = ({ members }) => ({
+const mapStateToProps = ({members}) => ({
   members: members
     .filter(
-      member =>
+      (member) =>
         member.buixieval &&
-        (member.buixieval.team === 'p' || member.buixieval.team === 'b')
+        (member.buixieval.team === "p" || member.buixieval.team === "b")
     )
-    .map(member =>
+    .map((member) =>
       Object.assign({}, member, {
         buixieval: Object.assign({}, member.buixieval, {
-          contributed: parseFloat(member.buixieval.contributed)
-        })
+          contributed: parseFloat(member.buixieval.contributed),
+        }),
       })
     )
-    .sort((a, b) => b.buixieval.contributed - a.buixieval.contributed)
+    .sort((a, b) => b.buixieval.contributed - a.buixieval.contributed),
 });
 
-const mapDispatchToProps = dispatch => ({
-  selectMember: member => dispatch(selectMember(member))
+const mapDispatchToProps = (dispatch) => ({
+  selectMember: (member) => dispatch(selectMember(member)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buixieval);

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from "react";
+import PropTypes from "prop-types";
 
 class OnLongPress extends Component {
   state = {
     longPressed: false,
-    longPressTimeout: null
+    longPressTimeout: null,
   };
 
   constructor(props) {
@@ -20,14 +20,14 @@ class OnLongPress extends Component {
 
     const longPressTimeOut = setTimeout(this.onLongPress, this.props.timeout);
 
-    this.setState({ longPressTimeOut, longPressed: false });
+    this.setState({longPressTimeOut, longPressed: false});
   }
 
   end(e) {
     e.preventDefault();
 
     if (this.state.longPressed) {
-      this.setState({ longPressed: false, longPressTimeOut: null });
+      this.setState({longPressed: false, longPressTimeOut: null});
       return;
     }
 
@@ -39,21 +39,21 @@ class OnLongPress extends Component {
   onLongPress() {
     clearTimeout(this.state.longPressTimeOut);
 
-    this.setState({ longPressed: true, longPressTimeOut: null });
+    this.setState({longPressed: true, longPressTimeOut: null});
 
     this.props.onLongPress();
   }
 
   render() {
-    const { children } = this.props;
+    const {children} = this.props;
 
-    const childrenWithProps = React.Children.map(children, child =>
+    const childrenWithProps = React.Children.map(children, (child) =>
       React.cloneElement(child, {
         onMouseDown: this.start,
         onTouchStart: this.start,
         onMouseUp: this.end,
         onTouchCancel: this.end,
-        onTouchEnd: this.end
+        onTouchEnd: this.end,
       })
     );
 
@@ -65,11 +65,11 @@ OnLongPress.propTypes = {
   timeout: PropTypes.number.isRequired,
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
-  onLongPress: PropTypes.func.isRequired
+  onLongPress: PropTypes.func.isRequired,
 };
 
 OnLongPress.defaultProps = {
-  timeout: 500
+  timeout: 500,
 };
 
 export default OnLongPress;

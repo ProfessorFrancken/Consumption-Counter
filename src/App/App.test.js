@@ -1,16 +1,16 @@
-import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { mount } from 'enzyme';
-import { menuItems } from 'reducer';
-import App from './App';
-import configureMockStore from 'redux-mock-store';
-import AvailableProducts from './Products/';
-import Prominent from './Prominent';
-import RecentMembers from './Recent';
+import React from "react";
+import {MemoryRouter} from "react-router-dom";
+import {Provider} from "react-redux";
+import {mount} from "enzyme";
+import {menuItems} from "reducer";
+import App from "./App";
+import configureMockStore from "redux-mock-store";
+import AvailableProducts from "./Products/";
+import Prominent from "./Prominent";
+import RecentMembers from "./Recent";
 
-function setup(routes = ['/']) {
-  const props = { menuItems: menuItems(undefined, {}) };
+function setup(routes = ["/"]) {
+  const props = {menuItems: menuItems(undefined, {})};
 
   const mockStore = configureMockStore([]);
   const store = mockStore(mockedState());
@@ -22,41 +22,41 @@ function setup(routes = ['/']) {
     </Provider>
   );
 
-  return { props, app, store };
+  return {props, app, store};
 }
 
-describe('rendering', () => {
-  it('renders without crashing', () => {
-    const { app } = setup();
+describe("rendering", () => {
+  it("renders without crashing", () => {
+    const {app} = setup();
 
-    expect(app.find('Header').length).toBe(1);
-    expect(app.find('AppContent').length).toBe(1);
-    expect(app.find('Footer').length).toBe(1);
+    expect(app.find("Header").length).toBe(1);
+    expect(app.find("AppContent").length).toBe(1);
+    expect(app.find("Footer").length).toBe(1);
   });
 
-  it('shows a selection of surname ranges by default', () => {
-    const { app } = setup();
+  it("shows a selection of surname ranges by default", () => {
+    const {app} = setup();
 
-    expect(app.find('SurnameRanges').length).toBe(1);
+    expect(app.find("SurnameRanges").length).toBe(1);
   });
 
-  describe('rendering screens depending on state', () => {
+  describe("rendering screens depending on state", () => {
     const screens = [
-      { path: '/', component: 'SurnameRanges' },
-      { path: '/prominent', component: Prominent },
-      { path: '/statistics', component: 'Statistics' },
-      { path: '/committees', component: 'Committees' },
-      { path: '/committees/0', component: 'Members' },
-      { path: '/pricelist', component: 'PriceList' },
-      { path: '/recent', component: RecentMembers },
-      { path: '/products', component: AvailableProducts },
-      { path: '/members', component: 'SurnameRanges' },
-      { path: '/members/0', component: 'Members' }
+      {path: "/", component: "SurnameRanges"},
+      {path: "/prominent", component: Prominent},
+      {path: "/statistics", component: "Statistics"},
+      {path: "/committees", component: "Committees"},
+      {path: "/committees/0", component: "Members"},
+      {path: "/pricelist", component: "PriceList"},
+      {path: "/recent", component: RecentMembers},
+      {path: "/products", component: AvailableProducts},
+      {path: "/members", component: "SurnameRanges"},
+      {path: "/members/0", component: "Members"},
     ];
 
-    screens.forEach(screen => {
+    screens.forEach((screen) => {
       it(`renders ${screen.path}`, () => {
-        const { app } = setup([screen.path]);
+        const {app} = setup([screen.path]);
 
         expect(app.find(screen.component).length).toBe(1);
       });
@@ -72,8 +72,8 @@ function mockedState() {
     members: [
       {
         id: 999,
-        firstName: 'John',
-        surname: 'Snow',
+        firstName: "John",
+        surname: "Snow",
         age: 18,
         prominent: null,
         cosmetics: {
@@ -82,10 +82,10 @@ function mockedState() {
           nickname: null,
           button: {
             width: null,
-            height: null
-          }
-        }
-      }
+            height: null,
+          },
+        },
+      },
     ],
     surnameRanges: {
       members_per_range: 30,
@@ -95,8 +95,8 @@ function mockedState() {
           members: [
             {
               id: 1,
-              firstName: 'John',
-              surname: 'Snow',
+              firstName: "John",
+              surname: "Snow",
               age: 18,
               prominent: null,
               cosmetics: {
@@ -105,61 +105,61 @@ function mockedState() {
                 nickname: null,
                 button: {
                   width: null,
-                  height: null
-                }
-              }
-            }
+                  height: null,
+                },
+              },
+            },
           ],
-          surname_start: 'Snow',
-          surname_end: 'Snow'
-        }
-      ]
+          surname_start: "Snow",
+          surname_end: "Snow",
+        },
+      ],
     },
     products: {
       Bier: [
         {
           id: 3,
-          name: 'Hertog Jan',
+          name: "Hertog Jan",
           price: 68,
           position: 1,
-          category: 'Bier',
-          image: 'wCwnyLXTVdPEnKRXjw9I.png',
-          age_restriction: 18
-        }
+          category: "Bier",
+          image: "wCwnyLXTVdPEnKRXjw9I.png",
+          age_restriction: 18,
+        },
       ],
       Fris: [
         {
           id: 27,
-          name: 'Ice Tea',
+          name: "Ice Tea",
           price: 60,
           position: 999,
-          category: 'Fris',
-          image: '',
-          age_restriction: 18
-        }
+          category: "Fris",
+          image: "",
+          age_restriction: 18,
+        },
       ],
       Eten: [
         {
           id: 243,
-          name: 'Kinder Bueno',
+          name: "Kinder Bueno",
           price: 55,
           position: 999,
-          category: 'Eten',
-          image: 'utnCWM87tZclyENVrG03.jpg',
-          age_restriction: 18
-        }
-      ]
+          category: "Eten",
+          image: "utnCWM87tZclyENVrG03.jpg",
+          age_restriction: 18,
+        },
+      ],
     },
     router: {
-      locationBeforeTransitions: null
+      locationBeforeTransitions: null,
     },
     order: {
       member: {
         id: 1,
-        fullName: 'Mark Redeman',
-        age: 19
+        fullName: "Mark Redeman",
+        age: 19,
       },
-      products: []
+      products: [],
     },
     transactions: [],
     recentBuyers: [],
@@ -169,11 +169,11 @@ function mockedState() {
         commissie_id: 0,
         lid_id: 314,
         jaar: 2018,
-        functie: 'King',
-        naam: 'Compucie'
-      }
+        functie: "King",
+        naam: "Compucie",
+      },
     ],
     queuedOrder: null,
-    menuItems: menuItems(undefined, {})
+    menuItems: menuItems(undefined, {}),
   };
 }
