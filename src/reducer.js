@@ -6,10 +6,9 @@ export { products } from 'App/Products/reducers';
 export { recentBuyers } from 'App/Recent/reducers';
 export { menuItems } from 'Layout/Sidebar/reducers';
 export { boardMembers } from 'App/Prominent/reducers';
-export { surnameRanges } from 'App/SurnameRanges/reducers'
+export { surnameRanges } from 'App/SurnameRanges/reducers';
 export { committeeMembers } from 'App/Committees/reducers';
 export { transactions, statistics, activities } from 'App/Statistics/reducers';
-
 
 const defaultOrder = {
   member: { age: 0 },

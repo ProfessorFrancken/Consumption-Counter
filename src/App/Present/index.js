@@ -5,7 +5,7 @@ import { selectMember } from '../../actions';
 import nedap from './../../assets/nedap-logo.png';
 
 const names = [
-  { francken_id: '1403', name: 'Mark', buixieval: 'pink', screen: true },
+  { francken_id: '1403', name: 'Mark', buixieval: 'pink', screen: true }
 ];
 
 class Present extends Component {
@@ -78,7 +78,4 @@ const mapDispatchToProps = dispatch => ({
   selectMember: member => dispatch(selectMember(member))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Present);
+export default connect(mapStateToProps, mapDispatchToProps)(Present);
