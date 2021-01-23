@@ -10,24 +10,24 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/cypress": "^7.0.3",
     "@testing-library/react-hooks": "^5.0.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "connected-react-router": "^6.8.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",
     "history": "^4.7.2",
-    "jwt-decode": "^2.2.0",
+    "jwt-decode": "^3.1.0",
     "lint-staged": "^10.5.3",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "moxios": "^0.4.0",
     "mutationobserver-shim": "^0.3.7",
-    "prettier": "^1.10.2",
+    "prettier": "^2.2.1",
     "react": "^16.14.0",
     "react-calendar-heatmap": "^1.6.3",
     "react-dom": "^16.14.0",
-    "react-hook-form": "^5.7.2",
-    "react-moment": "^0.9.7",
+    "react-hook-form": "^6.14.2",
+    "react-moment": "^1.1.1",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -37,12 +37,11 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^4.0.0",
     "styled-components": "^5.2.1",
-    "victory": "^34.3.12"
+    "victory": "^35.4.6"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
-      "prettier --single-quote --write",
-      "git add"
+      "prettier --single-quote --write"
     ]
   },
   "scripts": {
