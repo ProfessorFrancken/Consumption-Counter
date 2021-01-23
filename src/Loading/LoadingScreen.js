@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { LOADING_STATE } from './reducers';
+import React from "react";
+import PropTypes from "prop-types";
+import {NavLink} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {LOADING_STATE} from "./reducers";
 
-const LoadingScreen = ({ state, features, done }) => {
+const LoadingScreen = ({state, features, done}) => {
   return (
     <div
       className="h-100 d-flex justify-content-center align-items-center"
-      style={{ paddingBottom: '100px' }}
+      style={{paddingBottom: "100px"}}
     >
       <div className="bg-white p-5 rounded">
         <h2 className="">Loading streepsystem data...</h2>
@@ -17,7 +17,7 @@ const LoadingScreen = ({ state, features, done }) => {
             <li key={idx} className="font-weight-bold my-3">
               {feature.loading === LOADING_STATE.REQUESTING && (
                 <FontAwesomeIcon
-                  icon={'spinner'}
+                  icon={"spinner"}
                   spin
                   fixedWidth
                   className="mr-1 text-muted"
@@ -25,14 +25,14 @@ const LoadingScreen = ({ state, features, done }) => {
               )}
               {feature.loading === LOADING_STATE.SUCCESS && (
                 <FontAwesomeIcon
-                  icon={'check-circle'}
+                  icon={"check-circle"}
                   fixedWidth
                   className="mr-1 text-success"
                 />
               )}
               {feature.loading === LOADING_STATE.FAILURE && (
                 <FontAwesomeIcon
-                  icon={'times-circle'}
+                  icon={"times-circle"}
                   fixedWidth
                   className="mr-1 text-danger"
                 />

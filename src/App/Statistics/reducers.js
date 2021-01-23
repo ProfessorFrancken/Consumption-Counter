@@ -1,13 +1,13 @@
-import { TYPES } from 'actions';
-import moment from 'moment';
-import { take } from 'lodash';
+import {TYPES} from "actions";
+import moment from "moment";
+import {take} from "lodash";
 
 const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
 export function transactions(state = [], action) {
   switch (action.type) {
     case TYPES.BUY_ORDER_SUCCESS:
       return take(
-        [{ member: action.member, order: action.order }, ...state],
+        [{member: action.member, order: action.order}, ...state],
         KEEP_TRACK_OF_N_TRANSCACTIONS
       );
     default:
@@ -25,16 +25,16 @@ export function statistics(state = [], action) {
       ordered_at.setMinutes(0);
       ordered_at.setHours(0);
 
-      return state.map(statistic => {
-        if (statistic.date === moment(ordered_at).format('YYYY-MM-DD')) {
+      return state.map((statistic) => {
+        if (statistic.date === moment(ordered_at).format("YYYY-MM-DD")) {
           const beers = action.order.products.filter(
-            product => product.category === 'Bier'
+            (product) => product.category === "Bier"
           ).length;
           const soda = action.order.products.filter(
-            product => product.category === 'Fris'
+            (product) => product.category === "Fris"
           ).length;
           const food = action.order.products.filter(
-            product => product.category === 'Eten'
+            (product) => product.category === "Eten"
           ).length;
 
           return {
@@ -42,7 +42,7 @@ export function statistics(state = [], action) {
             total: statistic.total + action.order.products.length,
             beer: statistic.beer + beers,
             soda: statistic.soda + soda,
-            food: statistic.food + food
+            food: statistic.food + food,
           };
         }
 

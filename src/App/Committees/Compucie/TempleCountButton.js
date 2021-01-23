@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from "react";
 
 class TempleCountButton extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { count: null };
+    this.state = {count: null};
 
     this.fetchTempleCount = this.fetchTempleCount.bind(this);
     this.decreaseTempleCount = this.decreaseTempleCount.bind(this);
@@ -18,8 +18,8 @@ class TempleCountButton extends Component {
     fetch(`https://borrelcie.vodka/chwazorcle/hoeveel.php`)
       .then(this.handleResponse)
       .then(
-        count => this.setState({ count }),
-        error => this.setState({ count: 0 })
+        (count) => this.setState({count}),
+        (error) => this.setState({count: 0})
       );
   }
 
@@ -34,7 +34,7 @@ class TempleCountButton extends Component {
   decreaseTempleCount() {
     this.props.decreaseTempleCount();
 
-    this.setState(({ count }) => ({ count: count - 1 }));
+    this.setState(({count}) => ({count: count - 1}));
   }
 
   render() {

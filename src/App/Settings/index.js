@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import Authenticate from './Authentication';
-import { cancelOrder, buyOrder } from 'actions';
-import FailedOrder from './FailedOrder';
-import RetryAll from './RetryAll';
+import React from "react";
+import {connect} from "react-redux";
+import Authenticate from "./Authentication";
+import {cancelOrder, buyOrder} from "actions";
+import FailedOrder from "./FailedOrder";
+import RetryAll from "./RetryAll";
 
 // Show all products that were bought and the amount of times they were bought
-const Settings = ({ orders, cancel, buy }) => (
+const Settings = ({orders, cancel, buy}) => (
   <div>
     <Authenticate />
     <div className="mb-5 bg-light">
@@ -45,13 +45,13 @@ const Settings = ({ orders, cancel, buy }) => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  orders: state.queuedOrders
+const mapStateToProps = (state) => ({
+  orders: state.queuedOrders,
 });
 
-const mapDispatchToProps = dispatch => ({
-  cancel: order => dispatch(cancelOrder(order)),
-  buy: order => dispatch(buyOrder(order))
+const mapDispatchToProps = (dispatch) => ({
+  cancel: (order) => dispatch(cancelOrder(order)),
+  buy: (order) => dispatch(buyOrder(order)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

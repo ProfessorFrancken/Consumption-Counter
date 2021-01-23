@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
+import {combineReducers} from "redux";
+import {connectRouter} from "connected-react-router";
 
 import {
   authentication,
@@ -16,10 +16,10 @@ import {
   queuedOrders,
   menuItems,
   statistics,
-  activities
-} from '../reducer.js';
+  activities,
+} from "../reducer.js";
 
-export default history =>
+export default (history) =>
   combineReducers({
     authentication,
     loading,
@@ -36,5 +36,5 @@ export default history =>
     menuItems,
     statistics,
     activities,
-    router: connectRouter(history)
+    router: connectRouter(history),
   });

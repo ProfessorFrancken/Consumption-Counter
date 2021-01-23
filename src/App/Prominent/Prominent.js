@@ -1,21 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Member from './../Members/MemberButton';
-import { sortBy } from 'lodash';
+import React from "react";
+import PropTypes from "prop-types";
+import Member from "./../Members/MemberButton";
+import {sortBy} from "lodash";
 
-const Prominent = ({ prominent, boards, selectMember }) => (
+const Prominent = ({prominent, boards, selectMember}) => (
   <div className="prominentGrid">
     <div className="prominentRow">
-      {prominent.map(member => (
+      {prominent.map((member) => (
         <Member member={member} key={member.id} onClick={selectMember} />
       ))}
     </div>
     <div className="boardsRow">
       {boards.map((members, idx) => (
         <div className="boardColumn" key={idx}>
-          {sortBy(members, member => member.function)
+          {sortBy(members, (member) => member.function)
             .reverse()
-            .map(member => (
+            .map((member) => (
               <Member
                 member={member.member}
                 key={member.member.id}
@@ -31,7 +31,7 @@ const Prominent = ({ prominent, boards, selectMember }) => (
 const MemberPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
   firstName: PropTypes.string.isRequired,
-  surname: PropTypes.string.isRequired
+  surname: PropTypes.string.isRequired,
 });
 
 Prominent.propTypes = {
@@ -42,10 +42,10 @@ Prominent.propTypes = {
         id: PropTypes.number.isRequired,
         function: PropTypes.string,
         member: MemberPropType.isRequired,
-        year: PropTypes.number.isRequired
+        year: PropTypes.number.isRequired,
       })
     )
-  ).isRequired
+  ).isRequired,
 };
 
 export default Prominent;

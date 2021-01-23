@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-const RetryAll = ({ orders, buy }) => (
+const RetryAll = ({orders, buy}) => (
   <button
     className="btn btn-success"
-    onClick={() => orders.forEach(order => buy(order.order))}
+    onClick={() => orders.forEach((order) => buy(order.order))}
   >
     Retry all
   </button>

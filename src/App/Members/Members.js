@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Member from './MemberButton';
+import React from "react";
+import PropTypes from "prop-types";
+import Member from "./MemberButton";
 
-const Members = ({ members, selectMember }) => (
+const Members = ({members, selectMember}) => (
   <nav className="tilesGrid">
-    {members.map(member => (
+    {members.map((member) => (
       <Member member={member} key={member.id} onClick={selectMember} />
     ))}
   </nav>
@@ -15,9 +15,9 @@ Members.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       firstName: PropTypes.string.isRequired,
-      surname: PropTypes.string.isRequired
+      surname: PropTypes.string.isRequired,
     })
-  ).isRequired
+  ).isRequired,
 };
 
 export default Members;
