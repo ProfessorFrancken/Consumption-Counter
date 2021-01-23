@@ -40,7 +40,10 @@ class TempleCountButton extends Component {
   render() {
     return (
       <button className="tile button" onClick={this.decreaseTempleCount}>
-        Decrease<br />Temple Count<br />
+        Decrease
+        <br />
+        Temple Count
+        <br />
         {this.state.count ? `(${this.state.count})` : null}
       </button>
     );

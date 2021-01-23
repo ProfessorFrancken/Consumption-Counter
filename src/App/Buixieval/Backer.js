@@ -6,7 +6,9 @@ const Backer = ({ width, height, backer, selectMember }) => {
   const className =
     backer.buixieval.team === 'bstuur'
       ? 'neutral'
-      : backer.buixieval.team === 'p' ? 'pink' : 'blue';
+      : backer.buixieval.team === 'p'
+      ? 'pink'
+      : 'blue';
 
   return (
     <div
