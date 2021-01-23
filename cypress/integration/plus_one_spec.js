@@ -247,6 +247,9 @@ describe('PlusOne.js', () => {
     });
 
     it('Board member from 5 years ago', () => {
+      const date = new Date(2020, 2, 2, 17).getTime();
+      cy.clock(date, ['Date']);
+
       server.create('boardMember', {
         board: association({
           year: 2010
@@ -689,6 +692,8 @@ describe('PlusOne.js', () => {
     });
 
     it(`A minor isn't allowed to buy alcohol`, () => {
+      const after4 = new Date(2020, 2, 2, 17).getTime();
+      cy.clock(after4, ['Date']);
       server.create('member', {
         achternaam: 'Sjaars',
         voornaam: 'Sjaars',
