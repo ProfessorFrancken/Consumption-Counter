@@ -19,6 +19,7 @@ class OnLongPress extends Component {
     this.start = this.start.bind(this);
     this.end = this.end.bind(this);
     this.onLongPress = this.onLongPress.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
   start(e: any) {
     e.preventDefault();
@@ -41,6 +42,9 @@ class OnLongPress extends Component {
     this.setState({longPressed: true, longPressTimeOut: null});
     (this.props as any).onLongPress();
   }
+  onClick(e: any) {
+    this.start(e);
+  }
   render() {
     const {children} = this.props;
     const childrenWithProps = React.Children.map(children, (child) =>
@@ -51,9 +55,72 @@ class OnLongPress extends Component {
         onMouseUp: this.end,
         onTouchCancel: this.end,
         onTouchEnd: this.end,
+        onClick: this.onClick,
       })
     );
     return childrenWithProps;
   }
 }
 export default OnLongPress;
+
+/*
+import {useCallback, useRef, useState} from "react";
+
+const useLongPress = (
+  onLongPress,
+  onClick,
+  {shouldPreventDefault = true, delay = 300} = {}
+) => {
+  const [longPressTriggered, setLongPressTriggered] = useState(false);
+  const timeout = useRef();
+  const target = useRef();
+
+  const start = useCallback(
+    (event) => {
+      if (shouldPreventDefault && event.target) {
+        event.target.addEventListener("touchend", preventDefault, {
+          passive: false,
+        });
+        target.current = event.target;
+      }
+      timeout.current = setTimeout(() => {
+        onLongPress(event);
+        setLongPressTriggered(true);
+      }, delay);
+    },
+    [onLongPress, delay, shouldPreventDefault]
+  );
+
+  const clear = useCallback(
+    (event, shouldTriggerClick = true) => {
+      timeout.current && clearTimeout(timeout.current);
+      shouldTriggerClick && !longPressTriggered && onClick();
+      setLongPressTriggered(false);
+      if (shouldPreventDefault && target.current) {
+        target.current.removeEventListener("touchend", preventDefault);
+      }
+    },
+    [shouldPreventDefault, onClick, longPressTriggered]
+  );
+
+  return {
+    onMouseDown: (e) => start(e),
+    onTouchStart: (e) => start(e),
+    onMouseUp: (e) => clear(e),
+    onMouseLeave: (e) => clear(e, false),
+    onTouchEnd: (e) => clear(e),
+  };
+};
+
+const isTouchEvent = (event: any) => {
+  return "touches" in event;
+};
+
+const preventDefault = (event: any) => {
+  if (!isTouchEvent(event)) return;
+
+  if (event.touches.length < 2 && event.preventDefault) {
+    event.preventDefault();
+  }
+};
+ * */

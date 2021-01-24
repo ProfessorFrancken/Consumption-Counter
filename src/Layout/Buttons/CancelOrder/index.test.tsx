@@ -1,11 +1,10 @@
 import React from "react";
 import CancelOrder from ".";
 import configureMockStore from "redux-mock-store";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
 import {TYPES} from "actions";
 import thunk from "redux-thunk";
 import {Provider} from "react-redux";
+import {fireEvent, render} from "test-utils";
 
 describe("<CancelOrder>", () => {
   it("cancels orders", () => {
@@ -19,15 +18,14 @@ describe("<CancelOrder>", () => {
         ordered_at: 1,
       },
     });
-    const cancel = mount(
+    const {getByRole} = render(
       <Provider store={store}>
         <CancelOrder />
       </Provider>
     );
 
-    cancel.find("button").simulate("click");
-
-    expect(cancel.find("button").text()).toEqual("Cancel buying Pils for €1.00");
+    fireEvent.click(getByRole("button"));
+    expect(getByRole("button")).toHaveTextContent("Cancel buying Pils for €1.00");
 
     expect(store.getActions()).toEqual([
       {
@@ -51,15 +49,14 @@ describe("<CancelOrder>", () => {
         ordered_at: 1,
       },
     });
-    const cancel = mount(
+    const {getByRole} = render(
       <Provider store={store}>
         <CancelOrder />
       </Provider>
     );
 
-    cancel.find("button").simulate("click");
-
-    expect(cancel.find("button").text()).toEqual(
+    fireEvent.click(getByRole("button"));
+    expect(getByRole("button")).toHaveTextContent(
       "Cancel buying multiple products for €2.00"
     );
 
@@ -74,12 +71,12 @@ describe("<CancelOrder>", () => {
   it("isn't shown when no order is queud", () => {
     const mockStore = configureMockStore([thunk]);
     const store = mockStore({queuedOrder: null});
-    const cancel = mount(
+    const {queryByRole} = render(
       <Provider store={store}>
         <CancelOrder />
       </Provider>
     );
 
-    expect(cancel.find("button").length).toBe(0);
+    expect(queryByRole("button")).toBeNull();
   });
 });

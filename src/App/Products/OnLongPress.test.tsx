@@ -1,6 +1,5 @@
 import React from "react";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
+import {render, fireEvent} from "test-utils";
 import OnLongPress from "./OnLongPress";
 
 describe("<OnLongPress>", () => {
@@ -10,13 +9,14 @@ describe("<OnLongPress>", () => {
     const wasClicked = jest.fn();
     const wasLongPressed = jest.fn();
 
-    const onLongPress = mount(
+    const {getByRole} = render(
       <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed}>
         <button>Hoi</button>
       </OnLongPress>
     );
 
-    onLongPress.find("button").simulate("mouseDown").simulate("mouseUp");
+    fireEvent.mouseDown(getByRole("button"));
+    fireEvent.mouseUp(getByRole("button"));
 
     expect(wasClicked).toBeCalled();
     expect(wasLongPressed).not.toBeCalled();
@@ -26,17 +26,15 @@ describe("<OnLongPress>", () => {
     const wasClicked = jest.fn();
     const wasLongPressed = jest.fn();
 
-    const onLongPress = mount(
+    const {getByRole} = render(
       <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} timeout={100}>
         <button>Hoi</button>
       </OnLongPress>
     );
 
-    onLongPress.find("button").simulate("mouseDown");
-
+    fireEvent.mouseDown(getByRole("button"));
     jest.runTimersToTime(100);
-
-    onLongPress.find("button").simulate("mouseUp");
+    fireEvent.mouseUp(getByRole("button"));
 
     expect(wasClicked).not.toBeCalled();
     expect(wasLongPressed).toBeCalled();
@@ -47,13 +45,14 @@ describe("<OnLongPress>", () => {
       const wasClicked = jest.fn();
       const wasLongPressed = jest.fn();
 
-      const onLongPress = mount(
+      const {getByRole} = render(
         <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed}>
           <button>Hoi</button>
         </OnLongPress>
       );
 
-      onLongPress.find("button").simulate("touchStart").simulate("touchEnd");
+      fireEvent.touchStart(getByRole("button"));
+      fireEvent.touchEnd(getByRole("button"));
 
       expect(wasClicked).toBeCalled();
       expect(wasLongPressed).not.toBeCalled();
@@ -63,17 +62,15 @@ describe("<OnLongPress>", () => {
       const wasClicked = jest.fn();
       const wasLongPressed = jest.fn();
 
-      const onLongPress = mount(
+      const {getByRole} = render(
         <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} timeout={100}>
           <button>Hoi</button>
         </OnLongPress>
       );
 
-      onLongPress.find("button").simulate("touchStart");
-
+      fireEvent.touchStart(getByRole("button"));
       jest.runTimersToTime(100);
-
-      onLongPress.find("button").simulate("touchEnd");
+      fireEvent.touchEnd(getByRole("button"));
 
       expect(wasClicked).not.toBeCalled();
       expect(wasLongPressed).toBeCalled();

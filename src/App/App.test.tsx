@@ -1,21 +1,22 @@
 import React from "react";
 import {MemoryRouter} from "react-router-dom";
 import {Provider} from "react-redux";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
 import {menuItems} from "reducer";
 import App from "./App";
 import configureMockStore from "redux-mock-store";
 import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";
 import RecentMembers from "./Recent";
+import {render, screen, within} from "test-utils";
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
+import clock from "jest-plugin-clock";
 
 function setup(routes = ["/"]) {
   const props = {menuItems: menuItems(undefined, {})};
 
   const mockStore = configureMockStore([]);
   const store = mockStore(mockedState());
-  const app = mount(
+  const app = render(
     <Provider store={store}>
       <MemoryRouter initialEntries={routes}>
         <App {...props} />
@@ -28,38 +29,45 @@ function setup(routes = ["/"]) {
 
 describe("rendering", () => {
   it("renders without crashing", () => {
-    const {app} = setup();
+    setup();
 
-    expect(app.find("Header").length).toBe(1);
-    expect(app.find("AppContent").length).toBe(1);
-    expect(app.find("Footer").length).toBe(1);
+    screen.getByRole("contentinfo");
+    screen.getByRole("navigation");
+
+    // Check the header banner
+    screen.getByRole("banner");
+    screen.getByRole("heading");
+
+    screen.getByRole("main");
   });
 
   it("shows a selection of surname ranges by default", () => {
-    const {app} = setup();
+    setup();
+    const main = within(screen.getByRole("main"));
 
-    expect(app.find("SurnameRanges").length).toBe(1);
+    expect(main.getByRole("button")).toHaveTextContent("Snow-Snow");
   });
 
   describe("rendering screens depending on state", () => {
+    clock.set("2018-01-01");
+
     const screens = [
-      {path: "/", component: "SurnameRanges"},
-      {path: "/prominent", component: Prominent},
-      {path: "/statistics", component: "Statistics"},
-      {path: "/committees", component: "Committees"},
-      {path: "/committees/0", component: "Members"},
-      {path: "/pricelist", component: "PriceList"},
-      {path: "/recent", component: RecentMembers},
-      {path: "/products", component: AvailableProducts},
-      {path: "/members", component: "SurnameRanges"},
-      {path: "/members/0", component: "Members"},
+      {path: "/prominent", component: Prominent, title: "Prominent"},
+      {path: "/statistics", component: "Statistics", title: "Statistics"},
+      {path: "/committees", component: "Committees", title: "Committees"},
+      {path: "/committees/0", component: "Members", title: "Compucie"},
+      {path: "/pricelist", component: "PriceList", title: "Pricelist"},
+      {path: "/recent", component: RecentMembers, title: "Recent"},
+      {path: "/products", component: AvailableProducts, title: "John Snow"},
+      {path: "/members/0", component: "Members", title: ""},
     ];
 
     screens.forEach((screen) => {
       it(`renders ${screen.path}`, () => {
         const {app} = setup([screen.path]);
 
-        expect(app.find(screen.component).length).toBe(1);
+        const title = app.getByRole("heading", {level: 1});
+        expect(title).toHaveTextContent(screen.title);
       });
     });
   });
@@ -157,7 +165,7 @@ function mockedState() {
     order: {
       member: {
         id: 1,
-        fullName: "Mark Redeman",
+        fullname: "John Snow",
         age: 19,
       },
       products: [],
@@ -167,11 +175,13 @@ function mockedState() {
     boardMembers: [],
     committeeMembers: [
       {
-        commissie_id: 0,
-        lid_id: 314,
-        jaar: 2018,
-        functie: "King",
-        naam: "Compucie",
+        member_id: 314,
+        year: 2018,
+        function: "King",
+        committee: {
+          id: 0,
+          name: "Compucie",
+        },
       },
     ],
     queuedOrder: null,

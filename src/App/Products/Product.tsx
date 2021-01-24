@@ -5,7 +5,7 @@ const AmountBeingOrdered = ({product}: any) =>
   product.ordered > 0 ? (
     <div className="productAmountOverlay">
       <div className="productAmount">
-        <span>{product.ordered}</span>
+        <span aria-label="amount ordered">{product.ordered}</span>
       </div>
     </div>
   ) : (
@@ -17,6 +17,7 @@ const ProductName = ({product}: any) => <span>{product.name}</span>;
 const Product = ({product, toggle, onClick, locked}: any) => (
   <OnLongPress onClick={() => onClick(product)} onLongPress={() => toggle(product)}>
     <button
+      aria-label={`Buy ${product.name}`}
       className={"button tile " + (locked ? "locked" : "")}
       style={{
         backgroundImage: `url(${product.image})`,

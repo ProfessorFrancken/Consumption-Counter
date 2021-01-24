@@ -1,6 +1,6 @@
 import React from "react";
 
-const Range = ({range, onClick}: any) => (
+const RangeButton = ({range, onClick}: any) => (
   <button className="button tile" onClick={() => onClick(range)}>
     {range.surname_start}
     <br />
@@ -9,19 +9,21 @@ const Range = ({range, onClick}: any) => (
   </button>
 );
 
+type Range = {
+  idx: number;
+  members?: {}[];
+  surname_start: string;
+  surname_end: string;
+};
 type SurnameRangesProps = {
-  ranges: {
-    members?: {}[];
-    surname_start: string;
-    surname_end: string;
-  }[];
+  ranges: Range[];
+  selectRange: (range: Range) => void;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'selectRange' does not exist on type 'Sur... Remove this comment to see the full error message
 const SurnameRanges = ({ranges, selectRange}: SurnameRangesProps) => (
   <div className="tilesGrid">
     {ranges.map((range, idx) => (
-      <Range range={range} onClick={selectRange} key={idx} />
+      <RangeButton range={range} onClick={selectRange} key={range.idx} />
     ))}
   </div>
 );

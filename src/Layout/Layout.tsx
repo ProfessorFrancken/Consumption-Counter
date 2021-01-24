@@ -15,7 +15,7 @@ const backgroundFromProduct = (background = null) => {
       };
 };
 
-const Content = (props: any) => <div className="content">{props.children}</div>;
+const Content = (props: any) => <main className="content">{props.children}</main>;
 
 export const Layout = ({
   menuItems,

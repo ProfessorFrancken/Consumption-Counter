@@ -6,13 +6,12 @@ import Authentication from "./index";
 import api from "./../../../api";
 import {TYPES} from "./../../../actions";
 import moxios from "moxios";
-import {render, fireEvent} from "@testing-library/react";
+import {render, fireEvent, flushAllPromises} from "test-utils";
 import {act} from "react-dom/test-utils";
 import {push} from "connected-react-router";
 
 describe("Authentication", () => {
   const base_api = process.env.REACT_APP_API_SERVER;
-  const flushAllPromises = () => new Promise((resolve) => setImmediate(resolve));
 
   const middlewares = [thunk.withExtraArgument(api)];
   const mockStore = configureMockStore(middlewares);
@@ -20,7 +19,7 @@ describe("Authentication", () => {
   beforeEach(() => moxios.install());
   afterEach(() => moxios.uninstall());
 
-  fit("Shows a warning that the system is not authenticated", () => {
+  it("Shows a warning that the system is not authenticated", () => {
     const store = mockStore({
       authentication: {token: null, request: false},
     });
@@ -53,12 +52,10 @@ describe("Authentication", () => {
       </Provider>
     );
 
-    await act(async () => {
-      fireEvent.change(getByPlaceholderText("Passphrase"), {
-        target: {value: "some long passphrase"},
-      });
-      fireEvent.submit(getByText("Authenticate"));
+    fireEvent.change(getByPlaceholderText("Passphrase"), {
+      target: {value: "some long passphrase"},
     });
+    fireEvent.submit(getByText("Authenticate"));
 
     await act(async () => {
       await flushAllPromises();

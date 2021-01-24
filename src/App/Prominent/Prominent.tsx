@@ -16,14 +16,14 @@ type Props = {
 // @ts-expect-error ts-migrate(2339) FIXME: Property 'selectMember' does not exist on type 'Pr... Remove this comment to see the full error message
 const Prominent = ({prominent, boards, selectMember}: Props) => (
   <div className="prominentGrid">
-    <div className="prominentRow">
+    <div className="prominentRow" aria-label="prominent members">
       {prominent.map((member) => (
         <Member member={member} key={member.id} onClick={selectMember} />
       ))}
     </div>
     <div className="boardsRow">
       {boards.map((members, idx) => (
-        <div className="boardColumn" key={idx}>
+        <div className="boardColumn" key={idx} aria-label="board">
           {sortBy(members, (member: any) => member.function)
             .reverse()
             .map((member: any) => (

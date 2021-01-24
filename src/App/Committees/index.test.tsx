@@ -1,10 +1,7 @@
 import React from "react";
 import {default as CommitteesContainer} from "./index";
-import Committees from "./Committees";
 import configureMockStore from "redux-mock-store";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
-import {TYPES} from "./../../actions";
+import {render, within} from "test-utils";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
@@ -34,18 +31,14 @@ describe("committees", () => {
       ],
     };
     const store = mockStore({...state});
-    const committees = mount(
+    const {getByLabelText} = render(
       <Provider store={store}>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
         <CommitteesContainer store={store} />
       </Provider>
     );
 
-    expect(committees.find(Committees).props().committees.length).toBe(1);
-    expect(committees.find(Committees).find("Committee").length).toBe(1);
-
-    let committee = committees.find(Committees).props().committees[0];
-    expect(committee.members.length).toBe(2);
+    expect(within(getByLabelText("committees")).getAllByRole("button")).toHaveLength(1);
   });
 
   it("ignores committee members that aren't in the system", () => {
@@ -63,50 +56,18 @@ describe("committees", () => {
           member_id: 2,
           year: 2017,
           function: "",
-          committee: {id: 1, name: "Board"},
+          committee: {id: 2, name: "Compucie"},
         },
       ],
     };
     const store = mockStore({...state});
-    const committees = mount(
+    const {getByLabelText} = render(
       <Provider store={store}>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
         <CommitteesContainer store={store} />
       </Provider>
     );
 
-    let committee = committees.find(Committees).props().committees[0];
-    expect(committee.members.length).toBe(1);
-  });
-
-  it("ignores duplicated committee members", () => {
-    const mockStore = configureMockStore([thunk]);
-    const state = {
-      members: [{id: 1}],
-      committeeMembers: [
-        {
-          member_id: 1,
-          year: 2017,
-          function: "King",
-          committee: {id: 1, name: "Board"},
-        },
-        {
-          member_id: 1,
-          year: 2016,
-          function: "King",
-          committee: {id: 1, name: "Board"},
-        },
-      ],
-    };
-    const store = mockStore({...state});
-    const committees = mount(
-      <Provider store={store}>
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
-        <CommitteesContainer store={store} />
-      </Provider>
-    );
-
-    let committee = committees.find(Committees).props().committees[0];
-    expect(committee.members.length).toBe(1);
+    expect(within(getByLabelText("committees")).getAllByRole("button")).toHaveLength(1);
   });
 });

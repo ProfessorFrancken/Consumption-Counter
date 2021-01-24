@@ -1,24 +1,30 @@
 import React from "react";
 
-const Committee = ({committee, onClick}: any) => (
-  <button className="button tile" onClick={() => onClick(committee)}>
+const CommitteeButton = ({committee, onClick}: any) => (
+  <button
+    className="button tile"
+    onClick={() => onClick(committee)}
+    aria-label="committee"
+  >
     {committee.name}
   </button>
 );
 
-type CommitteesProps = {
-  committees: {
-    members?: {}[];
-    id: number;
-    name: string;
-  }[];
+type Committee = {
+  members?: {}[];
+  id: number;
+  name: string;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'selectCommittee' does not exist on type ... Remove this comment to see the full error message
+type CommitteesProps = {
+  committees: Committee[];
+  selectCommittee: (committee: Committee) => void;
+};
+
 const Committees = ({committees, selectCommittee}: CommitteesProps) => (
-  <nav className="tilesGrid">
+  <nav className="tilesGrid" aria-label="committees">
     {committees.map((committee, idx) => (
-      <Committee committee={committee} onClick={selectCommittee} key={idx} />
+      <CommitteeButton committee={committee} onClick={selectCommittee} key={idx} />
     ))}
   </nav>
 );
