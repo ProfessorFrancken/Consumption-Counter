@@ -1,13 +1,10 @@
 import React from "react";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {MemoryRouter} from "react-router-dom";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Provider} from "react-redux";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
 import {mount} from "enzyme";
 import {menuItems} from "reducer";
 import App from "./App";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'redu... Remove this comment to see the full error message
 import configureMockStore from "redux-mock-store";
 import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";

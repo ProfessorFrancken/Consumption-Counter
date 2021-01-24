@@ -1,6 +1,5 @@
 import {createSelector} from "reselect";
 import {membersSelector} from "selectors";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import {groupBy, sortBy, take, first} from "lodash";
 
 const SHOW_N_PROMINENT = 10;
@@ -31,11 +30,13 @@ export const boardsSelector = createSelector(
       take(
         sortBy(
           groupBy(boardMembers, (boardMember: any) => boardMember.year),
+          // @ts-expect-error ts-migrate(2571) FIXME: Object is of type 'unknown'.
           (board: any) => -first(board).year
         ),
         SHOW_N_BOARDS
       ),
       // Make sure that a board member is always placed on the same collumn
+      // @ts-expect-error ts-migrate(2571) FIXME: Object is of type 'unknown'.
       (board: any) => -((first(board).year + 1) % SHOW_N_BOARDS)
     )
 );

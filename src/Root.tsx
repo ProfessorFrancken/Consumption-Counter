@@ -1,7 +1,5 @@
 import React from "react";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Provider} from "react-redux";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Router} from "react-router-dom";
 import AppContainer from "./App/AppContainer";
 import {history} from "./Setup/store";
@@ -16,6 +14,7 @@ type Props = {
 
 const Root = ({store}: Props) => (
   <Provider store={store}>
+    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
     <Router history={history} basename={basename}>
       <AppContainer />
     </Router>

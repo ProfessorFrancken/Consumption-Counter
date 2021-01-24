@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {connect} from "react-redux";
 import {fetchInitialData} from "./../actions";
 import {backgroundSelector, failedOrdersSelector} from "./selectors";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {withRouter} from "react-router-dom";
 import {push} from "connected-react-router";
 import ScreenSaver from "./ScreenSaver";
@@ -35,6 +33,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   goHome: () => dispatch(push("/")),
   goToScreenSaver: () => dispatch(push("/statistics")),
 });
+// @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'ConnectedComponent<typeof AppCon... Remove this comment to see the full error message
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppContainer));
 // TODO add lifecycle stuff so that we can load initial data
 /* export connect(mapStateToProps)(AppContainer)*/

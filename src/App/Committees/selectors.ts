@@ -1,6 +1,5 @@
 import {createSelector} from "reselect";
 import {membersSelector} from "selectors";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import {uniqBy, groupBy} from "lodash";
 
 const committeeMembersSelector = (state: any) => state.committeeMembers;

@@ -1,13 +1,10 @@
 import React from "react";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'redu... Remove this comment to see the full error message
 import configureMockStore from "redux-mock-store";
 import Authentication from "./index";
 import api from "./../../../api";
 import {TYPES} from "./../../../actions";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moxi... Remove this comment to see the full error message
 import moxios from "moxios";
 import {render, fireEvent} from "@testing-library/react";
 import {act} from "react-dom/test-utils";

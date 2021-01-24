@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'redu... Remove this comment to see the full error message
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import {actions, TYPES, TIME_TO_CANCEL} from "./actions";
@@ -7,7 +6,6 @@ import {push, goBack} from "connected-react-router";
 import api from "./api";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moxi... Remove this comment to see the full error message
 import moxios from "moxios";
 
 const middlewares = [thunk.withExtraArgument(api)];
@@ -72,6 +70,7 @@ describe("Fetching initial data", () => {
 
     const store = mockStore({members: []});
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => Promise<any>'... Remove this comment to see the full error message
       .dispatch(actions.fetchInitialData())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -174,6 +173,7 @@ describe("fetching members", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -196,6 +196,7 @@ describe("fetching members", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -230,6 +231,7 @@ describe("fetching board members", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchBoardMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -252,6 +254,7 @@ describe("fetching board members", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchBoardMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -299,6 +302,7 @@ describe("fetching committee members", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchCommitteeMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -321,6 +325,7 @@ describe("fetching committee members", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchCommitteeMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -397,6 +402,7 @@ describe("fetching products", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchProducts())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -419,6 +425,7 @@ describe("fetching products", () => {
     const store = mockStore();
 
     store
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchProducts())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
@@ -433,6 +440,7 @@ describe("selecing a member", () => {
     const store = mockStore({});
 
     store.dispatch(
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => void' is not ... Remove this comment to see the full error message
       actions.selectRangeOfSurnames({
         idx: 0,
         range: [],
@@ -465,6 +473,7 @@ describe("selecing a member", () => {
       },
     };
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => void' is not ... Remove this comment to see the full error message
     store.dispatch(actions.selectMember(member));
 
     expect(store.getActions()).toEqual([
@@ -481,6 +490,7 @@ describe("cancelling", () => {
   it("can cancel any selecion by going back", () => {
     const store = mockStore({});
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
     store.dispatch(actions.goBack());
 
     expect(store.getActions()).toEqual([goBack(), {type: TYPES.GO_BACK}]);
@@ -505,6 +515,7 @@ describe("buying products", () => {
 
     // and when adding a product to order
     const product = {id: 2};
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
     store.dispatch(actions.addProductToOrder(product));
 
     // then we buy a product
@@ -525,6 +536,7 @@ describe("buying products", () => {
     });
 
     moxios.stubRequest(`${base_api}/orders`, {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ request: {}; headers: { "conte... Remove this comment to see the full error message
       request: {},
       headers: {"content-type": "application/json"},
     });
@@ -532,6 +544,7 @@ describe("buying products", () => {
     // and when adding a product to order
     const order = {products: [product], member, ordered_at: 1519344000000};
     const flushAllPromises = () => new Promise((resolve) => setImmediate(resolve));
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
     store.dispatch(actions.addProductToOrder(product)).then(() => {
       jest.runTimersToTime(TIME_TO_CANCEL);
 
@@ -559,6 +572,7 @@ describe("buying products", () => {
       const member = {id: 1};
       const store = mockStore();
       store
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
         .dispatch(actions.makeOrder({member, products}))
         .then(() => {
           // then we buy a product
@@ -578,6 +592,7 @@ describe("buying products", () => {
 
     it("buys an order after x seconds", (done) => {
       moxios.stubRequest(`${base_api}/orders`, {
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ request: {}; headers: { "conte... Remove this comment to see the full error message
         request: {},
         headers: {"content-type": "application/json"},
       });
@@ -594,6 +609,7 @@ describe("buying products", () => {
         ordered_at: 1519344000000,
       };
       const store = mockStore();
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
       store.dispatch(actions.makeOrder(order)).then(() => {
         jest.runTimersToTime(TIME_TO_CANCEL);
 
@@ -623,9 +639,11 @@ describe("buying products", () => {
       const store = mockStore();
 
       store
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
         .dispatch(actions.makeOrder(order))
         .then(() => {
           store.dispatch(
+            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => void' is not ... Remove this comment to see the full error message
             actions.cancelOrder({products, member, ordered_at: 1519344000000})
           );
           jest.runTimersToTime(TIME_TO_CANCEL);
@@ -656,6 +674,7 @@ describe("committees", () => {
   it("selects a committee", () => {
     const store = mockStore({});
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => void' is not ... Remove this comment to see the full error message
     store.dispatch(actions.selectCommittee({id: 0}));
 
     expect(store.getActions()).toEqual([
@@ -674,10 +693,12 @@ describe("Fetching initial data", () => {
   clock.set("2018-01-01");
   it("plays chwazi", () => {
     moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`, {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ members: never[]; }' is not as... Remove this comment to see the full error message
       members: [],
     });
 
     const store = mockStore({});
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => Promise<Axios... Remove this comment to see the full error message
     store.dispatch(actions.chwazi());
 
     // expect(fetchMock.calls.length).toBe(1);

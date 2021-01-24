@@ -1,6 +1,5 @@
 import {TYPES} from "actions";
 import moment from "moment";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import {take} from "lodash";
 const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
 export function transactions(state = [], action: any) {
