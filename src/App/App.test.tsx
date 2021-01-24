@@ -31,14 +31,14 @@ describe("rendering", () => {
   it("renders without crashing", () => {
     setup();
 
-    screen.getByRole("contentinfo");
-    screen.getByRole("navigation");
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+    expect(screen.getByRole("navigation")).toBeInTheDocument();
 
     // Check the header banner
-    screen.getByRole("banner");
-    screen.getByRole("heading");
+    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(screen.getByRole("heading")).toBeInTheDocument();
 
-    screen.getByRole("main");
+    expect(screen.getByRole("main")).toBeInTheDocument();
   });
 
   it("shows a selection of surname ranges by default", () => {
