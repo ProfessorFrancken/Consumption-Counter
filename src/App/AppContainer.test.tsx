@@ -2,14 +2,11 @@ import React from "react";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
 import {mount} from "enzyme";
 import AppContainer from "./AppContainer";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Router} from "react-router-dom";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Provider} from "react-redux";
 import {create, history} from "./../Setup/store";
 import {TYPES} from "./../actions";
 import MockDate from "mockdate";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moxi... Remove this comment to see the full error message
 import moxios from "moxios";
 
 xdescribe("Plus One", () => {

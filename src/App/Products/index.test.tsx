@@ -1,11 +1,9 @@
 import React from "react";
 import AvailableProducts from "./index";
 import Products from "./Products";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'redu... Remove this comment to see the full error message
 import configureMockStore from "redux-mock-store";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
 import {mount} from "enzyme";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 
@@ -25,6 +23,7 @@ it("renders, and it does not include products that a member is not allowed to bu
   });
   const products = mount(
     <Provider store={store}>
+      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
       <AvailableProducts store={store} />
     </Provider>
   );
@@ -64,6 +63,7 @@ it("shows the amount of products that are currently being orderd", () => {
 
   const products = mount(
     <Provider store={store}>
+      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
       <AvailableProducts store={store} />
     </Provider>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import Price from "./../Price";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import {groupBy, map} from "lodash";
 import Moment from "react-moment";
 

@@ -1,6 +1,5 @@
 import {TYPES} from "./actions";
 import buixieval from "./buixieval";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moxi... Remove this comment to see the full error message
 import moxios from "moxios";
 import moment from "moment";
 

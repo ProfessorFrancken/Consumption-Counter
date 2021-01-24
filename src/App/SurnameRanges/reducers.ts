@@ -1,5 +1,4 @@
 import {TYPES} from "actions";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import {chunk, first, last} from "lodash";
 
 const defaultRanges = {
@@ -24,7 +23,9 @@ export function surnameRanges(state = defaultRanges, action: any) {
           (members: any, idx: any) => ({
             idx,
             members,
+            // @ts-expect-error ts-migrate(2571) FIXME: Object is of type 'unknown'.
             surname_start: first(members).surname,
+            // @ts-expect-error ts-migrate(2571) FIXME: Object is of type 'unknown'.
             surname_end: last(members).surname,
           })
         ),

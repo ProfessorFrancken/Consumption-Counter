@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import {connect} from "react-redux";
 import {addProductToOrder, buyMore} from "actions";
 import {productsWithOrderCountSelector} from "./selectors";
@@ -15,4 +14,5 @@ const mapDispatchToProps = (dispatch: any) => ({
   toggle: (product: any) => dispatch(buyMore(product)),
 });
 
+// @ts-expect-error ts-migrate(2345) FIXME: Argument of type '({ products, addProductToOrder, ... Remove this comment to see the full error message
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

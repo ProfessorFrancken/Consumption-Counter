@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
 import {orderBy, pick} from "lodash";
 import {push, goBack as goBackRoute} from "connected-react-router";
 import {setHeader} from "./Setup/authHeader";
