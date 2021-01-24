@@ -1,10 +1,7 @@
 import React from "react";
 import {default as ProminentContainer} from "./index";
-import Prominent from "./Prominent";
 import configureMockStore from "redux-mock-store";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
-import {TYPES} from "./../../actions";
+import {render, within} from "test-utils";
 import thunk from "redux-thunk";
 import {Provider} from "react-redux";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
@@ -39,14 +36,16 @@ describe("prominent", () => {
       ],
     };
     const store = mockStore({...state});
-    const prominent = mount(
+    const {getAllByLabelText, getByLabelText, getAllByRole} = render(
       <Provider store={store}>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
         <ProminentContainer store={store} />
       </Provider>
     );
 
-    expect(prominent.find(Prominent).props().boards[0].length).toBe(2);
+    expect(getAllByLabelText("board")).toHaveLength(1);
+    const board = getByLabelText("board");
+    expect(getAllByRole("button", board)).toHaveLength(2);
   });
 
   it("ignores members that aren't in the system", () => {
@@ -68,14 +67,16 @@ describe("prominent", () => {
       ],
     };
     const store = mockStore({...state});
-    const prominent = mount(
+    const {getAllByLabelText, getByLabelText} = render(
       <Provider store={store}>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
         <ProminentContainer store={store} />
       </Provider>
     );
 
-    expect(prominent.find(Prominent).props().boards[0].length).toBe(1);
+    expect(getAllByLabelText("board")).toHaveLength(1);
+    const board = getByLabelText("board");
+    expect(within(board).getAllByRole("button")).toHaveLength(1);
   });
 
   it("Only shows prominent members if they bought a product recently", () => {
@@ -110,13 +111,14 @@ describe("prominent", () => {
       ],
     };
     const store = mockStore({...state});
-    const prominent = mount(
+    const {getByLabelText} = render(
       <Provider store={store}>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
         <ProminentContainer store={store} />
       </Provider>
     );
 
-    expect(prominent.find(Prominent).props().prominent.length).toBe(1);
+    const board = getByLabelText("prominent members");
+    expect(within(board).getAllByRole("button", board)).toHaveLength(1);
   });
 });

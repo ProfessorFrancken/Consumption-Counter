@@ -1,12 +1,10 @@
 import React from "react";
 import AuthenticationForm from "./AuthenticationForm";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {render, fireEvent} from "test-utils";
 
 describe("<AuthenticationForm />", () => {
   it("shows a warning if the system is not authenticated", () => {
-    const app = mount(
+    const {getByRole} = render(
       <AuthenticationForm
         changePassword={jest.fn()}
         submit={jest.fn()}
@@ -17,14 +15,14 @@ describe("<AuthenticationForm />", () => {
       />
     );
 
-    expect(app.find('button[type="submit"]').text()).toContain("Authenticate");
+    expect(getByRole("button")).toHaveTextContent("Authenticate");
   });
 
   it("is possible to refresh a token if a token is already present", () => {
     const token =
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4";
 
-    const app = mount(
+    const {getByRole} = render(
       <AuthenticationForm
         changePassword={jest.fn()}
         submit={jest.fn()}
@@ -35,14 +33,11 @@ describe("<AuthenticationForm />", () => {
       />
     );
 
-    expect(app.find('button[type="submit"]').text()).toContain("Refresh token");
-    expect(app.find('button[type="submit"]').find(FontAwesomeIcon).props().icon).toBe(
-      "sync"
-    );
+    expect(getByRole("button")).toHaveTextContent("Refresh token");
   });
 
   it("shows a waiting message when authenticating", () => {
-    const app = mount(
+    const {getByRole} = render(
       <AuthenticationForm
         changePassword={jest.fn()}
         submit={jest.fn()}
@@ -53,12 +48,13 @@ describe("<AuthenticationForm />", () => {
       />
     );
 
-    expect(app.find('button[type="submit"]').text()).toContain("Waiting");
+    expect(getByRole("button")).toHaveTextContent("Waiting");
+    expect(getByRole("button")).toHaveAttribute("disabled");
   });
 
   describe("error messages", () => {
-    it("tells the user if their password was incorrect", () => {
-      const app = mount(
+    fit("tells the user if their password was incorrect", () => {
+      const {getByText} = render(
         <AuthenticationForm
           changePassword={jest.fn()}
           submit={jest.fn()}
@@ -69,12 +65,11 @@ describe("<AuthenticationForm />", () => {
         />
       );
 
-      expect(app.find(".invalid-feedback").length).toBe(1);
-      expect(app.find(".invalid-feedback").text()).toContain("password");
+      expect(getByText("The given password was incorrect")).toBeVisible();
     });
 
     it("tells the user if something went wrong on the server", () => {
-      const app = mount(
+      const {getByText} = render(
         <AuthenticationForm
           changePassword={jest.fn()}
           submit={jest.fn()}
@@ -85,8 +80,7 @@ describe("<AuthenticationForm />", () => {
         />
       );
 
-      expect(app.find(".invalid-feedback").length).toBe(1);
-      expect(app.find(".invalid-feedback").text()).toContain("compucie");
+      expect(getByText("call the compucie")).toBeVisible();
     });
   });
 });

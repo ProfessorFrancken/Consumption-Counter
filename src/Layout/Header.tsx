@@ -12,7 +12,7 @@ const CommitteeTitle = ({
   const committees = useSelector(committeesSelector);
   const selectedCommittee = committees.find(({id}: any) => id === parseInt(page, 10));
 
-  return <span>{selectedCommittee ? selectedCommittee.name : "Unkown committee"}</span>;
+  return <span>{selectedCommittee ? selectedCommittee.name : "Unknown committee"}</span>;
 };
 
 const BuyProductsForMemberTitle = ({
@@ -26,7 +26,7 @@ const BuyProductsForMemberTitle = ({
 };
 
 const HeaderTitle = () => (
-  <div className="titleName header-item">
+  <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
     <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
     <Route exact path="/settings" render={() => <span>Settings</span>} />
     <Route exact path="/prominent" render={() => <span>Prominent</span>} />
@@ -37,11 +37,11 @@ const HeaderTitle = () => (
     <Route exact path="/committees/:page(\d+)" component={CommitteeTitle} />
     <Route exact path="/products" component={BuyProductsForMemberTitle} />
     <Route exact path="/present" render={() => <span>Present</span>} />
-  </div>
+  </h1>
 );
 
 const Header = ({onClick, failedOrders}: any) => (
-  <div className="header">
+  <header className="header">
     <HeaderTitle />
     <div className="header-item">
       <Route
@@ -73,7 +73,7 @@ const Header = ({onClick, failedOrders}: any) => (
         </NavLink>
       </div>
     )}
-  </div>
+  </header>
 );
 
 export default Header;

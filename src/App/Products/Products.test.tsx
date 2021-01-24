@@ -1,22 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
+import {render, fireEvent} from "test-utils";
 import Products from "./Products";
 
 it("renders without crashing", () => {
-  const div = document.createElement("div");
-
-  ReactDOM.render(
+  render(
     <Products
       products={{Bier: [], Fris: [], Eten: []}}
       addProductToOrder={(click) => click}
-    />,
-    div
+    />
   );
 });
 
-it("adds products to an order when clicked", () => {
+it("adds products to an order when clicked", async () => {
   const addToOrder = jest.fn();
 
   const products = (
@@ -30,12 +25,16 @@ it("adds products to an order when clicked", () => {
     />
   );
 
-  mount(products).find("Product").simulate("mouseDown").simulate("mouseUp");
+  const screen = render(products);
+
+  // Since this component uses a long press event, we need to simulate mouse down and up
+  fireEvent.mouseDown(screen.getByLabelText("Buy Hertog-Jan"));
+  fireEvent.mouseUp(screen.getByLabelText("Buy Hertog-Jan"));
 
   expect(addToOrder).toBeCalledWith({id: 1, name: "Hertog-Jan", image: ""});
 });
 
-xit("renders products from beer, drinks and food categories", () => {
+it("renders products from beer, drinks and food categories", () => {
   const products = (
     <Products
       products={{

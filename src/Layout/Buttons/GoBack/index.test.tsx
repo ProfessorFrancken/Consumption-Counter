@@ -2,24 +2,23 @@ import React from "react";
 import GoBack from ".";
 import configureMockStore from "redux-mock-store";
 import {MemoryRouter} from "react-router-dom";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'enzy... Remove this comment to see the full error message
-import {mount} from "enzyme";
 import {TYPES} from "actions";
 import {push, goBack} from "connected-react-router";
 import thunk from "redux-thunk";
+import {render, fireEvent} from "test-utils";
 
 describe("<GoBack />", () => {
   it("renders", () => {
     const mockStore = configureMockStore([thunk]);
 
     const store = mockStore({queuedOrder: null});
-    const goback = mount(
+    const {getByRole} = render(
       <MemoryRouter initialEntries={["/products"]}>
         <GoBack store={store} />
       </MemoryRouter>
     );
 
-    goback.find("button").simulate("click");
+    fireEvent.click(getByRole("button"));
 
     expect(store.getActions()).toEqual([goBack(), {type: TYPES.GO_BACK}]);
   });
@@ -53,13 +52,13 @@ describe("<GoBack />", () => {
         },
       },
     });
-    const goback = mount(
+    const {getByRole} = render(
       <MemoryRouter>
         <GoBack store={store} />
       </MemoryRouter>
     );
 
-    goback.find("button").simulate("click");
+    fireEvent.click(getByRole("button"));
 
     expect(store.getActions()).toEqual([
       push("/products"),

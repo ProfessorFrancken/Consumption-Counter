@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Product from "./Product";
 
-const Category = ({category, onClick, toggle, name, locked}: any) => (
-  <nav className={"categoryRow"}>
-    {category.map((product: any) => (
+const Category = ({products, onClick, toggle, name, locked}: any) => (
+  <nav className={"categoryRow"} aria-label={`${name} category`}>
+    {products.map((product: any) => (
       <Product
         product={product}
         onClick={onClick}
@@ -28,24 +28,35 @@ type ProductsProps = {
 // @ts-expect-error ts-migrate(2339) FIXME: Property 'toggle' does not exist on type 'Products... Remove this comment to see the full error message
 const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
   const beer = products["Bier"] || [];
-  const drinks = products["Fris"] || [];
+  const soda = products["Fris"] || [];
   const food = products["Eten"] || [];
 
   return (
     <div className="productsGrid">
       {beer.length > 0 && (
         <Category
+          name="beer"
           onClick={addProductToOrder}
           toggle={toggle}
-          category={beer}
+          products={beer}
           locked={false}
         />
       )}
-      {drinks.length > 0 && (
-        <Category onClick={addProductToOrder} toggle={toggle} category={drinks} />
+      {soda.length > 0 && (
+        <Category
+          name="soda"
+          onClick={addProductToOrder}
+          toggle={toggle}
+          products={soda}
+        />
       )}
       {food.length > 0 && (
-        <Category onClick={addProductToOrder} toggle={toggle} category={food} />
+        <Category
+          name="food"
+          onClick={addProductToOrder}
+          toggle={toggle}
+          products={food}
+        />
       )}
     </div>
   );

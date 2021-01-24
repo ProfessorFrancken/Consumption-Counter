@@ -9,7 +9,7 @@ const FooterActions = styled.div`
   display: flex;
 `;
 
-const FooterContainer = styled.div`
+const FooterContainer = styled.footer`
   padding-left: 110px;
   display: flex;
   justify-content: space-between;

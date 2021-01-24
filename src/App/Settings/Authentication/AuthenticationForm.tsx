@@ -32,7 +32,7 @@ const invalidFeedback = (error: any) => {
 };
 const AuthenticateButton = ({request, token}: any) => {
   if (request) {
-    return <Button>Waiting</Button>;
+    return <Button disabled>Waiting</Button>;
   }
   if (token) {
     return (

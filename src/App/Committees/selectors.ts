@@ -40,14 +40,16 @@ export const committeesWithMembersSelector = createSelector(
   committeesSelector,
   committeeMembersWithMemberSelector,
   (committees, members) =>
-    committees.map((committee: any) => ({
-      ...committee,
+    committees
+      .map((committee: any) => ({
+        ...committee,
 
-      members: uniqBy(
-        members.filter((member: any) => member.committee_id === committee.id),
-        (member: any) => member.id
-      ),
-    }))
+        members: uniqBy(
+          members.filter((member: any) => member.committee_id === committee.id),
+          (member: any) => member.id
+        ),
+      }))
+      .filter(({members}) => members.length > 0)
 );
 
 export const membersInCommitteesSelector = createSelector(

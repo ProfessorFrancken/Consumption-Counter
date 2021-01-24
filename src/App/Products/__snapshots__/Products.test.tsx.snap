@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders products from beer, drinks and food categories 1`] = `
+<Products
+  addProductToOrder={[MockFunction]}
+  products={
+    Object {
+      "Bier": Array [
+        Object {
+          "age_restriction": 0,
+          "id": 1,
+          "image": "",
+          "name": "Hertog-Jan",
+        },
+      ],
+      "Eten": Array [],
+      "Fris": Array [],
+    }
+  }
+/>
+`;
