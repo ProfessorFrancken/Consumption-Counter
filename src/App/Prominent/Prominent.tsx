@@ -1,19 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Member from "./../Members/MemberButton";
 import {sortBy} from "lodash";
+import {MemberType} from "App/Members/Members";
 
 type Props = {
-  prominent: MemberPropType[];
+  prominent: MemberType[];
   boards: {
     id: number;
     function?: string;
-    member: MemberPropType;
+    member: MemberType;
     year: number;
   }[][];
+  selectMember: (member: MemberType) => void;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'selectMember' does not exist on type 'Pr... Remove this comment to see the full error message
 const Prominent = ({prominent, boards, selectMember}: Props) => (
   <div className="prominentGrid">
     <div className="prominentRow" aria-label="prominent members">
@@ -38,17 +38,5 @@ const Prominent = ({prominent, boards, selectMember}: Props) => (
     </div>
   </div>
 );
-
-type MemberPropType = {
-  id: number;
-  firstName: string;
-  surname: string;
-};
-
-const MemberPropType: PropTypes.Requireable<MemberPropType> = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  firstName: PropTypes.string.isRequired,
-  surname: PropTypes.string.isRequired,
-});
 
 export default Prominent;

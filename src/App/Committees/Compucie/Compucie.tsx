@@ -8,18 +8,16 @@ import TempleCountButton from "./TempleCountButton";
 type Props = {
   compucie: MemberPropType[];
   scriptcie: MemberPropType[];
+  selectMember: (member: any) => void;
+  reloadApplication: () => void;
+  decreaseTempleCount: () => void;
 };
 
 const Compucie = ({
   compucie,
   scriptcie,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'selectMember' does not exist on type 'Pr... Remove this comment to see the full error message
   selectMember,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'toSettings' does not exist on type 'Prop... Remove this comment to see the full error message
-  toSettings,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'reloadApplication' does not exist on typ... Remove this comment to see the full error message
   reloadApplication,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'decreaseTempleCount' does not exist on t... Remove this comment to see the full error message
   decreaseTempleCount,
 }: Props) => (
   <div className="d-flex flex-column justify-content-stretch h-100">

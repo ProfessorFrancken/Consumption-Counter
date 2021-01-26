@@ -1,9 +1,14 @@
 import React, {Component} from "react";
 import Grid from "./Grid";
 import "./buixieval.css";
+import {MemberType} from "App/Members/Members";
 type State = any;
-class Buixieval extends Component<{}, State> {
-  constructor(props: {}) {
+type Props = {
+  members: MemberType[];
+  selectMember: (member: MemberType) => void;
+};
+class Buixieval extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       width: 0,

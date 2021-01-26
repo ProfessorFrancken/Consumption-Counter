@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {goBack} from "actions";
 import {goBackText} from "./selectors";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -20,14 +20,9 @@ const GoBack = ({text, onClick}: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  text: goBackText(state),
-});
+export default () => {
+  const dispatch = useDispatch();
+  const text = useSelector(goBackText);
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onClick: () => dispatch(goBack()),
-  };
+  return <GoBack text={text} onClick={() => dispatch(goBack())} />;
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(GoBack);

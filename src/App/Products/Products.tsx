@@ -16,12 +16,13 @@ const Category = ({products, onClick, toggle, name, locked}: any) => (
   </nav>
 );
 
+export type ProductsType = {
+  Bier: ProductPropType[];
+  Fris: ProductPropType[];
+  Eten: ProductPropType[];
+};
 type ProductsProps = {
-  products: {
-    Bier: ProductPropType[];
-    Fris: ProductPropType[];
-    Eten: ProductPropType[];
-  };
+  products: ProductsType;
   addProductToOrder: (...args: any[]) => any;
 };
 
@@ -62,7 +63,7 @@ const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
   );
 };
 
-type ProductPropType = {
+export type ProductPropType = {
   id: number;
   name: string;
   image: string;

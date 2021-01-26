@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 import {groupBy, map} from "lodash";
 import Price from "./../Price";
 import moment from "moment";
@@ -159,12 +159,16 @@ const Statistics = ({statistics = [], activities = [], transactions}: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  statistics: state.statistics,
-  activities: state.activities,
-  transactions: state.transactions,
-});
+export default () => {
+  const statistics = useSelector((state: any) => state.statistics);
+  const activities = useSelector((state: any) => state.activities);
+  const transactions = useSelector((state: any) => state.transactions);
 
-const mapDispatchToProps = (dispatch: any) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Statistics);
+  return (
+    <Statistics
+      statistics={statistics}
+      activities={activities}
+      transactions={transactions}
+    />
+  );
+};
