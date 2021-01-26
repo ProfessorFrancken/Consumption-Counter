@@ -1,11 +1,19 @@
+import {LocationListener, UnregisterCallback} from "history";
 import {Component} from "react";
+
+type LocationListenerType = (listener: LocationListener) => UnregisterCallback;
+
 export const SCREEN_SAVER_TIMEOUT = 30000;
 export default class ScreenSaver extends Component {
   unlisten: any;
   state = {
     screenSaver: null,
   };
-  constructor(props: any) {
+  constructor(props: {
+    listen: LocationListenerType;
+    goHome: () => void;
+    goToScreenSave: () => void;
+  }) {
     super(props);
     this.screenSaver = this.screenSaver.bind(this);
   }
