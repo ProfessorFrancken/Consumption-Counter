@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {buyAll} from "actions";
 import Price from "App/Price";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -26,12 +26,9 @@ const BuyAll = ({buyAll, products = []}: any) => {
   );
 };
 
-const mapStateToProps = ({order}: any) => ({
-  products: order.products,
-});
+export default () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state: any) => state.order.products);
 
-const mapDispatchToProps = (dispatch: any) => ({
-  buyAll: () => dispatch(buyAll()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(BuyAll);
+  return <BuyAll products={products} buyAll={() => dispatch(buyAll())} />;
+};

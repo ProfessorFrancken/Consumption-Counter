@@ -6,6 +6,7 @@ import {TYPES} from "actions";
 import {push, goBack} from "connected-react-router";
 import thunk from "redux-thunk";
 import {render, fireEvent} from "test-utils";
+import {Provider} from "react-redux";
 
 describe("<GoBack />", () => {
   it("renders", () => {
@@ -13,9 +14,11 @@ describe("<GoBack />", () => {
 
     const store = mockStore({queuedOrder: null});
     const {getByRole} = render(
-      <MemoryRouter initialEntries={["/products"]}>
-        <GoBack store={store} />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/products"]}>
+          <GoBack />
+        </MemoryRouter>
+      </Provider>
     );
 
     fireEvent.click(getByRole("button"));
@@ -53,9 +56,11 @@ describe("<GoBack />", () => {
       },
     });
     const {getByRole} = render(
-      <MemoryRouter>
-        <GoBack store={store} />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <GoBack />
+        </MemoryRouter>
+      </Provider>
     );
 
     fireEvent.click(getByRole("button"));

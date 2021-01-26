@@ -1,15 +1,16 @@
 import React from "react";
 import Member from "./MemberButton";
 
+export type MemberType = {
+  id: number;
+  firstName: string;
+  surname: string;
+};
 type Props = {
-  members: {
-    id: number;
-    firstName: string;
-    surname: string;
-  }[];
+  members: MemberType[];
+  selectMember: (member: MemberType) => void;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'selectMember' does not exist on type 'Pr... Remove this comment to see the full error message
 const Members = ({members, selectMember}: Props) => (
   <nav className="tilesGrid">
     {members.map((member) => (

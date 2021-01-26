@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Authenticate from "./Authentication";
 import {cancelOrder, buyOrder} from "actions";
 import FailedOrder from "./FailedOrder";
@@ -45,13 +45,15 @@ const Settings = ({orders, cancel, buy}: any) => (
   </div>
 );
 
-const mapStateToProps = (state: any) => ({
-  orders: state.queuedOrders,
-});
+export default () => {
+  const dispatch = useDispatch();
+  const orders = useSelector((state: any) => state.queuedOrders);
 
-const mapDispatchToProps = (dispatch: any) => ({
-  cancel: (order: any) => dispatch(cancelOrder(order)),
-  buy: (order: any) => dispatch(buyOrder(order)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+  return (
+    <Settings
+      orders={orders}
+      cancel={(order: any) => dispatch(cancelOrder(order))}
+      buy={(order: any) => dispatch(buyOrder(order))}
+    />
+  );
+};

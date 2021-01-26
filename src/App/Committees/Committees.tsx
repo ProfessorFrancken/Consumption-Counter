@@ -10,7 +10,7 @@ const CommitteeButton = ({committee, onClick}: any) => (
   </button>
 );
 
-type Committee = {
+export type Committee = {
   members?: {}[];
   id: number;
   name: string;

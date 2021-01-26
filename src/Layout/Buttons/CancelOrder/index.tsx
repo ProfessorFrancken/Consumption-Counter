@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {cancelOrder} from "actions";
 import {queuedOrderSelector} from "selectors";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -24,12 +24,13 @@ const CancelOrder = ({onClick, queuedOrder}: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  onClick: (order: any) => dispatch(cancelOrder(order.order)),
-});
-
-const mapStateToProps = (state: any) => ({
-  queuedOrder: queuedOrderSelector(state),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CancelOrder);
+export default () => {
+  const dispatch = useDispatch();
+  const queuedOrder = useSelector(queuedOrderSelector);
+  return (
+    <CancelOrder
+      onClick={(order: any) => dispatch(cancelOrder(order.order))}
+      queuedOrder={queuedOrder}
+    />
+  );
+};
