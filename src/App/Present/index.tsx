@@ -1,67 +1,83 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import Members from "./../Members/Members";
+import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+import Members, {MemberType} from "./../Members/Members";
 import {selectMember} from "../../actions";
 import nedap from "./../../assets/nedap-logo.png";
-const names = [{francken_id: "1403", name: "Mark", buixieval: "pink", screen: true}];
-type PresentState = any;
-class Present extends Component<{}, PresentState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {members: []};
-    this.fetchMembers = this.fetchMembers.bind(this);
+
+type PresentMemberType = {
+  francken_id: string;
+  name: string;
+  buixieval: string;
+  screen: boolean;
+};
+const names: PresentMemberType[] = [
+  {francken_id: "1403", name: "Mark", buixieval: "pink", screen: true},
+];
+
+const handleResponse = (response: any) => {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
   }
-  UNSAFE_componentWillMount() {
-    this.fetchMembers();
-  }
-  fetchMembers() {
+  return response.json();
+};
+
+const useFetchPresentMembers = (members: MemberType[]) => {
+  const [presentMembers, setPresentMembers] = React.useState<string[]>([]);
+  React.useEffect(() => {
     fetch(`https://borrelcie.vodka/present/data.php`)
-      .then(this.handleResponse)
+      .then(handleResponse)
       .then(
-        (members) => this.setState({members}),
-        (error) => this.setState({members: []})
+        (members) => setPresentMembers(members),
+        () => setPresentMembers([])
       );
-  }
-  handleResponse(response: any) {
-    if (!response.ok) {
-      return Promise.reject(response.statusText);
-    }
-    return response.json();
-  }
-  render() {
-    const filteredMembers = this.state.members
-      .map((memberName: any) => {
-        return names.find((name) => name.name === memberName);
-      })
-      .filter((member: any) => member !== undefined)
-      .map((presentMember: any) => {
-        return (this.props as any).members.find(
-          (member: any) => member.id === parseInt(presentMember.francken_id, 10)
-        );
-      })
-      .filter((member: any) => member !== undefined);
-    const selectMember = (this.props as any).selectMember;
-    return (
-      <div className="d-flex flex-column justify-content-between h-100">
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ members: any; selectMember: any; }' is not... Remove this comment to see the full error message */}
-        <Members members={filteredMembers} selectMember={selectMember} />
-        <div className="text-right">
-          Sponsored by
-          <img
-            src={nedap}
-            className="ml-3 img-fluid"
-            alt="Logo of Nedap"
-            style={{width: "150px"}}
-          />
-        </div>
-      </div>
+  });
+
+  return presentMembers
+    .map((memberName: string) => {
+      return names.find((name) => name.name === memberName);
+    })
+    .filter((member): member is PresentMemberType => member !== undefined)
+    .map((presentMember: PresentMemberType) => {
+      return members.find(
+        (member: MemberType) => member.id === parseInt(presentMember.francken_id, 10)
+      );
+    })
+    .filter(
+      (member: MemberType | undefined): member is MemberType => member !== undefined
     );
-  }
-}
-const mapStateToProps = (state: any) => ({
-  members: state.members,
-});
-const mapDispatchToProps = (dispatch: any) => ({
-  selectMember: (member: any) => dispatch(selectMember(member)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Present);
+};
+
+type PresentProps = {
+  members: MemberType[];
+  selectMember: (member: MemberType) => void;
+};
+
+const Present = ({members, selectMember}: PresentProps) => {
+  const presentMembers = useFetchPresentMembers(members);
+
+  return (
+    <div className="d-flex flex-column justify-content-between h-100">
+      <Members members={presentMembers} selectMember={selectMember} />
+      <div className="text-right">
+        Sponsored by
+        <img
+          src={nedap}
+          className="ml-3 img-fluid"
+          alt="Logo of Nedap"
+          style={{width: "150px"}}
+        />
+      </div>
+    </div>
+  );
+};
+export default () => {
+  const dispatch = useDispatch();
+  const members = useSelector((state: any) => state.members);
+
+  return (
+    <Present
+      selectMember={(member: MemberType) => dispatch(selectMember(member))}
+      members={members}
+    />
+  );
+};
