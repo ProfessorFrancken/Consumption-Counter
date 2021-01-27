@@ -22,12 +22,7 @@ const AppContainer = () => {
 
   return (
     <>
-      <ScreenSaver
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ listen: any; goHome: any; goToScreenSaver:... Remove this comment to see the full error message
-        listen={listen}
-        goHome={goHome}
-        goToScreenSaver={goToScreenSaver}
-      />
+      <ScreenSaver listen={listen} goHome={goHome} goToScreenSaver={goToScreenSaver} />
       <App
         menuItems={menuItems}
         background={background}
