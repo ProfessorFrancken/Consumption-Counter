@@ -6,7 +6,10 @@ import rootReducer from "./reducers";
 import {loadState, saveState} from "./loadState";
 import api from "./../api";
 import buixieval from "./../buixieval";
-export const history = createBrowserHistory();
+
+const basename = process.env.REACT_APP_ROUTER_BASENAME || "";
+export const history = createBrowserHistory({basename});
+
 const enhancers = [];
 if (process.env.NODE_ENV === "development") {
   const devToolsExtension = (window as any).devToolsExtension;
@@ -14,13 +17,17 @@ if (process.env.NODE_ENV === "development") {
     enhancers.push(devToolsExtension());
   }
 }
+
 const middleware = [
   thunk.withExtraArgument(api),
   routerMiddleware(history),
   buixieval(window.fetch, new Date()),
 ];
+
 const composedEnhancers = compose(applyMiddleware(...middleware), ...enhancers);
+
 const persistedState = loadState();
+
 export const create = () => {
   const store = createStore(rootReducer(history), persistedState, composedEnhancers);
   store.subscribe(() => {
@@ -28,5 +35,7 @@ export const create = () => {
   });
   return store;
 };
+
 const store = create();
+
 export default store;
