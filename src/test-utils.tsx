@@ -1,12 +1,48 @@
 import React from "react";
 import {render, RenderOptions} from "@testing-library/react";
+import {Provider} from "react-redux";
+import {MemoryRouter} from "react-router";
+import {mockedState} from "App/App.test";
+import {create, history} from "./Setup/store";
 
-const AllTheProviders: React.FC = ({children}) => {
-  return <>{children}</>;
+const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
+  children,
+  storeState,
+  routes,
+  ...props
+}) => {
+  const store = create({...mockedState(), ...storeState});
+
+  return (
+    <Provider store={store}>
+      <MemoryRouter initialEntries={routes}>{children}</MemoryRouter>
+    </Provider>
+  );
 };
 
-const customRender = (ui: React.ReactElement, options?: Omit<RenderOptions, "queries">) =>
-  render(ui, {wrapper: AllTheProviders, ...options});
+const customRender = (
+  ui: React.ReactElement,
+  options: Omit<RenderOptions, "queries"> & {
+    wrapperProps?: any;
+    storeState?: any;
+    routes: string[];
+  } = {
+    wrapperProps: {},
+    storeState: {},
+    routes: ["/"],
+  }
+) => {
+  const wrapper = (props: any) => (
+    <AllTheProviders
+      {...props}
+      storeState={options.storeState}
+      routes={options.routes}
+      {...options.wrapperProps}
+    />
+  );
+
+  return render(ui, {wrapper, ...options});
+};
 
 // re-export everything
 export * from "@testing-library/react";

@@ -75,9 +75,8 @@ describe("rendering", () => {
 
 /* xit('should show a loading message when refreshing the database')*/
 
-function mockedState() {
+export function mockedState() {
   return {
-    title: "T.F.V. 'Professor Francken'",
     members: [
       {
         id: 999,
@@ -186,5 +185,10 @@ function mockedState() {
     ],
     queuedOrder: null,
     menuItems: menuItems(undefined, {}),
+    authentication: {
+      request: false,
+      token:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
+    },
   };
 }
