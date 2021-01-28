@@ -28,11 +28,18 @@ const composedEnhancers = compose(applyMiddleware(...middleware), ...enhancers);
 
 const persistedState = loadState();
 
-export const create = () => {
-  const store = createStore(rootReducer(history), persistedState, composedEnhancers);
+// Note that the only use case for passing an existing state is for testing purposes
+export const create = (state?: any) => {
+  const store = createStore(
+    rootReducer(history),
+    state === undefined ? persistedState : state,
+    composedEnhancers
+  );
+
   store.subscribe(() => {
     saveState(store.getState());
   });
+
   return store;
 };
 
