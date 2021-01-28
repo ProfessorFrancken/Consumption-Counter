@@ -5,10 +5,13 @@ import {cancelOrder, buyOrder} from "actions";
 import FailedOrder from "./FailedOrder";
 import RetryAll from "./RetryAll";
 
-// Show all products that were bought and the amount of times they were bought
-const Settings = ({orders, cancel, buy}: any) => (
-  <div>
-    <Authenticate />
+const QueuedOrders = () => {
+  const dispatch = useDispatch();
+  const orders = useSelector((state: any) => state.queuedOrders);
+  const cancel = (order: any) => dispatch(cancelOrder(order));
+  const buy = (order: any) => dispatch(buyOrder(order));
+
+  return (
     <div className="mb-5 bg-light">
       <div className="d-flex justify-content-between">
         <h2 className="h4 font-weight-normal p-3">Queued Orders</h2>
@@ -42,18 +45,15 @@ const Settings = ({orders, cancel, buy}: any) => (
         </tbody>
       </table>
     </div>
+  );
+};
+
+// Show all products that were bought and the amount of times they were bought
+const Settings = ({orders, cancel, buy}: any) => (
+  <div>
+    <Authenticate />
+    <QueuedOrders />
   </div>
 );
 
-export default () => {
-  const dispatch = useDispatch();
-  const orders = useSelector((state: any) => state.queuedOrders);
-
-  return (
-    <Settings
-      orders={orders}
-      cancel={(order: any) => dispatch(cancelOrder(order))}
-      buy={(order: any) => dispatch(buyOrder(order))}
-    />
-  );
-};
+export default Settings;
