@@ -3,6 +3,7 @@ import {Provider} from "react-redux";
 import {Router} from "react-router-dom";
 import AppContainer from "./App/AppContainer";
 import {history} from "./Setup/store";
+import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 
 import "./index.css";
 
@@ -13,7 +14,9 @@ type Props = {
 const Providers: React.FC<Props> = ({children, store}) => {
   return (
     <Provider store={store}>
-      <Router history={history}>{children}</Router>
+      <Router history={history}>
+        <AuthenticationProvider>{children}</AuthenticationProvider>
+      </Router>
     </Provider>
   );
 };

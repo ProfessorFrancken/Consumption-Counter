@@ -1,15 +1,9 @@
 import {useDispatch, useSelector} from "react-redux";
-import {authenticate} from "../../../actions";
 import AuthenticationForm from "./AuthenticationForm";
+import {useAuthentication} from "./Context";
 
 export default () => {
-  const dispatch = useDispatch();
-  const authentication = useSelector((state: any) => state.authentication);
+  const authentication = useAuthentication();
 
-  return (
-    <AuthenticationForm
-      authenticate={(password: string) => dispatch(authenticate(password))}
-      {...authentication}
-    />
-  );
+  return <AuthenticationForm {...authentication} />;
 };
