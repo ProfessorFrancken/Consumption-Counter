@@ -6,19 +6,22 @@ import {history} from "./Setup/store";
 
 import "./index.css";
 
-const basename = process.env.REACT_APP_ROUTER_BASENAME;
-
 type Props = {
   store: any;
 };
 
+const Providers: React.FC<Props> = ({children, store}) => {
+  return (
+    <Provider store={store}>
+      <Router history={history}>{children}</Router>
+    </Provider>
+  );
+};
+
 const Root = ({store}: Props) => (
-  <Provider store={store}>
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
-    <Router history={history} basename={basename}>
-      <AppContainer />
-    </Router>
-  </Provider>
+  <Providers store={store}>
+    <AppContainer />
+  </Providers>
 );
 
 export default Root;
