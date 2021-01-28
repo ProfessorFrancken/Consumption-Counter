@@ -53,7 +53,7 @@ describe("<AuthenticationForm />", () => {
   });
 
   describe("error messages", () => {
-    fit("tells the user if their password was incorrect", () => {
+    it("tells the user if their password was incorrect", () => {
       const {getByText} = render(
         <AuthenticationForm
           changePassword={jest.fn()}
@@ -65,7 +65,7 @@ describe("<AuthenticationForm />", () => {
         />
       );
 
-      expect(getByText("The given password was incorrect")).toBeVisible();
+      expect(getByText("The given password was incorrect")).toBeInTheDocument();
     });
 
     it("tells the user if something went wrong on the server", () => {
@@ -80,7 +80,7 @@ describe("<AuthenticationForm />", () => {
         />
       );
 
-      expect(getByText("call the compucie")).toBeVisible();
+      expect(getByText("call the compucie", {exact: false})).toBeInTheDocument();
     });
   });
 });

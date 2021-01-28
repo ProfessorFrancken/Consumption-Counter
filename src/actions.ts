@@ -497,27 +497,6 @@ export function goBack() {
   };
 }
 
-export function authenticate(password: any) {
-  return (dispatch: any, getState: any, api: any) => {
-    dispatch({
-      type: TYPES.AUTHENTICATE_REQUEST,
-      password,
-    });
-
-    return api
-      .post("/authenticate", {password})
-      .then((response: any) => {
-        setHeader(response.token);
-        dispatch({
-          type: TYPES.AUTHENTICATE_SUCCESS,
-          token: response.token,
-        });
-        dispatch(fetchInitialData());
-      })
-      .catch((ex: any) => dispatch({type: TYPES.AUTHENTICATE_FAILURE, error: ex}));
-  };
-}
-
 export function chwazi() {
   return (dispatch: any) => {
     // We don't really need to dispatch an action here so we only make the

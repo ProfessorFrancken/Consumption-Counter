@@ -3,11 +3,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import decode from "jwt-decode";
 import moment from "moment";
 import {useForm} from "react-hook-form";
+import {useAuthentication} from "./Context";
+
 const Button = ({children, ...props}: any) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
     {children}
   </button>
 );
+
 const authenticated = (token: any) => {
   const decoded = decode(token);
   const expiration = new Date((decoded as any).exp * 1000);
@@ -18,6 +21,7 @@ const authenticated = (token: any) => {
     </span>
   );
 };
+
 const unauthenticated = () => {
   return (
     <span>
@@ -25,11 +29,13 @@ const unauthenticated = () => {
     </span>
   );
 };
-const invalidFeedback = (error: any) => {
+
+const invalidFeedback = (error: string) => {
   return error === "Unauthorized"
     ? "The given password was incorrect"
     : "There probably was an unexpected error on the server, call the compucie to solve this.";
 };
+
 const AuthenticateButton = ({request, token}: any) => {
   if (request) {
     return <Button disabled>Waiting</Button>;
@@ -49,12 +55,14 @@ const AuthenticateButton = ({request, token}: any) => {
     </Button>
   );
 };
-const AuthenticationForm = (props: any) => {
+
+const AuthenticationForm = ({authenticate, token, request, error}: any) => {
   const {handleSubmit, register, errors} = useForm();
-  const {authenticate, token, request, error} = props;
+
   const onSubmit = handleSubmit(({password}) => {
     authenticate(password);
   });
+
   return (
     <div className="mb-5 p-3 bg-light">
       <h2 className="h4 font-weight-normal">
@@ -93,4 +101,5 @@ const AuthenticationForm = (props: any) => {
     </div>
   );
 };
+
 export default AuthenticationForm;
