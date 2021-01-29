@@ -1,9 +1,6 @@
 import React from "react";
-import {MemoryRouter} from "react-router-dom";
-import {Provider} from "react-redux";
 import {menuItems} from "reducer";
 import App from "./App";
-import configureMockStore from "redux-mock-store";
 import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";
 import RecentMembers from "./Recent";
@@ -13,18 +10,10 @@ import clock from "jest-plugin-clock";
 
 function setup(routes = ["/"]) {
   const props = {menuItems: menuItems(undefined, {})};
+  const storeState = mockedState();
+  const app = render(<App {...props} />, {storeState, routes});
 
-  const mockStore = configureMockStore([]);
-  const store = mockStore(mockedState());
-  const app = render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={routes}>
-        <App {...props} />
-      </MemoryRouter>
-    </Provider>
-  );
-
-  return {props, app, store};
+  return {props, app};
 }
 
 describe("rendering", () => {
