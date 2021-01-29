@@ -4,7 +4,10 @@ import Thales from "assets/sponsors/Thales-gray.png";
 import ASML from "assets/sponsors/ASML.png";
 
 const Sponsors = () => (
-  <ul className="company-logos list-unstyled my-0 flex-grow-0 d-flex">
+  <ul
+    className="company-logos list-unstyled my-0 flex-grow-0 d-flex"
+    aria-label="Partners sponsoring the consumption counter"
+  >
     <li className="d-flex align-items-center mx-3">
       <img
         src={Demcon}
