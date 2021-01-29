@@ -11,8 +11,6 @@ describe("committees", () => {
   clock.set("2018-01-01");
 
   it("renders", () => {
-    const mockStore = configureMockStore([thunk]);
-
     const state = {
       members: [{id: 1}, {id: 2}],
       committeeMembers: [
@@ -30,13 +28,7 @@ describe("committees", () => {
         },
       ],
     };
-    const store = mockStore({...state});
-    const {getByLabelText} = render(
-      <Provider store={store}>
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ store: MockStoreEnhanced<unknown, {}>; }' ... Remove this comment to see the full error message */}
-        <CommitteesContainer store={store} />
-      </Provider>
-    );
+    const {getByLabelText} = render(<CommitteesContainer />, {storeState: state});
 
     expect(within(getByLabelText("committees")).getAllByRole("button")).toHaveLength(1);
   });
