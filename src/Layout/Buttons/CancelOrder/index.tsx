@@ -27,6 +27,7 @@ const CancelOrder = ({onClick, queuedOrder}: any) => {
 export default () => {
   const dispatch = useDispatch();
   const queuedOrder = useSelector(queuedOrderSelector);
+
   return (
     <CancelOrder
       onClick={(order: any) => dispatch(cancelOrder(order.order))}
