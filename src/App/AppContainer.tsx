@@ -1,24 +1,22 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {backgroundSelector, failedOrdersSelector} from "./selectors";
 import {useHistory} from "react-router-dom";
-import {push} from "connected-react-router";
 import ScreenSaver from "./ScreenSaver";
 import App from "./App";
 
 const AppContainer = () => {
-  const dispatch = useDispatch();
   const menuItems = useSelector((state: any) => state.menuItems);
   const background = useSelector(backgroundSelector);
   const failedOrders = useSelector(failedOrdersSelector);
-  const {listen} = useHistory();
+  const {listen, push} = useHistory();
 
-  const goToCompucieScreen = () => dispatch(push("/compucie"));
-  const goToProminent = () => dispatch(push("/prominent"));
+  const goToCompucieScreen = () => push("/compucie");
+  const goToProminent = () => push("/prominent");
 
   // Screensaver
-  const goHome = () => dispatch(push("/"));
-  const goToScreenSaver = () => dispatch(push("/statistics"));
+  const goHome = () => push("/");
+  const goToScreenSaver = () => push("/statistics");
 
   return (
     <>
