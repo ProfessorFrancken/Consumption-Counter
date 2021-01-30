@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Price from "./Price";
 
 const Product = ({product}: any) => (
@@ -54,11 +53,5 @@ type ProductPropType = {
   name: string;
   price: number;
 };
-
-const ProductPropType: PropTypes.Requireable<ProductPropType> = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-});
 
 export default PriceList;

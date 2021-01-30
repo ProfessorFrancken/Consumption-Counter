@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Product from "./Product";
 
 const Category = ({products, onClick, toggle, name, locked}: any) => (
@@ -68,11 +67,5 @@ export type ProductPropType = {
   name: string;
   image: string;
 };
-
-const ProductPropType: PropTypes.Requireable<ProductPropType> = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-});
 
 export default Products;

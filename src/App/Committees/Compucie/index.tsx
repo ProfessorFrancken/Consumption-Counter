@@ -4,7 +4,7 @@ import {selectMember, chwazi, fetchInitialData} from "actions";
 import {compucieSelector} from "./../selectors";
 import Compucie from "./Compucie";
 
-export default () => {
+const CompucieScreen = () => {
   const dispatch = useDispatch();
   const {compucie, scriptcie} = useSelector(compucieSelector);
 
@@ -18,3 +18,5 @@ export default () => {
     />
   );
 };
+
+export default CompucieScreen;

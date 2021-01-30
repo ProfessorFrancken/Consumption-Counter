@@ -4,7 +4,7 @@ import {boardsSelector, prominentSelector} from "./selectors";
 import Prominent from "./Prominent";
 import {MemberType} from "App/Members/Members";
 
-export default () => {
+const ProminentScreen = () => {
   const dispatch = useDispatch();
   const boards = useSelector((state: any) => boardsSelector(state));
   const prominent = useSelector((state: any) => prominentSelector(state));
@@ -16,3 +16,5 @@ export default () => {
     />
   );
 };
+
+export default ProminentScreen;

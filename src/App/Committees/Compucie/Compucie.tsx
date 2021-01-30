@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {NavLink} from "react-router-dom";
 import Member from "App/Members/MemberButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -83,11 +82,5 @@ type MemberPropType = {
   firstName: string;
   surname: string;
 };
-
-const MemberPropType: PropTypes.Requireable<MemberPropType> = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  firstName: PropTypes.string.isRequired,
-  surname: PropTypes.string.isRequired,
-});
 
 export default Compucie;

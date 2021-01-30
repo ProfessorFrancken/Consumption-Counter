@@ -4,7 +4,7 @@ import {membersInCommitteesSelector} from "./../selectors";
 import Members, {MemberType} from "App/Members/Members";
 import {useParams} from "react-router";
 
-export default () => {
+const SelectMemberFromCommitteeScreen = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const members = useSelector((state) => membersInCommitteesSelector(state, params));
@@ -16,3 +16,5 @@ export default () => {
     />
   );
 };
+
+export default SelectMemberFromCommitteeScreen;

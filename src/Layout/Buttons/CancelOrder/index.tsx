@@ -8,7 +8,11 @@ import Price from "App/Price";
 const products = (order: any) =>
   order.products.length === 1 ? order.products[0].name : "multiple products";
 
-const CancelOrder = ({onClick, queuedOrder}: any) => {
+const CancelOrder = () => {
+  const dispatch = useDispatch();
+  const queuedOrder = useSelector(queuedOrderSelector);
+  const onClick = (order: any) => dispatch(cancelOrder(order.order));
+
   if (queuedOrder === null) {
     return null;
   }
@@ -24,14 +28,4 @@ const CancelOrder = ({onClick, queuedOrder}: any) => {
   );
 };
 
-export default () => {
-  const dispatch = useDispatch();
-  const queuedOrder = useSelector(queuedOrderSelector);
-
-  return (
-    <CancelOrder
-      onClick={(order: any) => dispatch(cancelOrder(order.order))}
-      queuedOrder={queuedOrder}
-    />
-  );
-};
+export default CancelOrder;

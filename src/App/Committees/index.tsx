@@ -3,7 +3,7 @@ import {selectCommittee} from "actions";
 import {committeesWithMembersSelector} from "./selectors";
 import Committees, {Committee} from "./Committees";
 
-export default () => {
+const CommitteesScreen = () => {
   const dispatch = useDispatch();
   const committees = useSelector(committeesWithMembersSelector);
 
@@ -14,3 +14,5 @@ export default () => {
     />
   );
 };
+
+export default CommitteesScreen;

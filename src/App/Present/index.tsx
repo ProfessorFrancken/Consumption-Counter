@@ -70,7 +70,8 @@ const Present = ({members, selectMember}: PresentProps) => {
     </div>
   );
 };
-export default () => {
+
+const PresentScreen = () => {
   const dispatch = useDispatch();
   const members = useSelector((state: any) => state.members);
 
@@ -81,3 +82,5 @@ export default () => {
     />
   );
 };
+
+export default PresentScreen;

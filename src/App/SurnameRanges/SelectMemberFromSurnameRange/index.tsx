@@ -4,7 +4,7 @@ import {membersInRangeSelector} from "selectors";
 import Members, {MemberType} from "App/Members/Members";
 import {useParams} from "react-router";
 
-export default () => {
+const SelectMemberFromSurnameRangeScreen = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const members = useSelector((state: any) => membersInRangeSelector(state, params));
@@ -16,3 +16,5 @@ export default () => {
     />
   );
 };
+
+export default SelectMemberFromSurnameRangeScreen;

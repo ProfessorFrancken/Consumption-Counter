@@ -1,9 +1,10 @@
-import {useDispatch, useSelector} from "react-redux";
 import AuthenticationForm from "./AuthenticationForm";
 import {useAuthentication} from "./Context";
 
-export default () => {
+const AuthenticationScreen = () => {
   const authentication = useAuthentication();
 
   return <AuthenticationForm {...authentication} />;
 };
+
+export default AuthenticationScreen;

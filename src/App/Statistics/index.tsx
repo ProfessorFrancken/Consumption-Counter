@@ -159,7 +159,7 @@ const Statistics = ({statistics = [], activities = [], transactions}: any) => {
   );
 };
 
-export default () => {
+const StatisticsSreen = () => {
   const statistics = useSelector((state: any) => state.statistics);
   const activities = useSelector((state: any) => state.activities);
   const transactions = useSelector((state: any) => state.transactions);
@@ -172,3 +172,5 @@ export default () => {
     />
   );
 };
+
+export default StatisticsSreen;
