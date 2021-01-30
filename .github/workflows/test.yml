@@ -1,30 +1,30 @@
 name: Jest tests
 on:
-  - push
-  - pull_request
+    - push
+    - pull_request
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    env:
-      NODE_ENV: test
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+        env:
+            NODE_ENV: test
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
 
-    - uses: actions/setup-node@v1.1.0
-      with:
-        node-version: '10.x'
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: "14.x"
 
-    - run: npm install
-    - run: npm test -- --coverage
-      env:
-        CI: true
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm run build
-      env:
-        CI: true
+            - run: npm install
+            - run: npm test -- --coverage --watchAll=false
+              env:
+                  CI: true
+            - name: Coveralls
+              uses: coverallsapp/github-action@master
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+            - run: npm run build
+              env:
+                  CI: true
