@@ -20,6 +20,7 @@ const Member = ({member, onClick, style = {}}: any) => (
     className="tile button"
     onClick={() => onClick(member)}
     style={buttonStyle(member)}
+    aria-label={member.fullname}
   >
     &nbsp;
     {member.cosmetics.nickname ? member.cosmetics.nickname : member.fullname}
