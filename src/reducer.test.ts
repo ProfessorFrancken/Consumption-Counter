@@ -453,8 +453,8 @@ describe("keeping track of orders", () => {
 describe("menu items", () => {
   it("has a default menu", () => {
     expect(menuItems(undefined, {})).toEqual([
-      {icon: "home", url: "/", loading: false},
-      {icon: "clock", url: "/recent"},
+      {icon: "home", url: "/", loading: false, label: "Home"},
+      {icon: "clock", url: "/recent", label: "Recent"},
     ]);
   });
 
@@ -465,9 +465,9 @@ describe("menu items", () => {
         members: [{buixieval: true}],
       })
     ).toEqual([
-      {icon: "home", url: "/", loading: false},
-      {icon: "clock", url: "/recent"},
-      {icon: ["fab", "bitcoin"], url: "/buixieval"},
+      {icon: "home", url: "/", loading: false, label: "Home"},
+      {icon: "clock", url: "/recent", label: "Recent"},
+      {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
     ]);
   });
 
@@ -476,9 +476,9 @@ describe("menu items", () => {
       type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST,
     });
     expect(menuItemsWhenLoadingCommittees).toEqual([
-      {icon: "home", url: "/", loading: false},
-      {icon: "clock", url: "/recent"},
-      {icon: "users", url: "/committees", loading: true},
+      {icon: "home", url: "/", loading: false, label: "Home"},
+      {icon: "clock", url: "/recent", label: "Recent"},
+      {icon: "users", url: "/committees", loading: true, label: "Committees"},
     ]);
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '({ icon: string; url: string; lo... Remove this comment to see the full error message
@@ -486,9 +486,9 @@ describe("menu items", () => {
       type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS,
     });
     expect(menuItemsAfterLoadingCommittees).toEqual([
-      {icon: "home", url: "/", loading: false},
-      {icon: "clock", url: "/recent"},
-      {icon: "users", url: "/committees", loading: false},
+      {icon: "home", url: "/", loading: false, label: "Home"},
+      {icon: "clock", url: "/recent", label: "Recent"},
+      {icon: "users", url: "/committees", loading: false, label: "Committees"},
     ]);
   });
 
@@ -497,9 +497,9 @@ describe("menu items", () => {
       type: TYPES.FETCH_BOARD_MEMBERS_REQUEST,
     });
     expect(menuItemsWhenLoadingProminent).toEqual([
-      {icon: "chess-queen", url: "/prominent", loading: true},
-      {icon: "home", url: "/", loading: false},
-      {icon: "clock", url: "/recent"},
+      {icon: "chess-queen", url: "/prominent", loading: true, label: "Prominent"},
+      {icon: "home", url: "/", loading: false, label: "Home"},
+      {icon: "clock", url: "/recent", label: "Recent"},
     ]);
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '({ icon: string; url: string; lo... Remove this comment to see the full error message
@@ -507,9 +507,9 @@ describe("menu items", () => {
       type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS,
     });
     expect(menuItemsAfterLoadingProminent).toEqual([
-      {icon: "chess-queen", url: "/prominent", loading: false},
-      {icon: "home", url: "/", loading: false},
-      {icon: "clock", url: "/recent"},
+      {icon: "chess-queen", url: "/prominent", loading: false, label: "Prominent"},
+      {icon: "home", url: "/", loading: false, label: "Home"},
+      {icon: "clock", url: "/recent", label: "Recent"},
     ]);
   });
 });
