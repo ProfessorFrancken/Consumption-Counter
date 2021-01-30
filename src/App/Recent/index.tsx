@@ -3,7 +3,7 @@ import {selectMember} from "../../actions";
 import {recentBuyersSelector} from "./selectors";
 import Members, {MemberType} from "./../Members/Members";
 
-export default () => {
+const RecentScreen = () => {
   const dispatch = useDispatch();
   const members = useSelector(recentBuyersSelector);
 
@@ -14,3 +14,5 @@ export default () => {
     />
   );
 };
+
+export default RecentScreen;

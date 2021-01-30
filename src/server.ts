@@ -40,15 +40,23 @@ const makeCypressServer = () => {
   cyServer.logging = false;
   return cyServer;
 };
+
 const makeDevServer = () => {
   let server = makeServer();
   server.logging = true;
   return server;
 };
-export default () => {
-  return (window as any).Cypress
-    ? makeCypressServer()
-    : process.env.NODE_ENV === "development"
-    ? makeDevServer()
-    : null;
+
+const makeEnvironmentSpecificServer = () => {
+  if ((window as any).Cypress) {
+    return makeCypressServer();
+  }
+
+  if (process.env.NODE_ENV === "development") {
+    return makeDevServer();
+  }
+
+  return null;
 };
+
+export default makeEnvironmentSpecificServer;

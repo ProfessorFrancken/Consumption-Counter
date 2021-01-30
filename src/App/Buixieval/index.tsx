@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectMember} from "../../actions";
 import Buixieval from "./Buixieval";
 
-export default () => {
+const BuixieValScreen = () => {
   const dispatch = useDispatch();
 
   const members: MemberType[] = useSelector((state: any) =>
@@ -29,3 +29,5 @@ export default () => {
     />
   );
 };
+
+export default BuixieValScreen;

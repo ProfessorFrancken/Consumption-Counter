@@ -19,8 +19,8 @@ import {
   activities,
 } from "../reducer";
 
-export default (history: any) =>
-  combineReducers({
+const makeApplicationReducer = (history: any) => {
+  return combineReducers({
     authentication,
     loading,
     members,
@@ -38,3 +38,6 @@ export default (history: any) =>
     activities,
     router: connectRouter(history),
   });
+};
+
+export default makeApplicationReducer;

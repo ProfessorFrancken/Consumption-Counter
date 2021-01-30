@@ -2,11 +2,12 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {LOADING_STATE} from "./reducers";
+import {useSelector} from "react-redux";
+import {loadingScreenSelector} from "./selectors";
 
-type Props = {};
+const LoadingScreen = () => {
+  const {state, features} = useSelector(loadingScreenSelector);
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'state' does not exist on type 'Props'.
-const LoadingScreen = ({state, features, done}: Props) => {
   return (
     <div
       className="h-100 d-flex justify-content-center align-items-center"

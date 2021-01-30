@@ -3,7 +3,7 @@ import {addProductToOrder, buyMore} from "actions";
 import {productsWithOrderCountSelector} from "./selectors";
 import Products from "./Products";
 
-export default () => {
+const ProductsScreen = () => {
   const dispatch = useDispatch();
   const products = useSelector((state: any) =>
     productsWithOrderCountSelector(state, {
@@ -20,3 +20,5 @@ export default () => {
     />
   );
 };
+
+export default ProductsScreen;

@@ -5,7 +5,11 @@ import {goBackText} from "./selectors";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation} from "react-router-dom";
 
-const GoBack = ({text, onClick}: any) => {
+const GoBack = () => {
+  const dispatch = useDispatch();
+  const onClick = () => dispatch(goBack());
+  const text = useSelector(goBackText);
+
   const {pathname} = useLocation();
 
   if (text === "Go back" && pathname === "/") {
@@ -20,9 +24,4 @@ const GoBack = ({text, onClick}: any) => {
   );
 };
 
-export default () => {
-  const dispatch = useDispatch();
-  const text = useSelector(goBackText);
-
-  return <GoBack text={text} onClick={() => dispatch(goBack())} />;
-};
+export default GoBack;

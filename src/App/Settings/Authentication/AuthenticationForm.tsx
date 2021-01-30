@@ -3,7 +3,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import decode from "jwt-decode";
 import moment from "moment";
 import {useForm} from "react-hook-form";
-import {useAuthentication} from "./Context";
 
 const Button = ({children, ...props}: any) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">

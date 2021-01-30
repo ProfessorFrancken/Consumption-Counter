@@ -3,11 +3,6 @@ import axios from "axios";
 
 const api = process.env.REACT_APP_API_SERVER;
 
-export default {
-  get,
-  post,
-};
-
 function get(uri: any, params: any) {
   const requestOptions = {
     headers: {
@@ -34,3 +29,7 @@ function post(uri: any, body: any) {
 function handleResponse(response: any) {
   return Promise.resolve(response.data);
 }
+
+const apiMethods = {get, post};
+
+export default apiMethods;

@@ -5,7 +5,10 @@ import Price from "App/Price";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation} from "react-router-dom";
 
-const BuyAll = ({buyAll, products = []}: any) => {
+const BuyAll = () => {
+  const dispatch = useDispatch();
+  const onClick = () => dispatch(buyAll());
+  const products = useSelector((state: any) => state.order.products);
   const {pathname} = useLocation();
 
   if (pathname !== "/products") {
@@ -17,7 +20,7 @@ const BuyAll = ({buyAll, products = []}: any) => {
   }
 
   return (
-    <button className="button buyAllButton" onClick={buyAll}>
+    <button className="button buyAllButton" onClick={onClick}>
       <FontAwesomeIcon icon={"check-circle"} size="lg" />
       <span style={{marginLeft: ".5em"}}>
         Buy it all! (<Price products={products} />)
@@ -26,9 +29,4 @@ const BuyAll = ({buyAll, products = []}: any) => {
   );
 };
 
-export default () => {
-  const dispatch = useDispatch();
-  const products = useSelector((state: any) => state.order.products);
-
-  return <BuyAll products={products} buyAll={() => dispatch(buyAll())} />;
-};
+export default BuyAll;
