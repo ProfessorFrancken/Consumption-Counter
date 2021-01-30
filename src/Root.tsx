@@ -4,6 +4,8 @@ import {Router} from "react-router-dom";
 import AppContainer from "./App/AppContainer";
 import {history} from "./Setup/store";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
+import {ReactQueryDevtools} from "react-query/devtools";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 import "./index.css";
 
@@ -11,20 +13,38 @@ type Props = {
   store: any;
 };
 
-const Providers: React.FC<Props> = ({children, store}) => {
+export const InfrastructureProviders: React.FC<Props> = ({children, store}) => {
+  const queryClient = new QueryClient();
   return (
     <Provider store={store}>
       <Router history={history}>
-        <AuthenticationProvider>{children}</AuthenticationProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </Router>
     </Provider>
   );
 };
 
+const DevelopMentProviders: React.FC = ({children}) => {
+  return (
+    <>
+      <ReactQueryDevtools initialIsOpen={false} />
+      {children}
+    </>
+  );
+};
+
+export const ApplicationProviders: React.FC = ({children}) => {
+  return <AuthenticationProvider>{children} </AuthenticationProvider>;
+};
+
 const Root = ({store}: Props) => (
-  <Providers store={store}>
-    <AppContainer />
-  </Providers>
+  <InfrastructureProviders store={store}>
+    <DevelopMentProviders>
+      <ApplicationProviders>
+        <AppContainer />
+      </ApplicationProviders>
+    </DevelopMentProviders>
+  </InfrastructureProviders>
 );
 
 export default Root;

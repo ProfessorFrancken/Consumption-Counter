@@ -5,6 +5,7 @@ import {Router} from "react-router";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {mockedState} from "App/App.test";
 import {create, history} from "./Setup/store";
+import {InfrastructureProviders} from "Root";
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -17,11 +18,11 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   (routes || []).forEach((route) => history.push(route));
 
   return (
-    <Provider store={store}>
-      <Router history={history}>
-        <AuthenticationProvider>{children}</AuthenticationProvider>
-      </Router>
-    </Provider>
+    <InfrastructureProviders store={store}>
+      <AuthenticationProvider {...storeState.authentication}>
+        {children}
+      </AuthenticationProvider>
+    </InfrastructureProviders>
   );
 };
 
