@@ -22,6 +22,7 @@ const MenuItem = ({menuItem}: any) =>
       to={menuItem.url}
       className="button menuButton"
       activeClassName="active"
+      aria-label={menuItem.label}
     >
       <FontAwesomeIcon icon={menuItem.icon} size="lg" />
     </NavLink>
