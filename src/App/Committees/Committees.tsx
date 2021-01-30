@@ -1,11 +1,7 @@
 import React from "react";
 
 const CommitteeButton = ({committee, onClick}: any) => (
-  <button
-    className="button tile"
-    onClick={() => onClick(committee)}
-    aria-label="committee"
-  >
+  <button className="button tile" onClick={() => onClick(committee)}>
     {committee.name}
   </button>
 );
