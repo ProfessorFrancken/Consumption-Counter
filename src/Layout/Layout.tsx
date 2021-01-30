@@ -26,7 +26,7 @@ export const Layout = ({
   failedOrders,
   children,
 }: any) => (
-  <div className="wrapper" style={backgroundFromProduct(background)}>
+  <div className="wrapper" style={backgroundFromProduct(background)} data-testid="layout">
     <Header onClick={goToCompucieScreen} failedOrders={failedOrders} />
     <Sidebar menuItems={menuItems} />
     <Content>{children}</Content>

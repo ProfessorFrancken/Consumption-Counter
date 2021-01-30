@@ -1,28 +1,20 @@
 import React from "react";
 import AppContainer from "./AppContainer";
-import {Router} from "react-router-dom";
-import {Provider} from "react-redux";
-import {create, history} from "./../Setup/store";
-import {TYPES} from "./../actions";
+import {history} from "./../Setup/store";
 import MockDate from "mockdate";
 import moxios from "moxios";
+import {render, fireEvent} from "test-utils";
+import {TIME_TO_CANCEL} from "./../actions";
+import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
 
-xdescribe("Plus One", () => {
-  let store: any, app: any;
-  const base_api = process.env.REACT_APP_API_SERVER;
-
-  // https://hackernoon.com/low-effort-high-value-integration-tests-in-redux-apps-d3a590bd9fd5
-  const flushAllPromises = () => new Promise((resolve) => setImmediate(resolve));
-
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
+describe("Plus One", () => {
   beforeEach(() => {
     MockDate.set(new Date(1514764800000));
 
-    store = create();
-
     jest.useFakeTimers();
 
+    moxios.install();
+    const base_api = process.env.REACT_APP_API_SERVER;
     moxios.stubRequest(`${base_api}/members`, {
       response: {members: mocks.members},
       headers: {"content-type": "application/json"},
@@ -56,166 +48,115 @@ xdescribe("Plus One", () => {
       response: [],
       headers: {"content-type": "application/json"},
     });
-
-    app = mount(
-      <Provider store={store}>
-        <Router history={history}>
-          <AppContainer />
-        </Router>
-      </Provider>
-    );
-
-    // Not sure why, but we need to manually update our app in order
-    // for app.find() to work correclty (otherwise we get an timeout exception)
-    return flushAllPromises().then(() => app.update());
   });
 
   afterEach(() => {
+    moxios.uninstall();
     MockDate.reset();
   });
 
   const selectRangeIncludingJohnSnow = (app: any) => {
-    expect(app.find("SurnameRanges").length).toBe(1);
-    expect(app.find("SurnameRanges").find("button").length).toBe(1);
-    const selectJohn = app.find("SurnameRanges").find("button");
-    selectJohn.simulate("click");
+    fireEvent.click(app.getByText("Snow-Snow"));
+
+    expect(history.location.pathname).toBe("/members/0");
+    expect(app.getByText("John Snow")).toBeInTheDocument();
   };
 
   const selectJohnSnow = (app: any) => {
-    expect(app.find("Member").length).toBe(1);
-
-    app.find("Member").simulate("click");
-    expect(history.location.pathname).toBe("/products");
+    fireEvent.click(app.getByText("John Snow"));
   };
 
   const addHertogJanToOrder = (app: any) => {
     expect(history.location.pathname).toBe("/products");
-    expect(app.find("Product").length).toBe(3);
-    expect(app.find("Product").find("button").length).toBe(3);
+    const product = app.getByLabelText("Buy Hertog Jan");
 
-    const hertogJanButton = app
-      .find("Product")
-      .findWhere((c: any) => {
-        if (c.length === 0) {
-          return false;
-        }
+    expect(product).toBeInTheDocument();
 
-        const {product} = c.props();
-
-        return product !== undefined && product.id === 1;
-      })
-      .first();
-
-    hertogJanButton.simulate("mouseDown").simulate("mouseUp");
+    fireEvent.mouseDown(product);
+    fireEvent.mouseUp(product);
   };
 
-  const expectOrderToBeBought = (app: any, expectedOrder: any, done: any) => {
-    // The cancel button should be shown until the timeout is run
-    expect(app.find("CancelOrder").find("button").length).toBe(1);
+  const expectOrderToBeBought = async (app: any) => {
+    expect(history.location.pathname).toBe("/");
+    expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
+
     jest.runTimersToTime(10000);
+    expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
-    flushAllPromises()
-      .then(() => {
-        const latestCall = moxios.requests.get("post", `${base_api}/orders`);
-        expect(JSON.parse(latestCall.config.data)).toEqual(expectedOrder);
-        expect(history.location.pathname).toBe("/");
-
-        done();
-      })
-      .catch((e) => {
-        done.fail(e);
-      });
+    fireEvent.click(app.getByLabelText("Recent"));
+    expect(await app.findByLabelText("John Snow")).toBeInTheDocument();
   };
 
   const selectBuyMore = (app: any) => {
-    const hertogJanButton = app
-      .find("Product")
-      .findWhere((c: any) => {
-        if (c.length === 0) {
-          return false;
-        }
+    expect(history.location.pathname).toBe("/products");
+    expect(app.getByText("Hertog Jan")).toBeInTheDocument();
+    const product = app.getByText("Hertog Jan");
 
-        const {product} = c.props();
-
-        return product !== undefined && product.id === 1;
-      })
-      .first();
-
-    // Long press the product to select more of it
-    hertogJanButton.simulate("mouseDown");
+    fireEvent.mouseDown(product);
     jest.runTimersToTime(1000);
-    hertogJanButton.simulate("mouseUp");
+    fireEvent.mouseUp(product);
   };
 
   const expectBuyMoreToBeSelected = (app: any) => {
-    expect(app.find("BuyAll").length).toBe(1);
+    expect(app.getByRole("button", {name: /Buy it all!.*/i})).toBeInTheDocument();
   };
 
-  const buyAll = (app: any, done: any) => {
-    expect(app.find("BuyAll").find("button").length).toBe(1);
-    const buyAll = app.find("BuyAll").find("button").first();
-    buyAll.simulate("click");
+  const buyAll = async (app: any) => {
+    const buyAll = app.getByRole("button", {name: /Buy it all!.*/i});
+    fireEvent.click(buyAll);
 
-    expectOrderToBeBought(app, mocks.orders.multiple, done);
+    await expectOrderToBeBought(app);
   };
 
   const selectProminent = (app: any) => {
-    expect(app.find("Footer").length).toBe(1);
-
-    const prominent = app.find('NavLink[to="/prominent"]');
-    expect(prominent.length).toBe(1);
-
-    // https://github.com/airbnb/enzyme/issues/516
-    prominent.simulate("click", {button: 0});
-
+    fireEvent.click(app.getByLabelText("Prominent"));
     expect(history.location.pathname).toBe("/prominent");
   };
 
+  const cancelOrder = (app: any) => {
+    const btn = app.getByRole("button", {name: /Cancel buying.*/i});
+    expect(btn).toBeInTheDocument();
+    fireEvent.click(btn);
+    expect(btn).not.toBeInTheDocument();
+
+    jest.runAllTimers();
+
+    fireEvent.click(app.getByLabelText("Recent"));
+    expect(app.queryByLabelText("John Snow")).not.toBeInTheDocument();
+  };
+
   const selectCommittees = (app: any) => {
-    expect(app.find("Footer").length).toBe(1);
-
-    const committees = app.find('NavLink[to="/committees"]');
-    expect(committees.length).toBe(1);
-
-    // https://github.com/airbnb/enzyme/issues/516
-    committees.simulate("click", {button: 0});
-
+    fireEvent.click(app.getByLabelText("Committees"));
     expect(history.location.pathname).toBe("/committees");
   };
 
-  const selectNightsWatch = (app: any) => {
-    expect(app.find("Committee").length).toBe(2);
-
-    app
-      .find("Committee")
-      .findWhere((n: any) => n.props().children === "Compucie")
-      .simulate("click");
-
+  const selectCompucie = (app: any) => {
+    fireEvent.click(app.getByRole("button", {name: "Compucie"}));
     expect(history.location.pathname).toBe("/committees/0");
   };
 
   const selectRecent = (app: any) => {
-    expect(app.find("Footer").length).toBe(1);
-
-    const recent = app.find('NavLink[to="/recent"]');
-    expect(recent.length).toBe(1);
-
-    // https://github.com/airbnb/enzyme/issues/516
-    recent.simulate("click", {button: 0});
-
+    fireEvent.click(app.getByLabelText("Recent"));
     expect(history.location.pathname).toBe("/recent");
   };
 
-  it("allows a member to buy a product", (done) => {
+  const selectStatistics = (app: any) => {
+    fireEvent.click(app.getByLabelText("Statistics"));
+    expect(history.location.pathname).toBe("/statistics");
+  };
+
+  it("allows a member to buy a product", async () => {
+    const app = render(<AppContainer />);
+
     selectRangeIncludingJohnSnow(app);
-
     selectJohnSnow(app);
-
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single, done);
+    await expectOrderToBeBought(app);
   });
 
-  it("allows buying multiple products", (done) => {
+  it("allows buying multiple products", async () => {
+    const app = render(<AppContainer />);
+
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
 
@@ -227,151 +168,102 @@ xdescribe("Plus One", () => {
     addHertogJanToOrder(app);
     addHertogJanToOrder(app);
 
-    buyAll(app, done);
+    await buyAll(app);
   });
 
-  it("is possible to cancel an order", (done) => {
-    selectRangeIncludingJohnSnow(app);
+  it("is possible to cancel an order", async () => {
+    const app = render(<AppContainer />);
 
+    selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-
-    const cancelOrder = (app: any) => {
-      app.find("CancelOrder").find("button").simulate("click");
-      jest.runAllTimers();
-
-      flushAllPromises()
-        .then(() => {
-          expect(moxios.requests.get("post", `${base_api}/orders`)).toBe(undefined);
-          expect(app.find("CancelOrder").find("button").length).toBe(0);
-        })
-        .then(done)
-        .catch((e) => done.fail(e));
-    };
 
     cancelOrder(app);
   });
 
-  it("is possible to buy products using the prominent list", (done) => {
+  it("is possible to buy products using the prominent list", async () => {
+    const app = render(<AppContainer />);
     selectProminent(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single, done);
+    await expectOrderToBeBought(app);
   });
 
-  it("is possible to buy products using the committees list", (done) => {
+  it("is possible to buy products using the committees list", async () => {
+    const app = render(<AppContainer />);
     selectCommittees(app);
-    selectNightsWatch(app);
+    selectCompucie(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single, done);
+    await expectOrderToBeBought(app);
   });
 
-  it("is possible to buy products using the recent list", (done) => {
-    const member = {
-      id: 314,
-      firstName: "John",
-      surname: "Snow",
-      fullname: "John Snow",
-      age: 18,
-      prominent: null,
-      cosmetics: {
-        color: "",
-        image: "xtCWQ7vaLKJdSndU1hlv.jpg",
-        nickname: "",
-        button: {
-          width: 0,
-          height: 0,
-        },
-      },
-    };
+  it("is possible to buy products using the recent list", async () => {
+    const app = render(<AppContainer />);
 
-    const product = {
-      id: 3,
-      name: "Hertog Jan",
-      price: 68,
-      position: 1,
-      category: "Bier",
-      image: "wCwnyLXTVdPEnKRXjw9I.png",
-      age_restriction: 18,
-      ordered: 0,
-    };
-
-    const order = {
-      products: [product],
-      ordered_at: new Date().getTime(),
-      member,
-    };
-
-    store.dispatch({type: TYPES.BUY_ORDER_REQUEST, member, order});
-    store.dispatch({type: TYPES.BUY_ORDER_SUCCESS, member, order});
+    // TODO: Here we are duplicating buying an order, it might be better
+    // to mock the state?
+    selectRangeIncludingJohnSnow(app);
+    selectJohnSnow(app);
+    addHertogJanToOrder(app);
+    await expectOrderToBeBought(app);
 
     selectRecent(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    expectOrderToBeBought(app, mocks.orders.single, done);
+    await expectOrderToBeBought(app);
   });
 
-  it("shows a splashscreen when buying specific products", (done) => {
+  it("shows a splashscreen when buying specific products", async () => {
+    const app = render(<AppContainer />);
     selectRangeIncludingJohnSnow(app);
-
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
-    const splash = "Uo6qQC4Hm8TUqyNjw2G4.jpg";
 
-    expect(app.find(`App`).first().props().background).toBe(splash);
-    expectOrderToBeBought(app, mocks.orders.single, done);
+    const background = "Uo6qQC4Hm8TUqyNjw2G4.jpg";
+    const splashStyle = {backgroundImage: `url("${background}")`};
+    const layout = app.getByTestId("layout");
+
+    expect(layout).toHaveStyle(splashStyle);
+    await expectOrderToBeBought(app);
+    expect(layout).not.toHaveStyle(splashStyle);
   });
 
   // This test checks if we don't have any async issues
-  it("is possible to buy a product after someone else has bought a product", (done) => {
-    selectRangeIncludingJohnSnow(app);
+  it("is possible to buy a product after someone else has bought a product", async () => {
+    const app = render(<AppContainer />);
 
+    selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
 
     addHertogJanToOrder(app);
 
-    const selectOtherMemberAfterBuying = (app: any, expectedOrder: any, done: any) => {
-      // The cancel button should be shown until the timeout is run
-      expect(app.find("CancelOrder").find("button").length).toBe(1);
+    // Buy another product by clicking the go back button
+    expect(history.location.pathname).toBe("/");
+    selectJohnSnow(app);
 
-      selectRangeIncludingJohnSnow(app);
-      selectJohnSnow(app);
-      jest.runTimersToTime(10000);
+    expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
+    jest.runTimersToTime(TIME_TO_CANCEL);
+    expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
-      flushAllPromises()
-        .then(() => {
-          addHertogJanToOrder(app);
+    addHertogJanToOrder(app);
+    selectStatistics(app);
 
-          expect(moxios.requests.get("post", `${base_api}/orders`)).not.toBe(undefined);
-          const latestCall = moxios.requests.get("post", `${base_api}/orders`);
+    expect(await app.findAllByText("bought by John Snow")).toHaveLength(1);
+    expect(app.queryByText(/Cancel buying .*/)).toBeInTheDocument();
 
-          expect(JSON.parse(latestCall.config.data)).toEqual(expectedOrder);
+    jest.runTimersToTime(TIME_TO_CANCEL);
+    selectStatistics(app);
+    expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
-          jest.runTimersToTime(10000);
-
-          flushAllPromises()
-            .then(() => {
-              const latestCall = moxios.requests.get("post", `${base_api}/orders`);
-
-              expect(JSON.parse(latestCall.config.data)).toEqual(expectedOrder);
-              done();
-            })
-            .catch((e) => {
-              done.fail(e);
-            });
-        })
-        .catch((e) => {
-          done.fail(e);
-        });
-    };
-
-    selectOtherMemberAfterBuying(app, mocks.orders.single, done);
+    // BUG: we need this first line so that the app is rerendered?
+    expect(await app.findAllByText(/bought by.*/)).toHaveLength(1);
+    expect(app.getAllByText(/bought by.*/)).toHaveLength(2);
   });
   // Redirects
   // Shows a list of transactions
@@ -382,20 +274,8 @@ xdescribe("Plus One", () => {
 
   // Retries transactions
 
-  it("does allows cancelling an order after an other order's timeout was handled", (done) => {
-    const cancelOrder = (app: any) => {
-      flushAllPromises()
-        .then(() => {
-          app.update();
-
-          app.find("CancelOrder").find("button").simulate("click");
-
-          expect(moxios.requests.get("post", `${base_api}/orders`)).not.toBe(undefined);
-          expect(app.find("CancelOrder").find("button").length).toBe(0);
-        })
-        .then(done)
-        .catch((e) => done.fail(e));
-    };
+  it("does allows cancelling an order after an other order's timeout was handled", async () => {
+    const app = render(<AppContainer />);
 
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
@@ -403,53 +283,56 @@ xdescribe("Plus One", () => {
 
     // Run time forward a little so that the timeout of the first orders
     // does not occur on the same time as the second
-    jest.runTimersToTime(4000);
+    jest.runTimersToTime(TIME_TO_CANCEL / 2);
 
     MockDate.set(new Date(1514764800000 + 4000));
-    selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
     addHertogJanToOrder(app);
 
     // Run the first timeout
-    jest.runTimersToTime(4000);
-    cancelOrder(app);
+    jest.runTimersToTime(TIME_TO_CANCEL / 2);
+    const cancelBtn = app.getByText(/Cancel buying .*/);
+    fireEvent.click(cancelBtn);
+    expect(cancelBtn).not.toBeInTheDocument();
+
+    jest.runTimersToTime(TIME_TO_CANCEL);
+    selectStatistics(app);
+    expect(await app.findAllByText(/bought by.*/)).toHaveLength(1);
   });
 
   describe("when the system is idle for a specific time", () => {
     it("goes back to the main screen after 30 seconds", () => {
+      const app = render(<AppContainer />);
       selectRangeIncludingJohnSnow(app);
-      jest.runTimersToTime(30000);
+      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT);
       expect(history.location.pathname).toBe("/");
     });
 
     it("should reset the screensaver timer when going to a different route", () => {
+      const app = render(<AppContainer />);
       selectRangeIncludingJohnSnow(app);
-      jest.runTimersToTime(20000);
+      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2);
       selectRecent(app);
-      jest.runTimersToTime(20000);
+      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2);
       expect(history.location.pathname).toBe("/recent");
-      jest.runTimersToTime(10000);
+      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2);
       expect(history.location.pathname).toBe("/");
     });
   });
 
-  it("is possible select members through the compucie screen", (done) => {
-    const selectCompucie = (app: any) => {
-      app.find("Header").find(".association").simulate("click");
+  it("is possible select members through the compucie screen", async () => {
+    const app = render(<AppContainer />);
 
-      expect(history.location.pathname).toBe("/compucie");
-    };
+    const header = app.getByRole("heading", {level: 2});
+    expect(header).toHaveTextContent("T.F.V. 'Professor Francken'");
+    fireEvent.click(header);
 
-    selectCompucie(app);
+    expect(history.location.pathname).toBe("/compucie");
 
-    flushAllPromises().then(() => {
-      app.update();
-      selectJohnSnow(app.find(".compucie").first());
+    selectJohnSnow(app);
 
-      addHertogJanToOrder(app);
-      expectOrderToBeBought(app, mocks.orders.single, done);
-      done();
-    });
+    addHertogJanToOrder(app);
+    await expectOrderToBeBought(app);
   });
 });
 
@@ -515,6 +398,7 @@ const mocks = {
           id: 314,
           firstName: "John",
           surname: "Snow",
+          fullname: "John Snow",
         },
         products: [
           {
