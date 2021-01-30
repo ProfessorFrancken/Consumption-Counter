@@ -25,7 +25,7 @@ describe("rendering", () => {
 
     // Check the header banner
     expect(screen.getByRole("banner")).toBeInTheDocument();
-    expect(screen.getByRole("heading")).toBeInTheDocument();
+    expect(screen.getByRole("heading", {level: 1})).toBeInTheDocument();
 
     expect(screen.getByRole("main")).toBeInTheDocument();
   });
