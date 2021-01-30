@@ -1,6 +1,5 @@
 import {orderBy, pick} from "lodash";
 import {push, goBack as goBackRoute} from "connected-react-router";
-import {setHeader} from "./Setup/authHeader";
 import moment from "moment";
 import axios from "axios";
 
@@ -12,7 +11,6 @@ export const actions = {
   cancelOrder,
 
   addProductToOrder,
-  selectRangeOfSurnames,
   selectMember,
   selectCommittee,
 
@@ -75,12 +73,6 @@ export const TYPES = {
   AUTHENTICATE_SUCCESS: "AUTHENTICATE_SUCCESS",
   AUTHENTICATE_FAILURE: "AUTHENTICATE_FAILURE",
 };
-
-export function selectRangeOfSurnames(range: any) {
-  return (dispatch: any) => {
-    dispatch(push(`/members/${range.idx}`));
-  };
-}
 
 export function addProductToOrder(product: any) {
   return (dispatch: any, getState: any) => {
@@ -478,7 +470,6 @@ export function fetchInitialData() {
     ])
       .then(() => {
         return dispatch({type: TYPES.LOAD_APPLICATION_SUCCESS});
-        // dispatch(push(`/`));
       })
       .catch((ex) => dispatch({type: TYPES.LOAD_APPLICATION_FAILURE, ex}));
   };

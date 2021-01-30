@@ -1,16 +1,12 @@
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import SurnameRanges from "./SurnameRanges";
-import {selectRangeOfSurnames} from "./../../actions";
 import {rangesSelector} from "./../../selectors";
+import {useHistory} from "react-router";
 
 export default () => {
-  const dispatch = useDispatch();
+  const {push} = useHistory();
   const ranges = useSelector(rangesSelector);
+  const selectRange = (range: any) => push(`/members/${range.idx}`);
 
-  return (
-    <SurnameRanges
-      ranges={ranges}
-      selectRange={(range: any) => dispatch(selectRangeOfSurnames(range))}
-    />
-  );
+  return <SurnameRanges ranges={ranges} selectRange={selectRange} />;
 };
