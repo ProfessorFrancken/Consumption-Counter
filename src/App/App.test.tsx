@@ -62,16 +62,25 @@ describe("rendering", () => {
   });
 });
 
-/* xit('should show a loading message when refreshing the database')*/
-
 export function mockedState() {
+  const menu = [
+    {icon: "chess-queen", url: "/prominent", loading: false, label: "Prominent"},
+    {icon: "home", url: "/", loading: false, label: "Home"},
+    {icon: "clock", url: "/recent", label: "Recent"},
+    {icon: "users", url: "/committees", loading: false, label: "Committees"},
+    {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
+    {icon: "chart-bar", url: "/statistics", label: "Statistics"},
+  ];
+
   return {
     members: [
       {
-        id: 999,
+        id: 1,
         firstName: "John",
         surname: "Snow",
+        fullname: "John Snow",
         age: 18,
+        latest_purchase_at: "2018-01-01 00:00:00",
         prominent: null,
         cosmetics: {
           color: null,
@@ -94,8 +103,10 @@ export function mockedState() {
               id: 1,
               firstName: "John",
               surname: "Snow",
+              fullname: "John Snow",
               age: 18,
               prominent: null,
+              latest_purchase_at: "2018-01-01 00:00:00",
               cosmetics: {
                 color: null,
                 image: null,
@@ -121,6 +132,7 @@ export function mockedState() {
           position: 1,
           category: "Bier",
           image: "wCwnyLXTVdPEnKRXjw9I.png",
+          splash_image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
           age_restriction: 18,
         },
       ],
@@ -160,10 +172,10 @@ export function mockedState() {
     },
     transactions: [],
     recentBuyers: [],
-    boardMembers: [],
+    boardMembers: [{member_id: 1, function: "King"}],
     committeeMembers: [
       {
-        member_id: 314,
+        member_id: 1,
         year: 2018,
         function: "King",
         committee: {
@@ -173,7 +185,7 @@ export function mockedState() {
       },
     ],
     queuedOrder: null,
-    menuItems: menuItems(undefined, {}),
+    menuItems: menu,
     authentication: {
       request: false,
       token:
