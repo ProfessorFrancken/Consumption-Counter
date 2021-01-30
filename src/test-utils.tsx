@@ -1,7 +1,7 @@
 import React from "react";
 import {render, RenderOptions} from "@testing-library/react";
 import {Provider} from "react-redux";
-import {MemoryRouter} from "react-router";
+import {Router} from "react-router";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {mockedState} from "App/App.test";
 import {create, history} from "./Setup/store";
@@ -14,11 +14,13 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
 }) => {
   const store = create({...mockedState(), ...storeState});
 
+  (routes || []).forEach((route) => history.push(route));
+
   return (
     <Provider store={store}>
-      <MemoryRouter initialEntries={routes}>
+      <Router history={history}>
         <AuthenticationProvider>{children}</AuthenticationProvider>
-      </MemoryRouter>
+      </Router>
     </Provider>
   );
 };
