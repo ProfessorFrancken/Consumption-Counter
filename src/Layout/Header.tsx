@@ -43,7 +43,7 @@ const HeaderTitle = () => (
 const Header = ({onClick, failedOrders}: any) => (
   <header className="header">
     <HeaderTitle />
-    <div className="header-item">
+    <div className="header-item d-flex justify-content-center">
       <Route
         exact
         path="/products"
@@ -63,9 +63,12 @@ const Header = ({onClick, failedOrders}: any) => (
         )}
       />
     </div>
-    <div className="association header-item text-right" onClick={onClick}>
+    <h2
+      className="association header-item text-right h4 d-flex align-items-center font-weight-normal mb-0"
+      onClick={onClick}
+    >
       T.F.V. 'Professor Francken'
-    </div>
+    </h2>
     {failedOrders > 0 && (
       <div className="ml-3">
         <NavLink exact to="/settings">
