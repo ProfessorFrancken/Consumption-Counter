@@ -1,58 +1,61 @@
-import {fetchInitialData} from "actions";
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setHeader} from "Setup/authHeader";
+import {UseMutateFunction, useMutation} from "react-query";
 import AuthenticationForm from "./AuthenticationForm";
 import logo from "assets/logo.png";
+import api from "./../../../api";
+import {useLocalStorage} from "@rehooks/local-storage";
 
 type State = {
   request: boolean;
-  token: string;
-  error?: string;
-  authenticate: (passphrase: string) => void;
+  token: string | undefined;
+  error: string | null;
+  authenticate: UseMutateFunction<string, Error, string, unknown>;
 };
 
 const AuthenticationContext = React.createContext<State | undefined>(undefined);
 
-const TYPES = {
-  AUTHENTICATE_REQUEST: "AUTHENTICATE_REQUEST",
-  AUTHENTICATE_SUCCESS: "AUTHENTICATE_SUCCESS",
-  AUTHENTICATE_FAILURE: "AUTHENTICATE_FAILURE",
-};
-
-function login(password: any) {
-  return (dispatch: any, getState: any, api: any) => {
-    dispatch({
-      type: TYPES.AUTHENTICATE_REQUEST,
-      password,
-    });
-
-    return api
-      .post("/authenticate", {password})
-      .then((response: any) => {
-        setHeader(response.token);
-        dispatch({
-          type: TYPES.AUTHENTICATE_SUCCESS,
-          token: response.token,
-        });
-        dispatch(fetchInitialData());
-      })
-      .catch((ex: any) => dispatch({type: TYPES.AUTHENTICATE_FAILURE, error: ex}));
-  };
+function useApi() {
+  return api;
 }
 
-export function AuthenticationProvider({...props}) {
-  const dispatch = useDispatch();
-  const authentication = useSelector((state: any) => state.authentication);
-
-  const value = {
-    request: authentication.request,
-    token: authentication.token,
-    error: authentication.error,
-    authenticate: (passphrase: string) => dispatch(login(passphrase)),
+function useLogin(setToken: ({token}: {token: string}) => void) {
+  const api = useApi();
+  const login = async (password: string) => {
+    try {
+      const response = await api.post("/authenticate", {password});
+      const token = response.token as string;
+      return token;
+    } catch (e) {
+      throw new Error(e.response.statusText as string);
+    }
   };
 
-  if (false && !authentication.token) {
+  return useMutation<string, Error, string>("login", login, {
+    onSuccess: (token: string) => {
+      setToken({token});
+    },
+  });
+}
+
+export const AuthenticationProvider: React.FC<{token?: string}> = ({
+  token: defaultToken,
+  ...props
+}) => {
+  //
+  const [{token}, setToken] = useLocalStorage("plus_one_authorization", {
+    token: defaultToken,
+  });
+
+  const login = useLogin(setToken);
+
+  const value = {
+    request: login.isLoading,
+    token: token,
+    error: login.isError && login.error !== null ? login.error.message : null,
+    authenticate: login.mutate,
+  };
+
+  if (false && !value.token) {
     return (
       <AuthenticationContext.Provider value={value} {...props}>
         <div className="d-flex align-items-center justify-content-center h-100">
@@ -76,7 +79,7 @@ export function AuthenticationProvider({...props}) {
   }
 
   return <AuthenticationContext.Provider value={value} {...props} />;
-}
+};
 
 export const useAuthentication = () => {
   const context = React.useContext(AuthenticationContext);

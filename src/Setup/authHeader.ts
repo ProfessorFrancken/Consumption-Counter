@@ -1,4 +1,4 @@
-export function setHeader(token: any) {
+export function setHeader(token: string) {
   localStorage.setItem("plus_one_authorization", JSON.stringify({token}));
 }
 

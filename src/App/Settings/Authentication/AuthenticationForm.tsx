@@ -3,6 +3,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import decode from "jwt-decode";
 import moment from "moment";
 import {useForm} from "react-hook-form";
+import {useDispatch} from "react-redux";
+import {fetchInitialData} from "actions";
+import {useHistory} from "react-router";
 
 const Button = ({children, ...props}: any) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
@@ -57,9 +60,17 @@ const AuthenticateButton = ({request, token}: any) => {
 
 const AuthenticationForm = ({authenticate, token, request, error}: any) => {
   const {handleSubmit, register, errors} = useForm();
+  const dispatch = useDispatch();
+  const {push} = useHistory();
 
   const onSubmit = handleSubmit(({password}) => {
-    authenticate(password);
+    authenticate(password, {
+      // TODO: move this to a seperate context that automatically fetches information
+      onSuccess: () => {
+        dispatch(fetchInitialData());
+        push("/loading");
+      },
+    });
   });
 
   return (

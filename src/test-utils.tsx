@@ -1,11 +1,15 @@
 import React from "react";
 import {render, RenderOptions} from "@testing-library/react";
-import {Provider} from "react-redux";
-import {Router} from "react-router";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {mockedState} from "App/App.test";
 import {create, history} from "./Setup/store";
 import {InfrastructureProviders} from "Root";
+
+const defaultAuthentication = {
+  request: false,
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
+};
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -13,15 +17,14 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   routes,
   ...props
 }) => {
-  const store = create({...mockedState(), ...storeState});
+  const {authentication = defaultAuthentication, ...state} = storeState;
+  const store = create({...mockedState(), ...state});
 
   (routes || []).forEach((route) => history.push(route));
 
   return (
     <InfrastructureProviders store={store}>
-      <AuthenticationProvider {...storeState.authentication}>
-        {children}
-      </AuthenticationProvider>
+      <AuthenticationProvider {...authentication}>{children}</AuthenticationProvider>
     </InfrastructureProviders>
   );
 };
