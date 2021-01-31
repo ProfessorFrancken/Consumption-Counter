@@ -186,10 +186,5 @@ export function mockedState() {
     ],
     queuedOrder: null,
     menuItems: menu,
-    authentication: {
-      request: false,
-      token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
-    },
   };
 }

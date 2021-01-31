@@ -2,7 +2,6 @@ import {combineReducers} from "redux";
 import {connectRouter} from "connected-react-router";
 
 import {
-  authentication,
   loading,
   products,
   members,
@@ -21,7 +20,6 @@ import {
 
 const makeApplicationReducer = (history: any) => {
   return combineReducers({
-    authentication,
     loading,
     members,
     boardMembers,
