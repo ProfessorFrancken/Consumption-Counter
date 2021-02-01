@@ -46,8 +46,8 @@ Cypress.Commands.add(
     cy.get(".tilesGrid").should("not.be.empty");
 
     cy.get(`.tilesGrid > :nth-child(${nthSurname})`).click();
-    cy.get(".tilesGrid").should("contain", name);
-    cy.get(`.tilesGrid > :nth-child(${nthFirstname})`).click();
+
+    cy.findByText(name).click();
 
     // Check that we have selected the given member by comparing the page title
     cy.get(".titleName > span").should("contain", name);
@@ -66,8 +66,7 @@ Cypress.Commands.add("refreshApp", () => {
   cy.get(".compucie-buttons > :nth-child(1)").should("contain", "Refresh").click();
 
   cy.location("pathname").should("eq", "/loading");
-  cy.get(".tile").should("contain", "Open application");
-  cy.get(".tile").click();
+  cy.findByRole("link", {name: /Open application/}).click();
 
   cy.visit("/");
   cy.get(".tilesGrid").should("not.be.empty");
