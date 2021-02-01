@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import "@testing-library/cypress/add-commands";
+
 // Login without using the UI
 Cypress.Commands.add("login", (email: string, password: string) => {
   localStorage.setItem(
