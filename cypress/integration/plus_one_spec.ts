@@ -55,7 +55,7 @@ afterEach(() => {
   server.shutdown();
 });
 
-describe("PlusOne.js", () => {
+describe("Francken Consumption Counter", () => {
   beforeEach(() => {
     cy.login();
   });
