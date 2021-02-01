@@ -76,10 +76,6 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
 
   return (
     <div>
-      <h2 className="h4 font-weight-normal">
-        {token ? null : <FontAwesomeIcon icon="exclamation-triangle" className="mr-1" />}{" "}
-        Authenticate Plus One
-      </h2>
       <p className="lead">
         {token ? authenticated(token) : unauthenticated()}
         <br />

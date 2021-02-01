@@ -2,7 +2,6 @@ import React from "react";
 import Authentication from "./index";
 import moxios from "moxios";
 import {render, fireEvent} from "test-utils";
-import {act} from "react-dom/test-utils";
 import {deleteFromStorage} from "@rehooks/local-storage";
 
 describe("Authentication", () => {
@@ -13,11 +12,15 @@ describe("Authentication", () => {
 
   it("Shows a warning that the system is not authenticated", () => {
     deleteFromStorage("plus_one_authorization");
-    const {getByRole} = render(<Authentication />, {
+    const {getByRole, getByText} = render(<Authentication />, {
       storeState: {authentication: {token: null}},
     });
 
-    expect(getByRole("heading", {level: 2})).toHaveTextContent("Authenticate Plus One");
+    expect(
+      getByText(
+        "You need to authenticate with our server in order to connect the Consumption Counter."
+      )
+    ).toBeInTheDocument();
     expect(getByRole("button")).toHaveTextContent("Authenticate");
   });
 
