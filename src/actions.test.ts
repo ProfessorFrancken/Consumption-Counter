@@ -2,7 +2,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import {actions, TYPES, TIME_TO_CANCEL} from "./actions";
 import expect from "expect"; // You can use any testing library
-import {push, goBack} from "connected-react-router";
+import {push} from "connected-react-router";
 import api from "./api";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
@@ -483,17 +483,6 @@ describe("selecing a member", () => {
         member,
       },
     ]);
-  });
-});
-
-describe("cancelling", () => {
-  it("can cancel any selecion by going back", () => {
-    const store = mockStore({});
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
-    store.dispatch(actions.goBack());
-
-    expect(store.getActions()).toEqual([goBack(), {type: TYPES.GO_BACK}]);
   });
 });
 
