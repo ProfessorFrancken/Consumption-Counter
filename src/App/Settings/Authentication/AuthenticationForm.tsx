@@ -27,7 +27,8 @@ const authenticated = (token: any) => {
 const unauthenticated = () => {
   return (
     <span>
-      You need to authenticate with our server in order to connect the Plus One system.
+      You need to authenticate with our server in order to connect the Consumption
+      Counter.
     </span>
   );
 };
@@ -74,7 +75,7 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
   });
 
   return (
-    <div className="mb-5 p-3 bg-light">
+    <div>
       <h2 className="h4 font-weight-normal">
         {token ? null : <FontAwesomeIcon icon="exclamation-triangle" className="mr-1" />}{" "}
         Authenticate Plus One
@@ -101,12 +102,16 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
                 },
               })}
             />
-            {errors.password && errors.password.message}
+            {errors.password ? (
+              <p className="invalid-feedback text-dark">{errors.password.message}</p>
+            ) : null}
 
             {error ? <p className="invalid-feedback">{invalidFeedback(error)}</p> : null}
           </div>
+          <div className="form-group col">
+            <AuthenticateButton request={request} token={token} />
+          </div>
         </div>
-        <AuthenticateButton request={request} token={token} />
       </form>
     </div>
   );
