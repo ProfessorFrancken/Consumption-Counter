@@ -1,7 +1,3 @@
-export function setHeader(token: string) {
-  localStorage.setItem("plus_one_authorization", JSON.stringify({token}));
-}
-
 export function authHeader() {
   // return authorization header with jwt token
   const encoded_token = localStorage.getItem("plus_one_authorization");
