@@ -5,6 +5,7 @@ export type MemberType = {
   id: number;
   firstName: string;
   surname: string;
+  fullname: string;
 };
 type Props = {
   members: MemberType[];

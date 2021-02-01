@@ -1,10 +1,9 @@
 import {orderBy, pick} from "lodash";
-import {push, goBack as goBackRoute} from "connected-react-router";
+import {push} from "connected-react-router";
 import moment from "moment";
 import axios from "axios";
 
 export const actions = {
-  goBack,
   buyMore,
   makeOrder,
   buyAll,
@@ -472,19 +471,6 @@ export function fetchInitialData() {
         return dispatch({type: TYPES.LOAD_APPLICATION_SUCCESS});
       })
       .catch((ex) => dispatch({type: TYPES.LOAD_APPLICATION_FAILURE, ex}));
-  };
-}
-
-export function goBack() {
-  return (dispatch: any, getState: any) => {
-    const {queuedOrder} = getState();
-
-    if (queuedOrder) {
-      dispatch(selectMember(queuedOrder.order.member));
-    } else {
-      dispatch(goBackRoute());
-      dispatch({type: TYPES.GO_BACK});
-    }
   };
 }
 
