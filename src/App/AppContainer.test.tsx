@@ -7,7 +7,7 @@ import {render, fireEvent} from "test-utils";
 import {TIME_TO_CANCEL} from "./../actions";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
 
-describe("Plus One", () => {
+describe("Consumption Counter", () => {
   beforeEach(() => {
     MockDate.set(new Date(1514764800000));
 
