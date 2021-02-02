@@ -4,13 +4,9 @@ import moment from "moment";
 import axios from "axios";
 
 export const actions = {
-  buyMore,
   makeOrder,
-  buyAll,
   cancelOrder,
 
-  addProductToOrder,
-  selectMember,
   selectCommittee,
 
   fetchInitialData,
@@ -25,8 +21,6 @@ export const actions = {
 };
 
 export const TYPES = {
-  GO_BACK: "BO_BACK",
-
   BUY_MORE: "TOGGLE_BUY_MORE_PRODUCTS",
   ADD_PRODUCT_TO_ORDER: "ADD_PRODUCT_TO_ORDER",
 
@@ -72,33 +66,6 @@ export const TYPES = {
   AUTHENTICATE_SUCCESS: "AUTHENTICATE_SUCCESS",
   AUTHENTICATE_FAILURE: "AUTHENTICATE_FAILURE",
 };
-
-export function addProductToOrder(product: any) {
-  return (dispatch: any, getState: any) => {
-    const {order} = getState();
-
-    if (order.products.length === 0) {
-      return dispatch(makeOrder({member: order.member, products: [product]}));
-    } else {
-      dispatch({type: TYPES.ADD_PRODUCT_TO_ORDER, product});
-    }
-  };
-}
-
-export function buyAll() {
-  return (dispatch: any, getState: any) => {
-    const {order} = getState();
-
-    return dispatch(makeOrder(order));
-  };
-}
-
-export function buyMore(product: any) {
-  return {
-    type: TYPES.BUY_MORE,
-    product,
-  };
-}
 
 const orderQueue = {};
 
@@ -165,40 +132,6 @@ export function buyOrder(order: any) {
         dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
       })
       .catch((ex: any) => dispatch({type: TYPES.BUY_ORDER_FAILURE, order}));
-  };
-}
-
-export function selectMember(member: any) {
-  return (dispatch: any) => {
-    function didNotRecentlyOrderAProduct(member: any) {
-      const latest_purchase_at =
-        typeof member.latest_purchase_at === "string"
-          ? new Date(member.latest_purchase_at)
-          : member.latest_purchase_at;
-
-      if (latest_purchase_at === null) {
-        return true;
-      }
-
-      const today = new Date();
-      const timeDiff = today.getTime() - latest_purchase_at.getTime();
-      const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-      return diffDays > 90;
-    }
-
-    if (didNotRecentlyOrderAProduct(member)) {
-      if (!window.confirm(`Are you sure you want to select ${member.fullname}`)) {
-        // Cancel the selection since selecting this member was a mistake
-        return;
-      }
-    }
-
-    dispatch(push("/products"));
-    dispatch({
-      type: TYPES.SELECT_MEMBER,
-      member,
-    });
   };
 }
 

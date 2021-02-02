@@ -181,7 +181,7 @@ describe("Francken Consumption Counter", () => {
         .click()
         .then(() => {
           expect(stub.getCall(0)).to.be.calledWith(
-            `Are you sure you want to select ${member.fullName}`
+            `Are you sure you want to select ${member.fullName}?`
           );
           cy.get(".tilesGrid").should("contain", member.fullName);
         });
@@ -203,7 +203,7 @@ describe("Francken Consumption Counter", () => {
         .click()
         .then(() => {
           expect(stub.getCall(0)).to.be.calledWith(
-            `Are you sure you want to select ${member.fullName}`
+            `Are you sure you want to select ${member.fullName}?`
           );
           cy.get(".titleName > span").should("contain", member.fullName);
           cy.location("pathname").should("eq", "/products");

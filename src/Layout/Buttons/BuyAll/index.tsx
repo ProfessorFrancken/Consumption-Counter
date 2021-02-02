@@ -1,29 +1,27 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {buyAll} from "actions";
 import Price from "App/Price";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation} from "react-router-dom";
+import {useProductPurchase} from "App/Products/Context";
 
 const BuyAll = () => {
-  const dispatch = useDispatch();
-  const onClick = () => dispatch(buyAll());
-  const products = useSelector((state: any) => state.order.products);
+  const {buyAll} = useProductPurchase();
+  const {order} = useProductPurchase();
   const {pathname} = useLocation();
 
   if (pathname !== "/products") {
     return null;
   }
 
-  if (products.length === 0) {
+  if (order.products.length === 0) {
     return null;
   }
 
   return (
-    <button className="button buyAllButton" onClick={onClick}>
+    <button className="button buyAllButton" onClick={() => buyAll()}>
       <FontAwesomeIcon icon={"check-circle"} size="lg" />
       <span style={{marginLeft: ".5em"}}>
-        Buy it all! (<Price products={products} />)
+        Buy it all! (<Price products={order.products} />)
       </span>
     </button>
   );

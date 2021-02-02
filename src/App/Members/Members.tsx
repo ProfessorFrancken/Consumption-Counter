@@ -6,6 +6,8 @@ export type MemberType = {
   firstName: string;
   surname: string;
   fullname: string;
+  latest_purchase_at: null | Date;
+  age: number;
 };
 type Props = {
   members: MemberType[];

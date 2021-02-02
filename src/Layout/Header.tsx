@@ -2,7 +2,7 @@ import React from "react";
 import {Route, NavLink} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {committeesSelector} from "App/Committees/selectors";
-import {orderSelector} from "selectors";
+import {useProductPurchase} from "App/Products/Context";
 
 const CommitteeTitle = ({
   match: {
@@ -15,12 +15,8 @@ const CommitteeTitle = ({
   return <span>{selectedCommittee ? selectedCommittee.name : "Unknown committee"}</span>;
 };
 
-const BuyProductsForMemberTitle = ({
-  match: {
-    params: {page},
-  },
-}: any) => {
-  const order = useSelector(orderSelector);
+const BuyProductsForMemberTitle = () => {
+  const {order} = useProductPurchase();
 
   return <span>{order.member.fullname}</span>;
 };

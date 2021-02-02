@@ -14,8 +14,8 @@ const AmountBeingOrdered = ({product}: any) =>
 
 const ProductName = ({product}: any) => <span>{product.name}</span>;
 
-const Product = ({product, toggle, onClick, locked}: any) => (
-  <OnLongPress onClick={() => onClick(product)} onLongPress={() => toggle(product)}>
+const Product = ({product, onLongPress, onClick, locked}: any) => (
+  <OnLongPress onClick={onClick} onLongPress={onLongPress}>
     <button
       aria-label={`Buy ${product.name}`}
       className={"button tile " + (locked ? "locked" : "")}

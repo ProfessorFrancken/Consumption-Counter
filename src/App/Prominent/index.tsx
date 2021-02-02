@@ -1,20 +1,13 @@
-import {useDispatch, useSelector} from "react-redux";
-import {selectMember} from "../../actions";
+import {useSelector} from "react-redux";
 import {boardsSelector, prominentSelector} from "./selectors";
 import Prominent from "./Prominent";
-import {MemberType} from "App/Members/Members";
+import {useProductPurchase} from "App/Products/Context";
 
 const ProminentScreen = () => {
-  const dispatch = useDispatch();
   const boards = useSelector((state: any) => boardsSelector(state));
   const prominent = useSelector((state: any) => prominentSelector(state));
-  return (
-    <Prominent
-      boards={boards}
-      prominent={prominent}
-      selectMember={(member: MemberType) => dispatch(selectMember(member))}
-    />
-  );
+  const {selectMember} = useProductPurchase();
+  return <Prominent boards={boards} prominent={prominent} selectMember={selectMember} />;
 };
 
 export default ProminentScreen;
