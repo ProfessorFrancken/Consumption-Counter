@@ -1,10 +1,10 @@
 import {MemberType} from "App/Members/Members";
-import {useDispatch, useSelector} from "react-redux";
-import {selectMember} from "../../actions";
+import {useSelector} from "react-redux";
 import Buixieval from "./Buixieval";
+import {useProductPurchase} from "App/Products/Context";
 
 const BuixieValScreen = () => {
-  const dispatch = useDispatch();
+  const {selectMember} = useProductPurchase();
 
   const members: MemberType[] = useSelector((state: any) =>
     state.members
@@ -22,12 +22,7 @@ const BuixieValScreen = () => {
       )
       .sort((a: any, b: any) => b.buixieval.contributed - a.buixieval.contributed)
   );
-  return (
-    <Buixieval
-      members={members}
-      selectMember={(member: MemberType) => dispatch(selectMember(member))}
-    />
-  );
+  return <Buixieval members={members} selectMember={selectMember} />;
 };
 
 export default BuixieValScreen;

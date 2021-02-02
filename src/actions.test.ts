@@ -451,39 +451,6 @@ describe("selecing a member", () => {
 
     expect(store.getActions()).toEqual([push("/members/0")]);
   });
-
-  it("should select a member from a range of members", () => {
-    const store = mockStore({});
-    const member = {
-      id: 1,
-      firstName: "John",
-      surname: "Snow",
-      age: 18,
-      prominent: 0,
-      latest_purchase_at: new Date(),
-
-      cosmetics: {
-        color: undefined,
-        image: undefined,
-        nickname: undefined,
-        button: {
-          width: undefined,
-          height: undefined,
-        },
-      },
-    };
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => void' is not ... Remove this comment to see the full error message
-    store.dispatch(actions.selectMember(member));
-
-    expect(store.getActions()).toEqual([
-      push("/products"),
-      {
-        type: TYPES.SELECT_MEMBER,
-        member,
-      },
-    ]);
-  });
 });
 
 describe("buying products", () => {
@@ -491,66 +458,6 @@ describe("buying products", () => {
   afterEach(() => moxios.uninstall());
 
   clock.set("2018-02-23");
-
-  it("is possible to toggle buying more products", () => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
-    expect(actions.buyMore()).toEqual({type: TYPES.BUY_MORE});
-  });
-
-  it("does not inmediadly make an order when a product was already added to the order", () => {
-    // when a member is selected and we buy multiple products
-    const member = {id: 1};
-    const store = mockStore({order: {member, products: [{id: 1}]}});
-
-    // and when adding a product to order
-    const product = {id: 2};
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
-    store.dispatch(actions.addProductToOrder(product));
-
-    // then we buy a product
-    expect(store.getActions()).toEqual([{type: TYPES.ADD_PRODUCT_TO_ORDER, product}]);
-  });
-
-  it("buys an order after only adding 1 product to an order", (done) => {
-    jest.useFakeTimers();
-    // when a member is selected
-    // and we only buy one product
-    const member = {id: 1};
-    const product = {id: 2};
-    const store = mockStore({
-      order: {
-        member,
-        products: [],
-      },
-    });
-
-    moxios.stubRequest(`${base_api}/orders`, {
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ request: {}; headers: { "conte... Remove this comment to see the full error message
-      request: {},
-      headers: {"content-type": "application/json"},
-    });
-
-    // and when adding a product to order
-    const order = {products: [product], member, ordered_at: 1519344000000};
-    const flushAllPromises = () => new Promise((resolve) => setImmediate(resolve));
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any) =... Remove this comment to see the full error message
-    store.dispatch(actions.addProductToOrder(product)).then(() => {
-      jest.runTimersToTime(TIME_TO_CANCEL);
-
-      flushAllPromises()
-        .then(() => {
-          // then we buy a product
-          expect(store.getActions()).toEqual([
-            {type: TYPES.QUEUE_ORDER, order},
-            push("/"),
-            {type: TYPES.BUY_ORDER_REQUEST, order},
-            {type: TYPES.BUY_ORDER_SUCCESS, order},
-          ]);
-        })
-        .then(done)
-        .catch((e) => done.fail(e));
-    });
-  });
 
   describe("making an order", () => {
     beforeEach(() => jest.useFakeTimers());

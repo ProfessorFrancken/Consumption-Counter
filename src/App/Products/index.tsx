@@ -1,22 +1,14 @@
-import {useDispatch, useSelector} from "react-redux";
-import {addProductToOrder, buyMore} from "actions";
-import {productsWithOrderCountSelector} from "./selectors";
 import Products from "./Products";
+import {useProductPurchase} from "./Context";
 
 const ProductsScreen = () => {
-  const dispatch = useDispatch();
-  const products = useSelector((state: any) =>
-    productsWithOrderCountSelector(state, {
-      hour: new Date().getHours(),
-    })
-  );
+  const {addProductToOrder, productsWithHour, toggle} = useProductPurchase();
 
   return (
     <Products
-      /* @ts-expect-error FIXME: Requires better type control of selectors */
-      products={products}
-      addProductToOrder={(product: any) => dispatch(addProductToOrder(product))}
-      toggle={(product: any) => dispatch(buyMore(product))}
+      products={productsWithHour}
+      addProductToOrder={addProductToOrder}
+      toggle={toggle}
     />
   );
 };

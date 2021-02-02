@@ -1,18 +1,20 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {selectMember, chwazi, fetchInitialData} from "actions";
+import {chwazi, fetchInitialData} from "actions";
 import {compucieSelector} from "./../selectors";
 import Compucie from "./Compucie";
+import {useProductPurchase} from "App/Products/Context";
 
 const CompucieScreen = () => {
   const dispatch = useDispatch();
   const {compucie, scriptcie} = useSelector(compucieSelector);
+  const {selectMember} = useProductPurchase();
 
   return (
     <Compucie
       compucie={compucie}
       scriptcie={scriptcie}
-      selectMember={(member: any) => dispatch(selectMember(member))}
+      selectMember={selectMember}
       decreaseTempleCount={() => dispatch(chwazi())}
       reloadApplication={() => dispatch(fetchInitialData())}
     />

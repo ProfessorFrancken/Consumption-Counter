@@ -1,20 +1,15 @@
-import {useDispatch, useSelector} from "react-redux";
-import {selectMember} from "actions";
+import {useSelector} from "react-redux";
 import {membersInRangeSelector} from "selectors";
-import Members, {MemberType} from "App/Members/Members";
+import Members from "App/Members/Members";
 import {useParams} from "react-router";
+import {useProductPurchase} from "App/Products/Context";
 
 const SelectMemberFromSurnameRangeScreen = () => {
-  const dispatch = useDispatch();
   const params = useParams();
   const members = useSelector((state: any) => membersInRangeSelector(state, params));
+  const {selectMember} = useProductPurchase();
 
-  return (
-    <Members
-      members={members}
-      selectMember={(member: MemberType) => dispatch(selectMember(member))}
-    />
-  );
+  return <Members members={members} selectMember={selectMember} />;
 };
 
 export default SelectMemberFromSurnameRangeScreen;

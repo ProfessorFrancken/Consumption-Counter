@@ -1,19 +1,26 @@
 import React from "react";
+import {Product as ProductType} from "./Context";
 import Product from "./Product";
 
 const Category = ({products, onClick, toggle, name, locked}: any) => (
   <nav className={"categoryRow"} aria-label={`${name} category`}>
     {products.map((product: any) => (
       <Product
-        product={product}
-        onClick={onClick}
-        toggle={toggle}
         key={product.id}
+        product={product}
+        onClick={() => onClick(product)}
+        onLongPress={() => toggle(product)}
         locked={product.locked || locked}
       />
     ))}
   </nav>
 );
+
+export type ProductPropType = {
+  id: number;
+  name: string;
+  image: string;
+};
 
 export type ProductsType = {
   Bier: ProductPropType[];
@@ -22,10 +29,10 @@ export type ProductsType = {
 };
 type ProductsProps = {
   products: ProductsType;
-  addProductToOrder: (...args: any[]) => any;
+  addProductToOrder: (product: ProductType) => any;
+  toggle: (product: ProductType) => void;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'toggle' does not exist on type 'Products... Remove this comment to see the full error message
 const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
   const beer = products["Bier"] || [];
   const soda = products["Fris"] || [];
@@ -60,12 +67,6 @@ const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
       )}
     </div>
   );
-};
-
-export type ProductPropType = {
-  id: number;
-  name: string;
-  image: string;
 };
 
 export default Products;

@@ -1,14 +1,14 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {selectMember} from "actions";
+import {useSelector} from "react-redux";
+import {useProductPurchase} from "App/Products/Context";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useHistory} from "react-router-dom";
 import {queuedOrderSelector} from "selectors";
 
 const GoBack = () => {
-  const dispatch = useDispatch();
   const queuedOrder = useSelector(queuedOrderSelector);
   const {location, goBack} = useHistory();
+  const {selectMember} = useProductPurchase();
 
   if (!queuedOrder && location.pathname === "/") {
     return null;
@@ -16,7 +16,7 @@ const GoBack = () => {
 
   const onClick = () => {
     if (queuedOrder) {
-      dispatch(selectMember(queuedOrder.order.member));
+      selectMember(queuedOrder.order.member);
     } else {
       goBack();
     }
