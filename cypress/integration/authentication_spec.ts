@@ -25,7 +25,7 @@ afterEach(() => {
 });
 
 describe("Authentication", () => {
-  it("Authenticates with the plus one API", () => {
+  it("Authenticates with the Consumption Counter API", () => {
     expect(localStorage.getItem("plus_one_authorization")).to.be.null;
     const password = "bitterballen";
 
