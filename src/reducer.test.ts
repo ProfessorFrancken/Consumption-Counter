@@ -1,7 +1,6 @@
 import {
   surnameRanges,
   members,
-  order,
   transactions,
   queuedOrder,
   queuedOrders,
@@ -126,38 +125,7 @@ describe("members", () => {
   });
 });
 
-describe("selecting a member", () => {
-  describe("selecting a member", () => {
-    it("has no selected member by default", () => {
-      expect(order(undefined, {}).member).toEqual({age: 0});
-    });
-
-    it("selects a member", () => {
-      expect(
-        order(undefined, {
-          type: TYPES.SELECT_MEMBER,
-          member: {name: "mark"},
-        }).member
-      ).toEqual({name: "mark"});
-    });
-  });
-});
-
 describe("cancelling choices", () => {});
-
-describe("buying products", () => {
-  it("is possible to buy more products", () => {
-    expect(
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ products: never[]; }' is not a... Remove this comment to see the full error message
-      order({products: []}, {type: TYPES.BUY_MORE, product: {id: 1}}).products
-    ).toEqual([{id: 1}]);
-  });
-
-  it("clears the order list when changing from buy more to buying single", () => {
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'never'.
-    expect(order({products: [{id: 1}]}, {type: TYPES.BUY_MORE}).products).toEqual([]);
-  });
-});
 
 describe("keeping track of the latest transactions", () => {
   it("has no transactions by default", () => {

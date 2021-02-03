@@ -8,27 +8,6 @@ export {boardMembers} from "App/Prominent/reducers";
 export {surnameRanges} from "App/SurnameRanges/reducers";
 export {committeeMembers} from "App/Committees/reducers";
 export {transactions, statistics, activities} from "App/Statistics/reducers";
-const defaultOrder = {
-  member: {age: 0},
-  products: [],
-};
-export function order(state = defaultOrder, action: any) {
-  switch (action.type) {
-    case TYPES.BUY_MORE:
-      return {
-        ...state,
-        products: state.products.length === 0 ? [action.product] : [],
-      };
-    case TYPES.SELECT_MEMBER:
-      return {...defaultOrder, member: action.member};
-    case TYPES.ADD_PRODUCT_TO_ORDER:
-      return {...state, products: [...state.products, {...action.product}]};
-    case TYPES.QUEUE_ORDER:
-      return defaultOrder;
-    default:
-      return state;
-  }
-}
 export function queuedOrder(state = null, action: any) {
   switch (action.type) {
     case TYPES.QUEUE_ORDER:

@@ -144,7 +144,7 @@ export function mockedState() {
           position: 999,
           category: "Fris",
           image: "",
-          age_restriction: 18,
+          age_restriction: null,
         },
       ],
       Eten: [
@@ -155,20 +155,12 @@ export function mockedState() {
           position: 999,
           category: "Eten",
           image: "utnCWM87tZclyENVrG03.jpg",
-          age_restriction: 18,
+          age_restriction: null,
         },
       ],
     },
     router: {
       locationBeforeTransitions: null,
-    },
-    order: {
-      member: {
-        id: 1,
-        fullname: "John Snow",
-        age: 19,
-      },
-      products: [],
     },
     transactions: [],
     recentBuyers: [],

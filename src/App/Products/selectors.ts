@@ -1,7 +1,7 @@
 import {createSelector} from "reselect";
 import {mapValues} from "lodash";
-import {orderSelector} from "selectors";
 
+const orderSelector = (state: any, {order}: any) => order;
 const categorySelector = (state: any) => state.products;
 const hourSelector = (state: any, {hour}: any) => hour;
 
@@ -9,16 +9,21 @@ const hourSelector = (state: any, {hour}: any) => hour;
 const allowedProductsSelector = createSelector(
   categorySelector,
   orderSelector,
-  (categories, order) =>
-    mapValues(categories, (products: any) =>
+  (categories, order) => {
+    return mapValues(categories, (products: any) =>
       products.filter((product: any) => {
-        if (!order.member && product.age_restriction) {
+        if (order.member === undefined && product.age_restriction !== null) {
           return false;
+        }
+
+        if (product.age_restriction === null) {
+          return true;
         }
 
         return product.age_restriction <= order.member.age;
       })
-    )
+    );
+  }
 );
 
 const isProductLocked = (product: any, hour: any) => {
@@ -49,7 +54,7 @@ export const productsWithOrderCountSelector = createSelector(
         products.map((product: any) => ({
           ...product,
           locked: isProductLocked(product, hour),
-          ordered: order.products.filter((p: any) => p.id === product.id).length,
+          ordered: order.products.filter(({id}: any) => id === product.id).length,
         }))
     )
 );

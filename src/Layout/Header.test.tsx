@@ -4,7 +4,7 @@ import {render} from "test-utils";
 
 it("renders a buy more button when visiting the products page", () => {
   const storeState = {
-    order: {buyMore: false, member: {fullname: "Mark Redeman"}},
+    order: {member: {fullname: "Mark Redeman"}, products: []},
     queuedOrder: null,
   };
 
