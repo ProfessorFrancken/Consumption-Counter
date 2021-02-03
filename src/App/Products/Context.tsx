@@ -3,7 +3,7 @@ import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router";
-import {productsWithOrderCountSelector} from "./selectors";
+import {mapValues} from "lodash";
 
 export type Product = {
   id: number;
@@ -46,19 +46,6 @@ type OrderAction =
 const emptyOrder: Order = {
   member: undefined,
   products: [],
-};
-
-type State = {
-  productsWithHour: {
-    Bier: Product[];
-    Fris: Product[];
-    Eten: Product[];
-  };
-  selectMember: (member: MemberType) => void;
-  addProductToOrder: (product: Product) => void;
-  addProductToOrderOrMakeOrder: (product: Product) => void;
-  buyAll: () => void;
-  order: Order;
 };
 
 const orderReducer = (state: Order, action: OrderAction) => {
@@ -119,10 +106,69 @@ const useOrderReducer = (defaultOrder: Order) => {
   ] as const;
 };
 
-const useProducts = (order: Order, hour: number) => {
-  const products = useSelector((state: any) => state.products);
+const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType) => {
+  if (member === undefined) {
+    return false;
+  }
 
-  return products;
+  if (product.age_restriction === null) {
+    return true;
+  }
+
+  return product.age_restriction <= member.age;
+};
+
+const isProductLocked = (product: Product, hour: number) => {
+  if (product.category === "Bier") {
+    if (["Almanak", "Almanac"].includes(product.name)) {
+      return false;
+    }
+
+    return [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(hour);
+  }
+
+  if (product.name === "Goede morgen!") {
+    return ![6, 7, 8, 9, 10, 11].includes(hour);
+  }
+
+  return false;
+};
+
+const useProducts = (order: Order, hour: number) => {
+  const products = useSelector((state: any) => state.products) as {
+    Bier: Product[];
+    Fris: Product[];
+    Eten: Product[];
+  };
+
+  return React.useMemo(() => {
+    return mapValues(products, (products: Product[]) => {
+      return products
+        .filter((product: Product) =>
+          memberIsAllowedToPurchaseProduct(product, order.member)
+        )
+        .map((product: Product) => {
+          return {
+            ...product,
+            locked: isProductLocked(product, hour),
+            ordered: order.products.filter(({id}) => id === product.id).length,
+          };
+        });
+    });
+  }, [order, products, hour]);
+};
+
+type State = {
+  products: {
+    Bier: Product[];
+    Fris: Product[];
+    Eten: Product[];
+  };
+  selectMember: (member: MemberType) => void;
+  addProductToOrder: (product: Product) => void;
+  addProductToOrderOrMakeOrder: (product: Product) => void;
+  buyAll: () => void;
+  order: Order;
 };
 
 const ProductPurchaseContext = React.createContext<State | undefined>(undefined);
@@ -135,20 +181,12 @@ export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
     {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember},
   ] = useOrderReducer(defaultOrder);
   const hour = new Date().getHours();
-
   const products = useProducts(order, hour);
-  const productsWithHour = useSelector((state: any) =>
-    productsWithOrderCountSelector(state, {order, hour})
-  ) as {
-    Bier: Product[];
-    Fris: Product[];
-    Eten: Product[];
-  };
 
   return (
     <ProductPurchaseContext.Provider
       value={{
-        productsWithHour,
+        products,
         selectMember,
         addProductToOrderOrMakeOrder,
         addProductToOrder,
