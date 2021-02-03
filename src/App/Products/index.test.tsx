@@ -77,8 +77,9 @@ describe("Selecting a member", () => {
     age: 0,
   };
   const state = {
-    storeState: {order: {}},
+    storeState: {order: {member: undefined, products: []}},
   };
+
   it("Selects a member when they do not have a latest purchse", () => {
     window.confirm = jest.fn().mockImplementationOnce(() => true);
 
