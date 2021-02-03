@@ -1,5 +1,6 @@
 import React from "react";
 import Price from "./Price";
+import {Product as ProductType} from "./../Context";
 
 const Product = ({product}: any) => (
   <button
@@ -18,19 +19,20 @@ const Product = ({product}: any) => (
   </button>
 );
 
-const Category = ({category, onClick, toggle, name}: any) => (
-  <nav className="categoryRow">
-    {category.products.map((product: any) => (
-      <Product product={product} key={product.id} />
-    ))}
-  </nav>
-);
+const Category = ({category, onClick, toggle, name}: any) =>
+  category.products.length > 0 ? (
+    <nav className="categoryRow">
+      {category.products.map((product: any) => (
+        <Product product={product} key={product.id} />
+      ))}
+    </nav>
+  ) : null;
 
 type PriceListProps = {
   products: {
-    Bier: ProductPropType[];
-    Fris: ProductPropType[];
-    Eten: ProductPropType[];
+    Bier: ProductType[];
+    Fris: ProductType[];
+    Eten: ProductType[];
   };
 };
 
@@ -46,12 +48,6 @@ const PriceList = ({products}: PriceListProps) => {
       <Category category={{name: "Food", products: food}} />
     </div>
   );
-};
-
-type ProductPropType = {
-  id: number;
-  name: string;
-  price: number;
 };
 
 export default PriceList;
