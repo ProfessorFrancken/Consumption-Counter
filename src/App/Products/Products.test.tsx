@@ -21,7 +21,7 @@ it("adds products to an order when clicked", async () => {
         Fris: [],
         Eten: [],
       }}
-      addProductToOrder={addToOrder}
+      addProductToOrderOrMakeOrder={addToOrder}
     />
   );
 

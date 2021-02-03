@@ -1,5 +1,5 @@
 import React from "react";
-import {makeOrder as makeOrderAction, TYPES} from "actions";
+import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router";
@@ -40,10 +40,9 @@ type Order = {
 };
 
 type OrderAction =
-  | {type: "TOGGLE_BUY_MORE_PRODUCTS"; product: Product}
   | {type: "SELECT_MEMBER"; member: MemberType}
   | {type: "ADD_PRODUCT_TO_ORDER"; product: Product}
-  | {type: "QUEUE_ORDER"};
+  | {type: "RESET_ORDER"};
 
 const emptyOrder: Order = {
   member: undefined,
@@ -59,61 +58,43 @@ type State = {
   };
   selectMember: (member: MemberType) => void;
   addProductToOrder: (product: Product) => void;
-  toggle: (product: Product) => void;
+  addProductToOrderOrMakeOrder: (product: Product) => void;
   buyAll: () => void;
   order: Order;
 };
 
 const orderReducer = (state: Order, action: OrderAction) => {
   switch (action.type) {
-    case "TOGGLE_BUY_MORE_PRODUCTS":
-      return {
-        ...state,
-        products: state.products.length === 0 ? [action.product] : [],
-      };
     case "SELECT_MEMBER":
       return {...emptyOrder, member: action.member};
     case "ADD_PRODUCT_TO_ORDER":
       return {...state, products: [...state.products, {...action.product}]};
-    case "QUEUE_ORDER":
+    case "RESET_ORDER":
       return emptyOrder;
   }
 };
 
-const ProductPurchaseContext = React.createContext<State | undefined>(undefined);
-
-export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
-  order: defaultOrder = emptyOrder,
-  ...props
-}) => {
-  const dispatch = useDispatch();
-  const [order, orderDispatch] = React.useReducer(orderReducer, defaultOrder);
-
+const useOrderReducer = (defaultOrder: Order) => {
+  const globalDispatch = useDispatch();
   const {push} = useHistory();
+  const [order, dispatch] = React.useReducer(orderReducer, defaultOrder);
 
-  const products = useSelector((state: any) => state.products);
-  const hour = new Date().getHours();
-
-  const productsWithHour = useSelector((state: any) =>
-    productsWithOrderCountSelector(state, {order, hour}, {hour})
-  ) as {
-    Bier: ProductPropType[];
-    Fris: ProductPropType[];
-    Eten: ProductPropType[];
-  };
-
-  // TODO: potentially extract to a ClockProvider
   const makeOrder = (order: Order) => {
-    orderDispatch({type: "QUEUE_ORDER"});
-    dispatch(makeOrderAction(order));
+    dispatch({type: "RESET_ORDER"});
+    globalDispatch(makeOrderAction(order));
   };
 
-  const addProductToOrder = (product: any) => {
+  const buyAll = () => makeOrder(order);
+
+  const addProductToOrder = (product: Product) => {
+    dispatch({type: "ADD_PRODUCT_TO_ORDER", product});
+  };
+
+  const addProductToOrderOrMakeOrder = (product: any) => {
     if (order.products.length === 0) {
-      return makeOrder({member: order.member, products: [product]});
+      makeOrder({member: order.member, products: [product]});
     } else {
-      orderDispatch({type: "ADD_PRODUCT_TO_ORDER", product});
-      dispatch({type: TYPES.ADD_PRODUCT_TO_ORDER, product});
+      addProductToOrder(product);
     }
   };
 
@@ -125,27 +106,55 @@ export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
       }
     }
 
+    dispatch({type: "SELECT_MEMBER", member});
     push("/products");
-    orderDispatch({type: "SELECT_MEMBER", member});
-    dispatch({type: TYPES.SELECT_MEMBER, member});
   };
 
-  const toggle = (product: Product) => {
-    orderDispatch({type: "TOGGLE_BUY_MORE_PRODUCTS", product});
-    dispatch({type: TYPES.BUY_MORE, product});
-  };
-
-  const value = {
-    products,
-    productsWithHour,
-    selectMember,
-    addProductToOrder: (product: Product) => addProductToOrder(product),
-    toggle: toggle,
-    buyAll: () => makeOrder(order),
+  return [
     order,
+    {
+      buyAll,
+      selectMember,
+      addProductToOrder,
+      addProductToOrderOrMakeOrder,
+    },
+  ] as const;
+};
+
+const ProductPurchaseContext = React.createContext<State | undefined>(undefined);
+export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
+  order: defaultOrder = emptyOrder,
+  ...props
+}) => {
+  const [
+    order,
+    {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember},
+  ] = useOrderReducer(defaultOrder);
+
+  const products = useSelector((state: any) => state.products);
+  const hour = new Date().getHours();
+  const productsWithHour = useSelector((state: any) =>
+    productsWithOrderCountSelector(state, {order, hour})
+  ) as {
+    Bier: ProductPropType[];
+    Fris: ProductPropType[];
+    Eten: ProductPropType[];
   };
 
-  return <ProductPurchaseContext.Provider value={value} {...props} />;
+  return (
+    <ProductPurchaseContext.Provider
+      value={{
+        products,
+        productsWithHour,
+        selectMember,
+        addProductToOrderOrMakeOrder,
+        addProductToOrder,
+        buyAll,
+        order,
+      }}
+      {...props}
+    />
+  );
 };
 
 export const useProductPurchase = () => {

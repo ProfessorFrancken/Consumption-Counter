@@ -2,14 +2,14 @@ import React from "react";
 import {Product as ProductType} from "./Context";
 import Product from "./Product";
 
-const Category = ({products, onClick, toggle, name, locked}: any) => (
+const Category = ({products, onClick, onLongPress, name, locked}: any) => (
   <nav className={"categoryRow"} aria-label={`${name} category`}>
     {products.map((product: any) => (
       <Product
         key={product.id}
         product={product}
         onClick={() => onClick(product)}
-        onLongPress={() => toggle(product)}
+        onLongPress={() => onLongPress(product)}
         locked={product.locked || locked}
       />
     ))}
@@ -30,10 +30,14 @@ export type ProductsType = {
 type ProductsProps = {
   products: ProductsType;
   addProductToOrder: (product: ProductType) => any;
-  toggle: (product: ProductType) => void;
+  addProductToOrderOrMakeOrder: (product: ProductType) => any;
 };
 
-const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
+const Products = ({
+  products,
+  addProductToOrder,
+  addProductToOrderOrMakeOrder,
+}: ProductsProps) => {
   const beer = products["Bier"] || [];
   const soda = products["Fris"] || [];
   const food = products["Eten"] || [];
@@ -43,8 +47,8 @@ const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
       {beer.length > 0 && (
         <Category
           name="beer"
-          onClick={addProductToOrder}
-          toggle={toggle}
+          onClick={addProductToOrderOrMakeOrder}
+          onLongPress={addProductToOrder}
           products={beer}
           locked={false}
         />
@@ -52,16 +56,16 @@ const Products = ({products, addProductToOrder, toggle}: ProductsProps) => {
       {soda.length > 0 && (
         <Category
           name="soda"
-          onClick={addProductToOrder}
-          toggle={toggle}
+          onClick={addProductToOrderOrMakeOrder}
+          onLongPress={addProductToOrder}
           products={soda}
         />
       )}
       {food.length > 0 && (
         <Category
           name="food"
-          onClick={addProductToOrder}
-          toggle={toggle}
+          onClick={addProductToOrderOrMakeOrder}
+          onLongPress={addProductToOrder}
           products={food}
         />
       )}
