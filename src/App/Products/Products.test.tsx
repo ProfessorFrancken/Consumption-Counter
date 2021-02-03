@@ -33,19 +33,3 @@ it("adds products to an order when clicked", async () => {
 
   expect(addToOrder).toBeCalledWith({id: 1, name: "Hertog-Jan", image: ""});
 });
-
-it("renders products from beer, drinks and food categories", () => {
-  const products = (
-    <Products
-      products={{
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ id: number; name: string; image: string; a... Remove this comment to see the full error message
-        Bier: [{id: 1, name: "Hertog-Jan", image: "", age_restriction: 0}],
-        Fris: [],
-        Eten: [],
-      }}
-      addProductToOrder={jest.fn()}
-    />
-  );
-
-  expect(products).toMatchSnapshot();
-});
