@@ -24,6 +24,7 @@ const Product = ({product, onLongPress, onClick, locked}: any) => (
         backgroundSize: "cover",
         backgroundPosition: "50% 50%",
       }}
+      disabled={locked}
     >
       {/* @ts-expect-error ts-migrate(2786) FIXME: 'AmountBeingOrdered' cannot be used as a JSX compo... Remove this comment to see the full error message */}
       <AmountBeingOrdered product={product} />

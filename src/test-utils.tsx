@@ -32,7 +32,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     ...stateWithoutAuthentication
   } = storeState;
   const {order = defaultOrder, ...state} = stateWithoutAuthentication;
-  const store = create({...mockedState(), ...stateWithoutAuthentication});
+  const store = create({...mockedState(), ...state});
 
   (routes || []).forEach((route) => history.push(route));
 

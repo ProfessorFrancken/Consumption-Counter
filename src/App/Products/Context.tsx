@@ -95,13 +95,14 @@ export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
   const hour = new Date().getHours();
 
   const productsWithHour = useSelector((state: any) =>
-    productsWithOrderCountSelector(state, {hour})
+    productsWithOrderCountSelector(state, {order, hour}, {hour})
   ) as {
     Bier: ProductPropType[];
     Fris: ProductPropType[];
     Eten: ProductPropType[];
   };
 
+  // TODO: potentially extract to a ClockProvider
   const makeOrder = (order: Order) => {
     orderDispatch({type: "QUEUE_ORDER"});
     dispatch(makeOrderAction(order));
