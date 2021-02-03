@@ -204,8 +204,6 @@ describe("fetching members", () => {
       })
       .catch((e: any) => done.fail(e));
   });
-
-  xit("assumes a person is not allowed to buy beer if they don't have a birthday", () => {});
 });
 
 describe("fetching board members", () => {

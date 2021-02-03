@@ -12,21 +12,34 @@ const defaultAuthentication = {
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
 };
 
+const defaultOrder = {
+  member: {
+    id: 1,
+    fullname: "John Snow",
+    age: 19,
+  },
+  products: [],
+};
+
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
   storeState,
   routes,
   ...props
 }) => {
-  const {authentication = defaultAuthentication, ...state} = storeState;
-  const store = create({...mockedState(), ...state});
+  const {
+    authentication = defaultAuthentication,
+    ...stateWithoutAuthentication
+  } = storeState;
+  const {order = defaultOrder, ...state} = stateWithoutAuthentication;
+  const store = create({...mockedState(), ...stateWithoutAuthentication});
 
   (routes || []).forEach((route) => history.push(route));
 
   return (
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
-        <ProductPurchaseProvider>{children}</ProductPurchaseProvider>
+        <ProductPurchaseProvider {...defaultOrder}>{children}</ProductPurchaseProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
   );

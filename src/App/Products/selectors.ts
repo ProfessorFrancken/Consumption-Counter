@@ -11,7 +11,13 @@ const allowedProductsSelector = createSelector(
   orderSelector,
   (categories, order) =>
     mapValues(categories, (products: any) =>
-      products.filter((product: any) => product.age_restriction <= order.member.age)
+      products.filter((product: any) => {
+        if (!order.member && product.age_restriction) {
+          return false;
+        }
+
+        return product.age_restriction <= order.member.age;
+      })
     )
 );
 
