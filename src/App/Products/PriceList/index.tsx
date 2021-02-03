@@ -1,8 +1,8 @@
-import {useSelector} from "react-redux";
+import {useProductPurchase} from "../Context";
 import PriceList from "./PriceList";
 
 const PriceListScreen = () => {
-  const products = useSelector((state: any) => state.products);
+  const {productsWithHour: products} = useProductPurchase();
   return <PriceList products={products} />;
 };
 

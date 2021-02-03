@@ -3,7 +3,6 @@ import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router";
-import {ProductPropType} from "./Products";
 import {productsWithOrderCountSelector} from "./selectors";
 
 export type Product = {
@@ -50,11 +49,10 @@ const emptyOrder: Order = {
 };
 
 type State = {
-  products: Product[];
   productsWithHour: {
-    Bier: ProductPropType[];
-    Fris: ProductPropType[];
-    Eten: ProductPropType[];
+    Bier: Product[];
+    Fris: Product[];
+    Eten: Product[];
   };
   selectMember: (member: MemberType) => void;
   addProductToOrder: (product: Product) => void;
@@ -121,6 +119,12 @@ const useOrderReducer = (defaultOrder: Order) => {
   ] as const;
 };
 
+const useProducts = (order: Order, hour: number) => {
+  const products = useSelector((state: any) => state.products);
+
+  return products;
+};
+
 const ProductPurchaseContext = React.createContext<State | undefined>(undefined);
 export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
   order: defaultOrder = emptyOrder,
@@ -130,21 +134,20 @@ export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
     order,
     {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember},
   ] = useOrderReducer(defaultOrder);
-
-  const products = useSelector((state: any) => state.products);
   const hour = new Date().getHours();
+
+  const products = useProducts(order, hour);
   const productsWithHour = useSelector((state: any) =>
     productsWithOrderCountSelector(state, {order, hour})
   ) as {
-    Bier: ProductPropType[];
-    Fris: ProductPropType[];
-    Eten: ProductPropType[];
+    Bier: Product[];
+    Fris: Product[];
+    Eten: Product[];
   };
 
   return (
     <ProductPurchaseContext.Provider
       value={{
-        products,
         productsWithHour,
         selectMember,
         addProductToOrderOrMakeOrder,
