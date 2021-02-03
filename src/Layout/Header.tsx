@@ -18,6 +18,11 @@ const CommitteeTitle = ({
 const BuyProductsForMemberTitle = () => {
   const {order} = useProductPurchase();
 
+  if (order.member === undefined) {
+    console.warn("Tried rendering header for undefined member", order);
+    return null;
+  }
+
   return <span>{order.member.fullname}</span>;
 };
 

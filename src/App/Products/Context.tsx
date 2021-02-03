@@ -1,5 +1,5 @@
 import React from "react";
-import {makeOrder, TYPES} from "actions";
+import {makeOrder as makeOrderAction, TYPES} from "actions";
 import {MemberType} from "App/Members/Members";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router";
@@ -17,10 +17,6 @@ export type Product = {
   age_restriction: number | null;
 };
 
-type Order = {
-  products: Product[];
-  member: MemberType;
-};
 function didNotRecentlyOrderAProduct(member: MemberType) {
   const latest_purchase_at =
     typeof member.latest_purchase_at === "string"
@@ -38,21 +34,21 @@ function didNotRecentlyOrderAProduct(member: MemberType) {
   return diffDays > 90;
 }
 
-function addProductToOrder(product: any) {
-  return (dispatch: any, getState: any) => {
-    const {order} = getState();
+type Order = {
+  products: Product[];
+  member: undefined | MemberType;
+};
 
-    if (order.products.length === 0) {
-      return dispatch(makeOrder({member: order.member, products: [product]}));
-    } else {
-      dispatch({type: TYPES.ADD_PRODUCT_TO_ORDER, product});
-    }
-  };
-}
+type OrderAction =
+  | {type: "TOGGLE_BUY_MORE_PRODUCTS"; product: Product}
+  | {type: "SELECT_MEMBER"; member: MemberType}
+  | {type: "ADD_PRODUCT_TO_ORDER"; product: Product}
+  | {type: "QUEUE_ORDER"};
 
-function buyMore(product: any) {
-  return {type: TYPES.BUY_MORE, product};
-}
+const emptyOrder: Order = {
+  member: undefined,
+  products: [],
+};
 
 type State = {
   products: Product[];
@@ -64,18 +60,38 @@ type State = {
   selectMember: (member: MemberType) => void;
   addProductToOrder: (product: Product) => void;
   toggle: (product: Product) => void;
-  makeOrder: () => void;
   buyAll: () => void;
   order: Order;
 };
 
+const orderReducer = (state: Order, action: OrderAction) => {
+  switch (action.type) {
+    case "TOGGLE_BUY_MORE_PRODUCTS":
+      return {
+        ...state,
+        products: state.products.length === 0 ? [action.product] : [],
+      };
+    case "SELECT_MEMBER":
+      return {...emptyOrder, member: action.member};
+    case "ADD_PRODUCT_TO_ORDER":
+      return {...state, products: [...state.products, {...action.product}]};
+    case "QUEUE_ORDER":
+      return emptyOrder;
+  }
+};
+
 const ProductPurchaseContext = React.createContext<State | undefined>(undefined);
 
-export const ProductPurchaseProvider: React.FC<{}> = ({...props}) => {
-  const {push} = useHistory();
-  const order = useSelector((state: any) => state.order);
-  const products = useSelector((state: any) => state.products);
+export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
+  order: defaultOrder = emptyOrder,
+  ...props
+}) => {
   const dispatch = useDispatch();
+  const [order, orderDispatch] = React.useReducer(orderReducer, defaultOrder);
+
+  const {push} = useHistory();
+
+  const products = useSelector((state: any) => state.products);
   const hour = new Date().getHours();
 
   const productsWithHour = useSelector((state: any) =>
@@ -84,6 +100,20 @@ export const ProductPurchaseProvider: React.FC<{}> = ({...props}) => {
     Bier: ProductPropType[];
     Fris: ProductPropType[];
     Eten: ProductPropType[];
+  };
+
+  const makeOrder = (order: Order) => {
+    orderDispatch({type: "QUEUE_ORDER"});
+    dispatch(makeOrderAction(order));
+  };
+
+  const addProductToOrder = (product: any) => {
+    if (order.products.length === 0) {
+      return makeOrder({member: order.member, products: [product]});
+    } else {
+      orderDispatch({type: "ADD_PRODUCT_TO_ORDER", product});
+      dispatch({type: TYPES.ADD_PRODUCT_TO_ORDER, product});
+    }
   };
 
   const selectMember = (member: MemberType) => {
@@ -95,17 +125,22 @@ export const ProductPurchaseProvider: React.FC<{}> = ({...props}) => {
     }
 
     push("/products");
+    orderDispatch({type: "SELECT_MEMBER", member});
     dispatch({type: TYPES.SELECT_MEMBER, member});
+  };
+
+  const toggle = (product: Product) => {
+    orderDispatch({type: "TOGGLE_BUY_MORE_PRODUCTS", product});
+    dispatch({type: TYPES.BUY_MORE, product});
   };
 
   const value = {
     products,
     productsWithHour,
     selectMember,
-    makeOrder: () => {},
-    addProductToOrder: (product: Product) => dispatch(addProductToOrder(product)),
-    toggle: (product: Product) => dispatch(buyMore(product)),
-    buyAll: () => dispatch(makeOrder(order)),
+    addProductToOrder: (product: Product) => addProductToOrder(product),
+    toggle: toggle,
+    buyAll: () => makeOrder(order),
     order,
   };
 

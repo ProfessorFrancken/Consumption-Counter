@@ -39,7 +39,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   return (
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
-        <ProductPurchaseProvider {...defaultOrder}>{children}</ProductPurchaseProvider>
+        <ProductPurchaseProvider order={order}>{children}</ProductPurchaseProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
   );
