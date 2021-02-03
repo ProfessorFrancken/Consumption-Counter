@@ -2,13 +2,17 @@ import Products from "./Products";
 import {useProductPurchase} from "./Context";
 
 const ProductsScreen = () => {
-  const {addProductToOrder, productsWithHour, toggle} = useProductPurchase();
+  const {
+    addProductToOrder,
+    productsWithHour,
+    addProductToOrderOrMakeOrder,
+  } = useProductPurchase();
 
   return (
     <Products
       products={productsWithHour}
       addProductToOrder={addProductToOrder}
-      toggle={toggle}
+      addProductToOrderOrMakeOrder={addProductToOrderOrMakeOrder}
     />
   );
 };
