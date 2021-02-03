@@ -3,7 +3,7 @@ import AppContainer from "./AppContainer";
 import {history} from "./../Setup/store";
 import MockDate from "mockdate";
 import moxios from "moxios";
-import {render, fireEvent} from "test-utils";
+import {render, fireEvent, act} from "test-utils";
 import {TIME_TO_CANCEL} from "./../actions";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
 
@@ -93,7 +93,7 @@ describe("Consumption Counter", () => {
     const product = app.getByText("Hertog Jan");
 
     fireEvent.mouseDown(product);
-    jest.runTimersToTime(1000);
+    act(() => jest.runTimersToTime(1000));
     fireEvent.mouseUp(product);
   };
 
