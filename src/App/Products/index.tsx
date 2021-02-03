@@ -3,14 +3,14 @@ import {useProductPurchase} from "./Context";
 
 const ProductsScreen = () => {
   const {
+    products,
     addProductToOrder,
-    productsWithHour,
     addProductToOrderOrMakeOrder,
   } = useProductPurchase();
 
   return (
     <Products
-      products={productsWithHour}
+      products={products}
       addProductToOrder={addProductToOrder}
       addProductToOrderOrMakeOrder={addProductToOrderOrMakeOrder}
     />

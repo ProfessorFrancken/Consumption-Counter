@@ -2,7 +2,7 @@ import {useProductPurchase} from "../Context";
 import PriceList from "./PriceList";
 
 const PriceListScreen = () => {
-  const {productsWithHour: products} = useProductPurchase();
+  const {products} = useProductPurchase();
   return <PriceList products={products} />;
 };
 
