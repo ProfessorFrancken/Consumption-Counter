@@ -1,6 +1,6 @@
 import React from "react";
 import Price from "./Price";
-import {Product as ProductType} from "./../Context";
+import {Product as ProductType} from "./../OrdersContext";
 
 const Product = ({product}: any) => (
   <button

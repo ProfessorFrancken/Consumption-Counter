@@ -1,5 +1,5 @@
 import React from "react";
-import {Product as ProductType} from "./Context";
+import {Product as ProductType} from "./OrdersContext";
 import Product from "./Product";
 
 const Category = ({products, onClick, onLongPress, name, locked}: any) => (

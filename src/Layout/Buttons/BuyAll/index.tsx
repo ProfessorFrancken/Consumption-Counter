@@ -2,11 +2,10 @@ import React from "react";
 import Price from "App/Price";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation} from "react-router-dom";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 
 const BuyAll = () => {
-  const {buyAll} = useProductPurchase();
-  const {order} = useProductPurchase();
+  const {buyAll, order} = useOrder();
   const {pathname} = useLocation();
 
   if (pathname !== "/products") {

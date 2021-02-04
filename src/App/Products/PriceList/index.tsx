@@ -1,8 +1,8 @@
-import {useProductPurchase} from "../Context";
+import {useOrder} from "../OrdersContext";
 import PriceList from "./PriceList";
 
 const PriceListScreen = () => {
-  const {products} = useProductPurchase();
+  const {products} = useOrder();
   return <PriceList products={products} />;
 };
 

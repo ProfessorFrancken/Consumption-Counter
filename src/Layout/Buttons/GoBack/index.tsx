@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useHistory} from "react-router-dom";
 import {queuedOrderSelector} from "selectors";
@@ -8,7 +8,7 @@ import {queuedOrderSelector} from "selectors";
 const GoBack = () => {
   const queuedOrder = useSelector(queuedOrderSelector);
   const {location, goBack} = useHistory();
-  const {selectMember} = useProductPurchase();
+  const {selectMember} = useOrder();
 
   if (!queuedOrder && location.pathname === "/") {
     return null;
