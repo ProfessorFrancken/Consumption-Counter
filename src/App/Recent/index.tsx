@@ -1,11 +1,11 @@
 import {useSelector} from "react-redux";
 import {recentBuyersSelector} from "./selectors";
 import Members from "./../Members/Members";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 
 const RecentScreen = () => {
   const members = useSelector(recentBuyersSelector);
-  const {selectMember} = useProductPurchase();
+  const {selectMember} = useOrder();
 
   return <Members members={members} selectMember={selectMember} />;
 };

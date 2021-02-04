@@ -1,12 +1,8 @@
 import Products from "./Products";
-import {useProductPurchase} from "./Context";
+import {useOrder} from "./OrdersContext";
 
 const ProductsScreen = () => {
-  const {
-    products,
-    addProductToOrder,
-    addProductToOrderOrMakeOrder,
-  } = useProductPurchase();
+  const {products, addProductToOrder, addProductToOrderOrMakeOrder} = useOrder();
 
   return (
     <Products

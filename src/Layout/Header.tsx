@@ -2,7 +2,7 @@ import React from "react";
 import {Route, NavLink} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {committeesSelector} from "App/Committees/selectors";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 
 const CommitteeTitle = ({
   match: {
@@ -16,7 +16,7 @@ const CommitteeTitle = ({
 };
 
 const BuyProductsForMemberTitle = () => {
-  const {order} = useProductPurchase();
+  const {order} = useOrder();
 
   if (order.member === undefined) {
     console.warn("Tried rendering header for undefined member", order);

@@ -1,10 +1,10 @@
 import {MemberType} from "App/Members/Members";
 import {useSelector} from "react-redux";
 import Buixieval from "./Buixieval";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 
 const BuixieValScreen = () => {
-  const {selectMember} = useProductPurchase();
+  const {selectMember} = useOrder();
 
   const members: MemberType[] = useSelector((state: any) =>
     state.members

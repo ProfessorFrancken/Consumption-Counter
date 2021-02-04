@@ -171,8 +171,8 @@ type State = {
   order: Order;
 };
 
-const ProductPurchaseContext = React.createContext<State | undefined>(undefined);
-export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
+const OrderContext = React.createContext<State | undefined>(undefined);
+export const OrderProvider: React.FC<{order?: Order}> = ({
   order: defaultOrder = emptyOrder,
   ...props
 }) => {
@@ -184,7 +184,7 @@ export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
   const products = useProducts(order, hour);
 
   return (
-    <ProductPurchaseContext.Provider
+    <OrderContext.Provider
       value={{
         products,
         selectMember,
@@ -198,11 +198,11 @@ export const ProductPurchaseProvider: React.FC<{order?: Order}> = ({
   );
 };
 
-export const useProductPurchase = () => {
-  const context = React.useContext(ProductPurchaseContext);
+export const useOrder = () => {
+  const context = React.useContext(OrderContext);
 
   if (!context) {
-    throw new Error(`useProductPurchase must be used within a ProductPurchaseProvider`);
+    throw new Error(`useOrder must be used within a OrderProvider`);
   }
 
   return context;

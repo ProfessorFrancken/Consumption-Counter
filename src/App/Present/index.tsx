@@ -1,7 +1,7 @@
 import React from "react";
 import {useSelector} from "react-redux";
 import Members, {MemberType} from "./../Members/Members";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 import nedap from "./../../assets/nedap-logo.png";
 
 type PresentMemberType = {
@@ -73,7 +73,7 @@ const Present = ({members, selectMember}: PresentProps) => {
 
 const PresentScreen = () => {
   const members = useSelector((state: any) => state.members);
-  const {selectMember} = useProductPurchase();
+  const {selectMember} = useOrder();
 
   return <Present selectMember={selectMember} members={members} />;
 };

@@ -2,12 +2,12 @@ import {useSelector} from "react-redux";
 import {membersInRangeSelector} from "selectors";
 import Members from "App/Members/Members";
 import {useParams} from "react-router";
-import {useProductPurchase} from "App/Products/Context";
+import {useOrder} from "App/Products/OrdersContext";
 
 const SelectMemberFromSurnameRangeScreen = () => {
   const params = useParams();
   const members = useSelector((state: any) => membersInRangeSelector(state, params));
-  const {selectMember} = useProductPurchase();
+  const {selectMember} = useOrder();
 
   return <Members members={members} selectMember={selectMember} />;
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import AvailableProducts from "./index";
 import {render, fireEvent} from "test-utils";
-import {useProductPurchase} from "./Context";
+import {useOrder} from "./OrdersContext";
 import {MemberType} from "App/Members/Members";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
@@ -59,7 +59,7 @@ it("shows the amount of products that are currently being orderd", () => {
 
 describe("Selecting a member", () => {
   const SelectMember: React.FC<{member: MemberType}> = ({member}) => {
-    const {selectMember, order} = useProductPurchase();
+    const {selectMember, order} = useOrder();
 
     if (order.member) {
       return <span>{order.member.fullname}</span>;

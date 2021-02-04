@@ -4,7 +4,7 @@ import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {mockedState} from "App/App.test";
 import {create, history} from "./Setup/store";
 import {InfrastructureProviders} from "Root";
-import {ProductPurchaseProvider} from "App/Products/Context";
+import {OrderProvider} from "App/Products/OrdersContext";
 
 const defaultAuthentication = {
   request: false,
@@ -39,7 +39,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   return (
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
-        <ProductPurchaseProvider order={order}>{children}</ProductPurchaseProvider>
+        <OrderProvider order={order}>{children}</OrderProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
   );
