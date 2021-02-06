@@ -3,7 +3,7 @@ import axios from "axios";
 
 const api = process.env.REACT_APP_API_SERVER;
 
-function get(uri: any, params: any) {
+function get(uri: string, params?: any) {
   const requestOptions = {
     headers: {
       "Content-Type": "application/json",
