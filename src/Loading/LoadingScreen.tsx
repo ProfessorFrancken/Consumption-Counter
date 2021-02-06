@@ -4,9 +4,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {LOADING_STATE} from "./reducers";
 import {useSelector} from "react-redux";
 import {loadingScreenSelector} from "./selectors";
+import {useProducts} from "App/Products/ProductsContext";
 
 const LoadingScreen = () => {
   const {state, features} = useSelector(loadingScreenSelector);
+  const {productsQuery} = useProducts();
 
   return (
     <div
@@ -44,19 +46,19 @@ const LoadingScreen = () => {
             </li>
           ))}
         </ul>
-        {state === LOADING_STATE.SUCCESS && (
+        {state === LOADING_STATE.SUCCESS && productsQuery.isSuccess ? (
           <NavLink exact to="/" className="tile button p-4">
             Open application
           </NavLink>
-        )}
-        {state === LOADING_STATE.REQUESTING && (
+        ) : null}
+        {state === LOADING_STATE.REQUESTING && !productsQuery.isSuccess ? (
           <button
             className="d-block text-center w-100 bg-secondary tile button p-4"
             disabled
           >
             Loading...
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   );
