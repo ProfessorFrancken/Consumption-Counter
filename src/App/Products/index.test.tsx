@@ -10,8 +10,12 @@ import ProductsScreen from "./index";
 it("renders, and it does not include products that a member is not allowed to buy (due to age distriction)", () => {
   const storeState = {
     products: {
-      Bier: [{name: "Hertog Jan", image: "", id: 1, age_restriction: 18}],
-      Fris: [{name: "Ice Tea", image: "", id: 2, age_restriction: null}],
+      Bier: [
+        {name: "Hertog Jan", image: "", id: 1, age_restriction: 18, category: "Bier"},
+      ],
+      Fris: [
+        {name: "Ice Tea", image: "", id: 2, age_restriction: null, category: "Fris"},
+      ],
       Eten: [],
     },
     order: {member: {age: 17}, products: []},
@@ -30,8 +34,12 @@ it("renders, and it does not include products that a member is not allowed to bu
 it("shows the amount of products that are currently being orderd", () => {
   const storeState = {
     products: {
-      Bier: [{name: "Hertog Jan", image: "", id: 1, age_restriction: 18}],
-      Fris: [{name: "Ice Tea", image: "", id: 2, age_restriction: null}],
+      Bier: [
+        {name: "Hertog Jan", image: "", id: 1, age_restriction: 18, category: "Bier"},
+      ],
+      Fris: [
+        {name: "Ice Tea", image: "", id: 2, age_restriction: null, category: "Fris"},
+      ],
       Eten: [],
     },
     order: {

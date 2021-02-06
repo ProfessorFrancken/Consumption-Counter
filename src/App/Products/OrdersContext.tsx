@@ -1,9 +1,11 @@
 import React from "react";
 import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {mapValues} from "lodash";
+import {useProducts as useFetchedProducts} from "./ProductsContext";
+import {sortBy, groupBy} from "lodash";
 
 export type Product = {
   id: number;
@@ -135,14 +137,19 @@ const isProductLocked = (product: Product, hour: number) => {
 };
 
 const useProducts = (order: Order, hour: number) => {
-  const products = useSelector((state: any) => state.products) as {
+  const {products} = useFetchedProducts();
+
+  const productsByCategory = groupBy(
+    sortBy(products, (product: any) => product.position),
+    (product: any) => product.category
+  ) as {
     Bier: Product[];
     Fris: Product[];
     Eten: Product[];
   };
 
   return React.useMemo(() => {
-    return mapValues(products, (products: Product[]) => {
+    return mapValues(productsByCategory, (products: Product[]) => {
       return products
         .filter((product: Product) =>
           memberIsAllowedToPurchaseProduct(product, order.member)
@@ -155,7 +162,7 @@ const useProducts = (order: Order, hour: number) => {
           };
         });
     });
-  }, [order, products, hour]);
+  }, [order, productsByCategory, hour]);
 };
 
 type State = {

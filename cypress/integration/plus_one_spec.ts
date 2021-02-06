@@ -133,7 +133,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Allows buying multiple products at once", () => {
-      cy.clock();
       cy.visit("/");
       cy.get(".tilesGrid").should("not.be.empty");
 
@@ -146,7 +145,7 @@ describe("Francken Consumption Counter", () => {
         .should("contain", "Ice Tea")
         .trigger("mousedown");
 
-      cy.tick(1000);
+      cy.findByText("Buy it all", {exact: false});
       cy.get(".productsGrid > :nth-child(2) > :nth-child(1)")
         .should("contain", "1")
         .click()
