@@ -1,7 +1,6 @@
 import {TYPES} from "actions";
 export {loading} from "Loading/reducers";
 export {members} from "App/Members/reducers";
-export {products} from "App/Products/reducers";
 export {recentBuyers} from "App/Recent/reducers";
 export {menuItems} from "Layout/Sidebar/reducers";
 export {boardMembers} from "App/Prominent/reducers";

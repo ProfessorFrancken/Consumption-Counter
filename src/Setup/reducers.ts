@@ -3,7 +3,6 @@ import {connectRouter} from "connected-react-router";
 
 import {
   loading,
-  products,
   members,
   boardMembers,
   committeeMembers,
@@ -24,7 +23,6 @@ const makeApplicationReducer = (history: any) => {
     boardMembers,
     committeeMembers,
     surnameRanges,
-    products,
     transactions,
     recentBuyers,
     queuedOrder,

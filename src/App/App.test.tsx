@@ -123,42 +123,6 @@ export function mockedState() {
         },
       ],
     },
-    products: {
-      Bier: [
-        {
-          id: 3,
-          name: "Hertog Jan",
-          price: 68,
-          position: 1,
-          category: "Bier",
-          image: "wCwnyLXTVdPEnKRXjw9I.png",
-          splash_image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-          age_restriction: 18,
-        },
-      ],
-      Fris: [
-        {
-          id: 27,
-          name: "Ice Tea",
-          price: 60,
-          position: 999,
-          category: "Fris",
-          image: "",
-          age_restriction: null,
-        },
-      ],
-      Eten: [
-        {
-          id: 243,
-          name: "Kinder Bueno",
-          price: 55,
-          position: 999,
-          category: "Eten",
-          image: "utnCWM87tZclyENVrG03.jpg",
-          age_restriction: null,
-        },
-      ],
-    },
     router: {
       locationBeforeTransitions: null,
     },
