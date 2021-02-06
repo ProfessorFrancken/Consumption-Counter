@@ -54,13 +54,11 @@ describe("Fetching initial data", () => {
       {type: TYPES.LOAD_APPLICATION_REQUEST},
       push("/loading"),
       {type: TYPES.FETCH_MEMBERS_REQUEST},
-      {type: TYPES.FETCH_PRODUCTS_REQUEST},
       {type: TYPES.FETCH_BOARD_MEMBERS_REQUEST},
       {type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST},
       {type: TYPES.FETCH_STATISTICS_REQUEST},
       {type: TYPES.FETCH_ACTIVITIES_REQUEST},
       {type: TYPES.FETCH_MEMBERS_SUCCESS, members: []},
-      {type: TYPES.FETCH_PRODUCTS_SUCCESS, products: []},
       {type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS, boardMembers: []},
       {type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: []},
       {type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: []},
@@ -325,106 +323,6 @@ describe("fetching committee members", () => {
     store
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchCommitteeMembers())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      })
-      .catch((e: any) => done.fail(e));
-  });
-});
-
-describe("fetching products", () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
-
-  it("maps products from an http request", (done) => {
-    moxios.stubRequest(`${base_api}/products`, {
-      response: {
-        products: [
-          {
-            id: 1,
-            naam: "Grolsch",
-            prijs: "0.6500",
-            categorie: "Bier",
-            positie: 999,
-            beschikbaar: 1,
-            afbeelding: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-            splash_afbeelding: null,
-            kleur: null,
-          },
-          {
-            id: 2,
-            naam: "Heineken",
-            prijs: "0.6000",
-            categorie: "Bier",
-            positie: 999,
-            beschikbaar: 0,
-            afbeelding: "",
-            splash_afbeelding: null,
-            kleur: null,
-          },
-        ],
-      },
-      headers: {"content-type": "application/json"},
-    });
-
-    const expectedActions = [
-      {type: TYPES.FETCH_PRODUCTS_REQUEST},
-      {
-        type: TYPES.FETCH_PRODUCTS_SUCCESS,
-        products: [
-          {
-            age_restriction: 18,
-            category: "Bier",
-            id: 1,
-            image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
-            splash_image: null,
-            name: "Grolsch",
-            position: 999,
-            price: 65,
-          },
-          {
-            age_restriction: 18,
-            category: "Bier",
-            id: 2,
-            image: "",
-            splash_image: null,
-            name: "Heineken",
-            position: 999,
-            price: 60,
-          },
-        ],
-      },
-    ];
-
-    const store = mockStore();
-
-    store
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
-      .dispatch(actions.fetchProducts())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      })
-      .catch((e: any) => done.fail(e));
-  });
-
-  it("fails if the http request fails", (done) => {
-    moxios.stubRequest(`${base_api}/products`, {
-      status: 400,
-      headers: {"content-type": "application/json"},
-    });
-
-    const expectedActions = [
-      {type: TYPES.FETCH_PRODUCTS_REQUEST},
-      {type: TYPES.FETCH_PRODUCTS_FAILURE},
-    ];
-
-    const store = mockStore();
-
-    store
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
-      .dispatch(actions.fetchProducts())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
         done();

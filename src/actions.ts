@@ -11,7 +11,6 @@ export const actions = {
 
   fetchInitialData,
   fetchMembers,
-  fetchProducts,
   fetchBoardMembers,
   fetchCommitteeMembers,
   fetchStatistics,
@@ -45,10 +44,6 @@ export const TYPES = {
   FETCH_COMMITTEE_MEMBERS_REQUEST: "FETCH_COMMITTEE_MEMBERS_REQUEST",
   FETCH_COMMITTEE_MEMBERS_SUCCESS: "FETCH_COMMITTEE_MEMBERS_SUCCESS",
   FETCH_COMMITTEE_MEMBERS_FAILURE: "FETCH_COMMITTEE_MEMBERS_FAILURE",
-
-  FETCH_PRODUCTS_REQUEST: "FETCH_PRODUCTS_REQUEST",
-  FETCH_PRODUCTS_SUCCESS: "FETCH_PRODUCTS_SUCCESS",
-  FETCH_PRODUCTS_FAILURE: "FETCH_PRODUCTS_FAILURE",
 
   FETCH_STATISTICS_REQUEST: "FETCH_STATISTICS_REQUEST",
   FETCH_STATISTICS_SUCCESS: "FETCH_STATISTICS_SUCCESS",
@@ -202,43 +197,6 @@ export function fetchMembers() {
   };
 }
 
-export function fetchProducts() {
-  return (dispatch: any, getState: any, api: any) => {
-    dispatch({
-      type: TYPES.FETCH_PRODUCTS_REQUEST,
-    });
-
-    const mapProducts = (product: any) => {
-      return {
-        id: parseInt(product.id, 10),
-        name: product.naam,
-
-        // Note we parse the price and then convert it to fulll cents
-        price: 100 * parseFloat(product.prijs),
-        position: product.positie,
-        category: product.categorie,
-        image: product.afbeelding,
-        splash_image: product.splash_afbeelding,
-        age_restriction: product.categorie === "Bier" ? 18 : null,
-      };
-    };
-
-    return api
-      .get("/products")
-      .then((response: any) =>
-        dispatch({
-          type: TYPES.FETCH_PRODUCTS_SUCCESS,
-          products: response.products.map(mapProducts),
-        })
-      )
-      .catch((ex: any) =>
-        dispatch({
-          type: TYPES.FETCH_PRODUCTS_FAILURE,
-        })
-      );
-  };
-}
-
 export function fetchBoardMembers() {
   return (dispatch: any, getState: any, api: any) => {
     dispatch({
@@ -386,7 +344,6 @@ export function fetchInitialData() {
       dispatch({type: TYPES.LOAD_APPLICATION_REQUEST}),
       dispatch(push(`/loading`)),
       dispatch(fetchMembers()),
-      dispatch(fetchProducts()),
       dispatch(fetchBoardMembers()),
       dispatch(fetchCommitteeMembers()),
       dispatch(fetchStatistics()),

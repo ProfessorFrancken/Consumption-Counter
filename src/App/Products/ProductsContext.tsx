@@ -38,7 +38,9 @@ const useFetchProducts = (products?: Product[]) => {
         .get("/products")
         .then((response: any) => response.products.map(mapProducts));
     },
-    onSuccess: preLoadImages,
+    onSuccess: (products: Product[]) => {
+      preLoadImages(products);
+    },
     enabled: products === undefined,
   });
 };

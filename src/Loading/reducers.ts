@@ -39,16 +39,6 @@ export function loading(
         ...state,
         features: updateFeatureState(state.features, "Members", LOADING_STATE.FAILURE),
       };
-    case TYPES.FETCH_PRODUCTS_SUCCESS:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Products", LOADING_STATE.SUCCESS),
-      };
-    case TYPES.FETCH_PRODUCTS_FAILURE:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Products", LOADING_STATE.FAILURE),
-      };
     case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
       return {
         ...state,
