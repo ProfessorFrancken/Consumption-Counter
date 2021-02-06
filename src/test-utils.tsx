@@ -4,7 +4,8 @@ import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {mockedState} from "App/App.test";
 import {create, history} from "./Setup/store";
 import {InfrastructureProviders} from "Root";
-import {OrderProvider} from "App/Products/OrdersContext";
+import {OrderProvider, Product} from "App/Products/OrdersContext";
+import {ProductsProvider} from "App/Products/ProductsContext";
 
 const defaultAuthentication = {
   request: false,
@@ -21,6 +22,43 @@ const defaultOrder = {
   products: [],
 };
 
+const defaultProducts = {
+  Bier: [
+    {
+      id: 3,
+      name: "Hertog Jan",
+      price: 68,
+      position: 1,
+      category: "Bier",
+      image: "wCwnyLXTVdPEnKRXjw9I.png",
+      splash_image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
+      age_restriction: 18,
+    },
+  ],
+  Fris: [
+    {
+      id: 27,
+      name: "Ice Tea",
+      price: 60,
+      position: 999,
+      category: "Fris",
+      image: "",
+      age_restriction: null,
+    },
+  ],
+  Eten: [
+    {
+      id: 243,
+      name: "Kinder Bueno",
+      price: 55,
+      position: 999,
+      category: "Eten",
+      image: "utnCWM87tZclyENVrG03.jpg",
+      age_restriction: null,
+    },
+  ],
+};
+
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
   storeState,
@@ -31,15 +69,22 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     authentication = defaultAuthentication,
     ...stateWithoutAuthentication
   } = storeState;
-  const {order = defaultOrder, ...state} = stateWithoutAuthentication;
+  const {order = defaultOrder, ...stateWithoutOrder} = stateWithoutAuthentication;
+  const {products: productsByCategory = defaultProducts, ...state} = stateWithoutOrder;
   const store = create({...mockedState(), ...state});
 
   (routes || []).forEach((route) => history.push(route));
 
+  const products = Object.values(productsByCategory).flatMap(
+    (product) => product
+  ) as Product[];
+
   return (
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
-        <OrderProvider order={order}>{children}</OrderProvider>
+        <ProductsProvider products={products}>
+          <OrderProvider order={order}>{children}</OrderProvider>
+        </ProductsProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
   );

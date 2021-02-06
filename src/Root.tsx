@@ -7,6 +7,7 @@ import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {ReactQueryDevtools} from "react-query/devtools";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {OrderProvider} from "App/Products/OrdersContext";
+import {ProductsProvider} from "App/Products/ProductsContext";
 import "./index.css";
 
 type Props = {
@@ -36,7 +37,9 @@ const DevelopMentProviders: React.FC = ({children}) => {
 export const ApplicationProviders: React.FC = ({children}) => {
   return (
     <AuthenticationProvider>
-      <OrderProvider>{children}</OrderProvider>
+      <ProductsProvider>
+        <OrderProvider>{children}</OrderProvider>
+      </ProductsProvider>
     </AuthenticationProvider>
   );
 };
