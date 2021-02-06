@@ -5,6 +5,28 @@ import {LOADING_STATE} from "./reducers";
 import {useSelector} from "react-redux";
 import {loadingScreenSelector} from "./selectors";
 import {useProducts} from "App/Products/ProductsContext";
+import {QueryObserverResult} from "react-query";
+
+type Feature = {
+  query: QueryObserverResult;
+  label: string;
+};
+const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
+  return (
+    <li className="font-weight-bold my-3">
+      {feature.query.isLoading && (
+        <FontAwesomeIcon icon={"spinner"} spin fixedWidth className="mr-1 text-muted" />
+      )}
+      {feature.query.isSuccess && (
+        <FontAwesomeIcon icon={"check-circle"} fixedWidth className="mr-1 text-success" />
+      )}
+      {feature.query.isError && (
+        <FontAwesomeIcon icon={"times-circle"} fixedWidth className="mr-1 text-danger" />
+      )}
+      {feature.label}...
+    </li>
+  );
+};
 
 const LoadingScreen = () => {
   const {state, features} = useSelector(loadingScreenSelector);
@@ -45,6 +67,7 @@ const LoadingScreen = () => {
               {feature.label}...
             </li>
           ))}
+          <LoadFeatureListItem feature={{label: "Products", query: productsQuery}} />
         </ul>
         {state === LOADING_STATE.SUCCESS && productsQuery.isSuccess ? (
           <NavLink exact to="/" className="tile button p-4">
