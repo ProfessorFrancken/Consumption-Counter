@@ -3,7 +3,6 @@ import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import {mapValues} from "lodash";
 import {useProducts as useFetchedProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
 
@@ -18,6 +17,10 @@ export type Product = {
   age_restriction: number | null;
 };
 
+type AvailableProduct = Product & {
+  locked: boolean;
+  ordered: number;
+};
 function didNotRecentlyOrderAProduct(member: MemberType) {
   const latest_purchase_at =
     typeof member.latest_purchase_at === "string"
@@ -137,40 +140,41 @@ const isProductLocked = (product: Product, hour: number) => {
 };
 
 const useProducts = (order: Order, hour: number) => {
-  const {products} = useFetchedProducts();
-
-  const productsByCategory = groupBy(
-    sortBy(products, (product: any) => product.position),
-    (product: any) => product.category
-  ) as {
-    Bier: Product[];
-    Fris: Product[];
-    Eten: Product[];
-  };
+  const {products = []} = useFetchedProducts();
 
   return React.useMemo(() => {
-    return mapValues(productsByCategory, (products: Product[]) => {
-      return products
-        .filter((product: Product) =>
-          memberIsAllowedToPurchaseProduct(product, order.member)
-        )
-        .map((product: Product) => {
+    const availableProducts = products
+      .filter((product: Product) =>
+        memberIsAllowedToPurchaseProduct(product, order.member)
+      )
+      .map(
+        (product: Product): AvailableProduct => {
           return {
             ...product,
             locked: isProductLocked(product, hour),
             ordered: order.products.filter(({id}) => id === product.id).length,
           };
-        });
-    });
-  }, [order, productsByCategory, hour]);
+        }
+      );
+
+    return groupBy(
+      sortBy(availableProducts, (product: AvailableProduct) => product.position),
+      (product: AvailableProduct) => product.category
+    ) as {
+      Bier: AvailableProduct[];
+      Fris: AvailableProduct[];
+      Eten: AvailableProduct[];
+    };
+  }, [products, order, hour]);
 };
 
 type State = {
   products: {
-    Bier: Product[];
-    Fris: Product[];
-    Eten: Product[];
+    Bier: AvailableProduct[];
+    Fris: AvailableProduct[];
+    Eten: AvailableProduct[];
   };
+
   selectMember: (member: MemberType) => void;
   addProductToOrder: (product: Product) => void;
   addProductToOrderOrMakeOrder: (product: Product) => void;
