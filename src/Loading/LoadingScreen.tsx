@@ -8,7 +8,9 @@ import {useProducts} from "App/Products/ProductsContext";
 import {QueryObserverResult} from "react-query";
 
 type Feature = {
-  query: QueryObserverResult;
+  query:
+    | QueryObserverResult
+    | Pick<QueryObserverResult, "isLoading" | "isSuccess" | "isError">;
   label: string;
 };
 const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
@@ -41,31 +43,17 @@ const LoadingScreen = () => {
         <h2 className="">Loading streepsystem data...</h2>
         <ul className="feature-list my-4 list-unstyled">
           {features.map((feature: any, idx: any) => (
-            <li key={idx} className="font-weight-bold my-3">
-              {feature.loading === LOADING_STATE.REQUESTING && (
-                <FontAwesomeIcon
-                  icon={"spinner"}
-                  spin
-                  fixedWidth
-                  className="mr-1 text-muted"
-                />
-              )}
-              {feature.loading === LOADING_STATE.SUCCESS && (
-                <FontAwesomeIcon
-                  icon={"check-circle"}
-                  fixedWidth
-                  className="mr-1 text-success"
-                />
-              )}
-              {feature.loading === LOADING_STATE.FAILURE && (
-                <FontAwesomeIcon
-                  icon={"times-circle"}
-                  fixedWidth
-                  className="mr-1 text-danger"
-                />
-              )}
-              {feature.label}...
-            </li>
+            <LoadFeatureListItem
+              key={idx}
+              feature={{
+                label: feature.label,
+                query: {
+                  isSuccess: feature.loading === LOADING_STATE.SUCCESS,
+                  isError: feature.loading === LOADING_STATE.FAILURE,
+                  isLoading: feature.loading === LOADING_STATE.REQUESTING,
+                },
+              }}
+            />
           ))}
           <LoadFeatureListItem feature={{label: "Products", query: productsQuery}} />
         </ul>
