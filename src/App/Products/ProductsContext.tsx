@@ -4,6 +4,7 @@ import api from "api";
 import {Product} from "./OrdersContext";
 
 const useFetchProducts = (products?: Product[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = React.useState<HTMLImageElement[]>([]);
 
   const preLoadImages = (products: Product[]) => {
