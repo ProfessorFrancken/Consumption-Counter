@@ -234,10 +234,10 @@ describe("Francken Consumption Counter", () => {
         .click();
 
       cy.get(".titleName > span").should("contain", "Mark Redeman");
-      cy.get(".productsGrid > :nth-child(1) > :nth-child(1)").click();
+      cy.get(".productsGrid > :nth-child(2) > :nth-child(1)").click();
       cy.get('.cancelButton > [style="margin-left: 0.5em;"]').should(
         "contain",
-        "Cancel buying Hertog Jan for "
+        "Cancel buying Ice Tea for "
       );
     });
 
