@@ -19,7 +19,7 @@ const useFetchProducts = (products?: Product[]) => {
 
   return useQuery<Product[]>({
     queryKey: ["products"],
-    queryFn: () => {
+    queryFn: async () => {
       const mapProducts = (product: any): Product => {
         return {
           id: parseInt(product.id, 10),
@@ -35,13 +35,10 @@ const useFetchProducts = (products?: Product[]) => {
         };
       };
 
-      return api
-        .get("/products")
-        .then((response: any) => response.products.map(mapProducts));
+      const response = await api.get("/products");
+      return response.products.map(mapProducts);
     },
-    onSuccess: (products: Product[]) => {
-      preLoadImages(products);
-    },
+    onSuccess: preLoadImages,
     enabled: products === undefined,
   });
 };
