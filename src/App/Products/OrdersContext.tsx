@@ -3,7 +3,7 @@ import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import {useProducts as useFetchedProducts} from "./ProductsContext";
+import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
 
 export type Product = {
@@ -139,8 +139,8 @@ const isProductLocked = (product: Product, hour: number) => {
   return false;
 };
 
-const useProducts = (order: Order, hour: number) => {
-  const {products = []} = useFetchedProducts();
+const useCategorizedProducts = (order: Order, hour: number) => {
+  const {products = []} = useProducts();
 
   return React.useMemo(() => {
     const availableProducts = products
@@ -192,7 +192,7 @@ export const OrderProvider: React.FC<{order?: Order}> = ({
     {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember},
   ] = useOrderReducer(defaultOrder);
   const hour = new Date().getHours();
-  const products = useProducts(order, hour);
+  const products = useCategorizedProducts(order, hour);
 
   return (
     <OrderContext.Provider
