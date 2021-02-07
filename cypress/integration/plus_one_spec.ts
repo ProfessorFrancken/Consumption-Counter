@@ -15,8 +15,9 @@ let server;
 beforeEach(() => {
   server = makeServer({environment: "test"});
   server.logging = true;
+  const date = new Date();
   server.create("member", {
-    latest_purchase_at: "2020-03-08 22:05:49",
+    latest_purchase_at: date.toISOString(),
     geboortedatum: "1993-04-26",
     achternaam: member.lastName,
     voornaam: member.firstName,
@@ -26,7 +27,7 @@ beforeEach(() => {
 
   server.create("member", {
     id: 1403,
-    latest_purchase_at: "2020-03-08 22:05:49",
+    latest_purchase_at: date.toISOString(),
     geboortedatum: "1993-04-26",
     achternaam: "Redeman",
     voornaam: "Mark",
@@ -56,12 +57,9 @@ afterEach(() => {
 });
 
 describe("Francken Consumption Counter", () => {
-  beforeEach(() => {
-    cy.login();
-  });
   describe("Striping soda & food", () => {
     it("Allows striping soda", () => {
-      cy.visit("/");
+      cy.login();
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(".tilesGrid > :nth-child(1)").click();
@@ -83,7 +81,7 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Buying two products using the back button", () => {
-      cy.visit("/");
+      cy.login();
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(".tilesGrid > :nth-child(1)").click();
@@ -109,7 +107,7 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Showing prices of products", () => {
-      cy.visit("/");
+      cy.login();
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(".tilesGrid > :nth-child(1)").click();
@@ -133,7 +131,7 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Allows buying multiple products at once", () => {
-      cy.visit("/");
+      cy.login();
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(".tilesGrid > :nth-child(1)").click();
@@ -164,47 +162,65 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Shows a warning when selecting an inactive member", () => {
-      const future = new Date(2022, 2, 2, 13).getTime();
-      cy.clock(future, ["Date"]);
+      const past = new Date();
+      past.setYear(past.getFullYear() - 1);
+      server.create("member", {
+        latest_purchase_at: past.toISOString(),
+        geboortedatum: "1993-01-01",
+        achternaam: "Stark",
+        voornaam: "Brandon",
+        tussenvoegsel: "",
+        bijnaam: "Brandon Stark",
+      });
 
       const stub = cy.stub();
       stub.onFirstCall().returns(false);
       cy.on("window:confirm", stub);
 
-      cy.visit("/");
+      cy.login();
+
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(`.tilesGrid > :nth-child(1)`).click();
 
-      cy.findByText(member.fullName)
+      cy.findByText("Brandon Stark")
         .click()
         .then(() => {
           expect(stub.getCall(0)).to.be.calledWith(
-            `Are you sure you want to select ${member.fullName}?`
+            `Are you sure you want to select Brandon Stark?`
           );
-          cy.get(".tilesGrid").should("contain", member.fullName);
+          cy.get(".tilesGrid").should("contain", "Brandon Stark");
         });
     });
 
     it("Allows selecting an inactive member after confirmation", () => {
-      const future = new Date(2022, 2, 2, 13).getTime();
-      cy.clock(future, ["Date"]);
+      const past = new Date();
+      past.setYear(past.getFullYear() - 1);
+      server.create("member", {
+        latest_purchase_at: past.toISOString(),
+        geboortedatum: "1993-01-01",
+        achternaam: "Stark",
+        voornaam: "Brandon",
+        tussenvoegsel: "",
+        bijnaam: "Brandon Stark",
+      });
 
       const stub = cy.stub();
       stub.onFirstCall().returns(true);
       cy.on("window:confirm", stub);
 
-      cy.visit("/");
+      cy.login();
+
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(`.tilesGrid > :nth-child(1)`).click();
-      cy.findByText(member.fullName)
+      cy.findByText("Brandon Stark")
         .click()
         .then(() => {
           expect(stub.getCall(0)).to.be.calledWith(
-            `Are you sure you want to select ${member.fullName}?`
+            `Are you sure you want to select Brandon Stark?`
           );
-          cy.get(".titleName > span").should("contain", member.fullName);
+          cy.get(".titleName > span").should("contain", "Brandon Stark");
           cy.location("pathname").should("eq", "/products");
         });
     });
@@ -226,7 +242,7 @@ describe("Francken Consumption Counter", () => {
           bijnaam: "",
         }),
       });
-      cy.refreshApp();
+      cy.login();
 
       cy.get('[href="/prominent"]').click();
       cy.get(".boardsRow > :nth-child(1) > :nth-child(1)")
@@ -242,46 +258,45 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Board member from 5 years ago", () => {
-      const date = new Date(2020, 2, 2, 17).getTime();
-      cy.clock(date, ["Date"]);
+      const date = new Date();
 
       server.create("boardMember", {
         board: association({
-          year: 2010,
+          year: date.getFullYear() - 6,
         }),
         member: association({
           id: 9999,
-          latest_purchase_at: "2020-03-08 22:05:49",
-          achternaam: "Bosma",
-          voornaam: "Tom",
+          latest_purchase_at: date.toISOString(),
+          achternaam: "Stark",
+          voornaam: "Rickard",
           tussenvoegsel: "",
-          bijnaam: "Tom Bosma",
+          bijnaam: "Rickard Stark",
         }),
       });
       server.createList("boardMember", 5, {
-        board: association({year: 2020}),
+        board: association({year: date.getFullYear()}),
       });
       server.createList("boardMember", 5, {
-        board: association({year: 2019}),
+        board: association({year: date.getFullYear() - 1}),
       });
       server.createList("boardMember", 5, {
-        board: association({year: 2018}),
+        board: association({year: date.getFullYear() - 2}),
       });
       server.createList("boardMember", 5, {
-        board: association({year: 2017}),
+        board: association({year: date.getFullYear() - 3}),
       });
       server.createList("boardMember", 5, {
-        board: association({year: 2016}),
+        board: association({year: date.getFullYear() - 4}),
       });
-      cy.refreshApp();
+      cy.login();
 
       cy.get('[href="/prominent"]').click();
-      cy.get(".prominentRow > .tile").should("contain", "Tom Bosma");
+      cy.get(".prominentRow > .tile").should("contain", "Rickard Stark");
     });
   });
 
   describe("Recent", () => {
-    beforeEach(() => {
+    it("Shows members that recently bought a product", () => {
       server.create("member", {
         latest_purchase_at: "2020-03-08 22:05:49",
         geboortedatum: "1993-04-26",
@@ -291,8 +306,8 @@ describe("Francken Consumption Counter", () => {
         bijnaam: "",
       });
       cy.login();
-    });
-    it("Shows members that recently bought a product", () => {
+
+      // Mock clock so that we don't have to wait for the orders to be submitted
       cy.clock();
 
       cy.selectMember({name: member.fullName});
@@ -318,6 +333,7 @@ describe("Francken Consumption Counter", () => {
 
   describe("Present", () => {
     it("People currently at Francken", () => {
+      cy.login();
       cy.get('[href="/present"]').click();
       cy.get(".tilesGrid").should("contain", "Mark Redeman");
     });
@@ -341,7 +357,7 @@ describe("Francken Consumption Counter", () => {
         }),
         year: 2020,
       });
-      cy.refreshApp();
+      cy.login();
 
       cy.get('[href="/committees"]').click();
       cy.get(".titleName > span").should("contain", "Committees");
@@ -373,7 +389,7 @@ describe("Francken Consumption Counter", () => {
         }),
         year: 2020,
       });
-      cy.refreshApp();
+      cy.login();
     });
 
     it("Shows all previous compucie members", () => {
@@ -426,9 +442,10 @@ describe("Francken Consumption Counter", () => {
 
   describe("Statistics", () => {
     it("Shows the latest purchases", () => {
+      cy.login();
+      // Mock clock so that we don't have to wait for the orders to be submitted
       cy.clock();
-
-      [1, 2, 3].forEach((category) => {
+      [2, 3].forEach((category) => {
         cy.selectMember({name: member.fullName});
         cy.get(`.productsGrid > :nth-child(${category}) > :nth-child(1)`).click();
         cy.tick(TIME_TO_CANCEL);
@@ -440,19 +457,15 @@ describe("Francken Consumption Counter", () => {
       cy.get('[href="/statistics"]').click();
       cy.get(".titleName > span").should("contain", "Statistics");
 
-      cy.get(".recent-orders").find(".recent-order").should("have.length", 3);
+      cy.get(".recent-orders").find(".recent-order").should("have.length", 2);
       cy.get(".recent-orders")
         .find(".recent-order")
         .then((orders) => {
           cy.wrap(Cypress.$(orders[0])).should("contain", `bought by ${member.fullName}`);
-
           cy.wrap(Cypress.$(orders[1])).should("contain", `bought by ${member.fullName}`);
-
-          cy.wrap(Cypress.$(orders[2])).should("contain", `bought by ${member.fullName}`);
 
           cy.wrap(Cypress.$(orders[0])).should("contain", "Mars");
           cy.wrap(Cypress.$(orders[1])).should("contain", "Ice Tea");
-          cy.wrap(Cypress.$(orders[2])).should("contain", "Hertog Jan");
         });
     });
 
@@ -474,8 +487,9 @@ describe("Francken Consumption Counter", () => {
           beer: 100 * (idx + 1),
         });
       });
+      cy.login();
+
       cy.clock(thisWeek[4].getTime(), ["Date"]);
-      cy.refreshApp();
 
       cy.get('[href="/statistics"]').click();
       cy.get(".titleName > span").should("contain", "Statistics");
@@ -506,9 +520,8 @@ describe("Francken Consumption Counter", () => {
           date: moment(day).format("YYYY-MM-DD"),
         });
       });
+      cy.login();
       cy.clock(days[0].getTime(), ["Date"]);
-
-      cy.refreshApp();
 
       cy.get('[href="/statistics"]').click();
       cy.get(".titleName > span").should("contain", "Statistics");
@@ -517,7 +530,11 @@ describe("Francken Consumption Counter", () => {
 
   describe("Screensaver / Bug free zone", () => {
     it("Goes to the statistics page after a long idle time", () => {
+      cy.login();
+
+      // Mock clock so that we don't have to wait for the screensaver
       cy.clock();
+
       cy.selectMember({name: member.fullName});
 
       // Should go back to the members page
@@ -538,7 +555,7 @@ describe("Francken Consumption Counter", () => {
         splash_afbeelding:
           "https://old.professorfrancken.nl/database/streep/afbeeldingen/ECDOccDsQVmRRRpyBnN1.jpeg",
       });
-      cy.refreshApp();
+      cy.login();
 
       cy.selectMember({name: member.fullName});
 
@@ -563,7 +580,7 @@ describe("Francken Consumption Counter", () => {
         button_width: 70,
         button_height: 40,
       });
-      cy.refreshApp();
+      cy.login();
 
       cy.get(`.tilesGrid > :nth-child(1)`).click();
       cy.get(".tilesGrid").should("contain", "Arya");
@@ -585,7 +602,7 @@ describe("Francken Consumption Counter", () => {
             "https://old.professorfrancken.nl/database/streep/afbeeldingen/nc1J3sNtthqGkeQy0tDf.jpeg",
         }),
       });
-      cy.refreshApp();
+      cy.login();
 
       cy.get('[href="/prominent"]').click();
       const jeanne = cy.get(".boardsRow > :nth-child(1) > :nth-child(1)");
@@ -602,7 +619,7 @@ describe("Francken Consumption Counter", () => {
         categorie: "Fris",
         naam: "Goede morgen!",
       });
-      cy.refreshApp();
+      cy.login();
 
       const after12 = new Date(2020, 2, 2, 13).getTime();
       cy.clock(after12, ["Date"]);
@@ -616,7 +633,7 @@ describe("Francken Consumption Counter", () => {
 
   describe("Sponsor opportunities", () => {
     it("Shows logos of companies sponsoring the system", () => {
-      cy.visit("/");
+      cy.login();
       cy.get(".tilesGrid").should("not.be.empty");
 
       cy.get(".company-logos").find("img").should("have.length", 3);
@@ -627,6 +644,7 @@ describe("Francken Consumption Counter", () => {
     it("Does not allow striping beer before 4", () => {
       const before4 = new Date(2020, 2, 2, 13).getTime();
       cy.clock(before4, ["Date"]);
+      cy.login();
 
       cy.selectMember({name: member.fullName});
 
@@ -648,6 +666,7 @@ describe("Francken Consumption Counter", () => {
     it("Allows striping beer after 4", () => {
       const after4 = new Date(2020, 2, 2, 17).getTime();
       cy.clock(after4, ["Date"]);
+      cy.login();
 
       cy.selectMember({name: member.fullName});
 
@@ -676,7 +695,7 @@ describe("Francken Consumption Counter", () => {
         bijnaam: "Sjaars",
         geboortedatum: "2003-01-01",
       });
-      cy.refreshApp();
+      cy.login();
 
       // Normally we should be able to see beer
       cy.selectMember({name: member.fullName});
