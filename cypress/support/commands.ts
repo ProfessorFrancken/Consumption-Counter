@@ -68,6 +68,6 @@ Cypress.Commands.add("refreshApp", () => {
   cy.location("pathname").should("eq", "/loading");
   cy.findByRole("link", {name: /Open application/}).click();
 
-  cy.visit("/");
+  cy.location("pathname").should("eq", "/");
   cy.get(".tilesGrid").should("not.be.empty");
 });
