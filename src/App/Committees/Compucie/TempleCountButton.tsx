@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import axios from "axios";
+
 type State = any;
 class TempleCountButton extends Component<{}, State> {
   constructor(props: {}) {
@@ -11,18 +13,22 @@ class TempleCountButton extends Component<{}, State> {
     this.fetchTempleCount();
   }
   fetchTempleCount() {
-    fetch(`https://borrelcie.vodka/chwazorcle/hoeveel.php`)
+    axios
+      .get(`https://borrelcie.vodka/chwazorcle/hoeveel.php`)
+
       .then(this.handleResponse)
       .then(
-        (count) => this.setState({count}),
+        (count) => {
+          return this.setState({count});
+        },
         (error) => this.setState({count: 0})
       );
   }
   handleResponse(response: any) {
-    if (!response.ok) {
+    if (!response.data) {
       return Promise.reject(response.statusText);
     }
-    return response.json();
+    return response.data;
   }
   decreaseTempleCount() {
     (this.props as any).decreaseTempleCount();
@@ -35,7 +41,7 @@ class TempleCountButton extends Component<{}, State> {
         <br />
         Temple Count
         <br />
-        {this.state.count ? `(${this.state.count})` : null}
+        {this.state.count ? ` (${this.state.count})` : null}
       </button>
     );
   }
