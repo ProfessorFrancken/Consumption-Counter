@@ -7,6 +7,7 @@ import RecentMembers from "./Recent";
 import {render, screen, within} from "test-utils";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
+import {mockedState} from "./MockedState";
 
 function setup(routes = ["/"]) {
   const props = {menuItems: menuItems(undefined, {})};
@@ -61,74 +62,3 @@ describe("rendering", () => {
     });
   });
 });
-
-export function mockedState() {
-  const menu = [
-    {icon: "chess-queen", url: "/prominent", loading: false, label: "Prominent"},
-    {icon: "home", url: "/", loading: false, label: "Home"},
-    {icon: "clock", url: "/recent", label: "Recent"},
-    {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
-    {icon: "chart-bar", url: "/statistics", label: "Statistics"},
-  ];
-
-  return {
-    members: [
-      {
-        id: 1,
-        firstName: "John",
-        surname: "Snow",
-        fullname: "John Snow",
-        age: 18,
-        latest_purchase_at: "2018-01-01 00:00:00",
-        prominent: null,
-        cosmetics: {
-          color: null,
-          image: null,
-          nickname: null,
-          button: {
-            width: null,
-            height: null,
-          },
-        },
-      },
-    ],
-    surnameRanges: {
-      members_per_range: 30,
-      ranges: [
-        {
-          idx: 0,
-          members: [
-            {
-              id: 1,
-              firstName: "John",
-              surname: "Snow",
-              fullname: "John Snow",
-              age: 18,
-              prominent: null,
-              latest_purchase_at: "2018-01-01 00:00:00",
-              cosmetics: {
-                color: null,
-                image: null,
-                nickname: null,
-                button: {
-                  width: null,
-                  height: null,
-                },
-              },
-            },
-          ],
-          surname_start: "Snow",
-          surname_end: "Snow",
-        },
-      ],
-    },
-    router: {
-      locationBeforeTransitions: null,
-    },
-    transactions: [],
-    recentBuyers: [],
-    boardMembers: [{member_id: 1, function: "King"}],
-    queuedOrder: null,
-    menuItems: menu,
-  };
-}
