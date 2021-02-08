@@ -1,18 +1,10 @@
-import {useDispatch, useSelector} from "react-redux";
-import {selectCommittee} from "actions";
-import {committeesWithMembersSelector} from "./selectors";
-import Committees, {Committee} from "./Committees";
+import Committees from "./Committees";
+import {useCommittees} from "./CommitteesContext";
 
 const CommitteesScreen = () => {
-  const dispatch = useDispatch();
-  const committees = useSelector(committeesWithMembersSelector);
+  const {selectCommittee, committees = []} = useCommittees();
 
-  return (
-    <Committees
-      committees={committees}
-      selectCommittee={(committee: Committee) => dispatch(selectCommittee(committee))}
-    />
-  );
+  return <Committees committees={committees} selectCommittee={selectCommittee} />;
 };
 
 export default CommitteesScreen;

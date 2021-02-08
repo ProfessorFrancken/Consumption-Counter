@@ -439,27 +439,6 @@ describe("menu items", () => {
     ]);
   });
 
-  it("adds committees when committees have been loaded", () => {
-    const menuItemsWhenLoadingCommittees = menuItems(undefined, {
-      type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST,
-    });
-    expect(menuItemsWhenLoadingCommittees).toEqual([
-      {icon: "home", url: "/", loading: false, label: "Home"},
-      {icon: "clock", url: "/recent", label: "Recent"},
-      {icon: "users", url: "/committees", loading: true, label: "Committees"},
-    ]);
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '({ icon: string; url: string; lo... Remove this comment to see the full error message
-    const menuItemsAfterLoadingCommittees = menuItems(menuItemsWhenLoadingCommittees, {
-      type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS,
-    });
-    expect(menuItemsAfterLoadingCommittees).toEqual([
-      {icon: "home", url: "/", loading: false, label: "Home"},
-      {icon: "clock", url: "/recent", label: "Recent"},
-      {icon: "users", url: "/committees", loading: false, label: "Committees"},
-    ]);
-  });
-
   it("adds prominent when board members have been loaded", () => {
     const menuItemsWhenLoadingProminent = menuItems(undefined, {
       type: TYPES.FETCH_BOARD_MEMBERS_REQUEST,

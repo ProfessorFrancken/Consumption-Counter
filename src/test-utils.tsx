@@ -6,6 +6,7 @@ import {create, history} from "./Setup/store";
 import {InfrastructureProviders} from "Root";
 import {OrderProvider, Product} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
+import {CommitteesProvider} from "App/Committees/CommitteesContext";
 
 const defaultAuthentication = {
   request: false,
@@ -59,6 +60,18 @@ const defaultProducts = {
   ],
 };
 
+const defaultCommitteeeMembers = [
+  {
+    member_id: 1,
+    year: 2018,
+    function: "King",
+    committee: {
+      id: 0,
+      name: "Compucie",
+    },
+  },
+];
+
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
   storeState,
@@ -67,10 +80,11 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
 }) => {
   const {
     authentication = defaultAuthentication,
-    ...stateWithoutAuthentication
+    order = defaultOrder,
+    products: productsByCategory = defaultProducts,
+    committeeMembers = defaultCommitteeeMembers,
+    ...state
   } = storeState;
-  const {order = defaultOrder, ...stateWithoutOrder} = stateWithoutAuthentication;
-  const {products: productsByCategory = defaultProducts, ...state} = stateWithoutOrder;
   const store = create({...mockedState(), ...state});
 
   (routes || []).forEach((route) => history.push(route));
@@ -83,7 +97,9 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
         <ProductsProvider products={products}>
-          <OrderProvider order={order}>{children}</OrderProvider>
+          <CommitteesProvider committeeMembers={committeeMembers}>
+            <OrderProvider order={order}>{children}</OrderProvider>
+          </CommitteesProvider>
         </ProductsProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>

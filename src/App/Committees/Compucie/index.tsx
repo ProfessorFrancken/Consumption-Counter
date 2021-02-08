@@ -1,14 +1,14 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {fetchInitialData} from "actions";
-import {compucieSelector} from "./../selectors";
 import Compucie from "./Compucie";
 import {useOrder} from "App/Products/OrdersContext";
 import {useHistory} from "react-router";
+import {useCompucie} from "../CommitteesContext";
 
 const CompucieScreen = () => {
   const dispatch = useDispatch();
-  const {compucie, scriptcie} = useSelector(compucieSelector);
+  const {compucie, scriptcie} = useCompucie();
   const {selectMember} = useOrder();
   const {push} = useHistory();
 

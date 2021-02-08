@@ -67,7 +67,6 @@ export function mockedState() {
     {icon: "chess-queen", url: "/prominent", loading: false, label: "Prominent"},
     {icon: "home", url: "/", loading: false, label: "Home"},
     {icon: "clock", url: "/recent", label: "Recent"},
-    {icon: "users", url: "/committees", loading: false, label: "Committees"},
     {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
     {icon: "chart-bar", url: "/statistics", label: "Statistics"},
   ];
@@ -129,17 +128,6 @@ export function mockedState() {
     transactions: [],
     recentBuyers: [],
     boardMembers: [{member_id: 1, function: "King"}],
-    committeeMembers: [
-      {
-        member_id: 1,
-        year: 2018,
-        function: "King",
-        committee: {
-          id: 0,
-          name: "Compucie",
-        },
-      },
-    ],
     queuedOrder: null,
     menuItems: menu,
   };

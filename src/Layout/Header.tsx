@@ -1,15 +1,14 @@
 import React from "react";
 import {Route, NavLink} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {committeesSelector} from "App/Committees/selectors";
 import {useOrder} from "App/Products/OrdersContext";
+import {useCommittees} from "App/Committees/CommitteesContext";
 
 const CommitteeTitle = ({
   match: {
     params: {page},
   },
 }: any) => {
-  const committees = useSelector(committeesSelector);
+  const {committees = []} = useCommittees();
   const selectedCommittee = committees.find(({id}: any) => id === parseInt(page, 10));
 
   return <span>{selectedCommittee ? selectedCommittee.name : "Unknown committee"}</span>;
