@@ -9,6 +9,7 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import {OrderProvider} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
 import "./index.css";
+import {CommitteesProvider} from "App/Committees/CommitteesContext";
 
 type Props = {
   store: any;
@@ -38,7 +39,9 @@ export const ApplicationProviders: React.FC = ({children}) => {
   return (
     <AuthenticationProvider>
       <ProductsProvider>
-        <OrderProvider>{children}</OrderProvider>
+        <CommitteesProvider>
+          <OrderProvider>{children}</OrderProvider>
+        </CommitteesProvider>
       </ProductsProvider>
     </AuthenticationProvider>
   );

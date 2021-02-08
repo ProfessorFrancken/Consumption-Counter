@@ -6,12 +6,9 @@ export const actions = {
   makeOrder,
   cancelOrder,
 
-  selectCommittee,
-
   fetchInitialData,
   fetchMembers,
   fetchBoardMembers,
-  fetchCommitteeMembers,
   fetchStatistics,
   fetchActivities,
 };
@@ -24,8 +21,6 @@ export const TYPES = {
   BUY_ORDER_SUCCESS: "BUY_ORDER_SUCCESS",
   BUY_ORDER_FAILURE: "BUY_ORDER_FAILURE",
 
-  SELECT_COMMITTEE: "SELECT_COMMITTEE",
-
   LOAD_APPLICATION_REQUEST: "LOAD_APPLICATION_REQUEST",
   LOAD_APPLICATION_SUCCESS: "LOAD_APPLICATION_SUCCESS",
   LOAD_APPLICATION_FAILURE: "LOAD_APPLICATION_FAILURE",
@@ -37,10 +32,6 @@ export const TYPES = {
   FETCH_BOARD_MEMBERS_REQUEST: "FETCH_BOARD_MEMBERS_REQUEST",
   FETCH_BOARD_MEMBERS_SUCCESS: "FETCH_BOARD_MEMBERS_SUCCESS",
   FETCH_BOARD_MEMBERS_FAILURE: "FETCH_BOARD_MEMBERS_FAILURE",
-
-  FETCH_COMMITTEE_MEMBERS_REQUEST: "FETCH_COMMITTEE_MEMBERS_REQUEST",
-  FETCH_COMMITTEE_MEMBERS_SUCCESS: "FETCH_COMMITTEE_MEMBERS_SUCCESS",
-  FETCH_COMMITTEE_MEMBERS_FAILURE: "FETCH_COMMITTEE_MEMBERS_FAILURE",
 
   FETCH_STATISTICS_REQUEST: "FETCH_STATISTICS_REQUEST",
   FETCH_STATISTICS_SUCCESS: "FETCH_STATISTICS_SUCCESS",
@@ -116,16 +107,6 @@ export function buyOrder(order: any) {
         dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
       })
       .catch((ex: any) => dispatch({type: TYPES.BUY_ORDER_FAILURE, order}));
-  };
-}
-
-export function selectCommittee(committee: any) {
-  return (dispatch: any) => {
-    dispatch(push(`/committees/${committee.id}`));
-    dispatch({
-      type: TYPES.SELECT_COMMITTEE,
-      committee: committee,
-    });
   };
 }
 
@@ -227,40 +208,6 @@ export function fetchBoardMembers() {
   };
 }
 
-export function fetchCommitteeMembers() {
-  return (dispatch: any, getState: any, api: any) => {
-    dispatch({
-      type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST,
-    });
-
-    const mapCommittees = (member: any) => {
-      return {
-        member_id: parseInt(member.lid_id, 10),
-        year: member.jaar,
-        function: member.functie,
-        committee: {
-          id: parseInt(member.commissie_id, 10),
-          name: member.naam,
-        },
-      };
-    };
-
-    return api
-      .get("/committees")
-      .then((response: any) =>
-        dispatch({
-          type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS,
-          committees: response.committees.map(mapCommittees),
-        })
-      )
-      .catch((ex: any) =>
-        dispatch({
-          type: TYPES.FETCH_COMMITTEE_MEMBERS_FAILURE,
-        })
-      );
-  };
-}
-
 export function fetchStatistics() {
   return (dispatch: any, getState: any, api: any) => {
     dispatch({
@@ -341,7 +288,6 @@ export function fetchInitialData() {
       dispatch({type: TYPES.LOAD_APPLICATION_REQUEST}),
       dispatch(fetchMembers()),
       dispatch(fetchBoardMembers()),
-      dispatch(fetchCommitteeMembers()),
       dispatch(fetchStatistics()),
       dispatch(fetchActivities()),
     ])

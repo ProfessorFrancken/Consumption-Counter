@@ -4,9 +4,25 @@ import {backgroundSelector, failedOrdersSelector} from "./selectors";
 import {useHistory} from "react-router-dom";
 import ScreenSaver from "./ScreenSaver";
 import App from "./App";
+import {useCommittees} from "./Committees/CommitteesContext";
+
+const useMenuItems = () => {
+  const {committeesQuery} = useCommittees();
+  const menuItems = useSelector((state: any) => state.menuItems);
+
+  return [
+    ...menuItems,
+    {
+      icon: "users",
+      url: "/committees",
+      loading: committeesQuery.isLoading,
+      label: "Committees",
+    },
+  ];
+};
 
 const AppContainer = () => {
-  const menuItems = useSelector((state: any) => state.menuItems);
+  const menuItems = useMenuItems();
   const background = useSelector(backgroundSelector);
   const failedOrders = useSelector(failedOrdersSelector);
   const {listen, push} = useHistory();

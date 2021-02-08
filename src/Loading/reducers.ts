@@ -22,7 +22,6 @@ export function loading(
         state: LOADING_STATE.REQUESTING,
         features: [
           {loading: LOADING_STATE.REQUESTING, label: "Members"},
-          {loading: LOADING_STATE.REQUESTING, label: "Committees"},
           {loading: LOADING_STATE.REQUESTING, label: "Boards"},
           {loading: LOADING_STATE.REQUESTING, label: "Statistics"},
         ],
@@ -37,16 +36,6 @@ export function loading(
       return {
         ...state,
         features: updateFeatureState(state.features, "Members", LOADING_STATE.FAILURE),
-      };
-    case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Committees", LOADING_STATE.SUCCESS),
-      };
-    case TYPES.FETCH_COMMITTEE_MEMBERS_FAILURE:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Committees", LOADING_STATE.FAILURE),
       };
     case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
       return {
@@ -73,7 +62,6 @@ export function loading(
         state: LOADING_STATE.SUCCESS,
         features: [
           {loading: LOADING_STATE.SUCCESS, label: "Members"},
-          {loading: LOADING_STATE.SUCCESS, label: "Committees"},
           {loading: LOADING_STATE.SUCCESS, label: "Boards"},
           {loading: LOADING_STATE.SUCCESS, label: "Statistics"},
         ],
@@ -84,7 +72,6 @@ export function loading(
         state: LOADING_STATE.FAILURE,
         features: [
           {loading: LOADING_STATE.FAILURE, label: "Members"},
-          {loading: LOADING_STATE.FAILURE, label: "Committees"},
           {loading: LOADING_STATE.FAILURE, label: "Boards"},
           {loading: LOADING_STATE.FAILURE, label: "Statistics"},
         ],

@@ -54,12 +54,10 @@ describe("Fetching initial data", () => {
       {type: TYPES.LOAD_APPLICATION_REQUEST},
       {type: TYPES.FETCH_MEMBERS_REQUEST},
       {type: TYPES.FETCH_BOARD_MEMBERS_REQUEST},
-      {type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST},
       {type: TYPES.FETCH_STATISTICS_REQUEST},
       {type: TYPES.FETCH_ACTIVITIES_REQUEST},
       {type: TYPES.FETCH_MEMBERS_SUCCESS, members: []},
       {type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS, boardMembers: []},
-      {type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS, committees: []},
       {type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: []},
       {type: TYPES.FETCH_ACTIVITIES_SUCCESS, activities: []},
       {type: TYPES.LOAD_APPLICATION_SUCCESS},
@@ -259,77 +257,6 @@ describe("fetching board members", () => {
   });
 });
 
-describe("fetching committee members", () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
-
-  it("maps committee members from an http request", (done) => {
-    moxios.stubRequest(`${base_api}/committees`, {
-      response: {
-        committees: [
-          {
-            lid_id: 314,
-            jaar: 2018,
-            functie: "King",
-            naam: "Night's watch",
-            commissie_id: 1,
-          },
-        ],
-      },
-      headers: {"content-type": "application/json"},
-    });
-
-    const expectedActions = [
-      {type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST},
-      {
-        type: TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS,
-        committees: [
-          {
-            member_id: 314,
-            year: 2018,
-            function: "King",
-            committee: {id: 1, name: "Night's watch"},
-          },
-        ],
-      },
-    ];
-
-    const store = mockStore();
-
-    store
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
-      .dispatch(actions.fetchCommitteeMembers())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      })
-      .catch((e: any) => done.fail(e));
-  });
-
-  it("fails if the http request fails", (done) => {
-    moxios.stubRequest(`${base_api}/committees`, {
-      status: 400,
-      headers: {"content-type": "application/json"},
-    });
-
-    const expectedActions = [
-      {type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST},
-      {type: TYPES.FETCH_COMMITTEE_MEMBERS_FAILURE},
-    ];
-
-    const store = mockStore();
-
-    store
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
-      .dispatch(actions.fetchCommitteeMembers())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      })
-      .catch((e: any) => done.fail(e));
-  });
-});
-
 describe("selecing a member", () => {
   xit("should first select a range of surnames", () => {
     const store = mockStore({});
@@ -458,22 +385,5 @@ describe("buying products", () => {
 
   describe("cancelling orders", () => {
     it("waits a few seconds before buying an order so that a member can cancel its order", () => {});
-  });
-});
-
-describe("committees", () => {
-  it("selects a committee", () => {
-    const store = mockStore({});
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => void' is not ... Remove this comment to see the full error message
-    store.dispatch(actions.selectCommittee({id: 0}));
-
-    expect(store.getActions()).toEqual([
-      push("/committees/0"),
-      {
-        type: TYPES.SELECT_COMMITTEE,
-        committee: {id: 0},
-      },
-    ]);
   });
 });

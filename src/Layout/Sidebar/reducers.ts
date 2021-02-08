@@ -22,17 +22,6 @@ export function menuItems(state = defaultMenuItems, action: any) {
         ];
       }
       return state;
-    case TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST:
-      return [
-        ...state,
-        {icon: "users", url: "/committees", loading: true, label: "Committees"},
-      ];
-    case TYPES.FETCH_COMMITTEE_MEMBERS_SUCCESS:
-      return state.map((item) => ({
-        ...item,
-        ...(item.url === "/committees" ? {loading: false} : {}),
-      }));
-
     case TYPES.FETCH_STATISTICS_REQUEST:
       return [
         ...state,

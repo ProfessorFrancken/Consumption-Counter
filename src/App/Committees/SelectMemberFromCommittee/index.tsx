@@ -1,13 +1,12 @@
-import {useSelector} from "react-redux";
-import {membersInCommitteesSelector} from "./../selectors";
 import Members from "App/Members/Members";
 import {useParams} from "react-router";
 import {useOrder} from "App/Products/OrdersContext";
+import {useCommitteeMembers} from "../CommitteesContext";
 
 const SelectMemberFromCommitteeScreen = () => {
-  const params = useParams();
-  const members = useSelector((state) => membersInCommitteesSelector(state, params));
   const {selectMember} = useOrder();
+  const {page} = useParams<{page: string | undefined}>();
+  const members = useCommitteeMembers(parseInt(page || "0", 10));
 
   return <Members members={members} selectMember={selectMember} />;
 };
