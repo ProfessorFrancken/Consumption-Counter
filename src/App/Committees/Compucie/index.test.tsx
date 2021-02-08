@@ -51,7 +51,7 @@ describe("Compucie screen", () => {
     fireEvent.click(getByRole("button", {name: /Decrease Temple Count \(10\)/}));
 
     expect(
-      getByRole("button", {name: /Decrease Temple Count \(9\)/})
+      await findByRole("button", {name: /Decrease Temple Count \(9\)/})
     ).toBeInTheDocument();
   });
 

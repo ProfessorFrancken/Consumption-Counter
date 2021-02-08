@@ -1,49 +1,45 @@
-import React, {Component} from "react";
 import axios from "axios";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 
-type State = any;
-class TempleCountButton extends Component<{}, State> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {count: null};
-    this.fetchTempleCount = this.fetchTempleCount.bind(this);
-    this.decreaseTempleCount = this.decreaseTempleCount.bind(this);
+const handleResponse = (response: any) => {
+  if (!response.data) {
+    return Promise.reject(response.statusText);
   }
-  UNSAFE_componentWillMount() {
-    this.fetchTempleCount();
-  }
-  fetchTempleCount() {
-    axios
-      .get(`https://borrelcie.vodka/chwazorcle/hoeveel.php`)
+  return response.data;
+};
 
-      .then(this.handleResponse)
-      .then(
-        (count) => {
-          return this.setState({count});
-        },
-        (error) => this.setState({count: 0})
-      );
-  }
-  handleResponse(response: any) {
-    if (!response.data) {
-      return Promise.reject(response.statusText);
-    }
-    return response.data;
-  }
-  decreaseTempleCount() {
-    (this.props as any).decreaseTempleCount();
-    this.setState(({count}: any) => ({count: count - 1}));
-  }
-  render() {
-    return (
-      <button className="tile button" onClick={this.decreaseTempleCount}>
-        Decrease
-        <br />
-        Temple Count
-        <br />
-        {this.state.count ? ` (${this.state.count})` : null}
-      </button>
+const useTempleCount = () => {
+  const queryClient = useQueryClient();
+  const query = useQuery({
+    queryKey: ["temple_count"],
+    queryFn: async () => {
+      const response = await axios.get(`https://borrelcie.vodka/chwazorcle/hoeveel.php`);
+
+      return await handleResponse(response);
+    },
+  });
+
+  const decreaseTempleCount = () => {
+    queryClient.setQueryData(["temple_count"], (count: number | undefined) =>
+      count === undefined ? 0 : count - 1
     );
-  }
-}
-export default TempleCountButton;
+  };
+  const mutation = useMutation(
+    () => axios.post(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`),
+    {onSuccess: decreaseTempleCount}
+  );
+
+  return [query.data, mutation.mutate] as const;
+};
+
+const TempleCount = () => {
+  const [count, decreaseTempleCount] = useTempleCount();
+
+  return (
+    <button className="tile button" onClick={() => decreaseTempleCount()}>
+      Decrease <br /> Temple Count {count ? ` (${count})` : null}
+    </button>
+  );
+};
+
+export default TempleCount;
