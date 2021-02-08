@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {chwazi, fetchInitialData} from "actions";
+import {fetchInitialData} from "actions";
 import {compucieSelector} from "./../selectors";
 import Compucie from "./Compucie";
 import {useOrder} from "App/Products/OrdersContext";
@@ -17,7 +17,6 @@ const CompucieScreen = () => {
       compucie={compucie}
       scriptcie={scriptcie}
       selectMember={selectMember}
-      decreaseTempleCount={() => dispatch(chwazi())}
       reloadApplication={() => {
         push("/loading");
         dispatch(fetchInitialData());

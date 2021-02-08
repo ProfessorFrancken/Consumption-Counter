@@ -9,16 +9,9 @@ type Props = {
   scriptcie: MemberPropType[];
   selectMember: (member: any) => void;
   reloadApplication: () => void;
-  decreaseTempleCount: () => void;
 };
 
-const Compucie = ({
-  compucie,
-  scriptcie,
-  selectMember,
-  reloadApplication,
-  decreaseTempleCount,
-}: Props) => (
+const Compucie = ({compucie, scriptcie, selectMember, reloadApplication}: Props) => (
   <div className="d-flex flex-column justify-content-stretch h-100">
     <nav className="compucie tilesGrid" style={{flexShrink: 1}}>
       {[...compucie, ...scriptcie].map((member) => (
@@ -63,8 +56,7 @@ const Compucie = ({
         onClick={selectMember}
       />
 
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ decreaseTempleCount: any; }' is not assign... Remove this comment to see the full error message */}
-      <TempleCountButton decreaseTempleCount={decreaseTempleCount} />
+      <TempleCountButton />
       <div>
         {/* This div is deliberately left empty so that the settings
                button will be placed at the right most part of the grid

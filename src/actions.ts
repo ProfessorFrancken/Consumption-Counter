@@ -1,7 +1,6 @@
 import {orderBy, pick} from "lodash";
 import {push} from "connected-react-router";
 import moment from "moment";
-import axios from "axios";
 
 export const actions = {
   makeOrder,
@@ -15,8 +14,6 @@ export const actions = {
   fetchCommitteeMembers,
   fetchStatistics,
   fetchActivities,
-
-  chwazi,
 };
 
 export const TYPES = {
@@ -352,14 +349,6 @@ export function fetchInitialData() {
         return dispatch({type: TYPES.LOAD_APPLICATION_SUCCESS});
       })
       .catch((ex) => dispatch({type: TYPES.LOAD_APPLICATION_FAILURE, ex}));
-  };
-}
-
-export function chwazi() {
-  return (dispatch: any) => {
-    // We don't really need to dispatch an action here so we only make the
-    // chwazi request
-    return axios.post(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`);
   };
 }
 
