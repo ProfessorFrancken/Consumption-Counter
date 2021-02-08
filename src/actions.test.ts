@@ -477,21 +477,3 @@ describe("committees", () => {
     ]);
   });
 });
-
-describe("Fetching initial data", () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
-  clock.set("2018-01-01");
-  it("plays chwazi", () => {
-    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`, {
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ members: never[]; }' is not as... Remove this comment to see the full error message
-      members: [],
-    });
-
-    const store = mockStore({});
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any) => Promise<Axios... Remove this comment to see the full error message
-    store.dispatch(actions.chwazi());
-
-    // expect(fetchMock.calls.length).toBe(1);
-  });
-});
