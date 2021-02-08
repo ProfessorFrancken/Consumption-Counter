@@ -52,7 +52,6 @@ describe("Fetching initial data", () => {
 
     const expectedActions = [
       {type: TYPES.LOAD_APPLICATION_REQUEST},
-      push("/loading"),
       {type: TYPES.FETCH_MEMBERS_REQUEST},
       {type: TYPES.FETCH_BOARD_MEMBERS_REQUEST},
       {type: TYPES.FETCH_COMMITTEE_MEMBERS_REQUEST},

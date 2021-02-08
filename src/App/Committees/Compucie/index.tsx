@@ -4,11 +4,13 @@ import {chwazi, fetchInitialData} from "actions";
 import {compucieSelector} from "./../selectors";
 import Compucie from "./Compucie";
 import {useOrder} from "App/Products/OrdersContext";
+import {useHistory} from "react-router";
 
 const CompucieScreen = () => {
   const dispatch = useDispatch();
   const {compucie, scriptcie} = useSelector(compucieSelector);
   const {selectMember} = useOrder();
+  const {push} = useHistory();
 
   return (
     <Compucie
@@ -16,7 +18,10 @@ const CompucieScreen = () => {
       scriptcie={scriptcie}
       selectMember={selectMember}
       decreaseTempleCount={() => dispatch(chwazi())}
-      reloadApplication={() => dispatch(fetchInitialData())}
+      reloadApplication={() => {
+        push("/loading");
+        dispatch(fetchInitialData());
+      }}
     />
   );
 };
