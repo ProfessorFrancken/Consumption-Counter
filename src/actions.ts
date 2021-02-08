@@ -342,7 +342,6 @@ export function fetchInitialData() {
   return (dispatch: any) => {
     return Promise.all([
       dispatch({type: TYPES.LOAD_APPLICATION_REQUEST}),
-      dispatch(push(`/loading`)),
       dispatch(fetchMembers()),
       dispatch(fetchBoardMembers()),
       dispatch(fetchCommitteeMembers()),
