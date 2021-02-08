@@ -13,9 +13,22 @@ type Feature = {
     | Pick<QueryObserverResult, "isLoading" | "isSuccess" | "isError">;
   label: string;
 };
+
+const ariaLabel = (feature: Feature) => {
+  if (feature.query.isLoading) {
+    return `Loading ${feature.label}`;
+  }
+  if (feature.query.isSuccess) {
+    return `Succesfully loaded ${feature.label}`;
+  }
+  if (feature.query.isError) {
+    return `Failed loading ${feature.label}`;
+  }
+};
+
 const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
   return (
-    <li className="font-weight-bold my-3">
+    <li className="font-weight-bold my-3" aria-label={ariaLabel(feature)}>
       {feature.query.isLoading && (
         <FontAwesomeIcon icon={"spinner"} spin fixedWidth className="mr-1 text-muted" />
       )}
@@ -40,7 +53,7 @@ const LoadingScreen = () => {
       style={{paddingBottom: "100px"}}
     >
       <div className="bg-white p-5 rounded">
-        <h2 className="">Loading streepsystem data...</h2>
+        <h2 className="">Loading consumption counter...</h2>
         <ul className="feature-list my-4 list-unstyled">
           {features.map((feature: any, idx: any) => (
             <LoadFeatureListItem
