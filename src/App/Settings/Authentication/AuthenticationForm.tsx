@@ -89,6 +89,7 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
               type="password"
               name="password"
               placeholder="Passphrase"
+              autoFocus
               className={error ? "form-control is-invalid" : "form-control"}
               ref={register({
                 required: "Required",
