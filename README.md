@@ -2,7 +2,7 @@
 
 [![Jest tests](https://github.com/professorfrancken/consumption-counter/workflows/Jest%20tests/badge.svg)](https://github.com/ProfessorFrancken/plus-one/actions?query=workflow%3A%22Jest+tests%22)
 [![End-to-end tests](https://github.com/professorfrancken/consumption-counter/workflows/End-to-end%20tests/badge.svg)](https://github.com/ProfessorFrancken/plus-one/actions?query=workflow%3A%22End-to-end+tests%22)
-[![Coverage Status](https://coveralls.io/repos/github/ProfessorFrancken/consumption-counter/badge.svg?branch=master)](https://coveralls.io/github/ProfessorFrancken/plus-one?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ProfessorFrancken/Consumption-Counter/badge.svg)](https://coveralls.io/github/ProfessorFrancken/Consumption-Counter)
 
 # Introduction
 
