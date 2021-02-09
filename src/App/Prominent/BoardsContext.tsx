@@ -102,7 +102,7 @@ function recentlyPurchasedAProduct(member: MemberType) {
       : member.latest_purchase_at;
 
   if (latest_purchase_at === null) {
-    return true;
+    return false;
   }
 
   const today = new Date();
