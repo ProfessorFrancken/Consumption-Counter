@@ -425,19 +425,6 @@ describe("menu items", () => {
       {icon: "clock", url: "/recent", label: "Recent"},
     ]);
   });
-
-  it("adds buixieval when buixieval is enabled", () => {
-    expect(
-      menuItems(undefined, {
-        type: TYPES.FETCH_MEMBERS_SUCCESS,
-        members: [{buixieval: true}],
-      })
-    ).toEqual([
-      {icon: "home", url: "/", loading: false, label: "Home"},
-      {icon: "clock", url: "/recent", label: "Recent"},
-      {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
-    ]);
-  });
 });
 
 describe("statistics", () => {

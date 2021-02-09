@@ -126,19 +126,6 @@ export function makeServer({environment = "development"} = {}) {
       this.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", () => {
         return 1;
       });
-      this.get("https://buixieval.nl/api/backers", (schema) => {
-        const members = [
-          {
-            id: 1,
-            name: "John",
-            contributed: "33.33",
-            team: "p",
-            img: "1.jpeg",
-            f_id: "314",
-          },
-        ];
-        return members;
-      });
       this.get("https://borrelcie.vodka/present/data.php", (schema) => {
         return ["Mark"];
       });
