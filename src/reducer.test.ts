@@ -438,27 +438,6 @@ describe("menu items", () => {
       {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
     ]);
   });
-
-  it("adds prominent when board members have been loaded", () => {
-    const menuItemsWhenLoadingProminent = menuItems(undefined, {
-      type: TYPES.FETCH_BOARD_MEMBERS_REQUEST,
-    });
-    expect(menuItemsWhenLoadingProminent).toEqual([
-      {icon: "chess-queen", url: "/prominent", loading: true, label: "Prominent"},
-      {icon: "home", url: "/", loading: false, label: "Home"},
-      {icon: "clock", url: "/recent", label: "Recent"},
-    ]);
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '({ icon: string; url: string; lo... Remove this comment to see the full error message
-    const menuItemsAfterLoadingProminent = menuItems(menuItemsWhenLoadingProminent, {
-      type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS,
-    });
-    expect(menuItemsAfterLoadingProminent).toEqual([
-      {icon: "chess-queen", url: "/prominent", loading: false, label: "Prominent"},
-      {icon: "home", url: "/", loading: false, label: "Home"},
-      {icon: "clock", url: "/recent", label: "Recent"},
-    ]);
-  });
 });
 
 describe("statistics", () => {

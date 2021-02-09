@@ -53,11 +53,9 @@ describe("Fetching initial data", () => {
     const expectedActions = [
       {type: TYPES.LOAD_APPLICATION_REQUEST},
       {type: TYPES.FETCH_MEMBERS_REQUEST},
-      {type: TYPES.FETCH_BOARD_MEMBERS_REQUEST},
       {type: TYPES.FETCH_STATISTICS_REQUEST},
       {type: TYPES.FETCH_ACTIVITIES_REQUEST},
       {type: TYPES.FETCH_MEMBERS_SUCCESS, members: []},
-      {type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS, boardMembers: []},
       {type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: []},
       {type: TYPES.FETCH_ACTIVITIES_SUCCESS, activities: []},
       {type: TYPES.LOAD_APPLICATION_SUCCESS},
@@ -193,62 +191,6 @@ describe("fetching members", () => {
     store
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
       .dispatch(actions.fetchMembers())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      })
-      .catch((e: any) => done.fail(e));
-  });
-});
-
-describe("fetching board members", () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
-
-  it("maps board members from an http request", (done) => {
-    moxios.stubRequest(`${base_api}/boards`, {
-      response: {
-        boardMembers: [{lid_id: 314, jaar: 2018, functie: "King"}],
-      },
-      headers: {"content-type": "application/json"},
-    });
-
-    const expectedActions = [
-      {type: TYPES.FETCH_BOARD_MEMBERS_REQUEST},
-      {
-        type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS,
-        boardMembers: [{member_id: 314, year: 2018, function: "King"}],
-      },
-    ];
-
-    const store = mockStore();
-
-    store
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
-      .dispatch(actions.fetchBoardMembers())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      })
-      .catch((e: any) => done.fail(e));
-  });
-
-  it("fails if the http request fails", (done) => {
-    moxios.stubRequest(`${base_api}/boards`, {
-      status: 400,
-      headers: {"content-type": "application/json"},
-    });
-
-    const expectedActions = [
-      {type: TYPES.FETCH_BOARD_MEMBERS_REQUEST},
-      {type: TYPES.FETCH_BOARD_MEMBERS_FAILURE},
-    ];
-
-    const store = mockStore();
-
-    store
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(dispatch: any, getState: any, a... Remove this comment to see the full error message
-      .dispatch(actions.fetchBoardMembers())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
         done();

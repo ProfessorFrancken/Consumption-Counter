@@ -5,12 +5,20 @@ import {useHistory} from "react-router-dom";
 import ScreenSaver from "./ScreenSaver";
 import App from "./App";
 import {useCommittees} from "./Committees/CommitteesContext";
+import {useBoards} from "./Prominent/BoardsContext";
 
 const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
+  const {boardsQuery} = useBoards();
   const menuItems = useSelector((state: any) => state.menuItems);
 
   return [
+    {
+      icon: "chess-queen",
+      url: "/prominent",
+      loading: boardsQuery.isLoading,
+      label: "Prominent",
+    },
     ...menuItems,
     {
       icon: "users",

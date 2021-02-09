@@ -8,7 +8,6 @@ export const actions = {
 
   fetchInitialData,
   fetchMembers,
-  fetchBoardMembers,
   fetchStatistics,
   fetchActivities,
 };
@@ -28,10 +27,6 @@ export const TYPES = {
   FETCH_MEMBERS_REQUEST: "FETCH_MEMBERS_REQUEST",
   FETCH_MEMBERS_SUCCESS: "FETCH_MEMBERS_SUCCESS",
   FETCH_MEMBERS_FAILURE: "FETCH_MEMBERS_FAILURE",
-
-  FETCH_BOARD_MEMBERS_REQUEST: "FETCH_BOARD_MEMBERS_REQUEST",
-  FETCH_BOARD_MEMBERS_SUCCESS: "FETCH_BOARD_MEMBERS_SUCCESS",
-  FETCH_BOARD_MEMBERS_FAILURE: "FETCH_BOARD_MEMBERS_FAILURE",
 
   FETCH_STATISTICS_REQUEST: "FETCH_STATISTICS_REQUEST",
   FETCH_STATISTICS_SUCCESS: "FETCH_STATISTICS_SUCCESS",
@@ -175,39 +170,6 @@ export function fetchMembers() {
   };
 }
 
-export function fetchBoardMembers() {
-  return (dispatch: any, getState: any, api: any) => {
-    dispatch({
-      type: TYPES.FETCH_BOARD_MEMBERS_REQUEST,
-    });
-
-    const mapBoard = (boardMember: any) => {
-      return {
-        member_id: parseInt(boardMember.lid_id, 10),
-        year: boardMember.jaar,
-        function: boardMember.functie,
-      };
-    };
-
-    return api
-      .get("/boards")
-      .then((response: any) =>
-        dispatch({
-          type: TYPES.FETCH_BOARD_MEMBERS_SUCCESS,
-          boardMembers: orderBy(
-            response.boardMembers.map(mapBoard),
-            (boardMember: any) => boardMember.year
-          ),
-        })
-      )
-      .catch((ex: any) =>
-        dispatch({
-          type: TYPES.FETCH_BOARD_MEMBERS_FAILURE,
-        })
-      );
-  };
-}
-
 export function fetchStatistics() {
   return (dispatch: any, getState: any, api: any) => {
     dispatch({
@@ -287,7 +249,6 @@ export function fetchInitialData() {
     return Promise.all([
       dispatch({type: TYPES.LOAD_APPLICATION_REQUEST}),
       dispatch(fetchMembers()),
-      dispatch(fetchBoardMembers()),
       dispatch(fetchStatistics()),
       dispatch(fetchActivities()),
     ])

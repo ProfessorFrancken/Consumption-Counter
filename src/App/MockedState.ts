@@ -1,6 +1,5 @@
 export function mockedState() {
   const menu = [
-    {icon: "chess-queen", url: "/prominent", loading: false, label: "Prominent"},
     {icon: "home", url: "/", loading: false, label: "Home"},
     {icon: "clock", url: "/recent", label: "Recent"},
     {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
@@ -63,7 +62,6 @@ export function mockedState() {
     },
     transactions: [],
     recentBuyers: [],
-    boardMembers: [{member_id: 1, function: "King"}],
     queuedOrder: null,
     menuItems: menu,
   };
@@ -132,3 +130,5 @@ export const defaultCommitteeeMembers = [
     },
   },
 ];
+
+export const defaultBoardMembers = [{member_id: 1, function: "King"}];
