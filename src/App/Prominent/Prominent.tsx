@@ -2,15 +2,11 @@ import React from "react";
 import Member from "./../Members/MemberButton";
 import {sortBy} from "lodash";
 import {MemberType} from "App/Members/Members";
+import {BoardMember} from "./BoardsContext";
 
 type Props = {
   prominent: MemberType[];
-  boards: {
-    id: number;
-    function?: string;
-    member: MemberType;
-    year: number;
-  }[][];
+  boards: BoardMember[][];
   selectMember: (member: MemberType) => void;
 };
 

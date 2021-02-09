@@ -33,16 +33,6 @@ export function menuItems(state = defaultMenuItems, action: any) {
         ...(item.url === "/statistics" ? {loading: false} : {}),
       }));
 
-    case TYPES.FETCH_BOARD_MEMBERS_REQUEST:
-      return [
-        {icon: "chess-queen", url: "/prominent", loading: true, label: "Prominent"},
-        ...state,
-      ];
-    case TYPES.FETCH_BOARD_MEMBERS_SUCCESS:
-      return state.map((item) => ({
-        ...item,
-        ...(item.url === "/prominent" ? {loading: false} : {}),
-      }));
     default:
       return state;
   }

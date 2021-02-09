@@ -10,6 +10,7 @@ import {OrderProvider} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
 import "./index.css";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
+import {BoardsProvider} from "App/Prominent/BoardsContext";
 
 type Props = {
   store: any;
@@ -40,7 +41,9 @@ export const ApplicationProviders: React.FC = ({children}) => {
     <AuthenticationProvider>
       <ProductsProvider>
         <CommitteesProvider>
-          <OrderProvider>{children}</OrderProvider>
+          <BoardsProvider>
+            <OrderProvider>{children}</OrderProvider>
+          </BoardsProvider>
         </CommitteesProvider>
       </ProductsProvider>
     </AuthenticationProvider>
