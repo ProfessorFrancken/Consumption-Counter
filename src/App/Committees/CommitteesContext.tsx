@@ -45,7 +45,7 @@ const useFetchCommitteeMembers = (committeeMembers?: CommitteeMember[]) => {
 type State = {
   committeesQuery: QueryObserverResult<CommitteeMember[]>;
   committees: Committee[] | undefined;
-  committeeMembers: CommitteeMember[] | undefined;
+  committeeMembers: CommitteeMember[];
   selectCommittee: (committee: Committee) => void;
 };
 const CommitteesContext = React.createContext<State | undefined>(undefined);
