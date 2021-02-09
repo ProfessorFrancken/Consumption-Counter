@@ -85,6 +85,14 @@ describe("prominent", () => {
           prominent: 999,
           cosmetics: {button: {}},
         },
+        {
+          id: 3,
+          firstName: "Brandon",
+          surname: "Stark",
+          latest_purchase_at: null,
+          prominent: 999,
+          cosmetics: {button: {}},
+        },
       ],
       boardMembers: [
         {member_id: 2, year: 2017, function: "King"},
@@ -92,6 +100,7 @@ describe("prominent", () => {
         {member_id: 2, year: 2015, function: "King"},
         {member_id: 2, year: 2014, function: "King"},
         {member_id: 2, year: 2013, function: "King"},
+        {member_id: 3, year: 2011, function: "Prince"},
         {member_id: 1, year: 2012, function: "King"},
       ],
     };
