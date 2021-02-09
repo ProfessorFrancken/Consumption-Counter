@@ -7,12 +7,9 @@ import nedap from "./../../assets/nedap-logo.png";
 type PresentMemberType = {
   francken_id: string;
   name: string;
-  buixieval: string;
   screen: boolean;
 };
-const names: PresentMemberType[] = [
-  {francken_id: "1403", name: "Mark", buixieval: "pink", screen: true},
-];
+const names: PresentMemberType[] = [{francken_id: "1403", name: "Mark", screen: true}];
 
 const handleResponse = (response: any) => {
   if (!response.ok) {

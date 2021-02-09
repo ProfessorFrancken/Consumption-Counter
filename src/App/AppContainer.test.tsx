@@ -44,10 +44,6 @@ describe("Consumption Counter", () => {
       response: {committees: mocks.committees},
       headers: {"content-type": "application/json"},
     });
-    moxios.stubRequest("http://buixieval.nl/api/backers", {
-      response: [],
-      headers: {"content-type": "application/json"},
-    });
   });
 
   afterEach(() => {

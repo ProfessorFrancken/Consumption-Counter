@@ -5,7 +5,6 @@ import {createBrowserHistory} from "history";
 import rootReducer from "./reducers";
 import {loadState, saveState} from "./loadState";
 import api from "./../api";
-import buixieval from "./../buixieval";
 
 const basename = process.env.REACT_APP_ROUTER_BASENAME || "";
 export const history = createBrowserHistory({basename});
@@ -18,11 +17,7 @@ if (process.env.NODE_ENV === "development") {
   }
 }
 
-const middleware = [
-  thunk.withExtraArgument(api),
-  routerMiddleware(history),
-  buixieval(window.fetch, new Date()),
-];
+const middleware = [thunk.withExtraArgument(api), routerMiddleware(history)];
 
 const composedEnhancers = compose(applyMiddleware(...middleware), ...enhancers);
 

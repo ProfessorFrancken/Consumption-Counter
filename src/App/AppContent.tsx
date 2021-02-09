@@ -13,7 +13,6 @@ import Authenticate from "./Settings/Authentication/";
 import Settings from "./Settings/";
 import Statistics from "./Statistics/";
 import Present from "./Present/";
-import Buixieval from "./Buixieval/";
 import Loading from "Loading";
 
 export const AppContent = () => (
@@ -30,7 +29,6 @@ export const AppContent = () => (
     <Route exact path="/recent" component={RecentMembers} />
     <Route exact path="/products" component={BuyProducts} />
     <Route exact path="/" component={SurnameRanges} />
-    <Route exact path="/buixieval" component={Buixieval} />
     <Route exact path="/members/:page(\d+)" component={SelectMemberFromSurnameRange} />
     <Route exact path="/statistics" component={Statistics} />
     <Route exact path="/present" component={Present} />
