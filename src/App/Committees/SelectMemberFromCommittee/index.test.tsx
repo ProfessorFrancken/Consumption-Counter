@@ -36,7 +36,7 @@ describe("committees", () => {
       ],
     };
     const routes = ["/committees/1"];
-    const screen = render(
+    const {getByRole} = render(
       <Route
         exact
         path="/committees/:page"
@@ -45,6 +45,42 @@ describe("committees", () => {
       {storeState, routes}
     );
 
-    expect(screen.queryAllByRole("button")).toHaveLength(2);
+    expect(getByRole("button", {name: "John Snow"})).toBeInTheDocument();
+    expect(getByRole("button", {name: "Arya Stark"})).toBeInTheDocument();
+  });
+
+  it("only shows committee members from the current board year", () => {
+    const storeState = {
+      members: [
+        {id: 1, cosmetics: {}, fullname: "John Snow"},
+        {id: 2, cosmetics: {}, fullname: "Arya Stark"},
+      ],
+      committeeMembers: [
+        {
+          member_id: 1,
+          year: 2016,
+          function: "King",
+          committee: {id: 1, name: "Board"},
+        },
+        {
+          member_id: 2,
+          year: 2017,
+          function: "Queen",
+          committee: {id: 1, name: "Board"},
+        },
+      ],
+    };
+    const routes = ["/committees/1"];
+    const {getByRole, queryByRole} = render(
+      <Route
+        exact
+        path="/committees/:page"
+        component={SelectCommitteeMembersContainer}
+      />,
+      {storeState, routes}
+    );
+
+    expect(getByRole("button", {name: "Arya Stark"})).toBeInTheDocument();
+    expect(queryByRole("button", {name: "John Snow"})).not.toBeInTheDocument();
   });
 });

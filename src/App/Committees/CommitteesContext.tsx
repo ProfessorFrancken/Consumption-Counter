@@ -114,12 +114,16 @@ export const useCommittees = () => {
 
 export const useExistingCommitteeMembers = () => {};
 export const useCommitteeMembers = (committeeId: number): MemberType[] => {
+  const now = new Date();
   const {committeeMembers = []} = useCommittees();
   const members = useSelector((state: any) => state.members);
 
   return uniqBy(
     committeeMembers
       .filter((member) => member.committee.id === committeeId)
+      .filter((member) =>
+        [now.getFullYear() - 1, now.getFullYear()].includes(member.year)
+      )
       .map((activeMember: any) => ({
         committee_id: activeMember.committee.id,
         ...members.find((member: MemberType) => member.id === activeMember.member_id),
