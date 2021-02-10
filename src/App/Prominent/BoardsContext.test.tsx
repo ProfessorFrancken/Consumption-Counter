@@ -11,7 +11,7 @@ describe("Board context", () => {
     const {boardMembers} = useBoards();
 
     if (boardMembers === undefined) {
-      return <span>Hoi</span>;
+      return null;
     }
 
     return (
