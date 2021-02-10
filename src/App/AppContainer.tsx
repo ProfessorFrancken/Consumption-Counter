@@ -6,10 +6,12 @@ import ScreenSaver from "./ScreenSaver";
 import App from "./App";
 import {useCommittees} from "./Committees/CommitteesContext";
 import {useBoards} from "./Prominent/BoardsContext";
+import {useMembers} from "./Members/Context";
 
 const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
+  const {membersQuery} = useMembers();
   const menuItems = useSelector((state: any) => state.menuItems);
 
   return [
@@ -18,6 +20,12 @@ const useMenuItems = () => {
       url: "/prominent",
       loading: boardsQuery.isLoading,
       label: "Prominent",
+    },
+    {
+      icon: "home",
+      url: "/",
+      loading: membersQuery.isLoading,
+      label: "Home",
     },
     ...menuItems,
     {

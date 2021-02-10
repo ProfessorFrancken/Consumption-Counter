@@ -303,7 +303,6 @@ describe("keeping track of orders", () => {
 describe("menu items", () => {
   it("has a default menu", () => {
     expect(menuItems(undefined, {})).toEqual([
-      {icon: "home", url: "/", loading: false, label: "Home"},
       {icon: "clock", url: "/recent", label: "Recent"},
     ]);
   });
