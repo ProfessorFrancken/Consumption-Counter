@@ -8,6 +8,19 @@ export type MemberType = {
   fullname: string;
   latest_purchase_at: null | Date;
   age: number;
+
+  prominent: null | number;
+  cosmetics:
+    | undefined
+    | {
+        color: string | null;
+        image: string | null;
+        nickname: string | null;
+        button: {
+          width: number | null;
+          height: number | null;
+        };
+      };
 };
 type Props = {
   members: MemberType[];
