@@ -4,6 +4,7 @@ import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {
   defaultAuthentication,
   defaultCommitteeeMembers,
+  defaultMembers,
   defaultOrder,
   defaultProducts,
   mockedState,
@@ -15,6 +16,7 @@ import {ProductsProvider} from "App/Products/ProductsContext";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
 import {defaultBoardMembers} from "App/MockedState";
+import {MembersProvider} from "App/Members/Context";
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -30,6 +32,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     boardMembers = defaultBoardMembers,
     ...state
   } = storeState;
+  const {members = defaultMembers} = storeState;
   const store = create({...mockedState(), ...state});
 
   (routes || []).forEach((route) => history.push(route));
@@ -42,11 +45,13 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
         <ProductsProvider products={products}>
-          <CommitteesProvider committeeMembers={committeeMembers}>
-            <BoardsProvider boardMembers={boardMembers}>
-              <OrderProvider order={order}>{children}</OrderProvider>
-            </BoardsProvider>
-          </CommitteesProvider>
+          <MembersProvider members={members}>
+            <CommitteesProvider committeeMembers={committeeMembers}>
+              <BoardsProvider boardMembers={boardMembers}>
+                <OrderProvider order={order}>{children}</OrderProvider>
+              </BoardsProvider>
+            </CommitteesProvider>
+          </MembersProvider>
         </ProductsProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
