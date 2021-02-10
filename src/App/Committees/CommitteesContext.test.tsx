@@ -4,6 +4,7 @@ import {useCommittees, CommitteesProvider} from "./CommitteesContext";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
 import {create} from "./../../Setup/store";
+import {MembersProvider} from "App/Members/Context";
 
 describe("Committee context", () => {
   const SelectCommittee: React.FC = () => {
@@ -44,9 +45,20 @@ describe("Committee context", () => {
           ],
         })}
       >
-        <CommitteesProvider>
-          <SelectCommittee />
-        </CommitteesProvider>
+        <MembersProvider
+          members={[
+            {
+              id: 314,
+              firstName: "John",
+              surname: "Snow",
+              fullname: "John Snow",
+            },
+          ]}
+        >
+          <CommitteesProvider>
+            <SelectCommittee />
+          </CommitteesProvider>
+        </MembersProvider>
       </InfrastructureProviders>
     );
 

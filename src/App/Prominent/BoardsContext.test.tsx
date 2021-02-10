@@ -4,6 +4,7 @@ import {useBoards, BoardsProvider} from "./BoardsContext";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
 import {create} from "./../../Setup/store";
+import {MembersProvider} from "App/Members/Context";
 
 describe("Board context", () => {
   const SelectBoard: React.FC = () => {
@@ -46,9 +47,20 @@ describe("Board context", () => {
           ],
         })}
       >
-        <BoardsProvider>
-          <SelectBoard />
-        </BoardsProvider>
+        <MembersProvider
+          members={[
+            {
+              id: 314,
+              firstName: "John",
+              surname: "Snow",
+              fullname: "John Snow",
+            },
+          ]}
+        >
+          <BoardsProvider>
+            <SelectBoard />
+          </BoardsProvider>
+        </MembersProvider>
       </InfrastructureProviders>
     );
 
