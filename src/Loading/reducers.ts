@@ -20,21 +20,8 @@ export function loading(
     case TYPES.LOAD_APPLICATION_REQUEST:
       return {
         state: LOADING_STATE.REQUESTING,
-        features: [
-          {loading: LOADING_STATE.REQUESTING, label: "Members"},
-          {loading: LOADING_STATE.REQUESTING, label: "Statistics"},
-        ],
+        features: [{loading: LOADING_STATE.REQUESTING, label: "Statistics"}],
         done: false,
-      };
-    case TYPES.FETCH_MEMBERS_SUCCESS:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Members", LOADING_STATE.SUCCESS),
-      };
-    case TYPES.FETCH_MEMBERS_FAILURE:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Members", LOADING_STATE.FAILURE),
       };
     case TYPES.FETCH_STATISTICS_SUCCESS:
       return {
@@ -49,19 +36,13 @@ export function loading(
     case TYPES.LOAD_APPLICATION_SUCCESS:
       return {
         state: LOADING_STATE.SUCCESS,
-        features: [
-          {loading: LOADING_STATE.SUCCESS, label: "Members"},
-          {loading: LOADING_STATE.SUCCESS, label: "Statistics"},
-        ],
+        features: [{loading: LOADING_STATE.SUCCESS, label: "Statistics"}],
         done: true,
       };
     case TYPES.LOAD_APPLICATION_FAILURE:
       return {
         state: LOADING_STATE.FAILURE,
-        features: [
-          {loading: LOADING_STATE.FAILURE, label: "Members"},
-          {loading: LOADING_STATE.FAILURE, label: "Statistics"},
-        ],
+        features: [{loading: LOADING_STATE.FAILURE, label: "Statistics"}],
         done: true,
       };
     default:

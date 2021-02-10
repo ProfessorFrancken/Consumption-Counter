@@ -2,9 +2,7 @@ import React from "react";
 import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import {MemberType} from "App/Members/Members";
-import {useDispatch} from "react-redux";
 import {chunk, orderBy} from "lodash";
-import {TYPES} from "actions";
 
 const useFetchMembers = (members?: MemberType[]) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,7 +24,6 @@ const useFetchMembers = (members?: MemberType[]) => {
     setImages(images);
   };
 
-  const dispatch = useDispatch();
   const calculateAge = (lid: any) => {
     const birthdayString = lid.geboortedatum;
     if (birthdayString === null) {
@@ -43,8 +40,6 @@ const useFetchMembers = (members?: MemberType[]) => {
   return useQuery<MemberType[]>({
     queryKey: ["members"],
     queryFn: async () => {
-      dispatch({type: TYPES.FETCH_MEMBERS_REQUEST});
-
       const mapMembers = (lid: any) => ({
         id: parseInt(lid.id, 10),
         firstName: lid.voornaam,
@@ -77,13 +72,7 @@ const useFetchMembers = (members?: MemberType[]) => {
       return orderBy(members, (member: any) => member.surname);
     },
     enabled: members === undefined,
-    onSuccess: (members: MemberType[]) => {
-      dispatch({type: TYPES.FETCH_MEMBERS_SUCCESS, members});
-      preLoadImages(members);
-    },
-    onError: () => {
-      dispatch({type: TYPES.FETCH_MEMBERS_FAILURE});
-    },
+    onSuccess: preLoadImages,
   });
 };
 

@@ -1,6 +1,5 @@
 export function mockedState() {
   const menu = [
-    {icon: "home", url: "/", loading: false, label: "Home"},
     {icon: "clock", url: "/recent", label: "Recent"},
     {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
     {icon: "chart-bar", url: "/statistics", label: "Statistics"},

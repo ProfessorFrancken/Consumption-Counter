@@ -8,6 +8,7 @@ import {useProducts} from "App/Products/ProductsContext";
 import {QueryObserverResult} from "react-query";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
+import {useMembers} from "App/Members/Context";
 
 type Feature = {
   query:
@@ -48,6 +49,7 @@ const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
 const LoadingScreen = () => {
   const {state, features} = useSelector(loadingScreenSelector);
   const {productsQuery} = useProducts();
+  const {membersQuery} = useMembers();
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
 
@@ -73,6 +75,7 @@ const LoadingScreen = () => {
             />
           ))}
           <LoadFeatureListItem feature={{label: "Products", query: productsQuery}} />
+          <LoadFeatureListItem feature={{label: "Members", query: membersQuery}} />
           <LoadFeatureListItem feature={{label: "Committees", query: committeesQuery}} />
           <LoadFeatureListItem feature={{label: "Boards", query: boardsQuery}} />
         </ul>
