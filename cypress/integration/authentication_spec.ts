@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import {makeServer} from "../../src/server/";
+import {makeServer} from "../../src/server/index";
 
 const member = {
   firstName: "John",
