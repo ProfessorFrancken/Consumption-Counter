@@ -4,12 +4,24 @@ import Authenticate from "./Authentication";
 import {cancelOrder, buyOrder} from "actions";
 import FailedOrder from "./FailedOrder";
 import RetryAll from "./RetryAll";
+import {Product} from "App/Products/OrdersContext";
+import {MemberType} from "App/Members/Members";
+
+export type QueuedOrder = {
+  order: {
+    products: Product[];
+    member: MemberType;
+    ordered_at: number;
+  };
+  fails: number;
+  state: string;
+};
 
 const QueuedOrders = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state: any) => state.queuedOrders);
-  const cancel = (order: any) => dispatch(cancelOrder(order));
-  const buy = (order: any) => dispatch(buyOrder(order));
+  const cancel = (order: QueuedOrder["order"]) => dispatch(cancelOrder(order));
+  const buy = (order: QueuedOrder["order"]) => dispatch(buyOrder(order));
 
   return (
     <div className="mb-5 bg-light">
@@ -49,7 +61,7 @@ const QueuedOrders = () => {
 };
 
 // Show all products that were bought and the amount of times they were bought
-const Settings = ({orders, cancel, buy}: any) => (
+const Settings = () => (
   <div>
     <Authenticate />
     <QueuedOrders />
