@@ -54,15 +54,12 @@ const useFetchMembers = (members?: MemberType[]) => {
       });
 
       const response = await api.get("/members");
-      return response.members.map(mapMembers);
+      const members = response.members.map(mapMembers);
+      return orderBy(members, (member: any) => member.surname);
     },
     enabled: members === undefined,
-    onSuccess: (mmembers: MemberType[]) => {
-      const orderedMembers = orderBy(mmembers, (member: any) => member.surname);
-      dispatch({
-        type: TYPES.FETCH_MEMBERS_SUCCESS,
-        members: orderedMembers,
-      });
+    onSuccess: (members: MemberType[]) => {
+      dispatch({type: TYPES.FETCH_MEMBERS_SUCCESS, members});
     },
     onError: () => {
       dispatch({type: TYPES.FETCH_MEMBERS_FAILURE});
