@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import Members, {MemberType} from "./../Members/Members";
 import {useOrder} from "App/Products/OrdersContext";
 import nedap from "./../../assets/nedap-logo.png";
+import axios from "axios";
 
 type PresentMemberType = {
   francken_id: string;
@@ -12,22 +13,23 @@ type PresentMemberType = {
 const names: PresentMemberType[] = [{francken_id: "1403", name: "Mark", screen: true}];
 
 const handleResponse = (response: any) => {
-  if (!response.ok) {
+  if (!response.data) {
     return Promise.reject(response.statusText);
   }
-  return response.json();
+  return response.data;
 };
 
 const useFetchPresentMembers = (members: MemberType[]) => {
   const [presentMembers, setPresentMembers] = React.useState<string[]>([]);
   React.useEffect(() => {
-    fetch(`https://borrelcie.vodka/present/data.php`)
+    axios
+      .get(`https://borrelcie.vodka/present/data.php`)
       .then(handleResponse)
       .then(
         (members) => setPresentMembers(members),
         () => setPresentMembers([])
       );
-  });
+  }, []);
 
   return presentMembers
     .map((memberName: string) => {
