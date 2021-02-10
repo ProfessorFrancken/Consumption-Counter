@@ -11,7 +11,7 @@ describe("Committee context", () => {
     const {committees} = useCommittees();
 
     if (committees === undefined) {
-      return <span>Hoi</span>;
+      return null;
     }
 
     return (
