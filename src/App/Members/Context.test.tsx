@@ -51,7 +51,7 @@ describe("Member context", () => {
         geboortedatum: null,
         prominent: null,
         kleur: null,
-        afbeelding: null,
+        afbeelding: "utnCWM87tZclyENVrG03.jpg",
         bijnaam: null,
         button_width: null,
         button_height: null,

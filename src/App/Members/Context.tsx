@@ -2,11 +2,30 @@ import React from "react";
 import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import {MemberType} from "App/Members/Members";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {orderBy} from "lodash";
 import {TYPES} from "actions";
 
 const useFetchMembers = (members?: MemberType[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [images, setImages] = React.useState<HTMLImageElement[]>([]);
+
+  const preLoadImages = (members: MemberType[]) => {
+    const images = members
+      .filter((member) => member.cosmetics && member.cosmetics.image)
+      .map((member) => {
+        if (member.cosmetics && member.cosmetics.image) {
+          let img = new Image();
+          img.src = member?.cosmetics?.image;
+          return img;
+        }
+        return null;
+      })
+      .filter((image): image is HTMLImageElement => image !== null);
+
+    setImages(images);
+  };
+
   const dispatch = useDispatch();
   const calculateAge = (lid: any) => {
     const birthdayString = lid.geboortedatum;
@@ -60,6 +79,7 @@ const useFetchMembers = (members?: MemberType[]) => {
     enabled: members === undefined,
     onSuccess: (members: MemberType[]) => {
       dispatch({type: TYPES.FETCH_MEMBERS_SUCCESS, members});
+      preLoadImages(members);
     },
     onError: () => {
       dispatch({type: TYPES.FETCH_MEMBERS_FAILURE});
