@@ -30,9 +30,9 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     products: productsByCategory = defaultProducts,
     committeeMembers = defaultCommitteeeMembers,
     boardMembers = defaultBoardMembers,
+    members = defaultMembers,
     ...state
   } = storeState;
-  const {members = defaultMembers} = storeState;
   const store = create({...mockedState(), ...state});
 
   (routes || []).forEach((route) => history.push(route));
