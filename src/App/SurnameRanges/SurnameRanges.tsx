@@ -1,3 +1,4 @@
+import {MemberType} from "App/Members/Members";
 import React from "react";
 
 const RangeButton = ({range, onClick}: any) => (
@@ -11,7 +12,7 @@ const RangeButton = ({range, onClick}: any) => (
 
 type Range = {
   idx: number;
-  members?: {}[];
+  members?: MemberType[];
   surname_start: string;
   surname_end: string;
 };

@@ -3,7 +3,7 @@ import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import {MemberType} from "App/Members/Members";
 import {useDispatch} from "react-redux";
-import {orderBy} from "lodash";
+import {chunk, orderBy} from "lodash";
 import {TYPES} from "actions";
 
 const useFetchMembers = (members?: MemberType[]) => {
@@ -120,4 +120,18 @@ export const useMembers = () => {
   }
 
   return context;
+};
+
+const MEMBERS_PER_RANGE = 6 * 5;
+export const useGroupedSurnames = () => {
+  const {members} = useMembers();
+
+  return React.useMemo(() => {
+    return chunk(members, MEMBERS_PER_RANGE).map((members, idx) => ({
+      idx,
+      members,
+      surname_start: members[0].surname,
+      surname_end: members[members.length - 1].surname,
+    }));
+  }, [members]);
 };
