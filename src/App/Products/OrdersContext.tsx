@@ -38,7 +38,7 @@ function didNotRecentlyOrderAProduct(member: MemberType) {
   return diffDays > 90;
 }
 
-type Order = {
+export type Order = {
   products: Product[];
   member: undefined | MemberType;
 };

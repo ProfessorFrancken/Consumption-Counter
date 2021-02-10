@@ -1,6 +1,12 @@
 import React from "react";
+import {QueuedOrder} from ".";
 
-const RetryAll = ({orders, buy}: any) => (
+type Props = {
+  orders: QueuedOrder[];
+  buy: (order: QueuedOrder["order"]) => void;
+};
+
+const RetryAll = ({orders, buy}: Props) => (
   <button
     className="btn btn-success"
     onClick={() => orders.forEach((order: any) => buy(order.order))}
