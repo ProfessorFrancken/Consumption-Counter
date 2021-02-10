@@ -4,7 +4,7 @@ import api from "api";
 import {useHistory} from "react-router";
 import {groupBy, uniqBy} from "lodash";
 import {MemberType} from "App/Members/Members";
-import {useSelector} from "react-redux";
+import {useMembers} from "App/Members/Context";
 
 type Committee = {
   id: number;
@@ -55,7 +55,7 @@ export const CommitteesProvider: React.FC<{committeeMembers?: CommitteeMember[]}
   ...props
 }) => {
   const {push} = useHistory();
-  const members = useSelector((state: any) => state.members);
+  const {members} = useMembers();
 
   const committeesQuery = useFetchCommitteeMembers(defaultCommitteeMembers);
 
@@ -116,8 +116,9 @@ export const useExistingCommitteeMembers = () => {};
 export const useCommitteeMembers = (committeeId: number): MemberType[] => {
   const now = new Date();
   const {committeeMembers = []} = useCommittees();
-  const members = useSelector((state: any) => state.members);
+  const {members} = useMembers();
 
+  // @ts-ignore
   return uniqBy(
     committeeMembers
       .filter((member) => member.committee.id === committeeId)
@@ -128,6 +129,7 @@ export const useCommitteeMembers = (committeeId: number): MemberType[] => {
         committee_id: activeMember.committee.id,
         ...members.find((member: MemberType) => member.id === activeMember.member_id),
       }))
+      // @ts-ignore
       .filter((member: MemberType) => member.id !== undefined),
     (member) => member.id
   );

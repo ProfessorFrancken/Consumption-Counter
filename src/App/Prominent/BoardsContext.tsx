@@ -2,8 +2,8 @@ import React from "react";
 import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import {MemberType} from "App/Members/Members";
-import {useSelector} from "react-redux";
 import {groupBy, sortBy, take} from "lodash";
+import {useMembers} from "App/Members/Context";
 
 const SHOW_N_PROMINENT = 10;
 const SHOW_N_BOARDS = 5;
@@ -47,7 +47,7 @@ export const BoardsProvider: React.FC<{boardMembers?: BoardMember[]}> = ({
   const boardsQuery = useFetchBoardMembers(defaultBoardMembers);
 
   // TODO: extract this (and the same code for committees) to a useWithMembers(memberCollection) hook
-  const members = useSelector((state: any) => state.members);
+  const {members} = useMembers();
   const boardMembers: BoardMember[] = (defaultBoardMembers ?? boardsQuery.data ?? [])
     .map((member) => {
       return {

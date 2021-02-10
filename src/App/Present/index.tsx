@@ -1,9 +1,9 @@
 import React from "react";
-import {useSelector} from "react-redux";
 import Members, {MemberType} from "./../Members/Members";
 import {useOrder} from "App/Products/OrdersContext";
 import nedap from "./../../assets/nedap-logo.png";
 import axios from "axios";
+import {useMembers} from "App/Members/Context";
 
 type PresentMemberType = {
   francken_id: string;
@@ -71,7 +71,7 @@ const Present = ({members, selectMember}: PresentProps) => {
 };
 
 const PresentScreen = () => {
-  const members = useSelector((state: any) => state.members);
+  const {members} = useMembers();
   const {selectMember} = useOrder();
 
   return <Present selectMember={selectMember} members={members} />;
