@@ -1,6 +1,5 @@
 import {
   surnameRanges,
-  members,
   transactions,
   queuedOrder,
   queuedOrders,
@@ -80,48 +79,6 @@ describe("Surname selection reducer", () => {
         },
       ],
     });
-  });
-});
-
-describe("members", () => {
-  it("fetches members", () => {
-    const fetchedMembers = [
-      {
-        id: 1,
-        latest_purchase_at: new Date("2018-05-25"),
-      },
-    ];
-    expect(
-      members(undefined, {
-        type: TYPES.FETCH_MEMBERS_SUCCESS,
-        members: fetchedMembers,
-      })
-    ).toEqual(fetchedMembers);
-  });
-
-  it("updates the latest purchase date of a member", () => {
-    const orderAction = {
-      type: TYPES.BUY_ORDER_SUCCESS,
-      order: {
-        member: {id: 1},
-        ordered_at: 1531323576167,
-      },
-    };
-
-    expect(
-      members(
-        [
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'never'.
-          {id: 1, latest_purchase_at: new Date("2018-05-25")},
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'never'.
-          {id: 2, latest_purchase_at: new Date("2018-06-25")},
-        ],
-        orderAction
-      )
-    ).toEqual([
-      {id: 1, latest_purchase_at: new Date(1531323576167)},
-      {id: 2, latest_purchase_at: new Date("2018-06-25")},
-    ]);
   });
 });
 

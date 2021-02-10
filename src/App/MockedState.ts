@@ -7,26 +7,6 @@ export function mockedState() {
   ];
 
   return {
-    members: [
-      {
-        id: 1,
-        firstName: "John",
-        surname: "Snow",
-        fullname: "John Snow",
-        age: 18,
-        latest_purchase_at: "2018-01-01 00:00:00",
-        prominent: null,
-        cosmetics: {
-          color: null,
-          image: null,
-          nickname: null,
-          button: {
-            width: null,
-            height: null,
-          },
-        },
-      },
-    ],
     surnameRanges: {
       members_per_range: 30,
       ranges: [

@@ -35,18 +35,7 @@ describe("Board context", () => {
     });
 
     const {findByText} = render(
-      <InfrastructureProviders
-        store={create({
-          members: [
-            {
-              id: 314,
-              firstName: "John",
-              surname: "Snow",
-              fullname: "John Snow",
-            },
-          ],
-        })}
-      >
+      <InfrastructureProviders store={create()}>
         <MembersProvider
           members={[
             {

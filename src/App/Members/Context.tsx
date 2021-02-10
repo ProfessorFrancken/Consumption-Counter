@@ -81,13 +81,12 @@ export const MembersProvider: React.FC<{members?: MemberType[]}> = ({
   ...props
 }) => {
   const membersQuery = useFetchMembers(defaultMembers);
-  const members = useSelector((state: any) => state.members) as MemberType[];
 
   return (
     <MembersContext.Provider
       value={{
         membersQuery,
-        members,
+        members: defaultMembers ?? membersQuery.data ?? [],
         ...props,
       }}
     >
