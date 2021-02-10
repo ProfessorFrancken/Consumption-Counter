@@ -2,7 +2,6 @@ import {TYPES} from "actions";
 export {loading} from "Loading/reducers";
 export {recentBuyers} from "App/Recent/reducers";
 export {menuItems} from "Layout/Sidebar/reducers";
-export {surnameRanges} from "App/SurnameRanges/reducers";
 export {transactions, statistics, activities} from "App/Statistics/reducers";
 export function queuedOrder(state = null, action: any) {
   switch (action.type) {

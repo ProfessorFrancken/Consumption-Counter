@@ -1,5 +1,4 @@
 import {
-  surnameRanges,
   transactions,
   queuedOrder,
   queuedOrders,
@@ -9,80 +8,6 @@ import {
 } from "./reducer";
 import {TYPES} from "./actions";
 import expect from "expect";
-
-describe("Surname selection reducer", () => {
-  it("should return an empty initial state", () => {
-    expect(surnameRanges(undefined, {})).toEqual({
-      members_per_range: 6 * 5,
-      ranges: [],
-    });
-  });
-
-  it("ranges members based on their surname", () => {
-    const members = [
-      {surname: "A"},
-      {surname: "B"},
-      {surname: "C"},
-      {surname: "D"},
-      {surname: "E"},
-      {surname: "F"},
-    ];
-
-    expect(
-      surnameRanges(
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ members_per_range: number; }' ... Remove this comment to see the full error message
-        {members_per_range: 6 * 5},
-        {
-          type: TYPES.FETCH_MEMBERS_SUCCESS,
-          members,
-        }
-      )
-    ).toEqual({
-      members_per_range: 6 * 5,
-      ranges: [{idx: 0, members, surname_start: "A", surname_end: "F"}],
-    });
-  });
-
-  it("uses multiple ranges when not all members fit in a range", () => {
-    const members = [
-      {surname: "A"},
-      {surname: "B"},
-      {surname: "C"},
-      {surname: "D"},
-      {surname: "E"},
-      {surname: "F"},
-    ];
-
-    expect(
-      surnameRanges(
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ members_per_range: number; }' ... Remove this comment to see the full error message
-        {members_per_range: 3},
-        {
-          type: TYPES.FETCH_MEMBERS_SUCCESS,
-          members,
-        }
-      )
-    ).toEqual({
-      members_per_range: 3,
-      ranges: [
-        {
-          idx: 0,
-          members: [{surname: "A"}, {surname: "B"}, {surname: "C"}],
-          surname_start: "A",
-          surname_end: "C",
-        },
-        {
-          idx: 1,
-          members: [{surname: "D"}, {surname: "E"}, {surname: "F"}],
-          surname_start: "D",
-          surname_end: "F",
-        },
-      ],
-    });
-  });
-});
-
-describe("cancelling choices", () => {});
 
 describe("keeping track of the latest transactions", () => {
   it("has no transactions by default", () => {

@@ -3,7 +3,6 @@ import {connectRouter} from "connected-react-router";
 
 import {
   loading,
-  surnameRanges,
   transactions,
   recentBuyers,
   queuedOrder,
@@ -16,7 +15,6 @@ import {
 const makeApplicationReducer = (history: any) => {
   return combineReducers({
     loading,
-    surnameRanges,
     transactions,
     recentBuyers,
     queuedOrder,

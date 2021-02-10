@@ -1,14 +1,14 @@
-import {useSelector} from "react-redux";
 import SurnameRanges from "./SurnameRanges";
-import {rangesSelector} from "./../../selectors";
 import {useHistory} from "react-router";
+import {useGroupedSurnames} from "App/Members/Context";
 
 const SurnameRangesScreen = () => {
   const {push} = useHistory();
-  const ranges = useSelector(rangesSelector);
+  const groupedSurnames = useGroupedSurnames();
+
   const selectRange = (range: any) => push(`/members/${range.idx}`);
 
-  return <SurnameRanges ranges={ranges} selectRange={selectRange} />;
+  return <SurnameRanges ranges={groupedSurnames} selectRange={selectRange} />;
 };
 
 export default SurnameRangesScreen;
