@@ -119,6 +119,27 @@ export const defaultProducts = {
   ],
 };
 
+export const defaultMembers = [
+  {
+    id: 1,
+    firstName: "John",
+    surname: "Snow",
+    fullname: "John Snow",
+    age: 18,
+    latest_purchase_at: "2018-01-01 00:00:00",
+    prominent: null,
+    cosmetics: {
+      color: null,
+      image: null,
+      nickname: null,
+      button: {
+        width: null,
+        height: null,
+      },
+    },
+  },
+];
+
 export const defaultCommitteeeMembers = [
   {
     member_id: 1,

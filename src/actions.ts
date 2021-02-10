@@ -1,4 +1,4 @@
-import {orderBy, pick} from "lodash";
+import {pick} from "lodash";
 import {push} from "connected-react-router";
 import moment from "moment";
 
@@ -7,7 +7,6 @@ export const actions = {
   cancelOrder,
 
   fetchInitialData,
-  fetchMembers,
   fetchStatistics,
   fetchActivities,
 };
@@ -105,71 +104,6 @@ export function buyOrder(order: any) {
   };
 }
 
-export function fetchMembers() {
-  return (dispatch: any, getState: any, api: any) => {
-    dispatch({
-      type: TYPES.FETCH_MEMBERS_REQUEST,
-    });
-
-    const calculateAge = (lid: any) => {
-      const birthdayString = lid.geboortedatum;
-      if (birthdayString === null) {
-        return 0;
-      }
-      const birthday = new Date(Date.parse(birthdayString));
-
-      const date = new Date();
-      const ageDifMs = date.getTime() - birthday.getTime();
-      const ageDate = new Date(ageDifMs);
-      return Math.abs(ageDate.getUTCFullYear() - 1970);
-    };
-
-    const mapMembers = (lid: any) => ({
-      id: parseInt(lid.id, 10),
-      firstName: lid.voornaam,
-      surname: lid.achternaam,
-
-      fullname: [lid.voornaam, lid.tussenvoegsel, lid.achternaam]
-        .filter((name) => ![undefined, ""].includes(name))
-        .join(" "),
-
-      age: calculateAge(lid),
-      prominent: lid.prominent,
-
-      latest_purchase_at: lid.latest_purchase_at
-        ? new Date(lid.latest_purchase_at)
-        : null,
-
-      cosmetics: {
-        color: lid.kleur,
-        image: lid.afbeelding,
-        nickname: lid.bijnaam,
-        button: {
-          width: lid.button_width,
-          height: lid.button_height,
-        },
-      },
-    });
-
-    return api
-      .get("/members")
-      .then((response: any) => {
-        dispatch({
-          type: TYPES.FETCH_MEMBERS_SUCCESS,
-          members: orderBy(
-            response.members.map(mapMembers),
-            (member: any) => member.surname
-          ),
-        });
-      })
-      .catch((ex: any) =>
-        dispatch({
-          type: TYPES.FETCH_MEMBERS_FAILURE,
-        })
-      );
-  };
-}
-
 export function fetchStatistics() {
   return (dispatch: any, getState: any, api: any) => {
     dispatch({
@@ -248,7 +182,6 @@ export function fetchInitialData() {
   return (dispatch: any) => {
     return Promise.all([
       dispatch({type: TYPES.LOAD_APPLICATION_REQUEST}),
-      dispatch(fetchMembers()),
       dispatch(fetchStatistics()),
       dispatch(fetchActivities()),
     ])
