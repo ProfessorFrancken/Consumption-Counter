@@ -1,7 +1,7 @@
 {
   "esversion": 6,
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "../src",
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
