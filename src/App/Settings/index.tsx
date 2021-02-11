@@ -1,5 +1,4 @@
 import React from "react";
-import {useSelector} from "react-redux";
 import Authenticate from "./Authentication";
 import FailedOrder from "./FailedOrder";
 import RetryAll from "./RetryAll";
@@ -18,8 +17,7 @@ export type QueuedOrder = {
 };
 
 const QueuedOrders = () => {
-  const orders = useSelector((state: any) => state.queuedOrders);
-  const {cancelOrder, buyOrder} = useQueuedOrders();
+  const {queuedOrders: orders, cancelOrder, buyOrder} = useQueuedOrders();
 
   const cancel = (order: QueuedOrder["order"]) => cancelOrder(order);
   const buy = (order: QueuedOrder["order"]) => buyOrder(order);
