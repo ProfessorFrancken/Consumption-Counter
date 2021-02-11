@@ -1,7 +1,7 @@
 import {TYPES} from "actions";
 import {pick} from "lodash";
 import React from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {MemberType} from "./Members/Members";
 import {Product} from "./Products/OrdersContext";
 import api from "api";
@@ -78,6 +78,8 @@ export type QueuedOrder = {
 };
 
 type State = {
+  queuedOrders: QueuedOrder[];
+  queuedOrder: QueuedOrder;
   makeOrder: (order: any) => void;
   buyOrder: (order: any) => void;
   cancelOrder: (order: any) => void;
@@ -90,6 +92,8 @@ export const QueuedOrdersProvider: React.FC<{queuedOrders?: QueuedOrder[]}> = ({
 }) => {
   const dispatch = useDispatch();
   const {push} = useHistory();
+  const queuedOrders = useSelector((state: any) => state.queuedOrders);
+  const queuedOrder = useSelector((state: any) => state.queuedOrder);
 
   const buyOrder = (order: any) => {
     const ordered_at = order.ordered_at;
@@ -145,6 +149,8 @@ export const QueuedOrdersProvider: React.FC<{queuedOrders?: QueuedOrder[]}> = ({
   return (
     <QueuedOrdersContext.Provider
       value={{
+        queuedOrder,
+        queuedOrders,
         makeOrder,
         buyOrder,
         cancelOrder,
@@ -162,4 +168,24 @@ export const useQueuedOrders = () => {
   }
 
   return context;
+};
+
+export const useBackgroundFromOrder = () => {
+  const {queuedOrder: order} = useQueuedOrders();
+
+  if (order === null) {
+    return null;
+  }
+
+  const product = order.order.products.find(
+    (product: any) => product.splash_image !== null
+  );
+
+  return product === undefined ? null : product.splash_image;
+};
+
+export const useFailedOrders = () => {
+  const {queuedOrders} = useQueuedOrders();
+
+  return queuedOrders.filter((order: any) => order.fails > 0).length;
 };
