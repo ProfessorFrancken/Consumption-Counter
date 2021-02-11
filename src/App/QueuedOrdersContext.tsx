@@ -63,47 +63,22 @@ export function queuedOrders(state = [], action: any) {
   }
 }
 
-const orderQueue = {} as any;
-
-export const TIME_TO_CANCEL = 7000;
-
-export type QueuedOrder = {
-  order: {
-    products: Product[];
-    member: MemberType;
-    ordered_at: number;
-  };
-  fails: number;
-  state: string;
-};
-
-type State = {
-  queuedOrders: QueuedOrder[];
-  queuedOrder: QueuedOrder;
-  makeOrder: (order: any) => void;
-  buyOrder: (order: any) => void;
-  cancelOrder: (order: any) => void;
-};
-
-const QueuedOrdersContext = React.createContext<State | undefined>(undefined);
-export const QueuedOrdersProvider: React.FC<{queuedOrders?: QueuedOrder[]}> = ({
-  queuedOrders: defaultQueuedOrders = [],
-  ...props
-}) => {
+const useQueuedOrderState = () => {
   const dispatch = useDispatch();
-  const {push} = useHistory();
   const queuedOrders = useSelector((state: any) => state.queuedOrders);
   const queuedOrder = useSelector((state: any) => state.queuedOrder);
 
-  const buyOrder = (order: any) => {
+  const {push} = useHistory();
+
+  const buyOrder = async (order: any) => {
     const ordered_at = order.ordered_at;
     delete orderQueue[ordered_at];
 
     dispatch({type: TYPES.BUY_ORDER_REQUEST, order});
 
     const member = order.member;
-    return api
-      .post("/orders", {
+    try {
+      const response = await api.post("/orders", {
         order: {
           member: pick(member, ["id", "firstName", "surname"]),
           products: order.products.map((product: any) =>
@@ -111,11 +86,11 @@ export const QueuedOrdersProvider: React.FC<{queuedOrders?: QueuedOrder[]}> = ({
           ),
           ordered_at,
         },
-      })
-      .then((response: any) => {
-        dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
-      })
-      .catch((ex: any) => dispatch({type: TYPES.BUY_ORDER_FAILURE, order}));
+      });
+      dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
+    } catch (ex) {
+      return dispatch({type: TYPES.BUY_ORDER_FAILURE, order});
+    }
   };
 
   // TODO don't make this exportable and m ake order not be optional
@@ -145,6 +120,50 @@ export const QueuedOrdersProvider: React.FC<{queuedOrders?: QueuedOrder[]}> = ({
       order: pick(order, "member", "products", "ordered_at"),
     });
   };
+
+  return {
+    queuedOrder,
+    queuedOrders,
+    makeOrder,
+    cancelOrder,
+    buyOrder,
+  };
+};
+
+const orderQueue = {} as any;
+
+export const TIME_TO_CANCEL = 7000;
+
+export type QueuedOrder = {
+  order: {
+    products: Product[];
+    member: MemberType;
+    ordered_at: number;
+  };
+  fails: number;
+  state: string;
+};
+
+type State = {
+  queuedOrders: QueuedOrder[];
+  queuedOrder: QueuedOrder;
+  makeOrder: (order: any) => void;
+  buyOrder: (order: any) => void;
+  cancelOrder: (order: any) => void;
+};
+
+const QueuedOrdersContext = React.createContext<State | undefined>(undefined);
+export const QueuedOrdersProvider: React.FC<{queuedOrders?: QueuedOrder[]}> = ({
+  queuedOrders: defaultQueuedOrders = [],
+  ...props
+}) => {
+  const {
+    queuedOrder,
+    queuedOrders,
+    makeOrder,
+    buyOrder,
+    cancelOrder,
+  } = useQueuedOrderState();
 
   return (
     <QueuedOrdersContext.Provider
