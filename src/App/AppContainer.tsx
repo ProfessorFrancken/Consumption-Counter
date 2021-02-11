@@ -1,12 +1,12 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {backgroundSelector, failedOrdersSelector} from "./selectors";
 import {useHistory} from "react-router-dom";
 import ScreenSaver from "./ScreenSaver";
 import App from "./App";
 import {useCommittees} from "./Committees/CommitteesContext";
 import {useBoards} from "./Prominent/BoardsContext";
 import {useMembers} from "./Members/Context";
+import {useBackgroundFromOrder, useFailedOrders} from "./QueuedOrdersContext";
 
 const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
@@ -39,8 +39,8 @@ const useMenuItems = () => {
 
 const AppContainer = () => {
   const menuItems = useMenuItems();
-  const background = useSelector(backgroundSelector);
-  const failedOrders = useSelector(failedOrdersSelector);
+  const background = useBackgroundFromOrder();
+  const failedOrders = useFailedOrders();
   const {listen, push} = useHistory();
 
   const goToCompucieScreen = () => push("/compucie");

@@ -1,12 +1,11 @@
 import React from "react";
-import {useSelector} from "react-redux";
 import {useOrder} from "App/Products/OrdersContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useHistory} from "react-router-dom";
-import {queuedOrderSelector} from "selectors";
+import {useQueuedOrders} from "App/QueuedOrdersContext";
 
 const GoBack = () => {
-  const queuedOrder = useSelector(queuedOrderSelector);
+  const {queuedOrder} = useQueuedOrders();
   const {location, goBack} = useHistory();
   const {selectMember} = useOrder();
 
