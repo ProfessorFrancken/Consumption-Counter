@@ -1,6 +1,6 @@
+import React from "react";
 import {TYPES} from "actions";
 import {pick, maxBy} from "lodash";
-import React, {useReducer} from "react";
 import {useDispatch} from "react-redux";
 import {MemberType} from "./Members/Members";
 import {Order, Product} from "./Products/OrdersContext";
@@ -19,65 +19,23 @@ export type QueuedOrder = {
   state: "queued" | "requesting";
 };
 
-type Action =
-  | {type: "BUY_ORDER_REQUEST"; order: OrderedOrder}
-  | {type: "BUY_ORDER_REQUEST_SUCCESS"; order: OrderedOrder}
-  | {type: "BUY_ORDER_REQUEST_FAILURE"; order: OrderedOrder}
-  | {type: "QUEUE_ORDER"; order: OrderedOrder}
-  | {type: "CANCEL_ORDER"; order: OrderedOrder};
-
-type QueuedOrderState = QueuedOrder[];
-
 const orderTimeoutQueue = {} as any;
 const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
-  const [queuedOrders, dispatch] = useReducer(
-    (state: QueuedOrderState, action: Action) => {
-      switch (action.type) {
-        case "QUEUE_ORDER":
-          return [
-            {
-              ordered_at: action.order.ordered_at,
-              order: action.order,
-              fails: 0,
-              state: "queued" as const,
-            },
-            ...state,
-          ];
-        case "BUY_ORDER_REQUEST":
-          return state.map((order) => {
-            return order.ordered_at === action.order.ordered_at
-              ? {...order, state: "requesting" as const}
-              : order;
-          });
-        case "BUY_ORDER_REQUEST_SUCCESS":
-          return [
-            ...state.filter((order) => order.ordered_at !== action.order.ordered_at),
-          ];
-        case "CANCEL_ORDER":
-          return [
-            ...state.filter((order) => order.ordered_at !== action.order.ordered_at),
-          ];
-        case "BUY_ORDER_REQUEST_FAILURE":
-          return state.map((order) => {
-            return order.ordered_at === action.order.ordered_at
-              ? {...order, fails: order.fails + 1, state: "queued" as const}
-              : order;
-          });
-        default:
-          return state;
-      }
-    },
-    defaultQueuedOrders
-  );
-  const globalDispatch = useDispatch();
-
+  const [queuedOrders, setQueuedOrders] = React.useState(defaultQueuedOrders);
+  const dispatch = useDispatch();
   const {push} = useHistory();
 
   const buyOrder = async (order: OrderedOrder) => {
     const ordered_at = order.ordered_at;
     delete orderTimeoutQueue[ordered_at];
 
-    dispatch({type: "BUY_ORDER_REQUEST", order});
+    setQueuedOrders((orders) =>
+      orders.map((otherOrder) => {
+        return otherOrder.ordered_at === order.ordered_at
+          ? {...otherOrder, state: "requesting" as const}
+          : otherOrder;
+      })
+    );
 
     const member = order.member;
     try {
@@ -90,10 +48,19 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
           ordered_at,
         },
       });
-      dispatch({type: "BUY_ORDER_REQUEST_SUCCESS", order});
-      globalDispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
+
+      setQueuedOrders((orders) =>
+        orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
+      );
+      dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
     } catch (ex) {
-      dispatch({type: "BUY_ORDER_REQUEST_FAILURE", order});
+      setQueuedOrders((orders) =>
+        orders.map((otherOrder) => {
+          return otherOrder.ordered_at === order.ordered_at
+            ? {...otherOrder, fails: otherOrder.fails + 1, state: "queued" as const}
+            : otherOrder;
+        })
+      );
     }
   };
 
@@ -106,7 +73,15 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
 
     const orderedOrder = {...order, ordered_at: date.getTime()} as OrderedOrder;
 
-    dispatch({type: "QUEUE_ORDER", order: orderedOrder});
+    setQueuedOrders((state) => [
+      {
+        ordered_at: orderedOrder.ordered_at,
+        order: orderedOrder,
+        fails: 0,
+        state: "queued" as const,
+      },
+      ...state,
+    ]);
 
     push("/");
 
@@ -119,7 +94,9 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     clearTimeout(orderTimeoutQueue[order.ordered_at]);
     delete orderTimeoutQueue[order.ordered_at];
 
-    dispatch({type: "CANCEL_ORDER", order});
+    setQueuedOrders((orders) =>
+      orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
+    );
   };
 
   return {
