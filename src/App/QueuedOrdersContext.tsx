@@ -1,5 +1,5 @@
 import {TYPES} from "actions";
-import {pick, sortBy} from "lodash";
+import {pick, maxBy} from "lodash";
 import React, {useReducer} from "react";
 import {useDispatch} from "react-redux";
 import {MemberType} from "./Members/Members";
@@ -157,16 +157,16 @@ export const QueuedOrdersProvider: React.FC<{
       : defaultQueuedOrders
   );
 
-  const queuedOrdersf = queuedOrders.filter((order) => order.state === "queued");
-  const newQueuedOrder =
-    queuedOrdersf.length > 0
-      ? sortBy(queuedOrdersf, (order) => order.ordered_at)[0]
-      : null;
+  const queuedOrder =
+    maxBy(
+      queuedOrders.filter(({state}) => state === "queued"),
+      (order) => order.ordered_at
+    ) ?? null;
 
   return (
     <QueuedOrdersContext.Provider
       value={{
-        queuedOrder: newQueuedOrder,
+        queuedOrder: queuedOrder === undefined ? null : queuedOrder,
         queuedOrders,
         makeOrder,
         buyOrder,
