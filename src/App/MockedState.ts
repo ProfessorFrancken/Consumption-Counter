@@ -11,7 +11,6 @@ export function mockedState() {
     },
     transactions: [],
     recentBuyers: [],
-    queuedOrder: null,
     menuItems: menu,
   };
 }
