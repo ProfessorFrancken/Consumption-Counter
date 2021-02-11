@@ -12,6 +12,7 @@ import "./index.css";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
 import {MembersProvider} from "App/Members/Context";
+import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 
 type Props = {
   store: any;
@@ -40,15 +41,17 @@ const DevelopMentProviders: React.FC = ({children}) => {
 export const ApplicationProviders: React.FC = ({children}) => {
   return (
     <AuthenticationProvider>
-      <ProductsProvider>
-        <MembersProvider>
-          <CommitteesProvider>
-            <BoardsProvider>
-              <OrderProvider>{children}</OrderProvider>
-            </BoardsProvider>
-          </CommitteesProvider>
-        </MembersProvider>
-      </ProductsProvider>
+      <QueuedOrdersProvider>
+        <ProductsProvider>
+          <MembersProvider>
+            <CommitteesProvider>
+              <BoardsProvider>
+                <OrderProvider>{children}</OrderProvider>
+              </BoardsProvider>
+            </CommitteesProvider>
+          </MembersProvider>
+        </ProductsProvider>
+      </QueuedOrdersProvider>
     </AuthenticationProvider>
   );
 };

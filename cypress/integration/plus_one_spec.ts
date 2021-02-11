@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import {association} from "miragejs";
 import {makeServer} from "../../src/server/index";
-import {TIME_TO_CANCEL} from "./../../src/actions";
+import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./../../src/App/ScreenSaver";
 import moment from "moment";
 

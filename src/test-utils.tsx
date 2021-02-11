@@ -17,6 +17,7 @@ import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
 import {defaultBoardMembers} from "App/MockedState";
 import {MembersProvider} from "App/Members/Context";
+import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -44,15 +45,17 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   return (
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
-        <ProductsProvider products={products}>
-          <MembersProvider members={members}>
-            <CommitteesProvider committeeMembers={committeeMembers}>
-              <BoardsProvider boardMembers={boardMembers}>
-                <OrderProvider order={order}>{children}</OrderProvider>
-              </BoardsProvider>
-            </CommitteesProvider>
-          </MembersProvider>
-        </ProductsProvider>
+        <QueuedOrdersProvider>
+          <ProductsProvider products={products}>
+            <MembersProvider members={members}>
+              <CommitteesProvider committeeMembers={committeeMembers}>
+                <BoardsProvider boardMembers={boardMembers}>
+                  <OrderProvider order={order}>{children}</OrderProvider>
+                </BoardsProvider>
+              </CommitteesProvider>
+            </MembersProvider>
+          </ProductsProvider>
+        </QueuedOrdersProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
   );

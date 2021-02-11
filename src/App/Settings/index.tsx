@@ -1,11 +1,11 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import Authenticate from "./Authentication";
-import {cancelOrder, buyOrder} from "actions";
 import FailedOrder from "./FailedOrder";
 import RetryAll from "./RetryAll";
 import {Product} from "App/Products/OrdersContext";
 import {MemberType} from "App/Members/Members";
+import {useQueuedOrders} from "App/QueuedOrdersContext";
 
 export type QueuedOrder = {
   order: {
@@ -18,10 +18,11 @@ export type QueuedOrder = {
 };
 
 const QueuedOrders = () => {
-  const dispatch = useDispatch();
   const orders = useSelector((state: any) => state.queuedOrders);
-  const cancel = (order: QueuedOrder["order"]) => dispatch(cancelOrder(order));
-  const buy = (order: QueuedOrder["order"]) => dispatch(buyOrder(order));
+  const {cancelOrder, buyOrder} = useQueuedOrders();
+
+  const cancel = (order: QueuedOrder["order"]) => cancelOrder(order);
+  const buy = (order: QueuedOrder["order"]) => buyOrder(order);
 
   return (
     <div className="mb-5 bg-light">

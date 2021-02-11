@@ -4,7 +4,7 @@ import {history} from "./../Setup/store";
 import MockDate from "mockdate";
 import moxios from "moxios";
 import {render, fireEvent, act} from "test-utils";
-import {TIME_TO_CANCEL} from "./../actions";
+import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
 
 describe("Consumption Counter", () => {
