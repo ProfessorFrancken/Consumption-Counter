@@ -1,7 +1,7 @@
 import {TYPES} from "actions";
-import {pick} from "lodash";
+import {pick, sortBy} from "lodash";
 import React, {useReducer} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {MemberType} from "./Members/Members";
 import {Order, Product} from "./Products/OrdersContext";
 import api from "api";
@@ -23,117 +23,65 @@ type Action =
   | {type: "BUY_ORDER_REQUEST"; order: OrderedOrder}
   | {type: "BUY_ORDER_REQUEST_SUCCESS"; order: OrderedOrder}
   | {type: "BUY_ORDER_REQUEST_FAILURE"; order: OrderedOrder}
-  | {type: "QUEUE_ORDER"; order: any}
-  | {type: "CANCEL_ORDER"; order: any};
+  | {type: "QUEUE_ORDER"; order: OrderedOrder}
+  | {type: "CANCEL_ORDER"; order: OrderedOrder};
 
-type QueuedOrderState = {
-  queuedOrders: QueuedOrder[];
-  queuedOrder: null | QueuedOrder;
-};
+type QueuedOrderState = QueuedOrder[];
 
-const useQueuedOrderState = (
-  defaultQueuedOrder: QueuedOrder | null = null,
-  defaultQueuedOrders: QueuedOrder[] = []
-) => {
-  const [state, dispatch] = useReducer(
+const orderTimeoutQueue = {} as any;
+const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
+  const [queuedOrders, dispatch] = useReducer(
     (state: QueuedOrderState, action: Action) => {
       switch (action.type) {
         case "QUEUE_ORDER":
-          return {
-            queuedOrder: {
+          return [
+            {
               ordered_at: action.order.ordered_at,
               order: action.order,
               fails: 0,
               state: "queued" as const,
             },
-            queuedOrders: [
-              {
-                ordered_at: action.order.ordered_at,
-                order: action.order,
-                fails: 0,
-                state: "queued" as const,
-              },
-              ...state.queuedOrders,
-            ],
-          };
+            ...state,
+          ];
         case "BUY_ORDER_REQUEST":
-          const oldQueuedOrders = state.queuedOrders.map((order) => {
-            return (order as any).ordered_at === action.order.ordered_at
+          return state.map((order) => {
+            return order.ordered_at === action.order.ordered_at
               ? {...order, state: "requesting" as const}
               : order;
           });
-
-          if (state.queuedOrder === null) {
-            return {
-              queuedOrder: null,
-              queuedOrders: oldQueuedOrders,
-            };
-          }
-
-          return {
-            queuedOrder:
-              state.queuedOrder.ordered_at === action.order.ordered_at
-                ? null
-                : state.queuedOrder,
-            queuedOrders: oldQueuedOrders,
-          };
         case "BUY_ORDER_REQUEST_SUCCESS":
-          return {
-            queuedOrder: state.queuedOrder,
-            queuedOrders: [
-              ...state.queuedOrders.filter(
-                (order) => (order as any).ordered_at !== action.order.ordered_at
-              ),
-            ],
-          };
+          return [
+            ...state.filter((order) => order.ordered_at !== action.order.ordered_at),
+          ];
         case "CANCEL_ORDER":
-          return {
-            queuedOrder: null,
-            queuedOrders: [
-              ...state.queuedOrders.filter(
-                (order) => (order as any).ordered_at !== action.order.ordered_at
-              ),
-            ],
-          };
-        case TYPES.BUY_ORDER_FAILURE:
-          return {
-            queuedOrder: state.queuedOrder,
-            queuedOrders: state.queuedOrders.map((order) => {
-              return (order as any).ordered_at === action.order.ordered_at
-                ? {...order, fails: order.fails + 1, state: "queued" as const}
-                : order;
-            }),
-          };
-          return state;
+          return [
+            ...state.filter((order) => order.ordered_at !== action.order.ordered_at),
+          ];
+        case "BUY_ORDER_REQUEST_FAILURE":
+          return state.map((order) => {
+            return order.ordered_at === action.order.ordered_at
+              ? {...order, fails: order.fails + 1, state: "queued" as const}
+              : order;
+          });
         default:
           return state;
       }
-
-      return {
-        queuedOrder: null,
-        queuedOrders: [],
-      };
     },
-    {queuedOrders: defaultQueuedOrders, queuedOrder: defaultQueuedOrder}
+    defaultQueuedOrders
   );
   const globalDispatch = useDispatch();
-
-  /* const { queuedOrder: red } = state; */
-  const queuedOrders = useSelector((state: any) => state.queuedOrders);
-  const queuedOrder = useSelector((state: any) => state.queuedOrder);
 
   const {push} = useHistory();
 
   const buyOrder = async (order: OrderedOrder) => {
     const ordered_at = order.ordered_at;
-    delete orderQueue[ordered_at];
+    delete orderTimeoutQueue[ordered_at];
 
     dispatch({type: "BUY_ORDER_REQUEST", order});
-    globalDispatch({type: TYPES.BUY_ORDER_REQUEST, order});
 
     const member = order.member;
     try {
-      const response = await api.post("/orders", {
+      await api.post("/orders", {
         order: {
           member: pick(member, ["id", "firstName", "surname"]),
           products: order.products.map((product: any) =>
@@ -146,11 +94,9 @@ const useQueuedOrderState = (
       globalDispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
     } catch (ex) {
       dispatch({type: "BUY_ORDER_REQUEST_FAILURE", order});
-      globalDispatch({type: TYPES.BUY_ORDER_FAILURE, order});
     }
   };
 
-  // TODO don't make this exportable and m ake order not be optional
   const makeOrder = (order: Order) => {
     const date = new Date();
 
@@ -160,46 +106,29 @@ const useQueuedOrderState = (
 
     const orderedOrder = {...order, ordered_at: date.getTime()} as OrderedOrder;
 
-    dispatch({
-      type: "QUEUE_ORDER",
-      order: pick(orderedOrder, "member", "products", "ordered_at"),
-    });
-    globalDispatch({
-      type: TYPES.QUEUE_ORDER,
-      order: pick(orderedOrder, "member", "products", "ordered_at"),
-    });
+    dispatch({type: "QUEUE_ORDER", order: orderedOrder});
 
     push("/");
 
-    orderQueue[orderedOrder.ordered_at] = setTimeout(() => {
+    orderTimeoutQueue[orderedOrder.ordered_at] = setTimeout(() => {
       buyOrder(orderedOrder);
     }, TIME_TO_CANCEL);
   };
 
   const cancelOrder = (order: OrderedOrder) => {
-    clearTimeout(orderQueue[order.ordered_at]);
-    delete orderQueue[order.ordered_at];
+    clearTimeout(orderTimeoutQueue[order.ordered_at]);
+    delete orderTimeoutQueue[order.ordered_at];
 
-    dispatch({
-      type: "CANCEL_ORDER",
-      order: pick(order, "member", "products", "ordered_at"),
-    });
-    globalDispatch({
-      type: TYPES.CANCEL_ORDER,
-      order: pick(order, "member", "products", "ordered_at"),
-    });
+    dispatch({type: "CANCEL_ORDER", order});
   };
 
   return {
-    queuedOrder: state.queuedOrder,
-    queuedOrders: state.queuedOrders,
+    queuedOrders,
     makeOrder,
     cancelOrder,
     buyOrder,
   };
 };
-
-const orderQueue = {} as any;
 
 export const TIME_TO_CANCEL = 7000;
 
@@ -220,18 +149,24 @@ export const QueuedOrdersProvider: React.FC<{
   queuedOrders: defaultQueuedOrders = [],
   ...props
 }) => {
-  const {
-    queuedOrder,
-    queuedOrders,
-    makeOrder,
-    buyOrder,
-    cancelOrder,
-  } = useQueuedOrderState(defaultQueuedOrder, defaultQueuedOrders);
+  const {queuedOrders, makeOrder, buyOrder, cancelOrder} = useQueuedOrderState(
+    defaultQueuedOrders.length === 0
+      ? defaultQueuedOrder === null
+        ? []
+        : [{...defaultQueuedOrder, state: "queued" as const, fails: 0}]
+      : defaultQueuedOrders
+  );
+
+  const queuedOrdersf = queuedOrders.filter((order) => order.state === "queued");
+  const newQueuedOrder =
+    queuedOrdersf.length > 0
+      ? sortBy(queuedOrdersf, (order) => order.ordered_at)[0]
+      : null;
 
   return (
     <QueuedOrdersContext.Provider
       value={{
-        queuedOrder,
+        queuedOrder: newQueuedOrder,
         queuedOrders,
         makeOrder,
         buyOrder,
