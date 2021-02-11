@@ -76,7 +76,7 @@ describe("Consumption Counter", () => {
     expect(history.location.pathname).toBe("/");
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
 
-    jest.runTimersToTime(10000);
+    act(() => jest.runTimersToTime(10000));
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
     fireEvent.click(app.getByLabelText("Recent"));
@@ -244,7 +244,7 @@ describe("Consumption Counter", () => {
     selectJohnSnow(app);
 
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
-    jest.runTimersToTime(TIME_TO_CANCEL);
+    act(() => jest.runTimersToTime(TIME_TO_CANCEL));
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
     addHertogJanToOrder(app);
@@ -253,7 +253,7 @@ describe("Consumption Counter", () => {
     expect(await app.findAllByText("bought by John Snow")).toHaveLength(1);
     expect(app.queryByText(/Cancel buying .*/)).toBeInTheDocument();
 
-    jest.runTimersToTime(TIME_TO_CANCEL);
+    act(() => jest.runTimersToTime(TIME_TO_CANCEL));
     selectStatistics(app);
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
@@ -279,19 +279,19 @@ describe("Consumption Counter", () => {
 
     // Run time forward a little so that the timeout of the first orders
     // does not occur on the same time as the second
-    jest.runTimersToTime(TIME_TO_CANCEL / 2);
+    act(() => jest.runTimersToTime(TIME_TO_CANCEL / 2));
 
     MockDate.set(new Date(1514764800000 + 4000));
     selectJohnSnow(app);
     addHertogJanToOrder(app);
 
     // Run the first timeout
-    jest.runTimersToTime(TIME_TO_CANCEL / 2);
+    act(() => jest.runTimersToTime(TIME_TO_CANCEL / 2));
     const cancelBtn = app.getByText(/Cancel buying .*/);
     fireEvent.click(cancelBtn);
     expect(cancelBtn).not.toBeInTheDocument();
 
-    jest.runTimersToTime(TIME_TO_CANCEL);
+    act(() => jest.runTimersToTime(TIME_TO_CANCEL));
     selectStatistics(app);
     expect(await app.findAllByText(/bought by.*/)).toHaveLength(1);
   });
@@ -300,18 +300,18 @@ describe("Consumption Counter", () => {
     it("goes back to the main screen after 30 seconds", () => {
       const app = render(<AppContainer />);
       selectRangeIncludingJohnSnow(app);
-      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT);
+      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT));
       expect(history.location.pathname).toBe("/");
     });
 
     it("should reset the screensaver timer when going to a different route", () => {
       const app = render(<AppContainer />);
       selectRangeIncludingJohnSnow(app);
-      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2);
+      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2));
       selectRecent(app);
-      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2);
+      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2));
       expect(history.location.pathname).toBe("/recent");
-      jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2);
+      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2));
       expect(history.location.pathname).toBe("/");
     });
   });
