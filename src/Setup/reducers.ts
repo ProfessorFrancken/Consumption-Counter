@@ -1,6 +1,6 @@
 import {combineReducers} from "redux";
 import {connectRouter} from "connected-react-router";
-import {queuedOrder, queuedOrders} from "App/QueuedOrdersContext";
+import {queuedOrders} from "App/QueuedOrdersContext";
 
 import {
   loading,
@@ -16,7 +16,6 @@ const makeApplicationReducer = (history: any) => {
     loading,
     transactions,
     recentBuyers,
-    queuedOrder,
     queuedOrders,
     menuItems,
     statistics,

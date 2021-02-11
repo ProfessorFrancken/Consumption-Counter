@@ -32,6 +32,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     committeeMembers = defaultCommitteeeMembers,
     boardMembers = defaultBoardMembers,
     members = defaultMembers,
+    queuedOrder = null,
     ...state
   } = storeState;
   const store = create({...mockedState(), ...state});
@@ -45,7 +46,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   return (
     <InfrastructureProviders store={store}>
       <AuthenticationProvider {...authentication}>
-        <QueuedOrdersProvider>
+        <QueuedOrdersProvider queuedOrder={queuedOrder}>
           <ProductsProvider products={products}>
             <MembersProvider members={members}>
               <CommitteesProvider committeeMembers={committeeMembers}>

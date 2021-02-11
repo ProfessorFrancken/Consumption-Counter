@@ -3,8 +3,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Price from "App/Price";
 import {useQueuedOrders} from "App/QueuedOrdersContext";
 
-const products = (order: any) =>
-  order.products.length === 1 ? order.products[0].name : "multiple products";
+const products = (order: any) => {
+  return order.products.length === 1 ? order.products[0].name : "multiple products";
+};
 
 const CancelOrder = () => {
   const {queuedOrder, cancelOrder} = useQueuedOrders();
