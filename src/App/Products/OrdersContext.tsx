@@ -1,10 +1,9 @@
 import React from "react";
-import {makeOrder as makeOrderAction} from "actions";
 import {MemberType} from "App/Members/Members";
-import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
+import {useQueuedOrders} from "App/QueuedOrdersContext";
 
 export type Product = {
   id: number;
@@ -65,13 +64,13 @@ const orderReducer = (state: Order, action: OrderAction) => {
 };
 
 const useOrderReducer = (defaultOrder: Order) => {
-  const globalDispatch = useDispatch();
   const {push} = useHistory();
   const [order, dispatch] = React.useReducer(orderReducer, defaultOrder);
+  const {makeOrder: queueOrder} = useQueuedOrders();
 
   const makeOrder = (order: Order) => {
     dispatch({type: "RESET_ORDER"});
-    globalDispatch(makeOrderAction(order));
+    queueOrder(order);
   };
 
   const buyAll = () => makeOrder(order);

@@ -1,12 +1,11 @@
 import {combineReducers} from "redux";
 import {connectRouter} from "connected-react-router";
+import {queuedOrder, queuedOrders} from "App/QueuedOrdersContext";
 
 import {
   loading,
   transactions,
   recentBuyers,
-  queuedOrder,
-  queuedOrders,
   menuItems,
   statistics,
   activities,
