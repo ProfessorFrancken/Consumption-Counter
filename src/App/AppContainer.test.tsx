@@ -247,6 +247,7 @@ describe("Consumption Counter", () => {
     act(() => jest.runTimersToTime(TIME_TO_CANCEL));
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
+    MockDate.set(new Date(1514764800001));
     addHertogJanToOrder(app);
     selectStatistics(app);
 
