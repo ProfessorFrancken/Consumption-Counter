@@ -31,40 +31,6 @@ type QueuedOrderState = {
   queuedOrder: null | QueuedOrder;
 };
 
-export function queuedOrders(state: QueuedOrder[] = [], action: any) {
-  switch (action.type) {
-    case TYPES.QUEUE_ORDER:
-      return [
-        {
-          ordered_at: action.order.ordered_at,
-          order: action.order,
-          fails: 0,
-          state: "queued",
-        },
-        ...state,
-      ];
-    case TYPES.BUY_ORDER_REQUEST:
-      return state.map((order) => {
-        return (order as any).ordered_at === action.order.ordered_at
-          ? {...order, state: "requesting"}
-          : order;
-      });
-    case TYPES.BUY_ORDER_SUCCESS:
-    case TYPES.CANCEL_ORDER:
-      return [
-        ...state.filter((order) => (order as any).ordered_at !== action.order.ordered_at),
-      ];
-    case TYPES.BUY_ORDER_FAILURE:
-      return state.map((order) => {
-        return (order as any).ordered_at === action.order.ordered_at
-          ? {...order, fails: order.fails + 1, state: "queued"}
-          : order;
-      });
-    default:
-      return state;
-  }
-}
-
 const useQueuedOrderState = (
   defaultQueuedOrder: QueuedOrder | null = null,
   defaultQueuedOrders: QueuedOrder[] = []
@@ -80,13 +46,27 @@ const useQueuedOrderState = (
               fails: 0,
               state: "queued" as const,
             },
-            queuedOrders: state.queuedOrders,
+            queuedOrders: [
+              {
+                ordered_at: action.order.ordered_at,
+                order: action.order,
+                fails: 0,
+                state: "queued" as const,
+              },
+              ...state.queuedOrders,
+            ],
           };
         case "BUY_ORDER_REQUEST":
+          const oldQueuedOrders = state.queuedOrders.map((order) => {
+            return (order as any).ordered_at === action.order.ordered_at
+              ? {...order, state: "requesting" as const}
+              : order;
+          });
+
           if (state.queuedOrder === null) {
             return {
               queuedOrder: null,
-              queuedOrders: state.queuedOrders,
+              queuedOrders: oldQueuedOrders,
             };
           }
 
@@ -95,20 +75,43 @@ const useQueuedOrderState = (
               state.queuedOrder.ordered_at === action.order.ordered_at
                 ? null
                 : state.queuedOrder,
-            queuedOrders: state.queuedOrders,
+            queuedOrders: oldQueuedOrders,
+          };
+        case "BUY_ORDER_REQUEST_SUCCESS":
+          return {
+            queuedOrder: state.queuedOrder,
+            queuedOrders: [
+              ...state.queuedOrders.filter(
+                (order) => (order as any).ordered_at !== action.order.ordered_at
+              ),
+            ],
           };
         case "CANCEL_ORDER":
           return {
             queuedOrder: null,
-            queuedOrders: state.queuedOrders,
+            queuedOrders: [
+              ...state.queuedOrders.filter(
+                (order) => (order as any).ordered_at !== action.order.ordered_at
+              ),
+            ],
           };
+        case TYPES.BUY_ORDER_FAILURE:
+          return {
+            queuedOrder: state.queuedOrder,
+            queuedOrders: state.queuedOrders.map((order) => {
+              return (order as any).ordered_at === action.order.ordered_at
+                ? {...order, fails: order.fails + 1, state: "queued" as const}
+                : order;
+            }),
+          };
+          return state;
         default:
           return state;
       }
 
       return {
-        queuedOrder: null, //queuedOrderReducer(state.queuedOrder, action),
-        queuedOrders: [], //queuedOrdersReducer(state.queuedOrders, action),
+        queuedOrder: null,
+        queuedOrders: [],
       };
     },
     {queuedOrders: defaultQueuedOrders, queuedOrder: defaultQueuedOrder}
@@ -189,7 +192,7 @@ const useQueuedOrderState = (
 
   return {
     queuedOrder: state.queuedOrder,
-    queuedOrders,
+    queuedOrders: state.queuedOrders,
     makeOrder,
     cancelOrder,
     buyOrder,
