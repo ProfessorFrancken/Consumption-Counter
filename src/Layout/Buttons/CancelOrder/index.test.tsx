@@ -1,6 +1,11 @@
 import React from "react";
 import CancelOrder from ".";
 import {fireEvent, render} from "test-utils";
+import {deleteFromStorage} from "@rehooks/local-storage";
+
+beforeEach(() => {
+  deleteFromStorage("plus_one_order_queue");
+});
 
 describe("<CancelOrder>", () => {
   it("cancels orders", () => {

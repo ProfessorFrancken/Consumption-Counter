@@ -6,6 +6,15 @@ import moxios from "moxios";
 import {render, fireEvent, act} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
+import {deleteFromStorage} from "@rehooks/local-storage";
+
+beforeEach(() => {
+  deleteFromStorage("plus_one_order_queue");
+});
+
+afterEach(() => {
+  deleteFromStorage("plus_one_order_queue");
+});
 
 describe("Consumption Counter", () => {
   beforeEach(() => {
@@ -49,6 +58,7 @@ describe("Consumption Counter", () => {
   afterEach(() => {
     moxios.uninstall();
     MockDate.reset();
+    deleteFromStorage("plus_one_order_queue");
   });
 
   const selectRangeIncludingJohnSnow = (app: any) => {
@@ -247,12 +257,14 @@ describe("Consumption Counter", () => {
     act(() => jest.runTimersToTime(TIME_TO_CANCEL));
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
-    MockDate.set(new Date(1514764800001));
+    act(() => {
+      MockDate.set(new Date(1514764800001));
+    });
     addHertogJanToOrder(app);
     selectStatistics(app);
 
     expect(await app.findAllByText("bought by John Snow")).toHaveLength(1);
-    expect(app.queryByText(/Cancel buying .*/)).toBeInTheDocument();
+    expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
 
     act(() => jest.runTimersToTime(TIME_TO_CANCEL));
     selectStatistics(app);
