@@ -6,6 +6,7 @@ import {MemberType} from "./Members/Members";
 import {Order, Product} from "./Products/OrdersContext";
 import api from "api";
 import {useHistory} from "react-router";
+import useLocalStorage from "./useLocalStorage";
 
 type OrderedOrder = {
   ordered_at: number;
@@ -21,7 +22,10 @@ export type QueuedOrder = {
 
 const orderTimeoutQueue = {} as any;
 const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
-  const [queuedOrders, setQueuedOrders] = React.useState(defaultQueuedOrders);
+  const [queuedOrders, setQueuedOrders] = useLocalStorage(
+    "plus_one_order_queue",
+    defaultQueuedOrders
+  );
   const dispatch = useDispatch();
   const {push} = useHistory();
 
@@ -29,7 +33,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     const ordered_at = order.ordered_at;
     delete orderTimeoutQueue[ordered_at];
 
-    setQueuedOrders((orders) =>
+    setQueuedOrders((orders: QueuedOrder[]) =>
       orders.map((otherOrder) => {
         return otherOrder.ordered_at === order.ordered_at
           ? {...otherOrder, state: "requesting" as const}
@@ -49,12 +53,12 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
         },
       });
 
-      setQueuedOrders((orders) =>
+      setQueuedOrders((orders: QueuedOrder[]) =>
         orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
       );
       dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
     } catch (ex) {
-      setQueuedOrders((orders) =>
+      setQueuedOrders((orders: QueuedOrder[]) =>
         orders.map((otherOrder) => {
           return otherOrder.ordered_at === order.ordered_at
             ? {...otherOrder, fails: otherOrder.fails + 1, state: "queued" as const}
@@ -73,15 +77,17 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
 
     const orderedOrder = {...order, ordered_at: date.getTime()} as OrderedOrder;
 
-    setQueuedOrders((state) => [
-      {
-        ordered_at: orderedOrder.ordered_at,
-        order: orderedOrder,
-        fails: 0,
-        state: "queued" as const,
-      },
-      ...state,
-    ]);
+    setQueuedOrders((orders: QueuedOrder[]) => {
+      return [
+        {
+          ordered_at: orderedOrder.ordered_at,
+          order: orderedOrder,
+          fails: 0,
+          state: "queued" as const,
+        },
+        ...orders,
+      ];
+    });
 
     push("/");
 
@@ -94,7 +100,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     clearTimeout(orderTimeoutQueue[order.ordered_at]);
     delete orderTimeoutQueue[order.ordered_at];
 
-    setQueuedOrders((orders) =>
+    setQueuedOrders((orders: QueuedOrder[]) =>
       orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
     );
   };
