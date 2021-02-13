@@ -1,9 +1,9 @@
 import React from "react";
-import {QueuedOrder} from ".";
+import {QueuedOrder, OrderedOrder} from "App/QueuedOrdersContext";
 
 type Props = {
   orders: QueuedOrder[];
-  buy: (order: QueuedOrder["order"]) => void;
+  buy: (order: OrderedOrder) => void;
 };
 
 const RetryAll = ({orders, buy}: Props) => (

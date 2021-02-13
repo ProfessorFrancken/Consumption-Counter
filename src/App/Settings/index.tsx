@@ -2,25 +2,13 @@ import React from "react";
 import Authenticate from "./Authentication";
 import FailedOrder from "./FailedOrder";
 import RetryAll from "./RetryAll";
-import {Product} from "App/Products/OrdersContext";
-import {MemberType} from "App/Members/Members";
-import {useQueuedOrders} from "App/QueuedOrdersContext";
-
-export type QueuedOrder = {
-  order: {
-    products: Product[];
-    member: MemberType;
-    ordered_at: number;
-  };
-  fails: number;
-  state: string;
-};
+import {OrderedOrder, useQueuedOrders} from "App/QueuedOrdersContext";
 
 const QueuedOrders = () => {
   const {queuedOrders: orders, cancelOrder, buyOrder} = useQueuedOrders();
 
-  const cancel = (order: QueuedOrder["order"]) => cancelOrder(order);
-  const buy = (order: QueuedOrder["order"]) => buyOrder(order);
+  const cancel = (order: OrderedOrder) => cancelOrder(order);
+  const buy = (order: OrderedOrder) => buyOrder(order);
 
   return (
     <div className="mb-5 bg-light">

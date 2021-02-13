@@ -31,6 +31,7 @@ describe("<GoBack />", () => {
       queuedOrder: {
         ordered_at: 1,
         order: {
+          ordered_at: 1,
           member: {
             id: 1,
             firstName: "John",

@@ -8,7 +8,7 @@ import api from "api";
 import {useHistory} from "react-router";
 import useLocalStorage from "./useLocalStorage";
 
-type OrderedOrder = {
+export type OrderedOrder = {
   ordered_at: number;
   products: Product[];
   member: MemberType;
@@ -31,7 +31,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
 
   const dequeQueuedOrder = (order: OrderedOrder) => {
     setQueuedOrders((orders: QueuedOrder[]) =>
-      orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
+      orders.filter(({order: {ordered_at}}) => ordered_at !== order.ordered_at)
     );
   };
 
@@ -41,7 +41,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
 
     setQueuedOrders((orders: QueuedOrder[]) =>
       orders.map((otherOrder) => {
-        return otherOrder.ordered_at === order.ordered_at
+        return otherOrder.order.ordered_at === order.ordered_at
           ? {...otherOrder, state: "requesting" as const}
           : otherOrder;
       })
@@ -63,7 +63,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     } catch (ex) {
       setQueuedOrders((orders: QueuedOrder[]) =>
         orders.map((otherOrder) => {
-          return otherOrder.ordered_at === order.ordered_at
+          return otherOrder.order.ordered_at === order.ordered_at
             ? {...otherOrder, fails: otherOrder.fails + 1, state: "queued" as const}
             : otherOrder;
         })
@@ -143,7 +143,7 @@ export const QueuedOrdersProvider: React.FC<{
   const queuedOrder =
     maxBy(
       queuedOrders.filter(({state}) => state === "queued"),
-      (order) => order.ordered_at
+      (order) => order.order.ordered_at
     ) ?? null;
 
   return (

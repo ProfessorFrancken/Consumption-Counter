@@ -3,7 +3,7 @@ import Price from "./../Price";
 import {groupBy, map} from "lodash";
 import Moment from "react-moment";
 import {Product} from "App/Products/OrdersContext";
-import {QueuedOrder} from ".";
+import {QueuedOrder, OrderedOrder} from "App/QueuedOrdersContext";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Pick<Product, "id" | "name" | "price">[]) =>
@@ -20,8 +20,8 @@ const status = (order: QueuedOrder) =>
 
 type Props = {
   order: QueuedOrder;
-  buy: (order: QueuedOrder["order"]) => void;
-  cancel: (order: QueuedOrder["order"]) => void;
+  buy: (order: OrderedOrder) => void;
+  cancel: (order: OrderedOrder) => void;
 };
 const FailedOrder = ({order, buy, cancel}: Props) => (
   <tr>
