@@ -3,7 +3,7 @@ import {UseMutateFunction, useMutation} from "react-query";
 import AuthenticationForm from "./AuthenticationForm";
 import logo from "assets/logo.png";
 import api from "./../../../api";
-import {useLocalStorage} from "@rehooks/local-storage";
+import useLocalStorage from "App/useLocalStorage";
 
 type State = {
   request: boolean;
