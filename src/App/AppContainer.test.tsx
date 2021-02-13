@@ -6,14 +6,9 @@ import moxios from "moxios";
 import {render, fireEvent, act} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
-import {deleteFromStorage} from "@rehooks/local-storage";
-
-beforeEach(() => {
-  deleteFromStorage("plus_one_order_queue");
-});
 
 afterEach(() => {
-  deleteFromStorage("plus_one_order_queue");
+  localStorage.removeItem("plus_one_order_queue");
 });
 
 describe("Consumption Counter", () => {
@@ -58,7 +53,6 @@ describe("Consumption Counter", () => {
   afterEach(() => {
     moxios.uninstall();
     MockDate.reset();
-    deleteFromStorage("plus_one_order_queue");
   });
 
   const selectRangeIncludingJohnSnow = (app: any) => {
