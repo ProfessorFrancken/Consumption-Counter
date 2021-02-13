@@ -1,13 +1,9 @@
 import React from "react";
 import GoBack from ".";
 import {render, fireEvent} from "test-utils";
-import {deleteFromStorage} from "@rehooks/local-storage";
 
-beforeEach(() => {
-  deleteFromStorage("plus_one_order_queue");
-});
 afterEach(() => {
-  deleteFromStorage("plus_one_order_queue");
+  localStorage.removeItem("plus_one_order_queue");
 });
 
 describe("<GoBack />", () => {

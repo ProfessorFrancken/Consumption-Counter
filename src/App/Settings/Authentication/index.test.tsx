@@ -2,16 +2,17 @@ import React from "react";
 import Authentication from "./index";
 import moxios from "moxios";
 import {render, fireEvent} from "test-utils";
-import {deleteFromStorage} from "@rehooks/local-storage";
 
 describe("Authentication", () => {
   const base_api = process.env.REACT_APP_API_SERVER;
 
-  beforeEach(() => moxios.install());
+  beforeEach(() => {
+    moxios.install();
+    localStorage.removeItem("plus_one_authorization");
+  });
   afterEach(() => moxios.uninstall());
 
   it("Shows a warning that the system is not authenticated", () => {
-    deleteFromStorage("plus_one_authorization");
     const {getByRole, getByText} = render(<Authentication />, {
       storeState: {authentication: {token: null}},
     });
@@ -25,7 +26,6 @@ describe("Authentication", () => {
   });
 
   it("authenticates the plus one system", async () => {
-    deleteFromStorage("plus_one_authorization");
     const token =
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4";
 
