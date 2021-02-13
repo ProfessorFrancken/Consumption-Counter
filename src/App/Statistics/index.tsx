@@ -6,9 +6,11 @@ import moment from "moment";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import HeatMap from "./HeatMap";
 import PurchasesOfWeek from "./PurchasesOfWeek";
+import {OrderedOrder} from "App/QueuedOrdersContext";
+import {Product} from "App/Products/OrdersContext";
 
 // Show all products that were bought and the amount of times they were bought
-const listOfProducts = (products: any) =>
+const listOfProducts = (products: Product[]) =>
   map(
     groupBy(products, (product: any) => product.id),
     (product: any) =>
@@ -17,7 +19,7 @@ const listOfProducts = (products: any) =>
         : `${product[0].name} (${product.length}x)`
   ).join(", ");
 
-const ProductIcon = ({products}: any) => {
+const ProductIcon = ({products}: {products: Product[]}) => {
   if (products.length > 1) {
     return (
       <FontAwesomeIcon icon="shopping-cart" fixedWidth className="mr-2 text-muted" />
@@ -46,7 +48,7 @@ const ProductIcon = ({products}: any) => {
   }
 };
 
-const Transaction = ({order}: any) => (
+const Transaction = ({order}: {order: OrderedOrder}) => (
   <div className="recent-order d-flex justify-content-between">
     <div>
       <strong>
