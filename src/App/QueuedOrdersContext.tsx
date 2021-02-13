@@ -29,6 +29,12 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
   const dispatch = useDispatch();
   const {push} = useHistory();
 
+  const dequeQueuedOrder = (order: OrderedOrder) => {
+    setQueuedOrders((orders: QueuedOrder[]) =>
+      orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
+    );
+  };
+
   const buyOrder = async (order: OrderedOrder) => {
     const ordered_at = order.ordered_at;
     delete orderTimeoutQueue[ordered_at];
@@ -52,10 +58,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
           ordered_at,
         },
       });
-
-      setQueuedOrders((orders: QueuedOrder[]) =>
-        orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
-      );
+      dequeQueuedOrder(order);
       dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
     } catch (ex) {
       setQueuedOrders((orders: QueuedOrder[]) =>
@@ -99,10 +102,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
   const cancelOrder = (order: OrderedOrder) => {
     clearTimeout(orderTimeoutQueue[order.ordered_at]);
     delete orderTimeoutQueue[order.ordered_at];
-
-    setQueuedOrders((orders: QueuedOrder[]) =>
-      orders.filter(({ordered_at}) => ordered_at !== order.ordered_at)
-    );
+    dequeQueuedOrder(order);
   };
 
   return {
