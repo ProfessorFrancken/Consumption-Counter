@@ -47,11 +47,10 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
       })
     );
 
-    const member = order.member;
     try {
       await api.post("/orders", {
         order: {
-          member: pick(member, ["id", "firstName", "surname"]),
+          member: pick(order.member, ["id", "firstName", "surname"]),
           products: order.products.map((product) =>
             pick(product, ["id", "name", "price"])
           ),
