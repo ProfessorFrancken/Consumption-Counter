@@ -13,8 +13,8 @@ export type OrderedOrder = {
   products: Product[];
   member: MemberType;
 };
+
 export type QueuedOrder = {
-  ordered_at: number;
   order: OrderedOrder;
   fails: number;
   state: "queued" | "requesting";
@@ -52,7 +52,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
       await api.post("/orders", {
         order: {
           member: pick(member, ["id", "firstName", "surname"]),
-          products: order.products.map((product: any) =>
+          products: order.products.map((product) =>
             pick(product, ["id", "name", "price"])
           ),
           ordered_at,
@@ -71,31 +71,23 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     }
   };
 
-  const makeOrder = (order: Order) => {
+  const makeOrder = ({member, products}: Order) => {
     const date = new Date();
 
-    if (order.member === undefined) {
+    if (member === undefined) {
       throw new Error("Can't make an order without a member");
     }
 
-    const orderedOrder = {...order, ordered_at: date.getTime()} as OrderedOrder;
+    const order = {member, products, ordered_at: date.getTime()};
 
     setQueuedOrders((orders: QueuedOrder[]) => {
-      return [
-        {
-          ordered_at: orderedOrder.ordered_at,
-          order: orderedOrder,
-          fails: 0,
-          state: "queued" as const,
-        },
-        ...orders,
-      ];
+      return [{order, fails: 0, state: "queued" as const}, ...orders];
     });
 
     push("/");
 
-    orderTimeoutQueue[orderedOrder.ordered_at] = setTimeout(() => {
-      buyOrder(orderedOrder);
+    orderTimeoutQueue[order.ordered_at] = setTimeout(() => {
+      buyOrder(order);
     }, TIME_TO_CANCEL);
   };
 
@@ -143,7 +135,7 @@ export const QueuedOrdersProvider: React.FC<{
   const queuedOrder =
     maxBy(
       queuedOrders.filter(({state}) => state === "queued"),
-      (order) => order.order.ordered_at
+      ({order}) => order.ordered_at
     ) ?? null;
 
   return (
