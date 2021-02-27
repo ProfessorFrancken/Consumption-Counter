@@ -2,16 +2,17 @@ import React from "react";
 import {MemberType} from "App/Members/Members";
 import {take, uniqBy} from "lodash";
 import {useMembers} from "App/Members/Context";
-import {TYPES} from "actions";
-import {useSelector} from "react-redux";
+import {AppEvent, BUY_ORDER_SUCCESS_EVENT} from "actions";
 import {OrderedOrder} from "App/QueuedOrdersContext";
+import {useBusReducer} from "ts-bus/react";
 
 const RECENT_MEBMERS = 6 * 5;
-export function recentBuyers(state = [], action: any) {
-  switch (action.type) {
-    case TYPES.BUY_ORDER_SUCCESS:
+
+function recentBuyersReducer(state: number[], event: AppEvent) {
+  switch (event.type) {
+    case BUY_ORDER_SUCCESS_EVENT.toString():
       return take(
-        uniqBy([action.order.member.id, ...state], (member: any) => member),
+        uniqBy([event.payload.order.member.id, ...state], (member: any) => member),
         RECENT_MEBMERS
       );
     default:
@@ -21,13 +22,10 @@ export function recentBuyers(state = [], action: any) {
 
 const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
 type RecentBuyerId = number;
-export function transactions(state = [], action: any) {
-  switch (action.type) {
-    case TYPES.BUY_ORDER_SUCCESS:
-      return take(
-        [{member: action.member, order: action.order}, ...state],
-        KEEP_TRACK_OF_N_TRANSCACTIONS
-      );
+function transactionsReducer(state: OrderedOrder[] = [], event: AppEvent) {
+  switch (event.type) {
+    case BUY_ORDER_SUCCESS_EVENT.toString():
+      return take([event.payload.order, ...state], KEEP_TRACK_OF_N_TRANSCACTIONS);
     default:
       return state;
   }
@@ -35,12 +33,12 @@ export function transactions(state = [], action: any) {
 
 type State = {
   transactions: OrderedOrder[];
-  recentBuyers: RecentBuyerId;
+  recentBuyers: RecentBuyerId[];
 };
 const TransactionsContext = React.createContext<State | undefined>(undefined);
 export const TransactionsProvider: React.FC = ({children, ...props}) => {
-  const transactions = useSelector((state: any) => state.transactions);
-  const recentBuyers = useSelector((state: any) => state.recentBuyers);
+  const transactions = useBusReducer(transactionsReducer, []);
+  const recentBuyers = useBusReducer(recentBuyersReducer, []);
 
   return (
     <TransactionsContext.Provider
@@ -66,12 +64,14 @@ export const useTransactions = () => {
 };
 
 export function useRecentBuyers() {
-  const recent = useSelector((state: any) => state.recentBuyers);
+  const {recentBuyers} = useTransactions();
   const {members} = useMembers();
   return (
-    recent
+    recentBuyers
       .map((recent: number) => members.find((member: MemberType) => member.id === recent))
       // exclude members that couldn't be found (for instance guests)
-      .filter((member: MemberType | undefined) => member !== undefined)
+      .filter(
+        (member: MemberType | undefined): member is MemberType => member !== undefined
+      )
   );
 }

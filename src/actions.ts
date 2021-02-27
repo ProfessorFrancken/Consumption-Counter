@@ -2,10 +2,6 @@ import {OrderedOrder} from "App/QueuedOrdersContext";
 import {Statistic} from "App/Statistics/StatisticsContext";
 import {createEventDefinition} from "ts-bus/EventBus";
 
-export const TYPES = {
-  BUY_ORDER_SUCCESS: "BUY_ORDER_SUCCESS",
-};
-
 export const FETCH_STATISTICS_EVENT = createEventDefinition<{
   statistics: Statistic[];
 }>()("FETCH_STATISTICS_SUCCESS");

@@ -7,9 +7,9 @@ import HeatMap from "./HeatMap";
 import PurchasesOfWeek from "./PurchasesOfWeek";
 import {OrderedOrder} from "App/QueuedOrdersContext";
 import {Product} from "App/Products/OrdersContext";
-import {useActivities} from "App/Activities/ActivitiesContext";
+import {Activity, useActivities} from "App/Activities/ActivitiesContext";
 import {useTransactions} from "App/Transactions/TransactionsContext";
-import {useStatistics} from "./StatisticsContext";
+import {Statistic, useStatistics} from "./StatisticsContext";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -69,26 +69,33 @@ const Transaction = ({order}: {order: OrderedOrder}) => (
   </div>
 );
 
-const Transactions = ({transactions}: any) => {
+const Transactions = ({transactions}: {transactions: OrderedOrder[]}) => {
   return (
     <ul
       className="list-unstyled recent-orders"
       style={{columnCount: 2, paddingLeft: 0, fontSize: "0.95em"}}
     >
-      {transactions.map((transaction: any, idx: any) => (
+      {transactions.map((transaction: OrderedOrder, idx: any) => (
         <li key={idx} className="py-2">
-          <Transaction {...transaction} />
+          <Transaction order={transaction} />
         </li>
       ))}
     </ul>
   );
 };
 
-const Statistics = ({statistics = [], activities = [], transactions}: any) => {
+const Statistics = ({
+  statistics = [],
+  activities = [],
+  transactions,
+}: {
+  statistics: Statistic[];
+  activities: Activity[];
+  transactions: OrderedOrder[];
+}) => {
   const today = moment();
   const todayFormat = today.format("YYYY-MM-DD");
   const purchasesToday = statistics.find(
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'statistic' implicitly has an 'any' type... Remove this comment to see the full error message
     (statistic) => moment(statistic.date).format("YYYY-MM-DD") === todayFormat
   ) || {total: 0, beer: 0, soda: 0, food: 0};
 
@@ -107,7 +114,6 @@ const Statistics = ({statistics = [], activities = [], transactions}: any) => {
     soda: 0,
     food: 0,
     ...statistics.find(
-      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'statistic' implicitly has an 'any' type... Remove this comment to see the full error message
       (statistic) =>
         moment(statistic.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
     ),

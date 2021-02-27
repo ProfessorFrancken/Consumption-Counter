@@ -1,6 +1,12 @@
+import {Activity} from "App/Activities/ActivitiesContext";
 import React from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
-const HeatMap = ({statistics = [], activities = []}) => {
+import {Statistic} from "./StatisticsContext";
+
+const HeatMap: React.FC<{
+  statistics: Statistic[];
+  activities: Activity[];
+}> = ({statistics = [], activities = []}) => {
   if (statistics.length === 0) {
     return null;
   }
@@ -111,4 +117,5 @@ const HeatMap = ({statistics = [], activities = []}) => {
     />
   );
 };
+
 export default HeatMap;
