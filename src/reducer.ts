@@ -1,2 +1,2 @@
-export {recentBuyers} from "App/Recent/reducers";
-export {transactions, statistics} from "App/Statistics/StatisticsContext";
+export {transactions, recentBuyers} from "App/Transactions/TransactionsContext";
+export {statistics} from "App/Statistics/StatisticsContext";

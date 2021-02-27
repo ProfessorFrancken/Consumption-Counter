@@ -1,6 +1,5 @@
 import {combineReducers} from "redux";
 import {connectRouter} from "connected-react-router";
-
 import {transactions, recentBuyers, statistics} from "../reducer";
 
 const makeApplicationReducer = (history: any) => {

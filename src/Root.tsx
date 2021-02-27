@@ -15,6 +15,7 @@ import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
+import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 
 type Props = {
   store: any;
@@ -54,7 +55,9 @@ export const ApplicationProviders: React.FC = ({children}) => {
               <BoardsProvider>
                 <OrderProvider>
                   <ActivitiesProvider>
-                    <StatisticsProvider>{children}</StatisticsProvider>
+                    <StatisticsProvider>
+                      <TransactionsProvider>{children}</TransactionsProvider>
+                    </StatisticsProvider>
                   </ActivitiesProvider>
                 </OrderProvider>
               </BoardsProvider>

@@ -3,21 +3,8 @@ import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import moment from "moment";
 import {TYPES} from "actions";
-import {take} from "lodash";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
-export function transactions(state = [], action: any) {
-  switch (action.type) {
-    case TYPES.BUY_ORDER_SUCCESS:
-      return take(
-        [{member: action.member, order: action.order}, ...state],
-        KEEP_TRACK_OF_N_TRANSCACTIONS
-      );
-    default:
-      return state;
-  }
-}
 export function statistics(state = [], action: any) {
   switch (action.type) {
     case TYPES.FETCH_STATISTICS_SUCCESS:
@@ -111,7 +98,7 @@ export const StatisticsProvider: React.FC<{statistics?: Statistic[]}> = ({
   ...props
 }) => {
   const statisticsQuery = useFetchStatistics(defaultStatistics);
-  const statistics: Statistic[] = defaultStatistics ?? statisticsQuery.data ?? [];
+  const statistics = useSelector((state: any) => state.statistics);
 
   return (
     <StatisticsContext.Provider
