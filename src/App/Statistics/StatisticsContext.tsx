@@ -2,33 +2,32 @@ import React from "react";
 import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import moment from "moment";
-import {FETCH_STATISTICS_EVENT, TYPES} from "actions";
-import {useSelector} from "react-redux";
-import {useBus} from "ts-bus/react";
+import {AppEvent, FETCH_STATISTICS_EVENT, BUY_ORDER_SUCCESS_EVENT} from "actions";
+import {useBus, useBusReducer} from "ts-bus/react";
 
-export function statistics(state = [], action: any) {
-  switch (action.type) {
-    case TYPES.FETCH_STATISTICS_SUCCESS:
-      return action.statistics;
-    case TYPES.BUY_ORDER_SUCCESS:
-      const ordered_at = new Date(action.order.ordered_at);
+export function statisticsReducer(state: Statistic[], event: AppEvent) {
+  switch (event.type) {
+    case FETCH_STATISTICS_EVENT.toString():
+      return event.payload.statistics;
+    case BUY_ORDER_SUCCESS_EVENT.toString():
+      const ordered_at = new Date(event.payload.order.ordered_at);
       ordered_at.setSeconds(0);
       ordered_at.setMinutes(0);
       ordered_at.setHours(0);
       return state.map((statistic) => {
         if ((statistic as any).date === moment(ordered_at).format("YYYY-MM-DD")) {
-          const beers = action.order.products.filter(
+          const beers = event.payload.order.products.filter(
             (product: any) => product.category === "Bier"
           ).length;
-          const soda = action.order.products.filter(
+          const soda = event.payload.order.products.filter(
             (product: any) => product.category === "Fris"
           ).length;
-          const food = action.order.products.filter(
+          const food = event.payload.order.products.filter(
             (product: any) => product.category === "Eten"
           ).length;
           return {
             date: (statistic as any).date,
-            total: (statistic as any).total + action.order.products.length,
+            total: (statistic as any).total + event.payload.order.products.length,
             beer: (statistic as any).beer + beers,
             soda: (statistic as any).soda + soda,
             food: (statistic as any).food + food,
@@ -96,7 +95,7 @@ export const StatisticsProvider: React.FC<{statistics?: Statistic[]}> = ({
   ...props
 }) => {
   const statisticsQuery = useFetchStatistics(defaultStatistics);
-  const statistics = useSelector((state: any) => state.statistics);
+  const statistics = useBusReducer(statisticsReducer, []);
 
   return (
     <StatisticsContext.Provider

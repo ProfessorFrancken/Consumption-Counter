@@ -1,4 +1,4 @@
-import {transactions, recentBuyers, statistics} from "./reducer";
+import {transactions, recentBuyers} from "./reducer";
 import {TYPES} from "./actions";
 import expect from "expect";
 
@@ -102,47 +102,5 @@ describe("a list of members who recently made an order", () => {
         order: {products: [], member: {id: 33}, orderd_at: 1},
       })
     ).toEqual([33, 1]);
-  });
-});
-
-describe("statistics", () => {
-  it("fetches statistics", () => {
-    expect(
-      statistics(undefined, {
-        type: TYPES.FETCH_STATISTICS_SUCCESS,
-        statistics: [{date: new Date("2018-06-01"), total: 1, beer: 1, soda: 1, food: 1}],
-      })
-    ).toEqual([{date: new Date("2018-06-01"), total: 1, beer: 1, soda: 1, food: 1}]);
-  });
-
-  it("records statistics after a product is purchased", () => {
-    const orderAction = {
-      type: "BUY_ORDER_SUCCESS",
-      order: {
-        member: {id: 1},
-        products: [
-          {id: 3, category: "Bier"},
-          {id: 4, category: "Fris"},
-          {id: 4, category: "Fris"},
-          {id: 5, category: "Eten"},
-        ],
-        ordered_at: new Date("2018-06-01T18:00:00").getTime(),
-      },
-    };
-
-    expect(
-      statistics(
-        [
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'never'.
-          {date: "2018-05-01", total: 1, beer: 1, soda: 0, food: 0},
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'never'.
-          {date: "2018-06-01", total: 3, beer: 1, soda: 1, food: 1},
-        ],
-        orderAction
-      )
-    ).toEqual([
-      {date: "2018-05-01", total: 1, beer: 1, soda: 0, food: 0},
-      {date: "2018-06-01", total: 7, beer: 2, soda: 3, food: 2},
-    ]);
   });
 });
