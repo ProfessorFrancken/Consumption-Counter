@@ -1,20 +1,29 @@
 import React from "react";
 import OnLongPress from "./OnLongPress";
+import {AvailableProduct} from "./OrdersContext";
 
-const AmountBeingOrdered = ({product}: any) =>
+const AmountBeingOrdered = ({product}: {product: AvailableProduct}) =>
   product.ordered > 0 ? (
     <div className="productAmountOverlay">
       <div className="productAmount">
         <span aria-label="amount ordered">{product.ordered}</span>
       </div>
     </div>
-  ) : (
-    ""
-  );
+  ) : null;
 
 const ProductName = ({product}: any) => <span>{product.name}</span>;
 
-const Product = ({product, onLongPress, onClick, locked}: any) => (
+const Product = ({
+  product,
+  onLongPress,
+  onClick,
+  locked,
+}: {
+  product: AvailableProduct;
+  onClick: (product: AvailableProduct) => void;
+  onLongPress: (product: AvailableProduct) => void;
+  locked: boolean;
+}) => (
   <OnLongPress onClick={onClick} onLongPress={onLongPress}>
     <button
       aria-label={`Buy ${product.name}`}
@@ -26,7 +35,6 @@ const Product = ({product, onLongPress, onClick, locked}: any) => (
       }}
       disabled={locked}
     >
-      {/* @ts-expect-error ts-migrate(2786) FIXME: 'AmountBeingOrdered' cannot be used as a JSX compo... Remove this comment to see the full error message */}
       <AmountBeingOrdered product={product} />
       {product.ordered === 0 && <ProductName product={product} />}
     </button>

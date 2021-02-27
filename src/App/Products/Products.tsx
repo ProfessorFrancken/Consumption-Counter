@@ -1,36 +1,40 @@
 import React from "react";
-import {Product as ProductType} from "./OrdersContext";
+import {AvailableProduct} from "./OrdersContext";
 import Product from "./Product";
 
-const Category = ({products, onClick, onLongPress, name, locked}: any) => (
+const Category = ({
+  products,
+  onClick,
+  onLongPress,
+  name,
+}: {
+  products: AvailableProduct[];
+  onClick: (product: AvailableProduct) => void;
+  onLongPress: (product: AvailableProduct) => void;
+  name: string;
+}) => (
   <nav className={"categoryRow"} aria-label={`${name} category`}>
-    {products.map((product: any) => (
+    {products.map((product) => (
       <Product
         key={product.id}
         product={product}
         onClick={() => onClick(product)}
         onLongPress={() => onLongPress(product)}
-        locked={product.locked || locked}
+        locked={product.locked}
       />
     ))}
   </nav>
 );
 
-export type ProductPropType = {
-  id: number;
-  name: string;
-  image: string;
-};
-
 export type ProductsType = {
-  Bier: ProductPropType[];
-  Fris: ProductPropType[];
-  Eten: ProductPropType[];
+  Bier: AvailableProduct[];
+  Fris: AvailableProduct[];
+  Eten: AvailableProduct[];
 };
 type ProductsProps = {
   products: ProductsType;
-  addProductToOrder: (product: ProductType) => any;
-  addProductToOrderOrMakeOrder: (product: ProductType) => any;
+  addProductToOrder: (product: AvailableProduct) => void;
+  addProductToOrderOrMakeOrder: (product: AvailableProduct) => void;
 };
 
 const Products = ({
@@ -50,7 +54,6 @@ const Products = ({
           onClick={addProductToOrderOrMakeOrder}
           onLongPress={addProductToOrder}
           products={beer}
-          locked={false}
         />
       )}
       {soda.length > 0 && (

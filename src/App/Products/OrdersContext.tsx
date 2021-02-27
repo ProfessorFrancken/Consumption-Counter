@@ -16,7 +16,7 @@ export type Product = {
   age_restriction: number | null;
 };
 
-type AvailableProduct = Product & {
+export type AvailableProduct = Product & {
   locked: boolean;
   ordered: number;
 };
