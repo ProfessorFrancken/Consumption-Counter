@@ -6,12 +6,6 @@ export const LOADING_STATE = {
   FAILURE: "FAILURE",
 };
 
-const updateFeatureState = (features: any, label: any, state: any) =>
-  features.map((feature: any) => ({
-    ...feature,
-    loading: feature.label === label ? state : feature.loading,
-  }));
-
 export function loading(
   state = {loading: undefined, features: [], done: false},
   action: any
@@ -22,16 +16,6 @@ export function loading(
         state: LOADING_STATE.REQUESTING,
         features: [{loading: LOADING_STATE.REQUESTING, label: "Statistics"}],
         done: false,
-      };
-    case TYPES.FETCH_STATISTICS_SUCCESS:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Statistics", LOADING_STATE.SUCCESS),
-      };
-    case TYPES.FETCH_STATISTICS_FAILURE:
-      return {
-        ...state,
-        features: updateFeatureState(state.features, "Statistics", LOADING_STATE.FAILURE),
       };
     case TYPES.LOAD_APPLICATION_SUCCESS:
       return {

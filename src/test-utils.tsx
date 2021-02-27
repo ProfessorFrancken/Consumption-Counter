@@ -19,6 +19,7 @@ import {defaultBoardMembers} from "App/MockedState";
 import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
+import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -36,6 +37,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     queuedOrder = null,
     queuedOrders = [],
     activities = [],
+    statistics = [],
     ...state
   } = storeState;
   const store = create({...mockedState(), ...state});
@@ -56,7 +58,9 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
                 <BoardsProvider boardMembers={boardMembers}>
                   <OrderProvider order={order}>
                     <ActivitiesProvider activities={activities}>
-                      {children}
+                      <StatisticsProvider statistics={statistics}>
+                        {children}
+                      </StatisticsProvider>
                     </ActivitiesProvider>
                   </OrderProvider>
                 </BoardsProvider>
