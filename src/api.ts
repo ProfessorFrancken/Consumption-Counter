@@ -1,7 +1,24 @@
-import {authHeader} from "./Setup/authHeader";
 import axios from "axios";
 
 const api = process.env.REACT_APP_API_SERVER;
+
+function authHeader() {
+  // return authorization header with jwt token
+  const encoded_token = localStorage.getItem("plus_one_authorization");
+
+  if (encoded_token === undefined) {
+    return {};
+  }
+
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
+  let token = JSON.parse(encoded_token);
+
+  if (token) {
+    return {Authorization: "Bearer " + token.token};
+  } else {
+    return {};
+  }
+}
 
 function get(uri: string, params?: any) {
   const requestOptions = {
