@@ -7,9 +7,8 @@ import {
   defaultMembers,
   defaultOrder,
   defaultProducts,
-  mockedState,
 } from "App/MockedState";
-import {create, history} from "./Setup/store";
+import {history} from "Root";
 import {InfrastructureProviders} from "Root";
 import {OrderProvider, Product} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
@@ -40,10 +39,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     queuedOrders = [],
     activities = [],
     statistics = [],
-    ...state
   } = storeState;
-  const store = create({...mockedState(), ...state});
-
   (routes || []).forEach((route) => history.push(route));
 
   const products = Object.values(productsByCategory).flatMap(
@@ -60,7 +56,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   });
 
   return (
-    <InfrastructureProviders store={store} queryClient={queryClient}>
+    <InfrastructureProviders queryClient={queryClient}>
       <AuthenticationProvider {...authentication}>
         <QueuedOrdersProvider
           queuedOrder={queuedOrder ?? undefined}

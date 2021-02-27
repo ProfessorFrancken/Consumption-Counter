@@ -2,7 +2,6 @@ import * as React from "react";
 import {render} from "@testing-library/react";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
-import {create} from "./../../Setup/store";
 import {useMembers, MembersProvider} from "App/Members/Context";
 import moment from "moment";
 
@@ -68,7 +67,7 @@ describe("Member context", () => {
     });
 
     const {findByText} = render(
-      <InfrastructureProviders store={create()}>
+      <InfrastructureProviders>
         <MembersProvider>
           <SelectMember />
         </MembersProvider>

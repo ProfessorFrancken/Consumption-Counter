@@ -2,7 +2,6 @@ import * as React from "react";
 import {render} from "@testing-library/react";
 import {useStatistics, statisticsReducer, StatisticsProvider} from "./StatisticsContext";
 import moxios from "moxios";
-import {create} from "./../../Setup/store";
 import {InfrastructureProviders} from "Root";
 // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
@@ -42,7 +41,7 @@ describe("Statistics context", () => {
     );
 
     const {findByText} = render(
-      <InfrastructureProviders store={create()}>
+      <InfrastructureProviders>
         <StatisticsProvider>
           <SelectStatistic />
         </StatisticsProvider>

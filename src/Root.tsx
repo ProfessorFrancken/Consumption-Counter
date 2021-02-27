@@ -1,8 +1,6 @@
 import React from "react";
-import {Provider} from "react-redux";
 import {Router} from "react-router-dom";
 import AppContainer from "./App/AppContainer";
-import {history} from "./Setup/store";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {ReactQueryDevtools} from "react-query/devtools";
 import {QueryClient, QueryClientProvider} from "react-query";
@@ -18,31 +16,27 @@ import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 import {BusProvider} from "ts-bus/react";
 import {EventBus} from "ts-bus/EventBus";
+import {createBrowserHistory} from "history";
+
+const basename = process.env.REACT_APP_ROUTER_BASENAME || "";
+export const history = createBrowserHistory({basename});
 
 type Props = {
-  store: any;
   queryClient?: QueryClient;
   bus?: EventBus;
 };
 
 export const InfrastructureProviders: React.FC<Props> = ({
   children,
-  store,
   queryClient = new QueryClient(),
   bus = new EventBus(),
 }) => {
-  bus.subscribe("*", (event) => {
-    store.dispatch({type: event.type, ...event.payload});
-  });
-
   return (
-    <Provider store={store}>
-      <BusProvider value={bus}>
-        <Router history={history}>
-          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-        </Router>
-      </BusProvider>
-    </Provider>
+    <BusProvider value={bus}>
+      <Router history={history}>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </Router>
+    </BusProvider>
   );
 };
 
@@ -79,8 +73,8 @@ export const ApplicationProviders: React.FC = ({children}) => {
   );
 };
 
-const Root = ({store}: Props) => (
-  <InfrastructureProviders store={store}>
+const Root = () => (
+  <InfrastructureProviders>
     <DevelopMentProviders>
       <ApplicationProviders>
         <AppContainer />

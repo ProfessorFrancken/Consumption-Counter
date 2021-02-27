@@ -3,7 +3,6 @@ import {render} from "@testing-library/react";
 import {useProducts, ProductsProvider} from "./ProductsContext";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
-import {create} from "./../../Setup/store";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
@@ -32,7 +31,7 @@ describe("Product context", () => {
     });
 
     const {findByText} = render(
-      <InfrastructureProviders store={create()}>
+      <InfrastructureProviders>
         <ProductsProvider>
           <SelectProduct />
         </ProductsProvider>
