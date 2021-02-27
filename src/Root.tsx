@@ -18,10 +18,9 @@ import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 import {BusProvider} from "ts-bus/react";
 import {EventBus} from "ts-bus/EventBus";
-import {Store} from "redux";
 
 type Props = {
-  store: Store;
+  store: any;
   queryClient?: QueryClient;
   bus?: EventBus;
 };

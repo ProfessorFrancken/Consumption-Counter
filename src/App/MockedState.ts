@@ -3,8 +3,6 @@ export function mockedState() {
     router: {
       locationBeforeTransitions: null,
     },
-    transactions: [],
-    recentBuyers: [],
   };
 }
 
