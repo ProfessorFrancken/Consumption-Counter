@@ -2,8 +2,9 @@ import React from "react";
 import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
 import moment from "moment";
-import {TYPES} from "actions";
-import {useDispatch, useSelector} from "react-redux";
+import {FETCH_STATISTICS_EVENT, TYPES} from "actions";
+import {useSelector} from "react-redux";
+import {useBus} from "ts-bus/react";
 
 export function statistics(state = [], action: any) {
   switch (action.type) {
@@ -49,7 +50,7 @@ export type Statistic = {
 };
 
 const useFetchStatistics = (statistics?: Statistic[]) => {
-  const dispatch = useDispatch();
+  const bus = useBus();
 
   return useQuery<Statistic[]>({
     queryKey: ["statistics"],
@@ -79,10 +80,7 @@ const useFetchStatistics = (statistics?: Statistic[]) => {
     enabled: statistics === undefined,
     initialData: statistics,
     onSuccess: (statistics) => {
-      dispatch({
-        type: TYPES.FETCH_STATISTICS_SUCCESS,
-        statistics,
-      });
+      bus.publish(FETCH_STATISTICS_EVENT({statistics}));
     },
   });
 };
