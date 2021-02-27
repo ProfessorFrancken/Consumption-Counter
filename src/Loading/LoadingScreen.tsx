@@ -10,6 +10,7 @@ import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";
 import {useActivities} from "App/Activities/ActivitiesContext";
+import {useStatistics} from "App/Statistics/StatisticsContext";
 
 type Feature = {
   query:
@@ -54,6 +55,7 @@ const LoadingScreen = () => {
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
   const {activitiesQuery} = useActivities();
+  const {statisticsQuery} = useStatistics();
 
   return (
     <div
@@ -81,6 +83,7 @@ const LoadingScreen = () => {
           <LoadFeatureListItem feature={{label: "Committees", query: committeesQuery}} />
           <LoadFeatureListItem feature={{label: "Boards", query: boardsQuery}} />
           <LoadFeatureListItem feature={{label: "Activities", query: activitiesQuery}} />
+          <LoadFeatureListItem feature={{label: "Statistics", query: statisticsQuery}} />
         </ul>
         {state === LOADING_STATE.SUCCESS && productsQuery.isSuccess ? (
           <NavLink exact to="/" className="tile button p-4">

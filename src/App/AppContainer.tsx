@@ -7,12 +7,13 @@ import {useCommittees} from "./Committees/CommitteesContext";
 import {useBoards} from "./Prominent/BoardsContext";
 import {useMembers} from "./Members/Context";
 import {useBackgroundFromOrder, useFailedOrders} from "./QueuedOrdersContext";
+import {useStatistics} from "./Statistics/StatisticsContext";
 
 const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
   const {membersQuery} = useMembers();
-  const menuItems = useSelector((state: any) => state.menuItems);
+  const {statisticsQuery} = useStatistics();
 
   return [
     {
@@ -27,12 +28,29 @@ const useMenuItems = () => {
       loading: membersQuery.isLoading,
       label: "Home",
     },
-    ...menuItems,
+    {
+      icon: "clock",
+      url: "/recent",
+      loading: false,
+      label: "Recent",
+    },
     {
       icon: "users",
       url: "/committees",
       loading: committeesQuery.isLoading,
       label: "Committees",
+    },
+    {
+      icon: "chart-bar",
+      url: "/statistics",
+      loading: statisticsQuery.isLoading,
+      label: "Statistics",
+    },
+    {
+      icon: "map-marker-alt",
+      url: "/present",
+      loading: false,
+      label: "Present",
     },
   ];
 };
