@@ -21,6 +21,7 @@ import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient, setLogger} from "react-query";
+import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -72,7 +73,7 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
                   <OrderProvider order={order ?? undefined}>
                     <ActivitiesProvider activities={activities ?? undefined}>
                       <StatisticsProvider statistics={statistics ?? undefined}>
-                        {children}
+                        <TransactionsProvider>{children}</TransactionsProvider>
                       </StatisticsProvider>
                     </ActivitiesProvider>
                   </OrderProvider>

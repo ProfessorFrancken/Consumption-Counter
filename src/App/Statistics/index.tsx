@@ -1,5 +1,4 @@
 import React from "react";
-import {useSelector} from "react-redux";
 import {groupBy, map} from "lodash";
 import Price from "./../Price";
 import moment from "moment";
@@ -9,6 +8,8 @@ import PurchasesOfWeek from "./PurchasesOfWeek";
 import {OrderedOrder} from "App/QueuedOrdersContext";
 import {Product} from "App/Products/OrdersContext";
 import {useActivities} from "App/Activities/ActivitiesContext";
+import {useTransactions} from "App/Transactions/TransactionsContext";
+import {useStatistics} from "./StatisticsContext";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -163,9 +164,9 @@ const Statistics = ({statistics = [], activities = [], transactions}: any) => {
 };
 
 const StatisticsSreen = () => {
-  const statistics = useSelector((state: any) => state.statistics);
   const {activities} = useActivities();
-  const transactions = useSelector((state: any) => state.transactions);
+  const {statistics} = useStatistics();
+  const {transactions} = useTransactions();
 
   return (
     <Statistics
