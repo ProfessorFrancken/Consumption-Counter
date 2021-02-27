@@ -2,7 +2,7 @@ import React from "react";
 import {render, fireEvent} from "test-utils";
 import CompucieScreen from "./index";
 import moxios from "moxios";
-import {history} from "./../../../Setup/store";
+import {history} from "Root";
 
 describe("Compucie screen", () => {
   beforeEach(() => {

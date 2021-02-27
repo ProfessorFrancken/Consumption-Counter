@@ -3,7 +3,6 @@ import {render} from "@testing-library/react";
 import {useCommittees, CommitteesProvider} from "./CommitteesContext";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
-import {create} from "./../../Setup/store";
 import {MembersProvider} from "App/Members/Context";
 
 describe("Committee context", () => {
@@ -33,7 +32,7 @@ describe("Committee context", () => {
     });
 
     const {findByText} = render(
-      <InfrastructureProviders store={create()}>
+      <InfrastructureProviders>
         <MembersProvider
           members={[
             {

@@ -1,6 +1,6 @@
 import React from "react";
 import AppContainer from "./AppContainer";
-import {history} from "./../Setup/store";
+import {history} from "Root";
 import MockDate from "mockdate";
 import moxios from "moxios";
 import {render, fireEvent, act} from "test-utils";

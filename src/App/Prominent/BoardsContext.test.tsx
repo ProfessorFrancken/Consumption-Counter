@@ -3,7 +3,6 @@ import {render} from "@testing-library/react";
 import {useBoards, BoardsProvider} from "./BoardsContext";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
-import {create} from "./../../Setup/store";
 import {MembersProvider} from "App/Members/Context";
 
 describe("Board context", () => {
@@ -35,7 +34,7 @@ describe("Board context", () => {
     });
 
     const {findByText} = render(
-      <InfrastructureProviders store={create()}>
+      <InfrastructureProviders>
         <MembersProvider
           members={[
             {
