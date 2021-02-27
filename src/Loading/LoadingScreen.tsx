@@ -57,6 +57,15 @@ const LoadingScreen = () => {
   const {activitiesQuery} = useActivities();
   const {statisticsQuery} = useStatistics();
 
+  const applicationIsLoaded =
+    state === LOADING_STATE.SUCCESS &&
+    productsQuery.isSuccess &&
+    membersQuery.isSuccess &&
+    committeesQuery.isSuccess &&
+    boardsQuery.isSuccess &&
+    activitiesQuery.isSuccess &&
+    statisticsQuery.isSuccess;
+
   return (
     <div
       className="h-100 d-flex justify-content-center align-items-center"
@@ -85,19 +94,18 @@ const LoadingScreen = () => {
           <LoadFeatureListItem feature={{label: "Activities", query: activitiesQuery}} />
           <LoadFeatureListItem feature={{label: "Statistics", query: statisticsQuery}} />
         </ul>
-        {state === LOADING_STATE.SUCCESS && productsQuery.isSuccess ? (
+        {applicationIsLoaded ? (
           <NavLink exact to="/" className="tile button p-4">
             Open application
           </NavLink>
-        ) : null}
-        {state === LOADING_STATE.REQUESTING && !productsQuery.isSuccess ? (
+        ) : (
           <button
             className="d-block text-center w-100 bg-secondary tile button p-4"
             disabled
           >
             Loading...
           </button>
-        ) : null}
+        )}
       </div>
     </div>
   );
