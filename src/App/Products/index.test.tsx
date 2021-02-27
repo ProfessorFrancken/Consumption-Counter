@@ -3,7 +3,6 @@ import AvailableProducts from "./index";
 import {render, fireEvent} from "test-utils";
 import {useOrder} from "./OrdersContext";
 import {MemberType} from "App/Members/Members";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
 import ProductsScreen from "./index";
 

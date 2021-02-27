@@ -3,7 +3,6 @@ import {render} from "@testing-library/react";
 import {useStatistics, statisticsReducer, StatisticsProvider} from "./StatisticsContext";
 import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
 import {BUY_ORDER_SUCCESS_EVENT, FETCH_STATISTICS_EVENT} from "actions";
 

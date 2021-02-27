@@ -1,6 +1,5 @@
 // @ts-expect-error ts-migrate(2305) FIXME: Module '"miragejs"' has no exported member 'trait'... Remove this comment to see the full error message
 import {Factory, trait} from "miragejs";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'fake... Remove this comment to see the full error message
 import faker from "faker";
 import moment from "moment";
 
@@ -36,15 +35,15 @@ export const MemberFactory = Factory.extend({
   geboortedatum(i: any) {
     const birthdate =
       i % 5 === 0
-        ? faker.date.past(2, moment().subtract(15, "years"))
-        : faker.date.past(10, moment().subtract(18, "years"));
+        ? faker.date.past(2, moment().subtract(15, "years").toDate())
+        : faker.date.past(10, moment().subtract(18, "years").toDate());
 
     return moment(birthdate).format("YYYY-MM-DD");
   },
 
   minor: trait({
     birthdate() {
-      const birthdate = faker.date.past(2, moment().subtract(15, "years"));
+      const birthdate = faker.date.past(2, moment().subtract(15, "years").toDate());
 
       return moment(birthdate).format("YYYY-MM-DD");
     },
