@@ -20,6 +20,7 @@ import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
+import {QueryClient, setLogger} from "react-query";
 
 const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
   children,
@@ -48,17 +49,29 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     (product) => product
   ) as Product[];
 
+  const queryClient = new QueryClient({
+    defaultOptions: {queries: {retry: false}},
+  });
+  setLogger({
+    warn: () => {},
+    error: () => {},
+    log: () => {},
+  });
+
   return (
-    <InfrastructureProviders store={store}>
+    <InfrastructureProviders store={store} queryClient={queryClient}>
       <AuthenticationProvider {...authentication}>
-        <QueuedOrdersProvider queuedOrder={queuedOrder} queuedOrders={queuedOrders}>
-          <ProductsProvider products={products}>
-            <MembersProvider members={members}>
-              <CommitteesProvider committeeMembers={committeeMembers}>
-                <BoardsProvider boardMembers={boardMembers}>
-                  <OrderProvider order={order}>
-                    <ActivitiesProvider activities={activities}>
-                      <StatisticsProvider statistics={statistics}>
+        <QueuedOrdersProvider
+          queuedOrder={queuedOrder ?? undefined}
+          queuedOrders={queuedOrders ?? undefined}
+        >
+          <ProductsProvider products={products ?? undefined}>
+            <MembersProvider members={members ?? undefined}>
+              <CommitteesProvider committeeMembers={committeeMembers ?? undefined}>
+                <BoardsProvider boardMembers={boardMembers ?? undefined}>
+                  <OrderProvider order={order ?? undefined}>
+                    <ActivitiesProvider activities={activities ?? undefined}>
+                      <StatisticsProvider statistics={statistics ?? undefined}>
                         {children}
                       </StatisticsProvider>
                     </ActivitiesProvider>

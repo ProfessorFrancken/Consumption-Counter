@@ -72,6 +72,7 @@ const useFetchMembers = (members?: MemberType[]) => {
       return orderBy(members, (member: any) => member.surname);
     },
     enabled: members === undefined,
+    initialData: members,
     onSuccess: preLoadImages,
   });
 };

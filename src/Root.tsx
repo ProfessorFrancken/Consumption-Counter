@@ -18,10 +18,14 @@ import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 
 type Props = {
   store: any;
+  queryClient?: QueryClient;
 };
 
-export const InfrastructureProviders: React.FC<Props> = ({children, store}) => {
-  const queryClient = new QueryClient();
+export const InfrastructureProviders: React.FC<Props> = ({
+  children,
+  store,
+  queryClient = new QueryClient(),
+}) => {
   return (
     <Provider store={store}>
       <Router history={history}>

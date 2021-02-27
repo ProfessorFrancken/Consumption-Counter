@@ -40,6 +40,7 @@ const useFetchProducts = (products?: Product[]) => {
     },
     onSuccess: preLoadImages,
     enabled: products === undefined,
+    initialData: products,
   });
 };
 

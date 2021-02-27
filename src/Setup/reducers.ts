@@ -1,11 +1,10 @@
 import {combineReducers} from "redux";
 import {connectRouter} from "connected-react-router";
 
-import {loading, transactions, recentBuyers, statistics} from "../reducer";
+import {transactions, recentBuyers, statistics} from "../reducer";
 
 const makeApplicationReducer = (history: any) => {
   return combineReducers({
-    loading,
     transactions,
     recentBuyers,
     statistics,

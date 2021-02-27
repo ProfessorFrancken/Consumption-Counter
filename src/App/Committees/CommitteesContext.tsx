@@ -39,6 +39,7 @@ const useFetchCommitteeMembers = (committeeMembers?: CommitteeMember[]) => {
       return response.committees.map(mapCommittee);
     },
     enabled: committeeMembers === undefined,
+    initialData: committeeMembers,
   });
 };
 
