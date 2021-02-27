@@ -1,5 +1,4 @@
 import React from "react";
-import {menuItems} from "reducer";
 import App from "./App";
 import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";
@@ -10,7 +9,7 @@ import clock from "jest-plugin-clock";
 import {mockedState} from "./MockedState";
 
 function setup(routes = ["/"]) {
-  const props = {menuItems: menuItems(undefined, {})};
+  const props = {menuItems: []};
   const storeState = mockedState();
   const app = render(<App {...props} />, {storeState, routes});
 

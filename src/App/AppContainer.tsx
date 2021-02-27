@@ -1,5 +1,4 @@
 import React from "react";
-import {useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import ScreenSaver from "./ScreenSaver";
 import App from "./App";

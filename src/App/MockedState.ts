@@ -1,17 +1,10 @@
 export function mockedState() {
-  const menu = [
-    {icon: "clock", url: "/recent", label: "Recent"},
-    {icon: ["fab", "bitcoin"], url: "/buixieval", label: "Buixieval"},
-    {icon: "chart-bar", url: "/statistics", label: "Statistics"},
-  ];
-
   return {
     router: {
       locationBeforeTransitions: null,
     },
     transactions: [],
     recentBuyers: [],
-    menuItems: menu,
   };
 }
 

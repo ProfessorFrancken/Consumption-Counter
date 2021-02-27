@@ -1,4 +1,4 @@
-import {transactions, recentBuyers, statistics, menuItems} from "./reducer";
+import {transactions, recentBuyers, statistics} from "./reducer";
 import {TYPES} from "./actions";
 import expect from "expect";
 
@@ -102,14 +102,6 @@ describe("a list of members who recently made an order", () => {
         order: {products: [], member: {id: 33}, orderd_at: 1},
       })
     ).toEqual([33, 1]);
-  });
-});
-
-describe("menu items", () => {
-  it("has a default menu", () => {
-    expect(menuItems(undefined, {})).toEqual([
-      {icon: "clock", url: "/recent", label: "Recent"},
-    ]);
   });
 });
 
