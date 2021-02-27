@@ -16,22 +16,33 @@ import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
+import {BusProvider} from "ts-bus/react";
+import {EventBus} from "ts-bus/EventBus";
+import {Store} from "redux";
 
 type Props = {
-  store: any;
+  store: Store;
   queryClient?: QueryClient;
+  bus?: EventBus;
 };
 
 export const InfrastructureProviders: React.FC<Props> = ({
   children,
   store,
   queryClient = new QueryClient(),
+  bus = new EventBus(),
 }) => {
+  bus.subscribe("*", (event) => {
+    store.dispatch({type: event.type, ...event.payload});
+  });
+
   return (
     <Provider store={store}>
-      <Router history={history}>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-      </Router>
+      <BusProvider value={bus}>
+        <Router history={history}>
+          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        </Router>
+      </BusProvider>
     </Provider>
   );
 };
