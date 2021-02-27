@@ -1,12 +1,12 @@
 import React from "react";
-import {TYPES} from "actions";
+import {BUY_ORDER_SUCCESS_EVENT} from "actions";
 import {pick, maxBy} from "lodash";
-import {useDispatch} from "react-redux";
 import {MemberType} from "./Members/Members";
 import {Order, Product} from "./Products/OrdersContext";
 import api from "api";
 import {useHistory} from "react-router";
 import useLocalStorage from "./useLocalStorage";
+import {useBus} from "ts-bus/react";
 
 export type OrderedOrder = {
   ordered_at: number;
@@ -26,7 +26,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     "plus_one_order_queue",
     defaultQueuedOrders
   );
-  const dispatch = useDispatch();
+  const bus = useBus();
   const {push} = useHistory();
 
   const dequeQueuedOrder = (order: OrderedOrder) => {
@@ -58,7 +58,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
         },
       });
       dequeQueuedOrder(order);
-      dispatch({type: TYPES.BUY_ORDER_SUCCESS, order});
+      bus.publish(BUY_ORDER_SUCCESS_EVENT({order}));
     } catch (ex) {
       setQueuedOrders((orders: QueuedOrder[]) =>
         orders.map((otherOrder) => {
