@@ -9,6 +9,7 @@ import {QueryObserverResult} from "react-query";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";
+import {useActivities} from "App/Activities/ActivitiesContext";
 
 type Feature = {
   query:
@@ -52,6 +53,7 @@ const LoadingScreen = () => {
   const {membersQuery} = useMembers();
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
+  const {activitiesQuery} = useActivities();
 
   return (
     <div
@@ -78,6 +80,7 @@ const LoadingScreen = () => {
           <LoadFeatureListItem feature={{label: "Members", query: membersQuery}} />
           <LoadFeatureListItem feature={{label: "Committees", query: committeesQuery}} />
           <LoadFeatureListItem feature={{label: "Boards", query: boardsQuery}} />
+          <LoadFeatureListItem feature={{label: "Activities", query: activitiesQuery}} />
         </ul>
         {state === LOADING_STATE.SUCCESS && productsQuery.isSuccess ? (
           <NavLink exact to="/" className="tile button p-4">

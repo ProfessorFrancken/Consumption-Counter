@@ -47,11 +47,3 @@ export function statistics(state = [], action: any) {
       return state;
   }
 }
-export function activities(state = [], action: any) {
-  switch (action.type) {
-    case TYPES.FETCH_ACTIVITIES_SUCCESS:
-      return action.activities;
-    default:
-      return state;
-  }
-}

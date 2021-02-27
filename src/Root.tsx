@@ -13,6 +13,7 @@ import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
 import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
+import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 
 type Props = {
   store: any;
@@ -46,7 +47,9 @@ export const ApplicationProviders: React.FC = ({children}) => {
           <MembersProvider>
             <CommitteesProvider>
               <BoardsProvider>
-                <OrderProvider>{children}</OrderProvider>
+                <OrderProvider>
+                  <ActivitiesProvider>{children}</ActivitiesProvider>
+                </OrderProvider>
               </BoardsProvider>
             </CommitteesProvider>
           </MembersProvider>
