@@ -107,11 +107,11 @@ export function makeServer({environment = "development"} = {}) {
         const {models} = (schema as any).categories.all();
         return {statistics: models};
       });
-      this.get("*/activities", () => ({
+      this.get("activities", () => ({
         activities: [
           {
-            endDate: "2018-03-15T00:00:00+00:00",
-            startDate: "2018-03-13T00:00:00+00:00",
+            endDate: "2021-01-15T00:00:00+00:00",
+            startDate: "2021-01-13T00:00:00+00:00",
             location:
               "Martinihal, Leonard Springerlaan 2, 9727 KB Groningen, Netherlands",
             description:

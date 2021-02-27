@@ -8,6 +8,7 @@ import HeatMap from "./HeatMap";
 import PurchasesOfWeek from "./PurchasesOfWeek";
 import {OrderedOrder} from "App/QueuedOrdersContext";
 import {Product} from "App/Products/OrdersContext";
+import {useActivities} from "App/Activities/ActivitiesContext";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -163,7 +164,7 @@ const Statistics = ({statistics = [], activities = [], transactions}: any) => {
 
 const StatisticsSreen = () => {
   const statistics = useSelector((state: any) => state.statistics);
-  const activities = useSelector((state: any) => state.activities);
+  const {activities} = useActivities();
   const transactions = useSelector((state: any) => state.transactions);
 
   return (

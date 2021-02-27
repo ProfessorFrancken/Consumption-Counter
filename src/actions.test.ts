@@ -52,9 +52,7 @@ describe("Fetching initial data", () => {
     const expectedActions = [
       {type: TYPES.LOAD_APPLICATION_REQUEST},
       {type: TYPES.FETCH_STATISTICS_REQUEST},
-      {type: TYPES.FETCH_ACTIVITIES_REQUEST},
       {type: TYPES.FETCH_STATISTICS_SUCCESS, statistics: []},
-      {type: TYPES.FETCH_ACTIVITIES_SUCCESS, activities: []},
       {type: TYPES.LOAD_APPLICATION_SUCCESS},
     ];
 
