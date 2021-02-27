@@ -2,7 +2,6 @@ import React from "react";
 import {default as SelectCommitteeMembersContainer} from "./index";
 import {Route} from "react-router-dom";
 import {render} from "test-utils";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
 
 describe("committees", () => {

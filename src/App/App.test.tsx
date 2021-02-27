@@ -4,7 +4,6 @@ import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";
 import RecentMembers from "./Recent";
 import {render, screen, within} from "test-utils";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
 import {mockedState} from "./MockedState";
 

@@ -2,9 +2,8 @@
 import {Factory, association} from "miragejs";
 
 export const CommitteeFactory = Factory.extend({
-  id(i: any) {
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
-    return parseInt(i % 40, 10);
+  id(i: number) {
+    return i % 40;
   },
   name(i: any) {
     if (i % 40 === 1) {
@@ -18,7 +17,7 @@ export const CommitteeFactory = Factory.extend({
 });
 
 export const CommitteeMemberFactory = Factory.extend({
-  title(i: any) {
+  title(i: number) {
     const functions = ["", "", "", "Treasurer", "President"];
     return functions[i % functions.length];
   },
@@ -26,7 +25,7 @@ export const CommitteeMemberFactory = Factory.extend({
   committee: association(),
   member: association(),
 
-  year(i: any) {
+  year(i: number) {
     return 2018 + (i % 5);
   },
 });

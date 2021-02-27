@@ -1,7 +1,6 @@
 import React from "react";
 import {default as CommitteesContainer} from "./index";
 import {render, within} from "test-utils";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'jest... Remove this comment to see the full error message
 import clock from "jest-plugin-clock";
 
 describe("committees", () => {

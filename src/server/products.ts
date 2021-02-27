@@ -1,5 +1,4 @@
 import {Factory} from "miragejs";
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'fake... Remove this comment to see the full error message
 import faker from "faker";
 
 export const ProductFactory = Factory.extend({

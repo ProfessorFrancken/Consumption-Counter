@@ -2,13 +2,13 @@
 import {Factory, association} from "miragejs";
 
 export const BoardFactory = Factory.extend({
-  year(i: any) {
+  year(i: number) {
     return 2020 - (i % 20);
   },
 });
 
 export const BoardMemberFactory = Factory.extend({
-  title(i: any) {
+  title(i: number) {
     const functions = ["President", "Treasurer", "Secretary", "Intern", "Extern"];
     return functions[i % functions.length];
   },
