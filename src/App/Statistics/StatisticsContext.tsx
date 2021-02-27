@@ -90,6 +90,7 @@ const useFetchStatistics = (statistics?: Statistic[]) => {
       return response.statistics.map(mapStatistic);
     },
     enabled: statistics === undefined,
+    initialData: statistics,
     onSuccess: (statistics) => {
       dispatch({
         type: TYPES.FETCH_STATISTICS_SUCCESS,

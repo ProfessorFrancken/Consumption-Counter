@@ -31,6 +31,7 @@ const useFetchBoardMembers = (boardMembers?: BoardMember[]) => {
       return response.boardMembers.map(mapBoard);
     },
     enabled: boardMembers === undefined,
+    initialData: boardMembers,
   });
 };
 

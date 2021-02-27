@@ -34,6 +34,7 @@ const useFetchActivities = (activities?: Activity[]) => {
       return response.activities.map(mapActivity);
     },
     enabled: activities === undefined,
+    initialData: activities,
   });
 };
 
