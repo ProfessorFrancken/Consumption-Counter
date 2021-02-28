@@ -1,18 +1,25 @@
 import React from "react";
 import {render, fireEvent, act} from "test-utils";
-import OnLongPress from "./OnLongPress";
+import {useOnLongPress} from "./OnLongPress";
 
 describe("<OnLongPress>", () => {
   beforeEach(() => jest.useFakeTimers());
+
+  const OnLongPress: React.FC<{onClick: () => void; onLongPress: () => void}> = ({
+    onClick,
+    onLongPress,
+  }) => {
+    const handlers = useOnLongPress({onClick, onLongPress, timeout: 100});
+
+    return <button {...handlers}>Hoi</button>;
+  };
 
   it("simulates normal clicks", () => {
     const wasClicked = jest.fn();
     const wasLongPressed = jest.fn();
 
     const {getByRole} = render(
-      <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed}>
-        <button>Hoi</button>
-      </OnLongPress>
+      <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
     );
 
     fireEvent.mouseDown(getByRole("button"));
@@ -30,15 +37,15 @@ describe("<OnLongPress>", () => {
     const wasLongPressed = jest.fn();
 
     const {getByRole} = render(
-      <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} timeout={100}>
-        <button>Hoi</button>
-      </OnLongPress>
+      <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
     );
 
     fireEvent.mouseDown(getByRole("button"));
+    expect(wasClicked).not.toBeCalled();
     act(() => {
       jest.runTimersToTime(100);
     });
+    expect(wasClicked).not.toBeCalled();
     fireEvent.mouseUp(getByRole("button"));
 
     expect(wasClicked).not.toBeCalled();
@@ -54,9 +61,7 @@ describe("<OnLongPress>", () => {
       const wasLongPressed = jest.fn();
 
       const {getByRole} = render(
-        <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed}>
-          <button>Hoi</button>
-        </OnLongPress>
+        <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
       );
 
       fireEvent.touchStart(getByRole("button"));
@@ -74,9 +79,7 @@ describe("<OnLongPress>", () => {
       const wasLongPressed = jest.fn();
 
       const {getByRole} = render(
-        <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} timeout={100}>
-          <button>Hoi</button>
-        </OnLongPress>
+        <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
       );
 
       fireEvent.touchStart(getByRole("button"));
