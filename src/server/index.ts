@@ -107,7 +107,7 @@ export function makeServer({environment = "development"} = {}) {
         const {models} = (schema as any).categories.all();
         return {statistics: models};
       });
-      this.get("activities", () => ({
+      this.get("*/activities", () => ({
         activities: [
           {
             endDate: "2021-01-15T00:00:00+00:00",
