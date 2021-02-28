@@ -1,5 +1,5 @@
 import React from "react";
-import {render, fireEvent} from "test-utils";
+import {render, fireEvent, act} from "test-utils";
 import OnLongPress from "./OnLongPress";
 
 describe("<OnLongPress>", () => {
@@ -20,6 +20,9 @@ describe("<OnLongPress>", () => {
 
     expect(wasClicked).toBeCalled();
     expect(wasLongPressed).not.toBeCalled();
+
+    expect(wasClicked).toBeCalledTimes(1);
+    expect(wasLongPressed).toBeCalledTimes(0);
   });
 
   it("records long pressed clicks", () => {
@@ -33,11 +36,16 @@ describe("<OnLongPress>", () => {
     );
 
     fireEvent.mouseDown(getByRole("button"));
-    jest.runTimersToTime(100);
+    act(() => {
+      jest.runTimersToTime(100);
+    });
     fireEvent.mouseUp(getByRole("button"));
 
     expect(wasClicked).not.toBeCalled();
     expect(wasLongPressed).toBeCalled();
+
+    expect(wasClicked).toBeCalledTimes(0);
+    expect(wasLongPressed).toBeCalledTimes(1);
   });
 
   describe("should also work on touch screens", () => {
@@ -56,6 +64,9 @@ describe("<OnLongPress>", () => {
 
       expect(wasClicked).toBeCalled();
       expect(wasLongPressed).not.toBeCalled();
+
+      expect(wasClicked).toBeCalledTimes(1);
+      expect(wasLongPressed).toBeCalledTimes(0);
     });
 
     it("records long pressed clicks", () => {
@@ -69,11 +80,16 @@ describe("<OnLongPress>", () => {
       );
 
       fireEvent.touchStart(getByRole("button"));
-      jest.runTimersToTime(100);
+      act(() => {
+        jest.runTimersToTime(100);
+      });
       fireEvent.touchEnd(getByRole("button"));
 
       expect(wasClicked).not.toBeCalled();
       expect(wasLongPressed).toBeCalled();
+
+      expect(wasClicked).toBeCalledTimes(0);
+      expect(wasLongPressed).toBeCalledTimes(1);
     });
   });
 });

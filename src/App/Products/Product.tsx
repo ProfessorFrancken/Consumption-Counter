@@ -20,8 +20,8 @@ const Product = ({
   locked,
 }: {
   product: AvailableProduct;
-  onClick: (product: AvailableProduct) => void;
-  onLongPress: (product: AvailableProduct) => void;
+  onClick: () => void;
+  onLongPress: () => void;
   locked: boolean;
 }) => (
   <OnLongPress onClick={onClick} onLongPress={onLongPress}>
