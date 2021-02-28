@@ -1,10 +1,10 @@
 import React from "react";
-
-const OnLongPress: React.FC<{
+type Props = {
   timeout?: number;
   onClick: () => void;
   onLongPress: () => void;
-}> = ({timeout: delay = 500, onClick, onLongPress, children}) => {
+};
+export const useOnLongPress = ({timeout: delay = 500, onClick, onLongPress}: Props) => {
   const [triggered, setTriggered] = React.useState(false);
   React.useEffect(() => {
     if (!triggered) {
@@ -31,22 +31,11 @@ const OnLongPress: React.FC<{
     setTriggered(false);
   };
 
-  const childrenWithProps = React.Children.map<React.ReactNode, React.ReactNode>(
-    children,
-    (child) => {
-      if (React.isValidElement(child)) {
-        return React.cloneElement(child, {
-          onMouseDown: onDown,
-          onTouchStart: onDown,
-          onMouseUp: onUp,
-          onTouchCancel: onUp,
-          onTouchEnd: onUp,
-        });
-      }
-      return child;
-    }
-  );
-  return <>{childrenWithProps}</>;
+  return {
+    onMouseDown: onDown,
+    onTouchStart: onDown,
+    onMouseUp: onUp,
+    onTouchCancel: onUp,
+    onTouchEnd: onUp,
+  };
 };
-
-export default OnLongPress;

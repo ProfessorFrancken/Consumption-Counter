@@ -1,5 +1,5 @@
 import React from "react";
-import OnLongPress from "./OnLongPress";
+import {useOnLongPress} from "./OnLongPress";
 import {AvailableProduct} from "./OrdersContext";
 
 const AmountBeingOrdered = ({product}: {product: AvailableProduct}) =>
@@ -23,8 +23,10 @@ const Product = ({
   onClick: () => void;
   onLongPress: () => void;
   locked: boolean;
-}) => (
-  <OnLongPress onClick={onClick} onLongPress={onLongPress}>
+}) => {
+  const handlers = useOnLongPress({onClick, onLongPress});
+
+  return (
     <button
       aria-label={`Buy ${product.name}`}
       className={"button tile " + (locked ? "locked" : "")}
@@ -34,11 +36,12 @@ const Product = ({
         backgroundPosition: "50% 50%",
       }}
       disabled={locked}
+      {...handlers}
     >
       <AmountBeingOrdered product={product} />
       {product.ordered === 0 && <ProductName product={product} />}
     </button>
-  </OnLongPress>
-);
+  );
+};
 
 export default Product;
