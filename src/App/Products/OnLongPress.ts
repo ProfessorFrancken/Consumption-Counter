@@ -19,7 +19,6 @@ class OnLongPress extends Component {
     this.start = this.start.bind(this);
     this.end = this.end.bind(this);
     this.onLongPress = this.onLongPress.bind(this);
-    this.onClick = this.onClick.bind(this);
   }
   start(e: any) {
     e.preventDefault();
@@ -42,9 +41,6 @@ class OnLongPress extends Component {
     this.setState({longPressed: true, longPressTimeOut: null});
     (this.props as any).onLongPress();
   }
-  onClick(e: any) {
-    this.start(e);
-  }
   render() {
     const {children} = this.props;
     const childrenWithProps = React.Children.map(children, (child) =>
@@ -55,7 +51,6 @@ class OnLongPress extends Component {
         onMouseUp: this.end,
         onTouchCancel: this.end,
         onTouchEnd: this.end,
-        onClick: this.onClick,
       })
     );
     return childrenWithProps;
