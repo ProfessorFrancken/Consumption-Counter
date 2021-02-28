@@ -58,7 +58,7 @@ const AppContainer = () => {
   const menuItems = useMenuItems();
   const background = useBackgroundFromOrder();
   const failedOrders = useFailedOrders();
-  const {listen, push} = useHistory();
+  const {push} = useHistory();
 
   const goToCompucieScreen = () => push("/compucie");
   const goToProminent = () => push("/prominent");
@@ -69,7 +69,7 @@ const AppContainer = () => {
 
   return (
     <>
-      <ScreenSaver listen={listen} goHome={goHome} goToScreenSaver={goToScreenSaver} />
+      <ScreenSaver goHome={goHome} goToScreenSaver={goToScreenSaver} />
       <App
         menuItems={menuItems}
         background={background}

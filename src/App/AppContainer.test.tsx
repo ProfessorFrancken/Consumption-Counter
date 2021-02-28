@@ -119,7 +119,9 @@ describe("Consumption Counter", () => {
     fireEvent.click(btn);
     expect(btn).not.toBeInTheDocument();
 
-    jest.runAllTimers();
+    act(() => {
+      jest.runAllTimers();
+    });
 
     fireEvent.click(app.getByLabelText("Recent"));
     expect(app.queryByLabelText("John Snow")).not.toBeInTheDocument();
