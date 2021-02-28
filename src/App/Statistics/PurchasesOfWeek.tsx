@@ -35,8 +35,6 @@ const PurchasesOfWeek = ({purchases, today, icon, type}: any) => {
             tickFormat={(date) => moment(date).format("ddd")}
             style={{
               axis: {stroke: "transparant"},
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-              labelsaxis: {stroke: "#6c757d", color: "#6c757d"},
               tickLabels: {color: "#6c757d", fill: "rgb(108, 117, 125)"},
             }}
           />
