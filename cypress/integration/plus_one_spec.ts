@@ -529,7 +529,7 @@ describe("Francken Consumption Counter", () => {
   });
 
   describe("Screensaver / Bug free zone", () => {
-    it("Goes to the statistics page after a long idle time", () => {
+    it("Goes to home after a long idle time", () => {
       cy.login();
 
       // Mock clock so that we don't have to wait for the screensaver
@@ -542,7 +542,9 @@ describe("Francken Consumption Counter", () => {
       cy.location("pathname").should("eq", "/");
 
       // Should go to the statistics page after a long wait
-      cy.tick(2 * SCREEN_SAVER_TIMEOUT);
+      // TODO: It's unclear why but tick does not seem to work while testing the screensaver
+      // cy.tick(SCREEN_SAVER_TIMEOUT * 2);
+      cy.wait(SCREEN_SAVER_TIMEOUT * 2);
       cy.location("pathname").should("eq", "/statistics");
     });
   });

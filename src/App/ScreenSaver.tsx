@@ -14,25 +14,22 @@ const ScreenSaver: React.FC<Props> = ({goHome, goToScreenSaver}) => {
 
   const [pathname, setPathname] = React.useState(location.pathname);
   React.useEffect(() => {
-    return listen((location) => {
-      setPathname(location.pathname);
-    });
+    return listen((location) => setPathname(location.pathname));
   }, [listen, setPathname]);
 
   React.useEffect(() => {
-    if (pathname === "/") {
-      const screenSaver = setTimeout(() => {
-        goToScreenSaver();
-      }, 2 * SCREEN_SAVER_TIMEOUT);
-      return () => clearTimeout(screenSaver);
-    } else {
-      if (pathname !== "/statistics") {
-        const screenSaver = setTimeout(() => {
-          goHome();
-        }, SCREEN_SAVER_TIMEOUT);
-        return () => clearTimeout(screenSaver);
-      }
+    if (pathname === "/statistics") {
+      return;
     }
+
+    const screenSaver =
+      pathname === "/"
+        ? setTimeout(goToScreenSaver, 2 * SCREEN_SAVER_TIMEOUT)
+        : setTimeout(goHome, SCREEN_SAVER_TIMEOUT);
+
+    return () => {
+      clearTimeout(screenSaver);
+    };
   }, [pathname, goToScreenSaver, goHome]);
   return null;
 };
