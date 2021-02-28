@@ -27,7 +27,7 @@ const useFetchActivities = (activities?: Activity[]) => {
         };
       };
 
-      const response = await api.get("/activities", {
+      const response = await api.get("/statistics/activities", {
         after,
         before,
       });
