@@ -35,7 +35,6 @@ const Product = ({
         backgroundSize: "cover",
         backgroundPosition: "50% 50%",
       }}
-      disabled={locked}
       {...handlers}
     >
       <AmountBeingOrdered product={product} />
