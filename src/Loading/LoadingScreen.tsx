@@ -29,11 +29,16 @@ const ariaLabel = (feature: Feature) => {
 const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
   return (
     <li className="font-weight-bold my-3" aria-label={ariaLabel(feature)}>
-      {feature.query.isLoading && (
+      {feature.query.isLoading || feature.query.isFetching ? (
         <FontAwesomeIcon icon={"spinner"} spin fixedWidth className="mr-1 text-muted" />
-      )}
-      {(feature.query.isSuccess || (feature.query.isIdle && feature.query.data)) && (
-        <FontAwesomeIcon icon={"check-circle"} fixedWidth className="mr-1 text-success" />
+      ) : (
+        (feature.query.isSuccess || (feature.query.isIdle && feature.query.data)) && (
+          <FontAwesomeIcon
+            icon={"check-circle"}
+            fixedWidth
+            className="mr-1 text-success"
+          />
+        )
       )}
       {feature.query.isError && (
         <FontAwesomeIcon icon={"times-circle"} fixedWidth className="mr-1 text-danger" />
@@ -51,13 +56,18 @@ const LoadingScreen = () => {
   const {activitiesQuery} = useActivities();
   const {statisticsQuery} = useStatistics();
 
-  const applicationIsLoaded =
-    productsQuery.isSuccess &&
-    membersQuery.isSuccess &&
-    committeesQuery.isSuccess &&
-    boardsQuery.isSuccess &&
-    activitiesQuery.isSuccess &&
-    statisticsQuery.isSuccess;
+  const queries = [
+    productsQuery,
+    membersQuery,
+    committeesQuery,
+    boardsQuery,
+    activitiesQuery,
+    statisticsQuery,
+  ];
+
+  const applicationIsLoaded = !queries.some(
+    (query) => query.isLoading || !query.isSuccess || query.isFetching
+  );
 
   return (
     <div
