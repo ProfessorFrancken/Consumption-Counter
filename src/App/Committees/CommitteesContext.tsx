@@ -50,11 +50,10 @@ type State = {
   selectCommittee: (committee: Committee) => void;
 };
 const CommitteesContext = React.createContext<State | undefined>(undefined);
-export const CommitteesProvider: React.FC<{committeeMembers?: CommitteeMember[]}> = ({
-  committeeMembers: defaultCommitteeMembers,
-  children,
-  ...props
-}) => {
+export const CommitteesProvider: React.FC<{
+  committeeMembers?: CommitteeMember[];
+  children: React.ReactNode;
+}> = ({committeeMembers: defaultCommitteeMembers, children, ...props}) => {
   const {push} = useHistory();
   const {members} = useMembers();
 

@@ -25,7 +25,8 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
       const response = await api.post("/authenticate", {password});
       const token = response.token as string;
       return token;
-    } catch (e) {
+    } catch (e: unknown) {
+      // @ts-expect-error This is a known limitation
       throw new Error(e.response.statusText as string);
     }
   };
@@ -37,10 +38,10 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
   });
 }
 
-export const AuthenticationProvider: React.FC<{token?: string}> = ({
-  token: defaultToken,
-  ...props
-}) => {
+export const AuthenticationProvider: React.FC<{
+  token?: string;
+  children: React.ReactNode;
+}> = ({token: defaultToken, ...props}) => {
   //
   const [{token}, setToken] = useLocalStorage("plus_one_authorization", {
     token: defaultToken,

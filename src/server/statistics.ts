@@ -1,16 +1,16 @@
 import {Factory} from "miragejs";
-import faker from "faker";
+import {faker} from "@faker-js/faker";
 import moment from "moment";
 
 export const CategoryFactory = Factory.extend({
   food() {
-    return faker.random.number({min: 0, max: 200});
+    return faker.number.int({min: 0, max: 200});
   },
   soda() {
-    return faker.random.number({min: 0, max: 100});
+    return faker.number.int({min: 0, max: 100});
   },
   beer() {
-    return faker.random.number({min: 0, max: 400});
+    return faker.number.int({min: 0, max: 400});
   },
   date() {
     return moment(faker.date.recent()).format("YYYY-MM-DD");

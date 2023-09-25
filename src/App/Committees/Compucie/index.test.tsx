@@ -46,7 +46,7 @@ describe("Compucie screen", () => {
     const {findByRole, getByRole} = render(<CompucieScreen />);
 
     expect(
-      await findByRole("button", {name: /Decrease Temple Count \(10\)/i, exact: false})
+      await findByRole("button", {name: /Decrease Temple Count \(10\)/i})
     ).toBeInTheDocument();
     fireEvent.click(getByRole("button", {name: /Decrease Temple Count \(10\)/}));
 

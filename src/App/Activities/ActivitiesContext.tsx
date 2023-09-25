@@ -43,11 +43,10 @@ type State = {
   activities: Activity[];
 };
 const ActivitiesContext = React.createContext<State | undefined>(undefined);
-export const ActivitiesProvider: React.FC<{activities?: Activity[]}> = ({
-  activities: defaultActivities,
-  children,
-  ...props
-}) => {
+export const ActivitiesProvider: React.FC<{
+  activities?: Activity[];
+  children: React.ReactNode;
+}> = ({activities: defaultActivities, children, ...props}) => {
   const activitiesQuery = useFetchActivities(defaultActivities);
   const activities: Activity[] = defaultActivities ?? activitiesQuery.data ?? [];
 

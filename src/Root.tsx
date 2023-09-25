@@ -24,6 +24,7 @@ export const history = createBrowserHistory({basename});
 type Props = {
   queryClient?: QueryClient;
   bus?: EventBus;
+  children: React.ReactNode;
 };
 
 export const InfrastructureProviders: React.FC<Props> = ({
@@ -40,7 +41,7 @@ export const InfrastructureProviders: React.FC<Props> = ({
   );
 };
 
-const DevelopMentProviders: React.FC = ({children}) => {
+const DevelopMentProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
   return (
     <>
       <ReactQueryDevtools initialIsOpen={false} />
@@ -49,7 +50,9 @@ const DevelopMentProviders: React.FC = ({children}) => {
   );
 };
 
-export const ApplicationProviders: React.FC = ({children}) => {
+export const ApplicationProviders: React.FC<{children: React.ReactNode}> = ({
+  children,
+}) => {
   return (
     <AuthenticationProvider>
       <QueuedOrdersProvider>

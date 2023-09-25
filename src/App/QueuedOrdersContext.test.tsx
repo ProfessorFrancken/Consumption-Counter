@@ -28,7 +28,7 @@ describe("QueuedOrders context", () => {
   it("Requires the QueuedOrdersProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<QueueOrder />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

@@ -19,7 +19,7 @@ function authHeader() {
   }
 }
 
-function get(uri: string, params?: any) {
+async function get(uri: string, params?: any) {
   const requestOptions = {
     headers: {
       "Content-Type": "application/json",
@@ -31,7 +31,7 @@ function get(uri: string, params?: any) {
   return axios.get(api + uri, requestOptions).then(handleResponse);
 }
 
-function post(uri: any, body: any) {
+async function post(uri: any, body: any) {
   return axios
     .post(api + uri, body, {
       headers: {

@@ -28,7 +28,7 @@ const Product = ({
 
   return (
     <button
-      aria-label={`Buy ${product.name}`}
+      aria-label={`Buy ${product.name} ${locked ? "(disabled)" : ""}`}
       className={"button tile " + (locked ? "locked" : "")}
       style={{
         backgroundImage: `url(${product.image})`,

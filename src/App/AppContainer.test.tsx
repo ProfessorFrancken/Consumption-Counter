@@ -6,6 +6,7 @@ import moxios from "moxios";
 import {render, fireEvent, act} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
+import {waitFor} from "@testing-library/dom";
 
 afterEach(() => {
   localStorage.removeItem("plus_one_order_queue");
@@ -16,6 +17,9 @@ describe("Consumption Counter", () => {
     MockDate.set(new Date(1514764800000));
 
     jest.useFakeTimers();
+    window.confirm = (text: string | undefined) => {
+      return true;
+    };
 
     moxios.install();
     const base_api = process.env.REACT_APP_API_SERVER;
@@ -68,8 +72,8 @@ describe("Consumption Counter", () => {
 
   const addHertogJanToOrder = (app: any) => {
     expect(history.location.pathname).toBe("/products");
-    const product = app.getByLabelText("Buy Hertog Jan");
 
+    const product = app.getByLabelText(/Buy Hertog Jan/);
     expect(product).toBeInTheDocument();
 
     fireEvent.mouseDown(product);
@@ -80,7 +84,9 @@ describe("Consumption Counter", () => {
     expect(history.location.pathname).toBe("/");
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
 
-    act(() => jest.runTimersToTime(10000));
+    act(() => {
+      jest.advanceTimersByTime(10000);
+    });
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
     fireEvent.click(app.getByLabelText("Recent"));
@@ -93,7 +99,9 @@ describe("Consumption Counter", () => {
     const product = app.getByText("Hertog Jan");
 
     fireEvent.mouseDown(product);
-    act(() => jest.runTimersToTime(1000));
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
     fireEvent.mouseUp(product);
   };
 
@@ -152,6 +160,11 @@ describe("Consumption Counter", () => {
 
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
+
+    await waitFor(() => {
+      expect(history.location.pathname).toBe("/products");
+    });
+
     addHertogJanToOrder(app);
     await expectOrderToBeBought(app);
   });
@@ -250,7 +263,9 @@ describe("Consumption Counter", () => {
     selectJohnSnow(app);
 
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
-    act(() => jest.runTimersToTime(TIME_TO_CANCEL));
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL);
+    });
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
     act(() => {
@@ -262,13 +277,15 @@ describe("Consumption Counter", () => {
     expect(await app.findAllByText("bought by John Snow")).toHaveLength(1);
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
 
-    act(() => jest.runTimersToTime(TIME_TO_CANCEL));
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL);
+    });
     selectStatistics(app);
     expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
 
-    // BUG: we need this first line so that the app is rerendered?
-    expect(await app.findAllByText(/bought by.*/)).toHaveLength(1);
-    expect(app.getAllByText(/bought by.*/)).toHaveLength(2);
+    await waitFor(() => {
+      expect(app.getAllByText(/bought by.*/)).toHaveLength(2);
+    });
   });
   // Redirects
   // Shows a list of transactions
@@ -288,19 +305,25 @@ describe("Consumption Counter", () => {
 
     // Run time forward a little so that the timeout of the first orders
     // does not occur on the same time as the second
-    act(() => jest.runTimersToTime(TIME_TO_CANCEL / 2));
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
+    });
 
     MockDate.set(new Date(1514764800000 + 4000));
     selectJohnSnow(app);
     addHertogJanToOrder(app);
 
     // Run the first timeout
-    act(() => jest.runTimersToTime(TIME_TO_CANCEL / 2));
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
+    });
     const cancelBtn = app.getByText(/Cancel buying .*/);
     fireEvent.click(cancelBtn);
     expect(cancelBtn).not.toBeInTheDocument();
 
-    act(() => jest.runTimersToTime(TIME_TO_CANCEL));
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL);
+    });
     selectStatistics(app);
     expect(await app.findAllByText(/bought by.*/)).toHaveLength(1);
   });
@@ -309,18 +332,26 @@ describe("Consumption Counter", () => {
     it("goes back to the main screen after 30 seconds", () => {
       const app = render(<AppContainer />);
       selectRangeIncludingJohnSnow(app);
-      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT));
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT);
+      });
       expect(history.location.pathname).toBe("/");
     });
 
     it("should reset the screensaver timer when going to a different route", () => {
       const app = render(<AppContainer />);
       selectRangeIncludingJohnSnow(app);
-      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2));
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
+      });
       selectRecent(app);
-      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2));
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
+      });
       expect(history.location.pathname).toBe("/recent");
-      act(() => jest.runTimersToTime(SCREEN_SAVER_TIMEOUT / 2));
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
+      });
       expect(history.location.pathname).toBe("/");
     });
   });

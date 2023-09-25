@@ -76,13 +76,15 @@ describe("Selecting a member", () => {
   };
 
   clock.set("2018-01-01");
-  const member = {
+  const member: MemberType = {
     id: 33,
-    fistName: "John",
+    firstName: "John",
     surname: "Snow",
     fullname: "John Snow",
     latest_purchase_at: null,
     age: 0,
+    prominent: null,
+    cosmetics: undefined,
   };
   const state = {
     storeState: {order: {member: undefined, products: []}},
@@ -197,8 +199,8 @@ describe("Listing available products", () => {
     expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
     expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
     expect(getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Hertog Jan/})).toHaveTextContent(2);
-    expect(getByRole("button", {name: /Ice Tea/})).toHaveTextContent(1);
+    expect(getByRole("button", {name: /Hertog Jan/})).toHaveTextContent("2");
+    expect(getByRole("button", {name: /Ice Tea/})).toHaveTextContent("1");
   });
 
   describe("Before 4", () => {
@@ -215,7 +217,11 @@ describe("Listing available products", () => {
 
       expect(getByRole("button", {name: /Ice Tea/})).not.toBeDisabled();
       expect(getByRole("button", {name: /Kinder Bueno/})).not.toBeDisabled();
-      expect(getByRole("button", {name: /Hertog Jan/})).toBeDisabled();
+
+      // We don't want to disable buying beer before 4 but we do want to discourage it
+      const btn = getByRole("button", {name: /Hertog Jan/});
+      expect(getByRole("button", {name: /Hertog Jan/})).not.toBeDisabled();
+      expect(btn.className).toContain("locked");
     });
   });
 

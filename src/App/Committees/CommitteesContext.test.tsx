@@ -40,6 +40,10 @@ describe("Committee context", () => {
               firstName: "John",
               surname: "Snow",
               fullname: "John Snow",
+              age: 18,
+              cosmetics: undefined,
+              latest_purchase_at: null,
+              prominent: null,
             },
           ]}
         >
@@ -57,7 +61,7 @@ describe("Committee context", () => {
   it("Requires the CommitteesProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectCommittee />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

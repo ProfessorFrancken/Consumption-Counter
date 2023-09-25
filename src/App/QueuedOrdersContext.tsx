@@ -118,6 +118,7 @@ const QueuedOrdersContext = React.createContext<State | undefined>(undefined);
 export const QueuedOrdersProvider: React.FC<{
   queuedOrder?: QueuedOrder | null;
   queuedOrders?: QueuedOrder[];
+  children: React.ReactNode;
 }> = ({
   queuedOrder: defaultQueuedOrder = null,
   queuedOrders: defaultQueuedOrders = [],

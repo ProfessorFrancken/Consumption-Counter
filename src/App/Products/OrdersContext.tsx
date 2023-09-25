@@ -146,15 +146,13 @@ const useCategorizedProducts = (order: Order, hour: number) => {
       .filter((product: Product) =>
         memberIsAllowedToPurchaseProduct(product, order.member)
       )
-      .map(
-        (product: Product): AvailableProduct => {
-          return {
-            ...product,
-            locked: isProductLocked(product, hour),
-            ordered: order.products.filter(({id}) => id === product.id).length,
-          };
-        }
-      );
+      .map((product: Product): AvailableProduct => {
+        return {
+          ...product,
+          locked: isProductLocked(product, hour),
+          ordered: order.products.filter(({id}) => id === product.id).length,
+        };
+      });
 
     return groupBy(
       sortBy(availableProducts, (product: AvailableProduct) => product.position),
@@ -182,14 +180,12 @@ type State = {
 };
 
 const OrderContext = React.createContext<State | undefined>(undefined);
-export const OrderProvider: React.FC<{order?: Order}> = ({
-  order: defaultOrder = emptyOrder,
-  ...props
-}) => {
-  const [
-    order,
-    {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember},
-  ] = useOrderReducer(defaultOrder);
+export const OrderProvider: React.FC<{
+  order?: Order;
+  children: React.ReactNode;
+}> = ({order: defaultOrder = emptyOrder, ...props}) => {
+  const [order, {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember}] =
+    useOrderReducer(defaultOrder);
   const hour = new Date().getHours();
   const products = useCategorizedProducts(order, hour);
 

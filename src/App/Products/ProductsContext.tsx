@@ -5,7 +5,7 @@ import {Product} from "./OrdersContext";
 
 const useFetchProducts = (products?: Product[]) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = React.useState<HTMLImageElement[]>([]);
+  const [_, setImages] = React.useState<HTMLImageElement[]>([]);
 
   const preLoadImages = (products: Product[]) => {
     const images = products.map((product) => {
@@ -49,11 +49,10 @@ type State = {
   products: Product[] | undefined;
 };
 const ProductsContext = React.createContext<State | undefined>(undefined);
-export const ProductsProvider: React.FC<{products?: Product[]}> = ({
-  products: defaultProducts,
-  children,
-  ...props
-}) => {
+export const ProductsProvider: React.FC<{
+  products?: Product[];
+  children: React.ReactNode;
+}> = ({products: defaultProducts, children, ...props}) => {
   const productsQuery = useFetchProducts(defaultProducts);
 
   return (
