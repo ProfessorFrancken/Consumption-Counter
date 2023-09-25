@@ -84,7 +84,7 @@ describe("Member context", () => {
   it("Requires the MembersProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectMember />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

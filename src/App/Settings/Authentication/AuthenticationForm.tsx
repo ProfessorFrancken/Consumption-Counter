@@ -58,7 +58,11 @@ const AuthenticateButton = ({request, token}: any) => {
 };
 
 const AuthenticationForm = ({authenticate, token, request, error}: any) => {
-  const {handleSubmit, register, errors} = useForm();
+  const {
+    handleSubmit,
+    register,
+    formState: {errors},
+  } = useForm();
   const {push} = useHistory();
 
   const onSubmit = handleSubmit(({password}) => {
@@ -82,11 +86,10 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
           <div className="form-group col-lg-5 col-md-8 col-sm-10 col-12">
             <input
               type="password"
-              name="password"
               placeholder="Passphrase"
               autoFocus
               className={error ? "form-control is-invalid" : "form-control"}
-              ref={register({
+              {...register("password", {
                 required: "Required",
                 minLength: {
                   value: 6,
@@ -95,7 +98,9 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
               })}
             />
             {errors.password ? (
-              <p className="invalid-feedback text-dark">{errors.password.message}</p>
+              <p className="invalid-feedback text-dark">
+                {String(errors.password.message)}
+              </p>
             ) : null}
 
             {error ? <p className="invalid-feedback">{invalidFeedback(error)}</p> : null}

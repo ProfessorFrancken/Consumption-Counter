@@ -36,7 +36,10 @@ type State = {
   recentBuyers: RecentBuyerId[];
 };
 const TransactionsContext = React.createContext<State | undefined>(undefined);
-export const TransactionsProvider: React.FC = ({children, ...props}) => {
+export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
+  children,
+  ...props
+}) => {
   const transactions = useBusReducer(transactionsReducer, []);
   const recentBuyers = useBusReducer(recentBuyersReducer, []);
 

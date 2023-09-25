@@ -82,11 +82,10 @@ type State = {
   members: MemberType[];
 };
 const MembersContext = React.createContext<State | undefined>(undefined);
-export const MembersProvider: React.FC<{members?: MemberType[]}> = ({
-  members: defaultMembers,
-  children,
-  ...props
-}) => {
+export const MembersProvider: React.FC<{
+  members?: MemberType[];
+  children: React.ReactNode;
+}> = ({members: defaultMembers, children, ...props}) => {
   const membersQuery = useFetchMembers(defaultMembers);
 
   return (

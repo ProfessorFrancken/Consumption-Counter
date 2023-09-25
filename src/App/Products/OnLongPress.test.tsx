@@ -43,7 +43,7 @@ describe("<OnLongPress>", () => {
     fireEvent.mouseDown(getByRole("button"));
     expect(wasClicked).not.toBeCalled();
     act(() => {
-      jest.runTimersToTime(100);
+      jest.advanceTimersByTime(100);
     });
     expect(wasClicked).not.toBeCalled();
     fireEvent.mouseUp(getByRole("button"));
@@ -84,7 +84,7 @@ describe("<OnLongPress>", () => {
 
       fireEvent.touchStart(getByRole("button"));
       act(() => {
-        jest.runTimersToTime(100);
+        jest.advanceTimersByTime(100);
       });
       fireEvent.touchEnd(getByRole("button"));
 

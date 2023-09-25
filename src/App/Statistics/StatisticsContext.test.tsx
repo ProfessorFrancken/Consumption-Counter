@@ -53,7 +53,7 @@ describe("Statistics context", () => {
   it("Requires the StatisticsProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectStatistic />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

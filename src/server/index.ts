@@ -66,7 +66,7 @@ export function makeServer({environment = "development"} = {}) {
       seedStatistics(server);
     },
     routes() {
-      this.post("authenticate", (schema, request) => {
+      this.post("authenticate", (_, request) => {
         const {password} = JSON.parse(request.requestBody);
         if (password !== "bitterballen") {
           return new Response(401, {}, {error: "unauthorized"});
@@ -123,11 +123,10 @@ export function makeServer({environment = "development"} = {}) {
       this.post("/orders", () => {
         return {order: 1};
       });
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '() => number' is not assignable ... Remove this comment to see the full error message
       this.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", () => {
         return 1;
       });
-      this.get("https://borrelcie.vodka/present/data.php", (schema) => {
+      this.get("https://borrelcie.vodka/present/data.php", (_) => {
         return ["Mark"];
       });
     },
@@ -145,19 +144,14 @@ const makeCypressServer = () => {
       let methods = ["get", "put", "patch", "post", "delete"];
       methods.forEach((method) => {
         // @ts-expect-error ts-migrate(7052) FIXME: Element implicitly has an 'any' type because type ... Remove this comment to see the full error message
-        this[method](
-          "http://francken.nl.localhost/*",
-          async (schema: any, request: any) => {
-            let [status, headers, body] = await (window as any).handleFromCypress(
-              request
-            );
-            return new Response(status, headers, body);
-          }
-        );
+        this[method]("http://francken.nl.localhost/*", async (_: any, request: any) => {
+          let [status, headers, body] = await (window as any).handleFromCypress(request);
+          return new Response(status, headers, body);
+        });
         // @ts-expect-error ts-migrate(7052) FIXME: Element implicitly has an 'any' type because type ... Remove this comment to see the full error message
         this[method](
           "https://borrelcie.vodka/present/data.php",
-          async (schema: any, request: any) => {
+          async (_: any, request: any) => {
             let [status, headers, body] = await (window as any).handleFromCypress(
               request
             );
@@ -165,7 +159,7 @@ const makeCypressServer = () => {
           }
         );
         // @ts-expect-error ts-migrate(7052) FIXME: Element implicitly has an 'any' type because type ... Remove this comment to see the full error message
-        this[method]("/*", async (schema: any, request: any) => {
+        this[method]("/*", async (_: any, request: any) => {
           let [status, headers, body] = await (window as any).handleFromCypress(request);
           return new Response(status, headers, body);
         });

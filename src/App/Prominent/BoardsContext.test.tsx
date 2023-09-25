@@ -17,7 +17,7 @@ describe("Board context", () => {
       <ul>
         {boardMembers.map((board, idx) => (
           <li key={idx}>
-            {board.member.fullname} - {board.year}
+            {board.member?.fullname} - {board.year}
           </li>
         ))}
       </ul>
@@ -42,6 +42,10 @@ describe("Board context", () => {
               firstName: "John",
               surname: "Snow",
               fullname: "John Snow",
+              age: 33,
+              prominent: null,
+              cosmetics: undefined,
+              latest_purchase_at: null,
             },
           ]}
         >
@@ -58,7 +62,7 @@ describe("Board context", () => {
   it("Requires the BoardsProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectBoard />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

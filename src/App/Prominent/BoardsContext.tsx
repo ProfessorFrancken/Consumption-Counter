@@ -40,11 +40,10 @@ type State = {
   boardMembers: BoardMember[];
 };
 const BoardsContext = React.createContext<State | undefined>(undefined);
-export const BoardsProvider: React.FC<{boardMembers?: BoardMember[]}> = ({
-  boardMembers: defaultBoardMembers,
-  children,
-  ...props
-}) => {
+export const BoardsProvider: React.FC<{
+  boardMembers?: BoardMember[];
+  children: React.ReactNode;
+}> = ({boardMembers: defaultBoardMembers, children, ...props}) => {
   const boardsQuery = useFetchBoardMembers(defaultBoardMembers);
 
   // TODO: extract this (and the same code for committees) to a useWithMembers(memberCollection) hook

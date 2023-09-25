@@ -89,11 +89,10 @@ type State = {
   statistics: Statistic[];
 };
 const StatisticsContext = React.createContext<State | undefined>(undefined);
-export const StatisticsProvider: React.FC<{statistics?: Statistic[]}> = ({
-  statistics: defaultStatistics,
-  children,
-  ...props
-}) => {
+export const StatisticsProvider: React.FC<{
+  statistics?: Statistic[];
+  children: React.ReactNode;
+}> = ({statistics: defaultStatistics, children, ...props}) => {
   const statisticsQuery = useFetchStatistics(defaultStatistics);
   const statistics = useBusReducer(statisticsReducer, []);
 

@@ -1,12 +1,15 @@
 import React from "react";
 import {render, fireEvent} from "test-utils";
+import {AvailableProduct} from "./OrdersContext";
 import Products from "./Products";
 
 it("renders without crashing", () => {
+  const addToOrder = jest.fn();
   render(
     <Products
       products={{Bier: [], Fris: [], Eten: []}}
-      addProductToOrder={(click) => click}
+      addProductToOrder={addToOrder}
+      addProductToOrderOrMakeOrder={addToOrder}
     />
   );
 });
@@ -14,13 +17,27 @@ it("renders without crashing", () => {
 it("adds products to an order when clicked", async () => {
   const addToOrder = jest.fn();
 
+  const hertogJan: AvailableProduct = {
+    id: 1,
+    name: "Hertog-Jan",
+    image: "",
+    age_restriction: 18,
+    category: "Bier",
+    locked: false,
+    ordered: 0,
+    position: 0,
+    price: 1,
+    splash_image: "",
+  };
+
   const products = (
     <Products
       products={{
-        Bier: [{id: 1, name: "Hertog-Jan", image: ""}],
+        Bier: [hertogJan],
         Fris: [],
         Eten: [],
       }}
+      addProductToOrder={addToOrder}
       addProductToOrderOrMakeOrder={addToOrder}
     />
   );
@@ -31,5 +48,5 @@ it("adds products to an order when clicked", async () => {
   fireEvent.mouseDown(screen.getByLabelText("Buy Hertog-Jan"));
   fireEvent.mouseUp(screen.getByLabelText("Buy Hertog-Jan"));
 
-  expect(addToOrder).toBeCalledWith({id: 1, name: "Hertog-Jan", image: ""});
+  expect(addToOrder).toBeCalledWith(hertogJan);
 });

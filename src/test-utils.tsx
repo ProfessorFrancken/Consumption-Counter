@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import {render, RenderOptions} from "@testing-library/react";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {
@@ -22,12 +22,11 @@ import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient, setLogger} from "react-query";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 
-const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
-  children,
-  storeState,
-  routes,
-  ...props
-}) => {
+const AllTheProviders: React.FC<{
+  storeState: any;
+  routes: string[];
+  children: React.ReactNode;
+}> = ({children, storeState, routes, ...props}) => {
   const {
     authentication = defaultAuthentication,
     order = defaultOrder,
@@ -88,7 +87,7 @@ const customRender = (
   options: Omit<RenderOptions, "queries"> & {
     wrapperProps?: any;
     storeState?: any;
-    routes: string[];
+    routes?: string[];
   } = {
     wrapperProps: {},
     storeState: {},
