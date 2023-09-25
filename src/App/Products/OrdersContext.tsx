@@ -1,9 +1,9 @@
 import React from "react";
 import {MemberType} from "App/Members/Members";
-import {useHistory} from "react-router";
 import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
 import {useQueuedOrders} from "App/QueuedOrdersContext";
+import {useNavigate} from "react-router";
 
 export type Product = {
   id: number;
@@ -64,7 +64,7 @@ const orderReducer = (state: Order, action: OrderAction) => {
 };
 
 const useOrderReducer = (defaultOrder: Order) => {
-  const {push} = useHistory();
+  const navigate = useNavigate();
   const [order, dispatch] = React.useReducer(orderReducer, defaultOrder);
   const {makeOrder: queueOrder} = useQueuedOrders();
 
@@ -96,7 +96,7 @@ const useOrderReducer = (defaultOrder: Order) => {
     }
 
     dispatch({type: "SELECT_MEMBER", member});
-    push("/products");
+    navigate("/products");
   };
 
   return [

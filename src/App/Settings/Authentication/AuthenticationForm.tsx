@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import decode from "jwt-decode";
 import moment from "moment";
 import {useForm} from "react-hook-form";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router";
 
 const Button = ({children, ...props}: any) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
@@ -63,12 +63,12 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
     register,
     formState: {errors},
   } = useForm();
-  const {push} = useHistory();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(({password}) => {
     authenticate(password, {
       onSuccess: () => {
-        push("/loading");
+        navigate("/loading");
       },
     });
   });

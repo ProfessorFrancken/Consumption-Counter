@@ -1,14 +1,14 @@
 import React from "react";
 import Compucie from "./Compucie";
 import {useOrder} from "App/Products/OrdersContext";
-import {useHistory} from "react-router";
 import {useCompucie} from "../CommitteesContext";
 import {useQueryClient} from "react-query";
+import {useNavigate} from "react-router";
 
 const CompucieScreen = () => {
   const {compucie, scriptcie} = useCompucie();
   const {selectMember} = useOrder();
-  const {push} = useHistory();
+  const navigate = useNavigate();
   const client = useQueryClient();
 
   return (
@@ -19,7 +19,7 @@ const CompucieScreen = () => {
       reloadApplication={() => {
         client.invalidateQueries();
         client.refetchQueries();
-        push("/loading");
+        navigate("/loading");
       }}
     />
   );

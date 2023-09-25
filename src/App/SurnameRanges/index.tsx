@@ -1,12 +1,12 @@
 import SurnameRanges from "./SurnameRanges";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router";
 import {useGroupedSurnames} from "App/Members/Context";
 
 const SurnameRangesScreen = () => {
-  const {push} = useHistory();
+  const navigate = useNavigate();
   const groupedSurnames = useGroupedSurnames();
 
-  const selectRange = (range: any) => push(`/members/${range.idx}`);
+  const selectRange = (range: any) => navigate(`/members/${range.idx}`);
 
   return <SurnameRanges ranges={groupedSurnames} selectRange={selectRange} />;
 };

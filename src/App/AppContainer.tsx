@@ -1,5 +1,4 @@
 import React from "react";
-import {useHistory} from "react-router-dom";
 import ScreenSaver from "./ScreenSaver";
 import App from "./App";
 import {useCommittees} from "./Committees/CommitteesContext";
@@ -7,6 +6,7 @@ import {useBoards} from "./Prominent/BoardsContext";
 import {useMembers} from "./Members/Context";
 import {useBackgroundFromOrder, useFailedOrders} from "./QueuedOrdersContext";
 import {useStatistics} from "./Statistics/StatisticsContext";
+import {useNavigate} from "react-router";
 
 const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
@@ -58,14 +58,14 @@ const AppContainer = () => {
   const menuItems = useMenuItems();
   const background = useBackgroundFromOrder();
   const failedOrders = useFailedOrders();
-  const {push} = useHistory();
+  const navigate = useNavigate();
 
-  const goToCompucieScreen = () => push("/compucie");
-  const goToProminent = () => push("/prominent");
+  const goToCompucieScreen = () => navigate("/compucie");
+  const goToProminent = () => navigate("/prominent");
 
   // Screensaver
-  const goHome = () => push("/");
-  const goToScreenSaver = () => push("/statistics");
+  const goHome = () => navigate("/");
+  const goToScreenSaver = () => navigate("/statistics");
 
   return (
     <>

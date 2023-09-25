@@ -1,12 +1,23 @@
 import React from "react";
-import AppContainer from "./AppContainer";
-import {history} from "Root";
+import AppContainerWithoutLocation from "./AppContainer";
 import MockDate from "mockdate";
 import moxios from "moxios";
-import {render, fireEvent, act} from "test-utils";
+import {render, fireEvent, act, screen} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
 import {waitFor} from "@testing-library/dom";
+import {useLocation} from "react-router";
+
+// Ugly hack that allows us to read the browser's current location
+const AppContainer = () => {
+  const location = useLocation();
+  return (
+    <>
+      <span aria-label="location">{location.pathname}</span>
+      <AppContainerWithoutLocation />
+    </>
+  );
+};
 
 afterEach(() => {
   localStorage.removeItem("plus_one_order_queue");
@@ -62,7 +73,7 @@ describe("Consumption Counter", () => {
   const selectRangeIncludingJohnSnow = (app: any) => {
     fireEvent.click(app.getByText("Snow-Snow"));
 
-    expect(history.location.pathname).toBe("/members/0");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/members/0");
     expect(app.getByText("John Snow")).toBeInTheDocument();
   };
 
@@ -71,7 +82,7 @@ describe("Consumption Counter", () => {
   };
 
   const addHertogJanToOrder = (app: any) => {
-    expect(history.location.pathname).toBe("/products");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/products");
 
     const product = app.getByLabelText(/Buy Hertog Jan/);
     expect(product).toBeInTheDocument();
@@ -81,7 +92,7 @@ describe("Consumption Counter", () => {
   };
 
   const expectOrderToBeBought = async (app: any) => {
-    expect(history.location.pathname).toBe("/");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/");
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
 
     act(() => {
@@ -94,7 +105,7 @@ describe("Consumption Counter", () => {
   };
 
   const selectBuyMore = (app: any) => {
-    expect(history.location.pathname).toBe("/products");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/products");
     expect(app.getByText("Hertog Jan")).toBeInTheDocument();
     const product = app.getByText("Hertog Jan");
 
@@ -118,7 +129,7 @@ describe("Consumption Counter", () => {
 
   const selectProminent = (app: any) => {
     fireEvent.click(app.getByLabelText("Prominent"));
-    expect(history.location.pathname).toBe("/prominent");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/prominent");
   };
 
   const cancelOrder = (app: any) => {
@@ -137,22 +148,22 @@ describe("Consumption Counter", () => {
 
   const selectCommittees = (app: any) => {
     fireEvent.click(app.getByLabelText("Committees"));
-    expect(history.location.pathname).toBe("/committees");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/committees");
   };
 
   const selectCompucie = (app: any) => {
     fireEvent.click(app.getByRole("button", {name: "Compucie"}));
-    expect(history.location.pathname).toBe("/committees/0");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/committees/0");
   };
 
   const selectRecent = (app: any) => {
     fireEvent.click(app.getByLabelText("Recent"));
-    expect(history.location.pathname).toBe("/recent");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/recent");
   };
 
   const selectStatistics = (app: any) => {
     fireEvent.click(app.getByLabelText("Statistics"));
-    expect(history.location.pathname).toBe("/statistics");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/statistics");
   };
 
   it("allows a member to buy a product", async () => {
@@ -162,7 +173,7 @@ describe("Consumption Counter", () => {
     selectJohnSnow(app);
 
     await waitFor(() => {
-      expect(history.location.pathname).toBe("/products");
+      expect(screen.getByLabelText("location")).toHaveTextContent("/products");
     });
 
     addHertogJanToOrder(app);
@@ -259,7 +270,7 @@ describe("Consumption Counter", () => {
     addHertogJanToOrder(app);
 
     // Buy another product by clicking the go back button
-    expect(history.location.pathname).toBe("/");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/");
     selectJohnSnow(app);
 
     expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
@@ -335,7 +346,7 @@ describe("Consumption Counter", () => {
       act(() => {
         jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT);
       });
-      expect(history.location.pathname).toBe("/");
+      expect(screen.getByLabelText("location")).toHaveTextContent("/");
     });
 
     it("should reset the screensaver timer when going to a different route", () => {
@@ -348,11 +359,11 @@ describe("Consumption Counter", () => {
       act(() => {
         jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
       });
-      expect(history.location.pathname).toBe("/recent");
+      expect(screen.getByLabelText("location")).toHaveTextContent("/recent");
       act(() => {
         jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
       });
-      expect(history.location.pathname).toBe("/");
+      expect(screen.getByLabelText("location")).toHaveTextContent("/");
     });
   });
 
@@ -363,7 +374,7 @@ describe("Consumption Counter", () => {
     expect(header).toHaveTextContent("T.F.V. 'Professor Francken'");
     fireEvent.click(header);
 
-    expect(history.location.pathname).toBe("/compucie");
+    expect(screen.getByLabelText("location")).toHaveTextContent("/compucie");
 
     selectJohnSnow(app);
 
