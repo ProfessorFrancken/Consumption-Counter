@@ -1,5 +1,5 @@
 import React from "react";
-import {useHistory} from "react-router";
+import {useLocation} from "react-router";
 
 type Props = {
   goHome: () => void;
@@ -9,13 +9,12 @@ type Props = {
 export const SCREEN_SAVER_TIMEOUT = 30000;
 
 const ScreenSaver: React.FC<Props> = ({goHome, goToScreenSaver}) => {
-  const history = useHistory();
-  const {listen, location} = history;
+  const location = useLocation();
 
   const [pathname, setPathname] = React.useState(location.pathname);
   React.useEffect(() => {
-    return listen((location) => setPathname(location.pathname));
-  }, [listen, setPathname]);
+    return setPathname(location.pathname);
+  }, [location, setPathname]);
 
   React.useEffect(() => {
     if (pathname === "/statistics") {

@@ -4,7 +4,7 @@ import {pick, maxBy} from "lodash";
 import {MemberType} from "./Members/Members";
 import {Order, Product} from "./Products/OrdersContext";
 import api from "api";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router";
 import useLocalStorage from "./useLocalStorage";
 import {useBus} from "ts-bus/react";
 
@@ -27,7 +27,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     defaultQueuedOrders
   );
   const bus = useBus();
-  const {push} = useHistory();
+  const navigate = useNavigate();
 
   const dequeQueuedOrder = (order: OrderedOrder) => {
     setQueuedOrders((orders: QueuedOrder[]) =>
@@ -83,7 +83,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
       return [{order, fails: 0, state: "queued" as const}, ...orders];
     });
 
-    push("/");
+    navigate("/");
 
     orderTimeoutQueue[order.ordered_at] = setTimeout(() => {
       buyOrder(order);

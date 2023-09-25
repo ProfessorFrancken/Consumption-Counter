@@ -85,7 +85,7 @@ const LoadingScreen = () => {
           <LoadFeatureListItem feature={{label: "Statistics", query: statisticsQuery}} />
         </ul>
         {applicationIsLoaded ? (
-          <NavLink exact to="/" className="tile button p-4">
+          <NavLink to="/" className="tile button p-4">
             Open application
           </NavLink>
         ) : (

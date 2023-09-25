@@ -1,7 +1,7 @@
 import React from "react";
 import {QueryObserverResult, useQuery} from "react-query";
 import api from "api";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router";
 import {groupBy, uniqBy} from "lodash";
 import {MemberType} from "App/Members/Members";
 import {useMembers} from "App/Members/Context";
@@ -54,13 +54,13 @@ export const CommitteesProvider: React.FC<{
   committeeMembers?: CommitteeMember[];
   children: React.ReactNode;
 }> = ({committeeMembers: defaultCommitteeMembers, children, ...props}) => {
-  const {push} = useHistory();
+  const navigate = useNavigate();
   const {members} = useMembers();
 
   const committeesQuery = useFetchCommitteeMembers(defaultCommitteeMembers);
 
   const selectCommittee = (committee: Committee) => {
-    push(`/committees/${committee.id}`);
+    navigate(`/committees/${committee.id}`);
   };
 
   const committeeMembers: CommitteeMember[] = (

@@ -1,15 +1,14 @@
 import React from "react";
-import {Route, NavLink} from "react-router-dom";
 import {useOrder} from "App/Products/OrdersContext";
 import {useCommittees} from "App/Committees/CommitteesContext";
+import {NavLink, Route, Routes, useParams} from "react-router-dom";
 
-const CommitteeTitle = ({
-  match: {
-    params: {page},
-  },
-}: any) => {
+const CommitteeTitle = ({}: any) => {
+  const params = useParams<{page: string}>();
   const {committees = []} = useCommittees();
-  const selectedCommittee = committees.find(({id}: any) => id === parseInt(page, 10));
+  const selectedCommittee = committees.find(
+    ({id}: any) => id === parseInt(params.page ?? "", 10)
+  );
 
   return <span>{selectedCommittee ? selectedCommittee.name : "Unknown committee"}</span>;
 };
@@ -25,43 +24,39 @@ const BuyProductsForMemberTitle = () => {
   return <span>{order.member.fullname}</span>;
 };
 
-const HeaderTitle = () => (
-  <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
-    <Route exact path="/pricelist" render={() => <span>Pricelist</span>} />
-    <Route exact path="/settings" render={() => <span>Settings</span>} />
-    <Route exact path="/prominent" render={() => <span>Prominent</span>} />
-    <Route exact path="/recent" render={() => <span>Recent</span>} />
-    <Route exact path="/committees" render={() => <span>Committees</span>} />
-    <Route exact path="/statistics" render={() => <span>Statistics</span>} />
-    <Route exact path="/screensaver" render={() => <span>Screensaver</span>} />
-    <Route exact path="/committees/:page(\d+)" component={CommitteeTitle} />
-    <Route exact path="/products" component={BuyProductsForMemberTitle} />
-    <Route exact path="/present" render={() => <span>Present</span>} />
-  </h1>
-);
+const HeaderTitle = () => {
+  return (
+    <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
+      <Routes>
+        <Route path="/pricelist" Component={() => <span>Pricelist</span>} />
+        <Route path="/settings" Component={() => <span>Settings</span>} />
+        <Route path="/prominent" Component={() => <span>Prominent</span>} />
+        <Route path="/recent" Component={() => <span>Recent</span>} />
+        <Route path="/committees" Component={() => <span>Committees</span>} />
+        <Route path="/statistics" Component={() => <span>Statistics</span>} />
+        <Route path="/screensaver" Component={() => <span>Screensaver</span>} />
+        <Route path="/committees/:page" element={<CommitteeTitle />} />
+        <Route path="/products" element={<BuyProductsForMemberTitle />} />
+        <Route path="/present" Component={() => <span>Present</span>} />
+      </Routes>
+    </h1>
+  );
+};
 
 const Header = ({onClick, failedOrders}: any) => (
   <header className="header">
     <HeaderTitle />
     <div className="header-item d-flex justify-content-center">
-      <Route
-        exact
-        path="/products"
-        render={() => (
-          <NavLink exact to="/pricelist">
-            Show prices
-          </NavLink>
-        )}
-      />
-      <Route
-        exact
-        path="/pricelist"
-        render={() => (
-          <NavLink exact to="/products">
-            Buy products
-          </NavLink>
-        )}
-      />
+      <Routes>
+        <Route
+          path="/products"
+          Component={() => <NavLink to="/pricelist">Show prices</NavLink>}
+        />
+        <Route
+          path="/pricelist"
+          Component={() => <NavLink to="/products">Buy products</NavLink>}
+        />
+      </Routes>
     </div>
     <h2
       className="association header-item text-right h4 d-flex align-items-center font-weight-normal mb-0"
@@ -71,7 +66,7 @@ const Header = ({onClick, failedOrders}: any) => (
     </h2>
     {failedOrders > 0 && (
       <div className="ml-3">
-        <NavLink exact to="/settings">
+        <NavLink to="/settings">
           <div className="badge badge-danger">{failedOrders}</div>
         </NavLink>
       </div>

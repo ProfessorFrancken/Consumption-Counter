@@ -8,7 +8,6 @@ import {
   defaultOrder,
   defaultProducts,
 } from "App/MockedState";
-import {history} from "Root";
 import {InfrastructureProviders} from "Root";
 import {OrderProvider, Product} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
@@ -21,12 +20,13 @@ import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient, setLogger} from "react-query";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
+import {MemoryRouter} from "react-router-dom";
 
 const AllTheProviders: React.FC<{
   storeState: any;
   routes: string[];
   children: React.ReactNode;
-}> = ({children, storeState, routes, ...props}) => {
+}> = ({children, storeState = {}, routes, ...props}) => {
   const {
     authentication = defaultAuthentication,
     order = defaultOrder,
@@ -39,7 +39,7 @@ const AllTheProviders: React.FC<{
     activities = [],
     statistics = [],
   } = storeState;
-  (routes || []).forEach((route) => history.push(route));
+  // (routes || []).forEach((route) => history.push(route));
 
   const products = Object.values(productsByCategory).flatMap(
     (product) => product
@@ -55,7 +55,7 @@ const AllTheProviders: React.FC<{
   });
 
   return (
-    <InfrastructureProviders queryClient={queryClient}>
+    <InfrastructureProviders queryClient={queryClient} routes={routes}>
       <AuthenticationProvider {...authentication}>
         <QueuedOrdersProvider
           queuedOrder={queuedOrder ?? undefined}

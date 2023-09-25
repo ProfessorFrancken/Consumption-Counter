@@ -9,10 +9,8 @@ const MenuItem = ({menuItem}: any) =>
     </span>
   ) : (
     <NavLink
-      exact
       to={menuItem.url}
-      className="button menuButton"
-      activeClassName="active"
+      className={(props) => `button menuButton ${props.isActive ? "active" : ""}`}
       aria-label={menuItem.label}
     >
       <FontAwesomeIcon icon={menuItem.icon} size="lg" />

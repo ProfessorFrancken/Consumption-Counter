@@ -2,7 +2,6 @@ import React from "react";
 import {render, fireEvent} from "test-utils";
 import PresentScreen from "./index";
 import moxios from "moxios";
-import {history} from "Root";
 
 describe("Present screen", () => {
   it("Shows members that are present in the members room", async () => {
