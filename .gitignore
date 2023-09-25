@@ -22,3 +22,8 @@ yarn-error.log*
 
 db.json
 .log
+
+.parcel-cache
+package-lock.json
+.vscode/settings.json
+dist

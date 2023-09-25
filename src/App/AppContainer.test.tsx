@@ -1,12 +1,13 @@
 import React from "react";
 import AppContainerWithoutLocation from "./AppContainer";
 import MockDate from "mockdate";
-import moxios from "moxios";
 import {render, fireEvent, act, screen} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
 import {waitFor} from "@testing-library/dom";
 import {useLocation} from "react-router";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 // Ugly hack that allows us to read the browser's current location
 const AppContainer = () => {
@@ -24,6 +25,44 @@ afterEach(() => {
 });
 
 describe("Consumption Counter", () => {
+  const server = setupServer(
+    rest.get("*/members", (req, res, ctx) => {
+      return res(ctx.json({members: mocks.members}));
+    }),
+    rest.get("*/products", (req, res, ctx) => {
+      return res(ctx.json({products: mocks.members}));
+    }),
+    rest.get("*/boards", (req, res, ctx) => {
+      return res(ctx.json({boardMembers: mocks.boards}));
+    }),
+    rest.get("*/committees", (req, res, ctx) => {
+      return res(ctx.json({committees: mocks.committees}));
+    }),
+    rest.get("*/statistics", (req, res, ctx) => {
+      return res(ctx.json({statistics: []}));
+    }),
+    rest.get("*/activities", (req, res, ctx) => {
+      return res(ctx.json({activities: []}));
+    }),
+    rest.post("*/orders", (req, res, ctx) => {
+      return res(ctx.status(200));
+    }),
+    rest.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
+      return res(ctx.text("10"));
+    }),
+    rest.post("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
+      return res(ctx.json({}));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
   beforeEach(() => {
     MockDate.set(new Date(1514764800000));
 
@@ -31,42 +70,9 @@ describe("Consumption Counter", () => {
     window.confirm = (text: string | undefined) => {
       return true;
     };
-
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`${base_api}/members`, {
-      response: {members: mocks.members},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/products`, {
-      response: {products: mocks.products},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/boards`, {
-      response: {boardMembers: mocks.boards},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/committees`, {
-      response: {committees: mocks.committees},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/statistics`, {
-      response: {statistics: []},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/activities`, {
-      response: {activities: []},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/orders`, {});
-    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
-      response: {committees: mocks.committees},
-      headers: {"content-type": "application/json"},
-    });
   });
 
   afterEach(() => {
-    moxios.uninstall();
     MockDate.reset();
   });
 

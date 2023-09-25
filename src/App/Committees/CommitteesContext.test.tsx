@@ -1,9 +1,10 @@
 import * as React from "react";
 import {render} from "@testing-library/react";
 import {useCommittees, CommitteesProvider} from "./CommitteesContext";
-import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
 import {MembersProvider} from "App/Members/Context";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 describe("Committee context", () => {
   const SelectCommittee: React.FC = () => {
@@ -22,15 +23,38 @@ describe("Committee context", () => {
     );
   };
 
-  it("Fetches a list of committees", async () => {
-    // TODO: replace by msw or miragejs
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`${base_api}/committees`, {
-      response: {committees: committeeMembers},
-      headers: {"content-type": "application/json"},
-    });
+  const committeeMembers = [
+    {
+      commissie_id: 14,
+      lid_id: 314,
+      jaar: 2018,
+      functie: "King",
+      naam: "Night's Watch",
+    },
+    {
+      commissie_id: 0,
+      lid_id: 314,
+      jaar: 2018,
+      functie: "King",
+      naam: "Compucie",
+    },
+  ];
 
+  const server = setupServer(
+    rest.get("*/committees", (req, res, ctx) => {
+      return res(ctx.json({committees: committeeMembers}));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("Fetches a list of committees", async () => {
     const {findByText} = render(
       <InfrastructureProviders>
         <MembersProvider
@@ -69,20 +93,3 @@ describe("Committee context", () => {
 
   // it only shows current active members
 });
-
-const committeeMembers = [
-  {
-    commissie_id: 14,
-    lid_id: 314,
-    jaar: 2018,
-    functie: "King",
-    naam: "Night's Watch",
-  },
-  {
-    commissie_id: 0,
-    lid_id: 314,
-    jaar: 2018,
-    functie: "King",
-    naam: "Compucie",
-  },
-];

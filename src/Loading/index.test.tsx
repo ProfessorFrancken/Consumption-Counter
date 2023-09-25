@@ -1,40 +1,47 @@
 import React from "react";
 import {render} from "test-utils";
 import LoadingScreen from "./index";
-import moxios from "moxios";
+import {baseApi} from "api";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 describe("Loading screen", () => {
+  const members = [
+    {
+      id: 314,
+      voornaam: "John",
+      initialen: "",
+      tussenvoegsel: "",
+      achternaam: "Snow",
+      geboortedatum: "2000-01-01",
+      prominent: null,
+      kleur: null,
+      afbeelding: null,
+      bijnaam: null,
+      button_width: null,
+      button_height: null,
+      latest_purchase_at: "2018-01-01 00:00:00",
+    },
+  ];
+
+  const server = setupServer(
+    rest.get("*/members", (req, res, ctx) => {
+      return res(ctx.json({members}));
+    }),
+    rest.get("*/boards", (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({error: "moi"}));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
   it("renders", async () => {
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    const members = [
-      {
-        id: 314,
-        voornaam: "John",
-        initialen: "",
-        tussenvoegsel: "",
-        achternaam: "Snow",
-        geboortedatum: "2000-01-01",
-        prominent: null,
-        kleur: null,
-        afbeelding: null,
-        bijnaam: null,
-        button_width: null,
-        button_height: null,
-        latest_purchase_at: "2018-01-01 00:00:00",
-      },
-    ];
-
-    moxios.stubRequest(`${base_api}/members`, {
-      response: {members: members},
-      headers: {"content-type": "application/json"},
-    });
-    moxios.stubRequest(`${base_api}/boards`, {
-      headers: {"content-type": "application/json"},
-      status: 500,
-      response: {error: "moi"},
-    });
-
     const storeState = {
       members: null,
       boardMembers: null,

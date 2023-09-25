@@ -1,9 +1,18 @@
 import * as React from "react";
 import {render} from "@testing-library/react";
 import {useBoards, BoardsProvider} from "./BoardsContext";
-import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
 import {MembersProvider} from "App/Members/Context";
+import {rest} from "msw";
+import {setupServer} from "msw/node";
+
+const boardMembers = [
+  {
+    lid_id: 314,
+    jaar: 2018,
+    functie: "King",
+  },
+];
 
 describe("Board context", () => {
   const SelectBoard: React.FC = () => {
@@ -24,15 +33,21 @@ describe("Board context", () => {
     );
   };
 
-  it("Fetches a list of boards", async () => {
-    // TODO: replace by msw or miragejs
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`${base_api}/boards`, {
-      response: {boardMembers},
-      headers: {"content-type": "application/json"},
-    });
+  const server = setupServer(
+    rest.get("*/boards", (req, res, ctx) => {
+      return res(ctx.json({boardMembers}));
+    })
+  );
 
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("Fetches a list of boards", async () => {
     const {findByText} = render(
       <InfrastructureProviders>
         <MembersProvider
@@ -70,11 +85,3 @@ describe("Board context", () => {
 
   // it only shows current active members
 });
-
-const boardMembers = [
-  {
-    lid_id: 314,
-    jaar: 2018,
-    functie: "King",
-  },
-];

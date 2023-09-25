@@ -2,11 +2,26 @@ import * as React from "react";
 import {fireEvent, render} from "@testing-library/react";
 import {render as renderApp} from "test-utils";
 import {useQueuedOrders} from "./QueuedOrdersContext";
-import moxios from "moxios";
+import {rest} from "msw";
+import {setupServer} from "msw/lib/node";
 
 describe("QueuedOrders context", () => {
   afterEach(() => {
     localStorage.removeItem("plus_one_order_queue");
+  });
+
+  const server = setupServer(
+    rest.post("*/orders", (req, res, ctx) => {
+      return res(ctx.status(500));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
   });
 
   const QueueOrder: React.FC = () => {
@@ -62,12 +77,6 @@ describe("QueuedOrders context", () => {
   });
 
   it("Requeues an order if buying the order failed", async () => {
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`${base_api}/orders`, {
-      status: 500,
-    });
-
     const MakeOrder: React.FC = () => {
       const {buyOrder, queuedOrders} = useQueuedOrders();
 
