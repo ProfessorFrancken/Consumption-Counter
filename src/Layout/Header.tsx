@@ -3,7 +3,7 @@ import {useOrder} from "App/Products/OrdersContext";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {NavLink, Route, Routes, useParams} from "react-router-dom";
 
-const CommitteeTitle = ({}: any) => {
+const CommitteeTitle = () => {
   const params = useParams<{page: string}>();
   const {committees = []} = useCommittees();
   const selectedCommittee = committees.find(
