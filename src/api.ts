@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = process.env.REACT_APP_API_SERVER;
+export const baseApi = process.env.REACT_APP_API_SERVER;
 
 function authHeader() {
   // return authorization header with jwt token
@@ -28,12 +28,12 @@ async function get(uri: string, params?: any) {
     params,
   };
 
-  return axios.get(api + uri, requestOptions).then(handleResponse);
+  return axios.get(baseApi + uri, requestOptions).then(handleResponse);
 }
 
 async function post(uri: any, body: any) {
   return axios
-    .post(api + uri, body, {
+    .post(baseApi + uri, body, {
       headers: {
         "Content-Type": "application/json",
         ...authHeader(),

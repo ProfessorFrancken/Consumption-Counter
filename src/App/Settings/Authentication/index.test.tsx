@@ -1,16 +1,30 @@
 import React from "react";
 import Authentication from "./index";
-import moxios from "moxios";
 import {render, fireEvent} from "test-utils";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 describe("Authentication", () => {
-  const base_api = process.env.REACT_APP_API_SERVER;
-
   beforeEach(() => {
-    moxios.install();
     localStorage.removeItem("plus_one_authorization");
   });
-  afterEach(() => moxios.uninstall());
+
+  const token =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4";
+
+  const server = setupServer(
+    rest.post("*/authenticate", (req, res, ctx) => {
+      return res(ctx.json({token}));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
 
   it("Shows a warning that the system is not authenticated", () => {
     const {getByRole, getByText} = render(<Authentication />, {
@@ -26,14 +40,6 @@ describe("Authentication", () => {
   });
 
   it("authenticates the plus one system", async () => {
-    const token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4";
-
-    moxios.stubRequest(`${base_api}/authenticate`, {
-      response: {token},
-      headers: {"content-type": "application/json"},
-    });
-
     const {getByText, findByText, getByPlaceholderText} = render(<Authentication />, {
       storeState: {authentication: {token: null}},
     });

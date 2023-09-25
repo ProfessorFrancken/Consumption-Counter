@@ -1,18 +1,27 @@
 import React from "react";
 import {render, fireEvent, screen} from "test-utils";
 import CompucieScreen from "./index";
-import moxios from "moxios";
 import {Route, Routes} from "react-router";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 describe("Compucie screen", () => {
-  beforeEach(() => {
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
-      responseText: "10",
-      status: 200,
-    });
-    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`, {});
+  const server = setupServer(
+    rest.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
+      return res(ctx.text("10"));
+    }),
+
+    rest.post("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
+      return res(ctx.json({}));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
   });
 
   it("renders", () => {

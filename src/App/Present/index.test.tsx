@@ -1,14 +1,24 @@
-import React from "react";
-import {render, fireEvent} from "test-utils";
+import {rest} from "msw";
+import {setupServer} from "msw/lib/node";
+import {render} from "test-utils";
 import PresentScreen from "./index";
-import moxios from "moxios";
 
 describe("Present screen", () => {
+  const server = setupServer(
+    rest.get("https://borrelcie.vodka/present/data.php", (req, res, ctx) => {
+      return res(ctx.json(["Mark"]));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
   it("Shows members that are present in the members room", async () => {
-    moxios.install();
-    moxios.stubRequest(`https://borrelcie.vodka/present/data.php`, {
-      response: ["Mark"],
-    });
     const {findByRole, getByText, getByRole} = render(<PresentScreen />, {
       storeState: {members: [{id: 1403, fullname: "John Snow", cosmetics: {}}]},
     });

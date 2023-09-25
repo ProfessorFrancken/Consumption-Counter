@@ -31,10 +31,12 @@ const useFetchActivities = (activities?: Activity[]) => {
         after,
         before,
       });
+
       return response.activities.map(mapActivity);
     },
     enabled: activities === undefined,
     initialData: activities,
+    refetchInterval: 60 * 60 * 1000,
   });
 };
 
