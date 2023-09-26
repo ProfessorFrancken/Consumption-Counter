@@ -76,14 +76,16 @@ const useMenuItems = () => {
   ];
 };
 
-export const createAppRoutes = () => {
+export const createAppRoutes = (
+  ApplicationProvidersComponent: typeof ApplicationProviders
+) => {
   return createRoutesFromElements(
     <Route
       path="/"
       element={
-        <ApplicationProviders>
+        <ApplicationProvidersComponent>
           <Outlet />
-        </ApplicationProviders>
+        </ApplicationProvidersComponent>
       }
     >
       <Route
@@ -100,8 +102,7 @@ export const createAppRoutes = () => {
           path="/"
           element={
             <Layout>
-              {" "}
-              <Outlet />{" "}
+              <Outlet />
             </Layout>
           }
         >
