@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {BrowserRouter, MemoryRouter} from "react-router-dom";
 import AppContainer from "./App/AppContainer";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
@@ -78,14 +78,26 @@ export const ApplicationProviders: React.FC<{children: React.ReactNode}> = ({
   );
 };
 
-const Root = () => (
-  <InfrastructureProviders>
-    <DevelopMentProviders>
-      <ApplicationProviders>
-        <AppContainer />
-      </ApplicationProviders>
-    </DevelopMentProviders>
-  </InfrastructureProviders>
-);
+const Root = () => {
+  const [queryClient, bus] = useMemo(() => {
+    const queryClient = new QueryClient();
+    const bus = new EventBus();
+    return [queryClient, bus] as const;
+  });
+
+  return (
+    <BusProvider value={bus}>
+      <QueryClientProvider client={queryClient}>
+        <DevelopMentProviders>
+          <BrowserRouter>
+            <ApplicationProviders>
+              <AppContainer />
+            </ApplicationProviders>
+          </BrowserRouter>
+        </DevelopMentProviders>
+      </QueryClientProvider>
+    </BusProvider>
+  );
+};
 
 export default Root;
