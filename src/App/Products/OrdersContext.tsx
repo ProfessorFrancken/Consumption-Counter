@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {MemberType} from "App/Members/Members";
 import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
 import {useQueuedOrders} from "App/QueuedOrdersContext";
 import {useNavigate} from "react-router";
+import {createSearchParams, useSearchParams} from "react-router-dom";
+import {useMembers} from "App/Members/Context";
 
 export type Product = {
   id: number;
@@ -47,15 +49,21 @@ type OrderAction =
   | {type: "ADD_PRODUCT_TO_ORDER"; product: Product}
   | {type: "RESET_ORDER"};
 
-const emptyOrder: Order = {
+type InternalOrder = {
+  products: Product[];
+  memberId: undefined | number;
+  member: undefined | MemberType;
+};
+const emptyOrder: InternalOrder & Order = {
+  memberId: undefined,
   member: undefined,
   products: [],
 };
 
-const orderReducer = (state: Order, action: OrderAction) => {
+const orderReducer = (state: InternalOrder, action: OrderAction): InternalOrder => {
   switch (action.type) {
     case "SELECT_MEMBER":
-      return {...emptyOrder, member: action.member};
+      return {...emptyOrder, memberId: action.member.id, member: action.member};
     case "ADD_PRODUCT_TO_ORDER":
       return {...state, products: [...state.products, {...action.product}]};
     case "RESET_ORDER":
@@ -63,13 +71,31 @@ const orderReducer = (state: Order, action: OrderAction) => {
   }
 };
 
-const useOrderReducer = (defaultOrder: Order) => {
+const useOrderReducer = (defaultOrder: InternalOrder) => {
   const navigate = useNavigate();
-  const [order, dispatch] = React.useReducer(orderReducer, defaultOrder);
+  const [orderWithoutMember, dispatch] = React.useReducer(orderReducer, defaultOrder);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const {members} = useMembers();
+  const order = useMemo(() => {
+    const member = members.find(({id}) => id === Number(searchParams.get("memberId")));
+
+    if (
+      member === undefined &&
+      (searchParams.has("memberId") || orderWithoutMember.memberId !== undefined)
+    ) {
+      console.warn("OhNO!", orderWithoutMember);
+    }
+
+    return {
+      ...orderWithoutMember,
+      member: member ?? orderWithoutMember.member,
+    };
+  }, [orderWithoutMember, searchParams, members]);
   const {makeOrder: queueOrder} = useQueuedOrders();
 
   const makeOrder = (order: Order) => {
     dispatch({type: "RESET_ORDER"});
+    // HERE needs to be with member
     queueOrder(order);
   };
 
@@ -95,8 +121,13 @@ const useOrderReducer = (defaultOrder: Order) => {
       }
     }
 
+    searchParams.set("member-id", String(member.id));
+    setSearchParams(searchParams);
     dispatch({type: "SELECT_MEMBER", member});
-    navigate("/products");
+    navigate({
+      pathname: "/products",
+      search: createSearchParams({member: String(member.id)}).toString(),
+    });
   };
 
   return [
@@ -185,7 +216,7 @@ export const OrderProvider: React.FC<{
   children: React.ReactNode;
 }> = ({order: defaultOrder = emptyOrder, ...props}) => {
   const [order, {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember}] =
-    useOrderReducer(defaultOrder);
+    useOrderReducer({...defaultOrder, memberId: defaultOrder.member?.id});
   const hour = new Date().getHours();
   const products = useCategorizedProducts(order, hour);
 

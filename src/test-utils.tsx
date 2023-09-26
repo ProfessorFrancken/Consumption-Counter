@@ -39,7 +39,6 @@ const AllTheProviders: React.FC<{
     activities = [],
     statistics = [],
   } = storeState;
-  // (routes || []).forEach((route) => history.push(route));
 
   const products = Object.values(productsByCategory).flatMap(
     (product) => product
@@ -54,7 +53,7 @@ const AllTheProviders: React.FC<{
     log: () => {},
   });
 
-  // TODO put the test application providers in a separat thing that we pass to infrastructure providers?
+  // TODO put the test application providers in a separat thing that we pass to infrastructure providers
   return (
     <InfrastructureProviders queryClient={queryClient} routes={routes}>
       <AuthenticationProvider {...authentication}>

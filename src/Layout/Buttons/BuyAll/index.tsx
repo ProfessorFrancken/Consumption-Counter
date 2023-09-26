@@ -5,6 +5,7 @@ import {useLocation} from "react-router-dom";
 import {useOrder} from "App/Products/OrdersContext";
 
 const BuyAll = () => {
+  // HERE, not really
   const {buyAll, order} = useOrder();
   const {pathname} = useLocation();
 

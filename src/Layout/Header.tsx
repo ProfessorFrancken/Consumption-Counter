@@ -14,6 +14,7 @@ const CommitteeTitle = () => {
 };
 
 const BuyProductsForMemberTitle = () => {
+  // HERE
   const {order} = useOrder();
 
   if (order.member === undefined) {
