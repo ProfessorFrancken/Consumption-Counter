@@ -66,6 +66,7 @@ it("shows the amount of products that are currently being orderd", () => {
 
 describe("Selecting a member", () => {
   const SelectMember: React.FC<{member: MemberType}> = ({member}) => {
+    // HERE
     const {selectMember, order} = useOrder();
 
     if (order.member) {

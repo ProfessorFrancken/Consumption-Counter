@@ -81,47 +81,37 @@ export const createAppRoutes = (
 ) => {
   return createRoutesFromElements(
     <Route
-      path="/"
       element={
         <ApplicationProvidersComponent>
+          <ScreenSaver />
           <Outlet />
         </ApplicationProvidersComponent>
       }
     >
+      <Route path="/loading" element={<Loading />} />
       <Route
-        path="/"
+        path=""
         element={
-          <>
-            <ScreenSaver />
+          <Layout>
             <Outlet />
-          </>
+          </Layout>
         }
       >
-        <Route path="/loading" element={<Loading />} />
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <Outlet />
-            </Layout>
-          }
-        >
-          <Route path="/" element={<SurnameRanges />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/authenticate" element={<Authenticate />} />
-          <Route path="/compucie" element={<Compucie />} />
-          <Route path="/prominent" element={<Prominent />} />
-          <Route path="/statistics" element={<Statistics />} />
-          <Route path="/committees" element={<Committees />} />
-          <Route path="/committees/:page" element={<SelectMemberFromCommittee />} />
-          <Route path="/pricelist" element={<PriceList />} />
-          <Route path="/recent" element={<RecentMembers />} />
-          <Route path="/products" element={<BuyProducts />} />
-          <Route path="/statistics" element={<Statistics />} />
-          <Route path="/present" element={<Present />} />
-          <Route path="/members/:page" element={<SelectMemberFromSurnameRange />} />
-          <Route path="/members" element={<Navigate to="/" />} />
-        </Route>
+        <Route index element={<SurnameRanges />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="authenticate" element={<Authenticate />} />
+        <Route path="compucie" element={<Compucie />} />
+        <Route path="prominent" element={<Prominent />} />
+        <Route path="statistics" element={<Statistics />} />
+        <Route path="committees" element={<Committees />} />
+        <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
+        <Route path="pricelist" element={<PriceList />} />
+        <Route path="recent" element={<RecentMembers />} />
+        <Route path="products" element={<BuyProducts />} />
+        <Route path="statistics" element={<Statistics />} />
+        <Route path="present" element={<Present />} />
+        <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
+        <Route path="members" element={<Navigate to="/" />} />
       </Route>
     </Route>
   );
@@ -131,7 +121,6 @@ export const AppContainer = () => {
   return (
     <Routes>
       <Route
-        path="/"
         element={
           <>
             <ScreenSaver />
@@ -141,28 +130,28 @@ export const AppContainer = () => {
       >
         <Route path="/loading" element={<Loading />} />
         <Route
-          path="/"
+          path="*"
           element={
             <Layout>
               <Outlet />
             </Layout>
           }
         >
-          <Route path="/" element={<SurnameRanges />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/authenticate" element={<Authenticate />} />
-          <Route path="/compucie" element={<Compucie />} />
-          <Route path="/prominent" element={<Prominent />} />
-          <Route path="/statistics" element={<Statistics />} />
-          <Route path="/committees" element={<Committees />} />
-          <Route path="/committees/:page" element={<SelectMemberFromCommittee />} />
-          <Route path="/pricelist" element={<PriceList />} />
-          <Route path="/recent" element={<RecentMembers />} />
-          <Route path="/products" element={<BuyProducts />} />
-          <Route path="/statistics" element={<Statistics />} />
-          <Route path="/present" element={<Present />} />
-          <Route path="/members/:page" element={<SelectMemberFromSurnameRange />} />
-          <Route path="/members" element={<Navigate to="/" />} />
+          <Route index element={<SurnameRanges />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="authenticate" element={<Authenticate />} />
+          <Route path="compucie" element={<Compucie />} />
+          <Route path="prominent" element={<Prominent />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="committees" element={<Committees />} />
+          <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
+          <Route path="pricelist" element={<PriceList />} />
+          <Route path="recent" element={<RecentMembers />} />
+          <Route path="products" element={<BuyProducts />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="present" element={<Present />} />
+          <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
+          <Route path="members" element={<Navigate to="/" />} />
         </Route>
       </Route>
     </Routes>

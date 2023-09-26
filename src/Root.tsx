@@ -27,7 +27,7 @@ export const InfrastructureProviders: React.FC<Props> = ({
   queryClient = new QueryClient(),
   bus = new EventBus(),
 }) => {
-  //const memoryRouter = createMemoryRouter();
+  //const memoryRouter = createMemoryRouter(createAppRoutes(ApplicationProviders));
 
   return (
     <BusProvider value={bus}>
@@ -58,7 +58,7 @@ const Root = () => {
     const queryClient = new QueryClient();
     const bus = new EventBus();
     return [queryClient, bus] as const;
-  });
+  }, []);
 
   return (
     <BusProvider value={bus}>
