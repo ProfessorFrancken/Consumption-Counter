@@ -1,19 +1,14 @@
 import React, {useMemo} from "react";
-import {BrowserRouter, MemoryRouter} from "react-router-dom";
-import AppContainer from "./App/AppContainer";
-import {AuthenticationProvider} from "App/Settings/Authentication/Context";
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  MemoryRouter,
+  RouterProvider,
+} from "react-router-dom";
+import {createAppRoutes} from "./App/AppContainer";
 import {ReactQueryDevtools} from "react-query/devtools";
 import {QueryClient, QueryClientProvider} from "react-query";
-import {OrderProvider} from "App/Products/OrdersContext";
-import {ProductsProvider} from "App/Products/ProductsContext";
 import "./index.css";
-import {CommitteesProvider} from "App/Committees/CommitteesContext";
-import {BoardsProvider} from "App/Prominent/BoardsContext";
-import {MembersProvider} from "App/Members/Context";
-import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
-import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
-import {StatisticsProvider} from "App/Statistics/StatisticsContext";
-import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 import {BusProvider} from "ts-bus/react";
 import {EventBus} from "ts-bus/EventBus";
 
@@ -52,31 +47,7 @@ const DevelopMentProviders: React.FC<{children: React.ReactNode}> = ({children})
   );
 };
 
-export const ApplicationProviders: React.FC<{children: React.ReactNode}> = ({
-  children,
-}) => {
-  return (
-    <AuthenticationProvider>
-      <QueuedOrdersProvider>
-        <ProductsProvider>
-          <MembersProvider>
-            <CommitteesProvider>
-              <BoardsProvider>
-                <OrderProvider>
-                  <ActivitiesProvider>
-                    <StatisticsProvider>
-                      <TransactionsProvider>{children}</TransactionsProvider>
-                    </StatisticsProvider>
-                  </ActivitiesProvider>
-                </OrderProvider>
-              </BoardsProvider>
-            </CommitteesProvider>
-          </MembersProvider>
-        </ProductsProvider>
-      </QueuedOrdersProvider>
-    </AuthenticationProvider>
-  );
-};
+export const router = createBrowserRouter(createAppRoutes());
 
 const Root = () => {
   const [queryClient, bus] = useMemo(() => {
@@ -89,11 +60,7 @@ const Root = () => {
     <BusProvider value={bus}>
       <QueryClientProvider client={queryClient}>
         <DevelopMentProviders>
-          <BrowserRouter>
-            <ApplicationProviders>
-              <AppContainer />
-            </ApplicationProviders>
-          </BrowserRouter>
+          <RouterProvider router={router} />
         </DevelopMentProviders>
       </QueryClientProvider>
     </BusProvider>
