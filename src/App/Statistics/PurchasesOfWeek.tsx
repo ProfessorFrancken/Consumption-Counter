@@ -24,13 +24,7 @@ const PurchasesOfWeek = ({purchases, today, icon, type}: any) => {
         </small>
       </div>
       <div>
-        <VictoryChart
-          height={150}
-          width={400}
-          domainPadding={{x: 10, y: 0}}
-          padding={35}
-          scale={{x: "time"}}
-        >
+        <VictoryChart height={150} width={400} domainPadding={{x: 10, y: 0}} padding={35}>
           <VictoryAxis
             tickFormat={(date) => moment(date).format("ddd")}
             style={{
