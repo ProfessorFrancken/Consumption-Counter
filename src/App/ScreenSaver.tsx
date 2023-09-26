@@ -1,14 +1,13 @@
 import React from "react";
-import {useLocation} from "react-router";
-
-type Props = {
-  goHome: () => void;
-  goToScreenSaver: () => void;
-};
+import {useLocation, useNavigate} from "react-router";
 
 export const SCREEN_SAVER_TIMEOUT = 30000;
 
-const ScreenSaver: React.FC<Props> = ({goHome, goToScreenSaver}) => {
+const ScreenSaver = () => {
+  const navigate = useNavigate();
+  const goHome = () => navigate("/");
+  const goToScreenSaver = () => navigate("/statistics");
+
   const location = useLocation();
 
   const [pathname, setPathname] = React.useState(location.pathname);
