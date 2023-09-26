@@ -54,6 +54,7 @@ const AllTheProviders: React.FC<{
     log: () => {},
   });
 
+  // TODO put the test application providers in a separat thing that we pass to infrastructure providers?
   return (
     <InfrastructureProviders queryClient={queryClient} routes={routes}>
       <AuthenticationProvider {...authentication}>
