@@ -6,11 +6,12 @@ import RecentMembers from "./Recent";
 import {render, screen, within} from "test-utils";
 import clock from "jest-plugin-clock";
 import {mockedState} from "./MockedState";
+import {AppContent} from "./AppContent";
 
 function setup(routes = ["/"]) {
   const props = {menuItems: []};
   const storeState = mockedState();
-  const app = render(<App {...props} />, {storeState, routes});
+  const app = render(<AppContent {...props} />, {storeState, routes});
 
   return {props, app};
 }
