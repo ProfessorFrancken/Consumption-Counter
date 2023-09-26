@@ -68,6 +68,64 @@ const useMenuItems = () => {
   ];
 };
 
+const AppRoutes = () => {
+  const menuItems = useMenuItems();
+  const background = useBackgroundFromOrder();
+  const failedOrders = useFailedOrders();
+  const navigate = useNavigate();
+
+  const goToCompucieScreen = () => navigate("/compucie");
+  const goToProminent = () => navigate("/prominent");
+
+  // Screensaver
+  const goHome = () => navigate("/");
+
+  return (
+    <Route
+      path="/"
+      element={
+        <>
+          <ScreenSaver />
+          <Outlet />
+        </>
+      }
+    >
+      <Route path="/loading" element={<Loading />} />
+      <Route
+        path="/"
+        element={
+          <Layout
+            menuItems={menuItems}
+            background={background}
+            failedOrders={failedOrders}
+            goToCompucieScreen={goToCompucieScreen}
+            goToProminent={goToProminent}
+            goHome={goHome}
+          >
+            <Outlet />
+          </Layout>
+        }
+      >
+        <Route path="/" element={<SurnameRanges />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/authenticate" element={<Authenticate />} />
+        <Route path="/compucie" element={<Compucie />} />
+        <Route path="/prominent" element={<Prominent />} />
+        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/committees" element={<Committees />} />
+        <Route path="/committees/:page" element={<SelectMemberFromCommittee />} />
+        <Route path="/pricelist" element={<PriceList />} />
+        <Route path="/recent" element={<RecentMembers />} />
+        <Route path="/products" element={<BuyProducts />} />
+        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/present" element={<Present />} />
+        <Route path="/members/:page" element={<SelectMemberFromSurnameRange />} />
+        <Route path="/members" element={<Navigate to="/" />} />
+      </Route>
+    </Route>
+  );
+};
+
 export const AppContainer = () => {
   const menuItems = useMenuItems();
   const background = useBackgroundFromOrder();
