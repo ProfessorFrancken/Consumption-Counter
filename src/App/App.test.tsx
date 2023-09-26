@@ -1,19 +1,14 @@
-import React from "react";
-import App from "./App";
 import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";
 import RecentMembers from "./Recent";
 import {render, screen, within} from "test-utils";
 import clock from "jest-plugin-clock";
 import {mockedState} from "./MockedState";
-import {AppContent} from "./AppContent";
+import AppContainer from "./AppContainer";
 
 function setup(routes = ["/"]) {
-  const props = {menuItems: []};
   const storeState = mockedState();
-  const app = render(<AppContent {...props} />, {storeState, routes});
-
-  return {props, app};
+  return render(<AppContainer />, {storeState, routes});
 }
 
 describe("rendering", () => {
@@ -53,7 +48,7 @@ describe("rendering", () => {
 
     screens.forEach((screen) => {
       it(`renders ${screen.path}`, () => {
-        const {app} = setup([screen.path]);
+        const app = setup([screen.path]);
 
         const title = app.getByRole("heading", {level: 1});
         expect(title).toHaveTextContent(screen.title);
