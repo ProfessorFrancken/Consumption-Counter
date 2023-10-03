@@ -9,7 +9,12 @@ import {
   defaultProducts,
 } from "App/MockedState";
 import {InfrastructureProviders} from "Root";
-import {OrderProvider, Product} from "App/Products/OrdersContext";
+import {
+  AvailableProduct,
+  Order,
+  OrderProvider,
+  Product,
+} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
@@ -21,15 +26,34 @@ import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient, setLogger} from "react-query";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 import {MemoryRouter} from "react-router-dom";
+import {MemberType} from "App/Members/Members";
+import {ProductsType} from "App/Products/Products";
+
+type StoreState = {
+  authentication?: any;
+  order?: Order;
+  products?: any;
+  committeeMembers?: any;
+  boardMembers?: any;
+  members?: any;
+  queuedOrder?: any;
+  queuedOrders?: any;
+  activities?: any;
+  statistics?: any;
+};
 
 const AllTheProviders: React.FC<{
-  storeState: any;
+  storeState: StoreState;
   routes: string[];
   children: React.ReactNode;
 }> = ({children, storeState = {}, routes, ...props}) => {
   const {
     authentication = defaultAuthentication,
-    order = defaultOrder,
+    order = {
+      memberId: undefined,
+      member: undefined,
+      products: [],
+    },
     products: productsByCategory = defaultProducts,
     committeeMembers = defaultCommitteeeMembers,
     boardMembers = defaultBoardMembers,
@@ -53,9 +77,15 @@ const AllTheProviders: React.FC<{
     log: () => {},
   });
 
+  const actualRoutes = routes !== undefined ? routes : ["/"];
+
+  if (order.member?.id) {
+    actualRoutes[0] += `?memberId=${order.member.id}`;
+  }
+
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers
   return (
-    <InfrastructureProviders queryClient={queryClient} routes={routes}>
+    <InfrastructureProviders queryClient={queryClient} routes={actualRoutes}>
       <AuthenticationProvider {...authentication}>
         <QueuedOrdersProvider
           queuedOrder={queuedOrder ?? undefined}
@@ -86,12 +116,12 @@ const customRender = (
   ui: React.ReactElement,
   options: Omit<RenderOptions, "queries"> & {
     wrapperProps?: any;
-    storeState?: any;
+    storeState?: StoreState;
     routes?: string[];
   } = {
     wrapperProps: {},
     storeState: {},
-    routes: ["/"],
+    routes: undefined,
   }
 ) => {
   const wrapper = (props: any) => (
@@ -115,3 +145,41 @@ export {customRender as render};
 export const flushAllPromises = () => new Promise((resolve) => setImmediate(resolve));
 
 // TODO also add mirage / msw mock server here
+
+export const getMember = (member: Partial<MemberType> = {}): MemberType => {
+  return {
+    fullname: "John snow",
+    id: 1,
+    firstName: "John",
+    surname: "Snow",
+    latest_purchase_at: null,
+    age: 18,
+    prominent: null,
+    cosmetics: undefined,
+    ...member,
+  };
+};
+
+export const getProduct = (product: Partial<Product> = {}): Product => {
+  return {
+    id: 27,
+    name: "Ice Tea",
+    price: 60,
+    position: 999,
+    category: "Fris",
+    image: "",
+    splash_image: "",
+    age_restriction: null,
+    ...product,
+  };
+};
+
+export const getAvailableProduct = (
+  product: Partial<AvailableProduct> = {}
+): AvailableProduct => {
+  return {
+    locked: false,
+    ordered: 0,
+    ...getProduct(product),
+  };
+};

@@ -1,10 +1,13 @@
 import React from "react";
 import Header from "./Header";
-import {render} from "test-utils";
+import {getMember, render} from "test-utils";
 
 it("renders a buy more button when visiting the products page", () => {
   const storeState = {
-    order: {member: {fullname: "Mark Redeman"}, products: []},
+    order: {
+      member: getMember(),
+      products: [],
+    },
     queuedOrder: null,
   };
 
