@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "react-query";
+import {QueryObserverResult, useQuery} from '@tanstack/react-query';
 import api from "api";
 import moment from "moment";
 import {AppEvent, FETCH_STATISTICS_EVENT, BUY_ORDER_SUCCESS_EVENT} from "actions";

@@ -2,7 +2,7 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useProducts} from "App/Products/ProductsContext";
-import {QueryObserverResult} from "react-query";
+import {QueryObserverResult} from '@tanstack/react-query';
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";

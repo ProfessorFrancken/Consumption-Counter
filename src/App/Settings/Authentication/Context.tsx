@@ -1,5 +1,5 @@
 import React from "react";
-import {UseMutateFunction, useMutation} from "react-query";
+import {UseMutateFunction, useMutation} from "@tanstack/react-query";
 import AuthenticationForm from "./AuthenticationForm";
 import logo from "assets/logo.png";
 import api from "./../../../api";
@@ -24,6 +24,7 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
     try {
       const response = await api.post("/authenticate", {password});
       const token = response.token as string;
+      setToken({token});
       return token;
     } catch (e: unknown) {
       // @ts-expect-error This is a known limitation
@@ -31,10 +32,9 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
     }
   };
 
-  return useMutation<string, Error, string>("login", login, {
-    onSuccess: (token: string) => {
-      setToken({token});
-    },
+  return useMutation<string, Error, string>({
+    mutationKey: ["login"],
+    mutationFn: login,
   });
 }
 

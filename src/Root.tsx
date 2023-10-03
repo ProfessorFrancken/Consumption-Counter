@@ -7,8 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import {createAppRoutes} from "./App/AppContainer";
-import {ReactQueryDevtools} from "react-query/devtools";
-import {QueryClient, QueryClientProvider} from "react-query";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
 import {BusProvider} from "ts-bus/react";
 import {EventBus} from "ts-bus/EventBus";
@@ -43,12 +42,7 @@ export const InfrastructureProviders: React.FC<Props> = ({
 };
 
 const DevelopMentProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
-  return (
-    <>
-      <ReactQueryDevtools initialIsOpen={false} />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export const router = createBrowserRouter(createAppRoutes(ApplicationProviders));

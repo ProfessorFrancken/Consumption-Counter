@@ -2,7 +2,7 @@ import React from "react";
 import Compucie from "./Compucie";
 import {useOrder} from "App/Products/OrdersContext";
 import {useCompucie} from "../CommitteesContext";
-import {useQueryClient} from "react-query";
+import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate} from "react-router";
 
 const CompucieScreen = () => {
