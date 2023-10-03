@@ -23,7 +23,7 @@ import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
-import {QueryClient, setLogger} from "react-query";
+import {QueryClient} from "@tanstack/react-query";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 import {MemoryRouter} from "react-router-dom";
 import {MemberType} from "App/Members/Members";
@@ -70,11 +70,11 @@ const AllTheProviders: React.FC<{
 
   const queryClient = new QueryClient({
     defaultOptions: {queries: {retry: false}},
-  });
-  setLogger({
-    warn: () => {},
-    error: () => {},
-    log: () => {},
+    logger: {
+      warn: () => {},
+      error: () => {},
+      log: () => {},
+    },
   });
 
   const actualRoutes = routes !== undefined ? routes : ["/"];

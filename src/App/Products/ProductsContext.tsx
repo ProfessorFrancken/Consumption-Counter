@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "react-query";
+import {QueryObserverResult, useQuery} from '@tanstack/react-query';
 import api from "api";
 import {Product} from "./OrdersContext";
 
