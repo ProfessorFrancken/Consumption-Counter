@@ -10,24 +10,16 @@ it("renders, and it does not include products that a member is not allowed to bu
   const storeState = {
     products: {
       Bier: [
-        getProduct({
-          name: "Hertog Jan",
-          id: 1,
-          age_restriction: 18,
-          category: "Bier",
-        }),
+        getProduct({id: 1, name: "Hertog Jan", age_restriction: 18, category: "Bier"}),
       ],
-      Fris: [
-        getProduct({
-          name: "Ice Tea",
-          id: 2,
-          age_restriction: null,
-          category: "Fris",
-        }),
-      ],
+      Fris: [getProduct({id: 2, name: "Ice Tea", category: "Fris"})],
       Eten: [],
     },
-    order: {member: getMember({age: 17}), products: []},
+    order: {
+      member: getMember({age: 17}),
+      products: [],
+    },
+    members: [getMember({age: 17})],
   };
   const {queryByLabelText, getByLabelText, getAllByRole} = render(<AvailableProducts />, {
     storeState,
