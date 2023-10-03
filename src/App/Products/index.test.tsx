@@ -1,6 +1,6 @@
 import React from "react";
 import AvailableProducts from "./index";
-import {render, fireEvent} from "test-utils";
+import {render, fireEvent, getMember, getProduct} from "test-utils";
 import {useOrder} from "./OrdersContext";
 import {MemberType} from "App/Members/Members";
 import clock from "jest-plugin-clock";
@@ -10,14 +10,24 @@ it("renders, and it does not include products that a member is not allowed to bu
   const storeState = {
     products: {
       Bier: [
-        {name: "Hertog Jan", image: "", id: 1, age_restriction: 18, category: "Bier"},
+        getProduct({
+          name: "Hertog Jan",
+          id: 1,
+          age_restriction: 18,
+          category: "Bier",
+        }),
       ],
       Fris: [
-        {name: "Ice Tea", image: "", id: 2, age_restriction: null, category: "Fris"},
+        getProduct({
+          name: "Ice Tea",
+          id: 2,
+          age_restriction: null,
+          category: "Fris",
+        }),
       ],
       Eten: [],
     },
-    order: {member: {age: 17}, products: []},
+    order: {member: getMember({age: 17}), products: []},
   };
   const {queryByLabelText, getByLabelText, getAllByRole} = render(<AvailableProducts />, {
     storeState,
@@ -34,26 +44,38 @@ it("shows the amount of products that are currently being orderd", () => {
   const storeState = {
     products: {
       Bier: [
-        {name: "Hertog Jan", image: "", id: 1, age_restriction: 18, category: "Bier"},
+        getProduct({
+          name: "Hertog Jan",
+          id: 1,
+          age_restriction: 18,
+          category: "Bier",
+        }),
       ],
       Fris: [
-        {name: "Ice Tea", image: "", id: 2, age_restriction: null, category: "Fris"},
+        getProduct({
+          name: "Ice Tea",
+          id: 2,
+          age_restriction: null,
+          category: "Fris",
+        }),
       ],
       Eten: [],
     },
     order: {
-      member: {age: 19},
+      member: getMember({age: 19}),
       products: [
-        {
+        getProduct({
           id: 1,
           name: "Hertog Jan",
           price: 65,
-        },
-        {
+          category: "Bier",
+        }),
+        getProduct({
           id: 1,
           name: "Hertog Jan",
           price: 65,
-        },
+          category: "Bier",
+        }),
       ],
     },
   };
@@ -78,7 +100,7 @@ describe("Selecting a member", () => {
 
   clock.set("2018-01-01");
   const member: MemberType = {
-    id: 33,
+    id: 1,
     firstName: "John",
     surname: "Snow",
     fullname: "John Snow",
@@ -141,14 +163,10 @@ describe("Selecting a member", () => {
 describe("Listing available products", () => {
   clock.set("2018-01-01");
 
-  const member = {
-    id: 33,
-    fistName: "John",
-    surname: "Snow",
-    fullname: "John Snow",
+  const member = getMember({
     latest_purchase_at: new Date("2017-12-30"),
     age: 19,
-  };
+  });
   it("Shows products to a member", () => {
     const state = {
       storeState: {order: {member, products: []}},
@@ -162,7 +180,13 @@ describe("Listing available products", () => {
 
   it("Doesn't show alcohol minors", () => {
     const state = {
-      storeState: {order: {member: {...member, age: 0}, products: []}},
+      storeState: {
+        members: [{...member, age: 17}],
+        order: {
+          member: {...member, age: 17},
+          products: [],
+        },
+      },
     };
 
     const {getByRole, queryByRole} = render(<ProductsScreen />, state);
@@ -172,25 +196,19 @@ describe("Listing available products", () => {
   });
 
   it("Shows the amount of a product a member is about to purchase", () => {
-    const hertog = {
+    const hertog = getProduct({
       id: 3,
       name: "Hertog Jan",
       price: 68,
-      position: 1,
       category: "Bier",
-      image: "wCwnyLXTVdPEnKRXjw9I.png",
-      splash_image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
       age_restriction: 18,
-    };
-    const iceTea = {
+    });
+    const iceTea = getProduct({
       id: 27,
       name: "Ice Tea",
       price: 60,
-      position: 999,
       category: "Fris",
-      image: "",
-      age_restriction: null,
-    };
+    });
 
     const state = {
       storeState: {order: {member, products: [hertog, hertog, iceTea]}},

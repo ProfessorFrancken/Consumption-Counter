@@ -7,6 +7,31 @@ import {rest} from "msw";
 
 describe("Compucie screen", () => {
   const server = setupServer(
+    rest.get("*/members", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/products", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/boards", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/committees", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/statistics", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/statistics/categories", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/activities", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.post("*/orders", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+
     rest.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
       return res(ctx.text("10"));
     }),

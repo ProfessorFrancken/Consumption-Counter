@@ -79,13 +79,6 @@ const useOrderReducer = (defaultOrder: InternalOrder) => {
   const order = useMemo(() => {
     const member = members.find(({id}) => id === Number(searchParams.get("memberId")));
 
-    if (
-      member === undefined &&
-      (searchParams.has("memberId") || orderWithoutMember.memberId !== undefined)
-    ) {
-      console.warn("OhNO!", orderWithoutMember);
-    }
-
     return {
       ...orderWithoutMember,
       member: member ?? orderWithoutMember.member,
@@ -121,12 +114,12 @@ const useOrderReducer = (defaultOrder: InternalOrder) => {
       }
     }
 
-    searchParams.set("member-id", String(member.id));
+    searchParams.set("memberId", String(member.id));
     setSearchParams(searchParams);
     dispatch({type: "SELECT_MEMBER", member});
     navigate({
       pathname: "/products",
-      search: createSearchParams({member: String(member.id)}).toString(),
+      search: createSearchParams({memberId: String(member.id)}).toString(),
     });
   };
 
