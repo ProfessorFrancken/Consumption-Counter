@@ -29,6 +29,7 @@ import {useBoards} from "./Prominent/BoardsContext";
 import {useMembers} from "./Members/Context";
 import {useStatistics} from "./Statistics/StatisticsContext";
 import {ApplicationProviders} from "ApplicationProviders";
+import "./FontAwesome";
 
 const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
