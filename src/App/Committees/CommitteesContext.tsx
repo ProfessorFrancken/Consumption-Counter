@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from '@tanstack/react-query';
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import api from "api";
 import {useNavigate} from "react-router";
 import {groupBy, uniqBy} from "lodash";
@@ -118,19 +118,17 @@ export const useCommitteeMembers = (committeeId: number): MemberType[] => {
   const {committeeMembers = []} = useCommittees();
   const {members} = useMembers();
 
-  // @ts-ignore
   return uniqBy(
     committeeMembers
       .filter((member) => member.committee.id === committeeId)
       .filter((member) =>
         [now.getFullYear() - 1, now.getFullYear()].includes(member.year)
       )
-      .map((activeMember: any) => ({
+      .map((activeMember: CommitteeMember) => ({
         committee_id: activeMember.committee.id,
-        ...members.find((member: MemberType) => member.id === activeMember.member_id),
+        ...members.find((member: MemberType) => member.id === activeMember.member_id)!,
       }))
-      // @ts-ignore
-      .filter((member: MemberType) => member.id !== undefined),
+      .filter((member: MemberType): member is MemberType => member.id !== undefined),
     (member) => member.id
   );
 };

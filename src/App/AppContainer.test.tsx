@@ -4,9 +4,9 @@ import MockDate from "mockdate";
 import {render, fireEvent, act, screen} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
-import {waitFor} from "@testing-library/dom";
+import {waitFor, within} from "@testing-library/dom";
 import {useLocation} from "react-router";
-import {setupServer} from "msw/lib/node";
+import {setupServer} from "msw/node";
 import {rest} from "msw";
 import {mocks} from "./MockedState";
 
@@ -225,6 +225,8 @@ describe("Consumption Counter", () => {
   });
 
   it("is possible to buy products using the committees list", async () => {
+    MockDate.set(new Date(1514764800001));
+
     const app = render(<AppContainer />);
     selectCommittees(app);
     selectCompucie(app);
@@ -249,6 +251,14 @@ describe("Consumption Counter", () => {
 
     addHertogJanToOrder(app);
     await expectOrderToBeBought(app);
+
+    expect(await screen.findByRole("button", {name: "Go back"})).toBeInTheDocument();
+    fireEvent.click(app.getByLabelText("Statistics"));
+
+    const recentTransactions = screen.getByRole("list", {name: "Recent transactions"});
+    await waitFor(() => {
+      expect(within(recentTransactions).getAllByRole("listitem")).toHaveLength(2);
+    });
   });
 
   it("shows a splashscreen when buying specific products", async () => {

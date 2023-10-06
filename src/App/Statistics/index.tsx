@@ -72,6 +72,7 @@ const Transaction = ({order}: {order: OrderedOrder}) => (
 const Transactions = ({transactions}: {transactions: OrderedOrder[]}) => {
   return (
     <ul
+      aria-label="Recent transactions"
       className="list-unstyled recent-orders"
       style={{columnCount: 2, paddingLeft: 0, fontSize: "0.95em"}}
     >
