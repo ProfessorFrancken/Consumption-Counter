@@ -2,7 +2,7 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useProducts} from "App/Products/ProductsContext";
-import {QueryObserverResult} from '@tanstack/react-query';
+import {QueryObserverResult} from "@tanstack/react-query";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";
@@ -32,7 +32,8 @@ const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
       {feature.query.isLoading || feature.query.isFetching ? (
         <FontAwesomeIcon icon={"spinner"} spin fixedWidth className="mr-1 text-muted" />
       ) : (
-        (feature.query.isSuccess || (feature.query.isIdle && feature.query.data)) && (
+        (feature.query.isSuccess ||
+          (feature.query.isFetching === false && feature.query.data)) && (
           <FontAwesomeIcon
             icon={"check-circle"}
             fixedWidth
