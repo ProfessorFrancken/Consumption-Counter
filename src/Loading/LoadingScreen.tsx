@@ -31,18 +31,17 @@ const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
     <li className="font-weight-bold my-3" aria-label={ariaLabel(feature)}>
       {feature.query.isLoading || feature.query.isFetching ? (
         <FontAwesomeIcon icon={"spinner"} spin fixedWidth className="mr-1 text-muted" />
+      ) : feature.query.isSuccess ||
+        (feature.query.isFetching === false && feature.query.data) ? (
+        <FontAwesomeIcon icon={"check-circle"} fixedWidth className="mr-1 text-success" />
       ) : (
-        (feature.query.isSuccess ||
-          (feature.query.isFetching === false && feature.query.data)) && (
+        feature.query.isError && (
           <FontAwesomeIcon
-            icon={"check-circle"}
+            icon={"times-circle"}
             fixedWidth
-            className="mr-1 text-success"
+            className="mr-1 text-danger"
           />
         )
-      )}
-      {feature.query.isError && (
-        <FontAwesomeIcon icon={"times-circle"} fixedWidth className="mr-1 text-danger" />
       )}
       {feature.label}...
     </li>
