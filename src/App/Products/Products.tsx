@@ -1,5 +1,10 @@
 import React from "react";
-import {AvailableProduct} from "./OrdersContext";
+import {
+  Product as ProductType,
+  useOrder,
+  useOrderableProducts,
+  useSelectedMember,
+} from "./OrdersContext";
 import Product from "./Product";
 
 const Category = ({
@@ -8,50 +13,48 @@ const Category = ({
   onLongPress,
   name,
 }: {
-  products: AvailableProduct[];
-  onClick: (product: AvailableProduct) => void;
-  onLongPress: (product: AvailableProduct) => void;
+  products: ProductType[];
+  onClick: (product: ProductType) => void;
+  onLongPress: (product: ProductType) => void;
   name: string;
-}) => (
-  <nav className={"categoryRow"} aria-label={`${name} category`}>
-    {products.map((product) => (
-      <Product
-        key={product.id}
-        product={product}
-        onClick={() => onClick(product)}
-        onLongPress={() => onLongPress(product)}
-        locked={product.locked}
-      />
-    ))}
-  </nav>
-);
-
-export type ProductsType = {
-  Bier: AvailableProduct[];
-  Fris: AvailableProduct[];
-  Eten: AvailableProduct[];
-};
-type ProductsProps = {
-  products: ProductsType;
-  addProductToOrder: (product: AvailableProduct) => void;
-  addProductToOrderOrMakeOrder: (product: AvailableProduct) => void;
+}) => {
+  return (
+    <nav className={"categoryRow"} aria-label={`${name} category`}>
+      {products.map((product) => {
+        return (
+          <Product
+            key={product.id}
+            product={product}
+            onClick={() => onClick(product)}
+            onLongPress={() => onLongPress(product)}
+          />
+        );
+      })}
+    </nav>
+  );
 };
 
-const Products = ({
-  products,
-  addProductToOrder,
-  addProductToOrderOrMakeOrder,
-}: ProductsProps) => {
+const Products = () => {
+  const {order, makeOrder, addProductToOrder} = useOrder();
+  const products = useOrderableProducts();
+
   const beer = products["Bier"] || [];
   const soda = products["Fris"] || [];
   const food = products["Eten"] || [];
+
+  const hasPlacedATeporaryOrder = order.products.length > 0;
+
+  const handleClick = (product: ProductType) =>
+    hasPlacedATeporaryOrder
+      ? addProductToOrder(product)
+      : makeOrder({products: [product]});
 
   return (
     <div className="productsGrid">
       {beer.length > 0 && (
         <Category
           name="beer"
-          onClick={addProductToOrderOrMakeOrder}
+          onClick={handleClick}
           onLongPress={addProductToOrder}
           products={beer}
         />
@@ -59,7 +62,7 @@ const Products = ({
       {soda.length > 0 && (
         <Category
           name="soda"
-          onClick={addProductToOrderOrMakeOrder}
+          onClick={handleClick}
           onLongPress={addProductToOrder}
           products={soda}
         />
@@ -67,7 +70,7 @@ const Products = ({
       {food.length > 0 && (
         <Category
           name="food"
-          onClick={addProductToOrderOrMakeOrder}
+          onClick={handleClick}
           onLongPress={addProductToOrder}
           products={food}
         />

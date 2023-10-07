@@ -1,7 +1,7 @@
 import React from "react";
 import AvailableProducts from "./index";
 import {render, fireEvent, getMember, getProduct} from "test-utils";
-import {useOrder, useSelectMember} from "./OrdersContext";
+import {useSelectedMember, useSelectMember} from "./OrdersContext";
 import {MemberType} from "App/Members/Members";
 import clock from "jest-plugin-clock";
 import ProductsScreen from "./index";
@@ -16,13 +16,13 @@ it("renders, and it does not include products that a member is not allowed to bu
       Eten: [],
     },
     order: {
-      member: getMember({age: 17}),
       products: [],
     },
     members: [getMember({age: 17})],
   };
   const {queryByLabelText, getByLabelText, getAllByRole} = render(<AvailableProducts />, {
     storeState,
+    routes: ["?memberId=1"],
   });
 
   expect(queryByLabelText("beer category")).toBeNull();
@@ -54,7 +54,6 @@ it("shows the amount of products that are currently being orderd", () => {
       Eten: [],
     },
     order: {
-      member: getMember({age: 19}),
       products: [
         getProduct({
           id: 1,
@@ -71,7 +70,10 @@ it("shows the amount of products that are currently being orderd", () => {
       ],
     },
   };
-  const {getAllByLabelText} = render(<AvailableProducts />, {storeState});
+  const {getAllByLabelText} = render(<AvailableProducts />, {
+    storeState,
+    routes: ["?memberId=1"],
+  });
 
   const orderedProducts = getAllByLabelText("amount ordered");
   expect(orderedProducts).toHaveLength(1);
@@ -80,12 +82,11 @@ it("shows the amount of products that are currently being orderd", () => {
 
 describe("Selecting a member", () => {
   const SelectMember: React.FC<{member: MemberType}> = ({member}) => {
-    // HERE
-    const {order} = useOrder();
+    const selectedMember = useSelectedMember();
     const selectMember = useSelectMember();
 
-    if (order.member) {
-      return <span>{order.member.fullname}</span>;
+    if (selectedMember) {
+      return <span>{selectedMember.fullname}</span>;
     }
 
     return <button onClick={() => selectMember(member)}>Select {member.fullname}</button>;
@@ -103,7 +104,8 @@ describe("Selecting a member", () => {
     cosmetics: undefined,
   };
   const state = {
-    storeState: {order: {member: undefined, products: []}},
+    storeState: {order: {products: []}},
+    routes: ["/"],
   };
 
   it("Selects a member when they do not have a latest purchse", () => {
@@ -162,7 +164,8 @@ describe("Listing available products", () => {
   });
   it("Shows products to a member", () => {
     const state = {
-      storeState: {order: {member, products: []}},
+      storeState: {order: {products: []}},
+      routes: ["/?memberId=1"],
     };
 
     const {getByRole} = render(<ProductsScreen />, state);
@@ -176,10 +179,10 @@ describe("Listing available products", () => {
       storeState: {
         members: [{...member, age: 17}],
         order: {
-          member: {...member, age: 17},
           products: [],
         },
       },
+      routes: ["/?memberId=1"],
     };
 
     const {getByRole, queryByRole} = render(<ProductsScreen />, state);
@@ -204,7 +207,8 @@ describe("Listing available products", () => {
     });
 
     const state = {
-      storeState: {order: {member, products: [hertog, hertog, iceTea]}},
+      storeState: {order: {products: [hertog, hertog, iceTea]}},
+      routes: ["/?memberId=1"],
     };
 
     const {getByRole} = render(<ProductsScreen />, state);
@@ -219,7 +223,8 @@ describe("Listing available products", () => {
     clock.set("2018-01-01 15:00:00");
     it("Locks beer before 4", () => {
       const state = {
-        storeState: {order: {member, products: []}},
+        storeState: {order: {products: []}},
+        routes: ["/?memberId=1"],
       };
 
       const {getByRole} = render(<ProductsScreen />, state);
@@ -241,7 +246,8 @@ describe("Listing available products", () => {
     clock.set("2018-01-01 16:00:00");
     it("Locks beer before 4", () => {
       const state = {
-        storeState: {order: {member, products: []}},
+        storeState: {order: {products: []}},
+        routes: ["/?memberId=1"],
       };
 
       const {getByRole} = render(<ProductsScreen />, state);

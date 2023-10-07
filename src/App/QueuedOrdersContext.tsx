@@ -70,15 +70,9 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     }
   };
 
-  const makeOrder = ({member, products}: Order) => {
-    const date = new Date();
-
-    if (member === undefined) {
-      throw new Error("Can't make an order without a member");
-    }
-
-    const order = {member, products, ordered_at: date.getTime()};
-
+  // TODO: rewrite put this into OrdersContext, and make QueuedOrders a fallback for
+  // failed orders instead
+  const makeOrder = (order: OrderedOrder) => {
     setQueuedOrders((orders: QueuedOrder[]) => {
       return [{order, fails: 0, state: "queued" as const}, ...orders];
     });
@@ -109,7 +103,7 @@ export const TIME_TO_CANCEL = 7000;
 type State = {
   queuedOrders: QueuedOrder[];
   queuedOrder: QueuedOrder | null;
-  makeOrder: (order: Order) => void;
+  makeOrder: (order: OrderedOrder) => void;
   buyOrder: (order: OrderedOrder) => void;
   cancelOrder: (order: OrderedOrder) => void;
 };

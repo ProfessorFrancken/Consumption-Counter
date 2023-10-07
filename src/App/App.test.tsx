@@ -42,7 +42,7 @@ describe("rendering", () => {
       {path: "/committees/0", component: "Members", title: "Compucie"},
       {path: "/products/pricelist", component: "PriceList", title: "Pricelist"},
       {path: "/recent", component: RecentMembers, title: "Recent"},
-      {path: "/products", component: AvailableProducts, title: "John Snow"},
+      {path: "/products?memberId=1", component: AvailableProducts, title: "John Snow"},
       {path: "/members/0", component: "Members", title: ""},
     ];
 

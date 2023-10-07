@@ -11,16 +11,6 @@ export const defaultAuthentication = {
 };
 
 export const defaultOrder = {
-  member: {
-    fullname: "John snow",
-    id: 1,
-    firstName: "John",
-    surname: "Snow",
-    latest_purchase_at: null,
-    age: 19,
-    prominent: null,
-    cosmetics: undefined,
-  },
   products: [],
 };
 
