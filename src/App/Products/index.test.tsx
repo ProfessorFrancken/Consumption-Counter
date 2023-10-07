@@ -1,7 +1,7 @@
 import React from "react";
 import AvailableProducts from "./index";
 import {render, fireEvent, getMember, getProduct} from "test-utils";
-import {useOrder} from "./OrdersContext";
+import {useOrder, useSelectMember} from "./OrdersContext";
 import {MemberType} from "App/Members/Members";
 import clock from "jest-plugin-clock";
 import ProductsScreen from "./index";
@@ -81,7 +81,8 @@ it("shows the amount of products that are currently being orderd", () => {
 describe("Selecting a member", () => {
   const SelectMember: React.FC<{member: MemberType}> = ({member}) => {
     // HERE
-    const {selectMember, order} = useOrder();
+    const {order} = useOrder();
+    const selectMember = useSelectMember();
 
     if (order.member) {
       return <span>{order.member.fullname}</span>;
@@ -236,7 +237,7 @@ describe("Listing available products", () => {
     });
   });
 
-  describe("After 4 ", () => {
+  describe("After 4", () => {
     clock.set("2018-01-01 16:00:00");
     it("Locks beer before 4", () => {
       const state = {

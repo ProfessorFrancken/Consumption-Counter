@@ -66,9 +66,8 @@ const orderReducer = (state: InternalOrder, action: OrderAction): InternalOrder 
 };
 
 const useOrderReducer = (defaultOrder: InternalOrder) => {
-  const navigate = useNavigate();
   const [orderWithoutMember, dispatch] = React.useReducer(orderReducer, defaultOrder);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const {members} = useMembers();
   const order = useMemo(() => {
     const memberId = Number(searchParams.get("memberId"));
@@ -102,7 +101,19 @@ const useOrderReducer = (defaultOrder: InternalOrder) => {
     }
   };
 
-  const selectMember = (member: MemberType) => {
+  return [
+    order,
+    {
+      buyAll,
+      addProductToOrder,
+      addProductToOrderOrMakeOrder,
+    },
+  ] as const;
+};
+
+export const useSelectMember = () => {
+  const navigate = useNavigate();
+  return (member: MemberType) => {
     if (didNotRecentlyOrderAProduct(member)) {
       if (!window.confirm(`Are you sure you want to select ${member.fullname}?`)) {
         // Cancel the selection since selecting this member was a mistake
@@ -110,22 +121,11 @@ const useOrderReducer = (defaultOrder: InternalOrder) => {
       }
     }
 
-    dispatch({type: "RESET_ORDER"});
     navigate({
       pathname: "/products",
       search: createSearchParams({memberId: String(member.id)}).toString(),
     });
   };
-
-  return [
-    order,
-    {
-      buyAll,
-      selectMember,
-      addProductToOrder,
-      addProductToOrderOrMakeOrder,
-    },
-  ] as const;
 };
 
 const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType) => {
@@ -190,7 +190,6 @@ type State = {
     Eten: AvailableProduct[];
   };
 
-  selectMember: (member: MemberType) => void;
   addProductToOrder: (product: Product) => void;
   addProductToOrderOrMakeOrder: (product: Product) => void;
   buyAll: () => void;
@@ -202,7 +201,7 @@ export const OrderProvider: React.FC<{
   order?: Order;
   children: React.ReactNode;
 }> = ({order: defaultOrder = emptyOrder, ...props}) => {
-  const [order, {buyAll, addProductToOrder, addProductToOrderOrMakeOrder, selectMember}] =
+  const [order, {buyAll, addProductToOrder, addProductToOrderOrMakeOrder}] =
     useOrderReducer({...defaultOrder});
   const hour = new Date().getHours();
   const products = useCategorizedProducts(order, hour);
@@ -211,7 +210,6 @@ export const OrderProvider: React.FC<{
     <OrderContext.Provider
       value={{
         products,
-        selectMember,
         addProductToOrderOrMakeOrder,
         addProductToOrder,
         buyAll,

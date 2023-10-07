@@ -1,5 +1,5 @@
 import React from "react";
-import {useOrder} from "App/Products/OrdersContext";
+import {useSelectMember} from "App/Products/OrdersContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useQueuedOrders} from "App/QueuedOrdersContext";
@@ -8,7 +8,7 @@ const GoBack = () => {
   const {queuedOrder} = useQueuedOrders();
   const location = useLocation();
   const navigate = useNavigate();
-  const {selectMember} = useOrder();
+  const selectMember = useSelectMember();
 
   if (!queuedOrder && location.pathname === "/") {
     return null;

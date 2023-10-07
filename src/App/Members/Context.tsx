@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from '@tanstack/react-query';
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import {chunk, orderBy} from "lodash";
 import {MemberType} from "./Members";
 import api from "./../../api";

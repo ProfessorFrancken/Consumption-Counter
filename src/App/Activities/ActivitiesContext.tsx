@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from '@tanstack/react-query';
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 

@@ -1,13 +1,13 @@
 import React from "react";
 import Compucie from "./Compucie";
-import {useOrder} from "App/Products/OrdersContext";
 import {useCompucie} from "../CommitteesContext";
-import {useQueryClient} from '@tanstack/react-query';
+import {useQueryClient} from "@tanstack/react-query";
 import {useNavigate} from "react-router";
+import {useSelectMember} from "App/Products/OrdersContext";
 
 const CompucieScreen = () => {
   const {compucie, scriptcie} = useCompucie();
-  const {selectMember} = useOrder();
+  const selectMember = useSelectMember();
   const navigate = useNavigate();
   const client = useQueryClient();
 

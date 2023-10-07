@@ -29,11 +29,10 @@ describe("prominent", () => {
         {member_id: 2, year: 2017, function: "King"},
       ],
     };
-    const {
-      getAllByLabelText,
-      getByLabelText,
-      getAllByRole,
-    } = render(<ProminentContainer />, {storeState});
+    const {getAllByLabelText, getByLabelText, getAllByRole} = render(
+      <ProminentContainer />,
+      {storeState}
+    );
 
     expect(getAllByLabelText("board")).toHaveLength(1);
     const board = getByLabelText("board");
