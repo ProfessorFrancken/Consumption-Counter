@@ -5,8 +5,7 @@ import {useLocation} from "react-router-dom";
 import {useOrder} from "App/Products/OrdersContext";
 
 const BuyAll = () => {
-  // HERE, not really
-  const {buyAll, order} = useOrder();
+  const {order, makeOrder} = useOrder();
   const {pathname} = useLocation();
 
   if (!pathname.includes("/products")) {
@@ -18,7 +17,7 @@ const BuyAll = () => {
   }
 
   return (
-    <button className="button buyAllButton" onClick={() => buyAll()}>
+    <button className="button buyAllButton" onClick={() => makeOrder(order)}>
       <FontAwesomeIcon icon={"check-circle"} size="lg" />
       <span style={{marginLeft: ".5em"}}>
         Buy it all! (<Price products={order.products} />)

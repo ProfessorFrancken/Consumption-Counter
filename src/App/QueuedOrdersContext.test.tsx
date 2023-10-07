@@ -49,33 +49,6 @@ describe("QueuedOrders context", () => {
     spy.mockRestore();
   });
 
-  it("Doensn't allow an order without a member", () => {
-    const MakeOrder: React.FC = () => {
-      const [failed, setFailed] = React.useState(false);
-      const {makeOrder} = useQueuedOrders();
-
-      const onClick = () => {
-        try {
-          makeOrder({member: undefined, products: []});
-        } catch {
-          setFailed(true);
-        }
-      };
-
-      if (failed) {
-        return <div>Failed</div>;
-      }
-
-      return <button onClick={onClick}>Make order</button>;
-    };
-
-    const {getByRole, getByText} = renderApp(<MakeOrder />);
-
-    fireEvent.click(getByRole("button"));
-
-    expect(getByText("Failed")).toBeInTheDocument();
-  });
-
   it("Requeues an order if buying the order failed", async () => {
     const MakeOrder: React.FC = () => {
       const {buyOrder, queuedOrders} = useQueuedOrders();

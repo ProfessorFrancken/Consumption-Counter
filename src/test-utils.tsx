@@ -1,20 +1,14 @@
-import React, {ReactNode} from "react";
+import React from "react";
 import {render, RenderOptions} from "@testing-library/react";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {
   defaultAuthentication,
   defaultCommitteeeMembers,
   defaultMembers,
-  defaultOrder,
   defaultProducts,
 } from "App/MockedState";
 import {InfrastructureProviders} from "Root";
-import {
-  AvailableProduct,
-  Order,
-  OrderProvider,
-  Product,
-} from "App/Products/OrdersContext";
+import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
@@ -25,9 +19,7 @@ import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient} from "@tanstack/react-query";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
-import {MemoryRouter} from "react-router-dom";
 import {MemberType} from "App/Members/Members";
-import {ProductsType} from "App/Products/Products";
 
 type StoreState = {
   authentication?: any;
@@ -78,10 +70,6 @@ const AllTheProviders: React.FC<{
   });
 
   const actualRoutes = routes !== undefined ? routes : ["/"];
-
-  if (order.member?.id) {
-    actualRoutes[0] += `?memberId=${order.member.id}`;
-  }
 
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers
   return (
@@ -171,15 +159,5 @@ export const getProduct = (product: Partial<Product> = {}): Product => {
     splash_image: "",
     age_restriction: null,
     ...product,
-  };
-};
-
-export const getAvailableProduct = (
-  product: Partial<AvailableProduct> = {}
-): AvailableProduct => {
-  return {
-    locked: false,
-    ordered: 0,
-    ...getProduct(product),
   };
 };

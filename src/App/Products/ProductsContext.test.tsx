@@ -1,9 +1,11 @@
 import * as React from "react";
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import {useProducts, ProductsProvider} from "./ProductsContext";
 import {InfrastructureProviders} from "Root";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
+import {useOrder} from "./OrdersContext";
+import {render as renderApp, getProduct} from "test-utils";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
@@ -57,6 +59,33 @@ describe("Product context", () => {
 
     spy.mockReset();
     spy.mockRestore();
+  });
+
+  it("Doensn't allow an order without a member", () => {
+    const MakeOrder: React.FC = () => {
+      const [failed, setFailed] = React.useState(false);
+      const {makeOrder} = useOrder();
+
+      const onClick = () => {
+        try {
+          makeOrder({products: [getProduct()]});
+        } catch {
+          setFailed(true);
+        }
+      };
+
+      if (failed) {
+        return <div>Failed</div>;
+      }
+
+      return <button onClick={onClick}>Make order</button>;
+    };
+
+    const {getByRole, getByText} = renderApp(<MakeOrder />);
+
+    fireEvent.click(getByRole("button"));
+
+    expect(getByText("Failed")).toBeInTheDocument();
   });
 });
 

@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {MemberType} from "App/Members/Members";
 import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
@@ -18,10 +18,15 @@ export type Product = {
   age_restriction: number | null;
 };
 
-export type AvailableProduct = Product & {
-  locked: boolean;
-  ordered: number;
+export const useSelectedMember = () => {
+  const [searchParams] = useSearchParams();
+  const {members} = useMembers();
+  return useMemo(() => {
+    const memberId = Number(searchParams.get("memberId"));
+    return members.find(({id}) => id === memberId);
+  }, [members, searchParams]);
 };
+
 function didNotRecentlyOrderAProduct(member: MemberType) {
   const latest_purchase_at =
     typeof member.latest_purchase_at === "string"
@@ -39,81 +44,9 @@ function didNotRecentlyOrderAProduct(member: MemberType) {
   return diffDays > 90;
 }
 
-export type Order = {
-  products: Product[];
-  member: undefined | MemberType;
-};
-
-type OrderAction =
-  | {type: "ADD_PRODUCT_TO_ORDER"; product: Product}
-  | {type: "RESET_ORDER"};
-
-type InternalOrder = {
-  products: Product[];
-};
-const emptyOrder: InternalOrder & Order = {
-  member: undefined,
-  products: [],
-};
-
-const orderReducer = (state: InternalOrder, action: OrderAction): InternalOrder => {
-  switch (action.type) {
-    case "ADD_PRODUCT_TO_ORDER":
-      return {...state, products: [...state.products, {...action.product}]};
-    case "RESET_ORDER":
-      return emptyOrder;
-  }
-};
-
-export const useSelectedMember = () => {
-  const [searchParams] = useSearchParams();
-  const {members} = useMembers();
-  return useMemo(() => {
-    const memberId = Number(searchParams.get("memberId"));
-    return members.find(({id}) => id === memberId);
-  }, [members, searchParams]);
-};
-
-const useOrderReducer = (defaultOrder: InternalOrder) => {
-  const [orderWithoutMember, dispatch] = React.useReducer(orderReducer, defaultOrder);
-  const member = useSelectedMember();
-  const order = useMemo(() => {
-    return {...orderWithoutMember, member, memberId: member?.id};
-  }, [orderWithoutMember, member]);
-  const {makeOrder: queueOrder} = useQueuedOrders();
-
-  const makeOrder = (order: Order) => {
-    dispatch({type: "RESET_ORDER"});
-    // HERE needs to be with member
-    queueOrder(order);
-  };
-
-  const buyAll = () => makeOrder(order);
-
-  const addProductToOrder = (product: Product) => {
-    dispatch({type: "ADD_PRODUCT_TO_ORDER", product});
-  };
-
-  const addProductToOrderOrMakeOrder = (product: any) => {
-    if (order.products.length === 0) {
-      makeOrder({member: order.member, products: [product]});
-    } else {
-      addProductToOrder(product);
-    }
-  };
-
-  return [
-    order,
-    {
-      buyAll,
-      addProductToOrder,
-      addProductToOrderOrMakeOrder,
-    },
-  ] as const;
-};
-
 export const useSelectMember = () => {
   const navigate = useNavigate();
+  const {reset} = useOrder();
   return (member: MemberType) => {
     if (didNotRecentlyOrderAProduct(member)) {
       if (!window.confirm(`Are you sure you want to select ${member.fullname}?`)) {
@@ -122,11 +55,86 @@ export const useSelectMember = () => {
       }
     }
 
+    reset();
+
     navigate({
       pathname: "/products",
       search: createSearchParams({memberId: String(member.id)}).toString(),
     });
   };
+};
+
+export type Order = {
+  products: Product[];
+};
+
+const emptyOrder: Order = {
+  products: [],
+};
+
+type State = {
+  addProductToOrder: (product: Product) => void;
+  reset: () => void;
+  order: Order;
+  makeOrder: (order: Order) => void;
+};
+
+const useMakeOrder = (reset: () => void) => {
+  const member = useSelectedMember();
+  const {makeOrder: queueOrder} = useQueuedOrders();
+
+  const makeOrder = (order: Order) => {
+    if (member === undefined) {
+      throw new Error("Can't make an order without a member");
+    }
+
+    // HERE needs to be with member
+    const date = new Date();
+
+    queueOrder({
+      member,
+      products: order.products,
+      ordered_at: date.getTime(),
+    });
+
+    reset();
+  };
+
+  return makeOrder;
+};
+
+export const OrderContext = React.createContext<State | undefined>(undefined);
+export const OrderProvider: React.FC<{
+  order?: Order;
+  children: React.ReactNode;
+}> = ({order: defaultOrder = emptyOrder, ...props}) => {
+  const member = useSelectedMember();
+  const [orderedProducts, setOrderedProducts] = useState(defaultOrder.products);
+
+  const reset = () => {
+    setOrderedProducts([]);
+  };
+
+  const makeOrder = useMakeOrder(reset);
+  const addProductToOrder = (product: Product) => {
+    setOrderedProducts((products) => [...products, product]);
+  };
+
+  const order = useMemo(() => {
+    return {products: orderedProducts, member};
+  }, [orderedProducts, member]);
+
+  return (
+    <OrderContext.Provider
+      value={{
+        addProductToOrder,
+        reset,
+        order,
+        makeOrder,
+      }}
+      {...props}
+    />
+  );
 };
 
 const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType) => {
@@ -141,84 +149,25 @@ const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType)
   return product.age_restriction <= member.age;
 };
 
-const isProductLocked = (product: Product, hour: number) => {
-  if (product.category === "Bier") {
-    if (["Almanak", "Almanac"].includes(product.name)) {
-      return false;
-    }
-
-    return [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(hour);
-  }
-
-  if (product.name === "Goede morgen!") {
-    return ![6, 7, 8, 9, 10, 11].includes(hour);
-  }
-
-  return false;
-};
-
-const useCategorizedProducts = (order: Order, hour: number) => {
+export const useOrderableProducts = () => {
+  const {order} = useOrder();
   const {products = []} = useProducts();
+  const member = useSelectedMember();
 
   return React.useMemo(() => {
-    const availableProducts = products
-      .filter((product: Product) =>
-        memberIsAllowedToPurchaseProduct(product, order.member)
-      )
-      .map((product: Product): AvailableProduct => {
-        return {
-          ...product,
-          locked: isProductLocked(product, hour),
-          ordered: order.products.filter(({id}) => id === product.id).length,
-        };
-      });
+    const availableProducts = products.filter((product: Product) =>
+      memberIsAllowedToPurchaseProduct(product, member)
+    );
 
     return groupBy(
-      sortBy(availableProducts, (product: AvailableProduct) => product.position),
-      (product: AvailableProduct) => product.category
+      sortBy(availableProducts, (product: Product) => product.position),
+      (product: Product) => product.category
     ) as {
-      Bier: AvailableProduct[];
-      Fris: AvailableProduct[];
-      Eten: AvailableProduct[];
+      Bier: Product[];
+      Fris: Product[];
+      Eten: Product[];
     };
-  }, [products, order, hour]);
-};
-
-type State = {
-  products: {
-    Bier: AvailableProduct[];
-    Fris: AvailableProduct[];
-    Eten: AvailableProduct[];
-  };
-
-  addProductToOrder: (product: Product) => void;
-  addProductToOrderOrMakeOrder: (product: Product) => void;
-  buyAll: () => void;
-  order: Order;
-};
-
-const OrderContext = React.createContext<State | undefined>(undefined);
-export const OrderProvider: React.FC<{
-  order?: Order;
-  children: React.ReactNode;
-}> = ({order: defaultOrder = emptyOrder, ...props}) => {
-  const [order, {buyAll, addProductToOrder, addProductToOrderOrMakeOrder}] =
-    useOrderReducer({...defaultOrder});
-  const hour = new Date().getHours();
-  const products = useCategorizedProducts(order, hour);
-
-  return (
-    <OrderContext.Provider
-      value={{
-        products,
-        addProductToOrderOrMakeOrder,
-        addProductToOrder,
-        buyAll,
-        order,
-      }}
-      {...props}
-    />
-  );
+  }, [products, order, member]);
 };
 
 export const useOrder = () => {

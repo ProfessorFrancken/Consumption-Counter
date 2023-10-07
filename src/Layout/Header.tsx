@@ -14,15 +14,14 @@ const CommitteeTitle = () => {
 };
 
 const BuyProductsForMemberTitle = () => {
-  // HERE
-  const {order} = useOrder();
+  const member = useSelectedMember();
 
-  if (order.member === undefined) {
-    console.warn("Tried rendering header for undefined member", order);
+  if (member === undefined) {
+    console.warn("Tried rendering header for undefined member", member);
     return null;
   }
 
-  return <span>{order.member.fullname}</span>;
+  return <span>{member.fullname}</span>;
 };
 
 const HeaderTitle = () => {
