@@ -4,7 +4,7 @@ import MockDate from "mockdate";
 import {render, fireEvent, act, screen} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
 import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
-import {waitFor, within} from "@testing-library/dom";
+import {waitFor, within} from "@testing-library/react";
 import {useLocation} from "react-router";
 import {setupServer} from "msw/node";
 import {rest} from "msw";

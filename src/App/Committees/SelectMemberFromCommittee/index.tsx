@@ -1,10 +1,10 @@
 import Members from "App/Members/Members";
 import {useParams} from "react-router";
-import {useOrder} from "App/Products/OrdersContext";
+import {useSelectMember} from "App/Products/OrdersContext";
 import {useCommitteeMembers} from "../CommitteesContext";
 
 const SelectMemberFromCommitteeScreen = () => {
-  const {selectMember} = useOrder();
+  const selectMember = useSelectMember();
   const {page} = useParams<{page: string | undefined}>();
   const members = useCommitteeMembers(parseInt(page || "0", 10));
 
