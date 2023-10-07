@@ -106,9 +106,9 @@ export const createAppRoutes = (
         <Route path="statistics" element={<Statistics />} />
         <Route path="committees" element={<Committees />} />
         <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
-        <Route path="pricelist" element={<PriceList />} />
         <Route path="recent" element={<RecentMembers />} />
         <Route path="products" element={<BuyProducts />} />
+        <Route path="products/pricelist" element={<PriceList />} />
         <Route path="statistics" element={<Statistics />} />
         <Route path="present" element={<Present />} />
         <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
@@ -146,9 +146,9 @@ export const AppContainer = () => {
           <Route path="statistics" element={<Statistics />} />
           <Route path="committees" element={<Committees />} />
           <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
-          <Route path="pricelist" element={<PriceList />} />
           <Route path="recent" element={<RecentMembers />} />
           <Route path="products" element={<BuyProducts />} />
+          <Route path="products/pricelist" element={<PriceList />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="present" element={<Present />} />
           <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />

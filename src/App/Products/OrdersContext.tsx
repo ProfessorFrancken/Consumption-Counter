@@ -65,20 +65,24 @@ const orderReducer = (state: InternalOrder, action: OrderAction): InternalOrder 
   }
 };
 
+export const useSelectedMember = () => {
+  const [searchParams] = useSearchParams();
+  const {members} = useMembers();
+  return useMemo(() => {
+    const memberId = Number(searchParams.get("memberId"));
+    return members.find(({id}) => id === memberId);
+  }, [members, searchParams]);
+};
+
 const useOrderReducer = (defaultOrder: InternalOrder) => {
   const [orderWithoutMember, dispatch] = React.useReducer(orderReducer, defaultOrder);
   const [searchParams] = useSearchParams();
-  const {members} = useMembers();
+  const member = useSelectedMember();
   const order = useMemo(() => {
     const memberId = Number(searchParams.get("memberId"));
-    const member = members.find(({id}) => id === memberId);
 
-    return {
-      ...orderWithoutMember,
-      memberId,
-      member,
-    };
-  }, [orderWithoutMember, searchParams, members]);
+    return {...orderWithoutMember, memberId, member};
+  }, [orderWithoutMember, searchParams]);
   const {makeOrder: queueOrder} = useQueuedOrders();
 
   const makeOrder = (order: Order) => {

@@ -9,7 +9,7 @@ const BuyAll = () => {
   const {buyAll, order} = useOrder();
   const {pathname} = useLocation();
 
-  if (pathname !== "/products") {
+  if (!pathname.includes("/products")) {
     return null;
   }
 
