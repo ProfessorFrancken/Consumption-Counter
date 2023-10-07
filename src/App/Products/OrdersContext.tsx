@@ -76,13 +76,10 @@ export const useSelectedMember = () => {
 
 const useOrderReducer = (defaultOrder: InternalOrder) => {
   const [orderWithoutMember, dispatch] = React.useReducer(orderReducer, defaultOrder);
-  const [searchParams] = useSearchParams();
   const member = useSelectedMember();
   const order = useMemo(() => {
-    const memberId = Number(searchParams.get("memberId"));
-
-    return {...orderWithoutMember, memberId, member};
-  }, [orderWithoutMember, searchParams]);
+    return {...orderWithoutMember, member, memberId: member?.id};
+  }, [orderWithoutMember, member]);
   const {makeOrder: queueOrder} = useQueuedOrders();
 
   const makeOrder = (order: Order) => {
