@@ -1,5 +1,5 @@
 import React from "react";
-import {useOrder} from "App/Products/OrdersContext";
+import {useOrder, useSelectedMember} from "App/Products/OrdersContext";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {NavLink, Route, Routes, useParams} from "react-router-dom";
 
@@ -29,7 +29,7 @@ const HeaderTitle = () => {
   return (
     <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
       <Routes>
-        <Route path="/pricelist" Component={() => <span>Pricelist</span>} />
+        <Route path="/products/pricelist" Component={() => <span>Pricelist</span>} />
         <Route path="/settings" Component={() => <span>Settings</span>} />
         <Route path="/prominent" Component={() => <span>Prominent</span>} />
         <Route path="/recent" Component={() => <span>Recent</span>} />
@@ -44,19 +44,32 @@ const HeaderTitle = () => {
   );
 };
 
+const ShowPriceList = () => {
+  const member = useSelectedMember();
+
+  if (!member) {
+    return null;
+  }
+
+  return <NavLink to={`./pricelist?memberId=${member.id}`}>Show prices</NavLink>;
+};
+const GoBacToBuying = () => {
+  const member = useSelectedMember();
+
+  if (!member) {
+    return null;
+  }
+
+  return <NavLink to={`/products?memberId=${member.id}`}>Buy products</NavLink>;
+};
+
 const Header = ({onClick, failedOrders}: any) => (
   <header className="header">
     <HeaderTitle />
     <div className="header-item d-flex justify-content-center">
       <Routes>
-        <Route
-          path="/products"
-          Component={() => <NavLink to="/pricelist">Show prices</NavLink>}
-        />
-        <Route
-          path="/pricelist"
-          Component={() => <NavLink to="/products">Buy products</NavLink>}
-        />
+        <Route path="/products" element={<ShowPriceList />} />
+        <Route path="/products/pricelist" element={<GoBacToBuying />} />
       </Routes>
     </div>
     <h2
