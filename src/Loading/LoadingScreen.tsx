@@ -2,7 +2,7 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useProducts} from "App/Products/ProductsContext";
-import {QueryObserverResult} from "react-query";
+import {QueryObserverResult} from "@tanstack/react-query";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";
@@ -31,17 +31,17 @@ const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
     <li className="font-weight-bold my-3" aria-label={ariaLabel(feature)}>
       {feature.query.isLoading || feature.query.isFetching ? (
         <FontAwesomeIcon icon={"spinner"} spin fixedWidth className="mr-1 text-muted" />
+      ) : feature.query.isSuccess ||
+        (feature.query.isFetching === false && feature.query.data) ? (
+        <FontAwesomeIcon icon={"check-circle"} fixedWidth className="mr-1 text-success" />
       ) : (
-        (feature.query.isSuccess || (feature.query.isIdle && feature.query.data)) && (
+        feature.query.isError && (
           <FontAwesomeIcon
-            icon={"check-circle"}
+            icon={"times-circle"}
             fixedWidth
-            className="mr-1 text-success"
+            className="mr-1 text-danger"
           />
         )
-      )}
-      {feature.query.isError && (
-        <FontAwesomeIcon icon={"times-circle"} fixedWidth className="mr-1 text-danger" />
       )}
       {feature.label}...
     </li>
@@ -85,7 +85,7 @@ const LoadingScreen = () => {
           <LoadFeatureListItem feature={{label: "Statistics", query: statisticsQuery}} />
         </ul>
         {applicationIsLoaded ? (
-          <NavLink exact to="/" className="tile button p-4">
+          <NavLink to="/" className="tile button p-4">
             Open application
           </NavLink>
         ) : (

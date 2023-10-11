@@ -5,12 +5,10 @@ import {
   defaultAuthentication,
   defaultCommitteeeMembers,
   defaultMembers,
-  defaultOrder,
   defaultProducts,
 } from "App/MockedState";
-import {history} from "Root";
 import {InfrastructureProviders} from "Root";
-import {OrderProvider, Product} from "App/Products/OrdersContext";
+import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
@@ -19,18 +17,35 @@ import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
-import {QueryClient, setLogger} from "react-query";
+import {QueryClient} from "@tanstack/react-query";
 import {TransactionsProvider} from "App/Transactions/TransactionsContext";
+import {MemberType} from "App/Members/Members";
 
-const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
-  children,
-  storeState,
-  routes,
-  ...props
-}) => {
+type StoreState = {
+  authentication?: any;
+  order?: Order;
+  products?: any;
+  committeeMembers?: any;
+  boardMembers?: any;
+  members?: any;
+  queuedOrder?: any;
+  queuedOrders?: any;
+  activities?: any;
+  statistics?: any;
+};
+
+const AllTheProviders: React.FC<{
+  storeState: StoreState;
+  routes: string[];
+  children: React.ReactNode;
+}> = ({children, storeState = {}, routes, ...props}) => {
   const {
     authentication = defaultAuthentication,
-    order = defaultOrder,
+    order = {
+      memberId: undefined,
+      member: undefined,
+      products: [],
+    },
     products: productsByCategory = defaultProducts,
     committeeMembers = defaultCommitteeeMembers,
     boardMembers = defaultBoardMembers,
@@ -40,7 +55,6 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
     activities = [],
     statistics = [],
   } = storeState;
-  (routes || []).forEach((route) => history.push(route));
 
   const products = Object.values(productsByCategory).flatMap(
     (product) => product
@@ -48,15 +62,18 @@ const AllTheProviders: React.FC<{storeState: any; routes: string[]}> = ({
 
   const queryClient = new QueryClient({
     defaultOptions: {queries: {retry: false}},
-  });
-  setLogger({
-    warn: () => {},
-    error: () => {},
-    log: () => {},
+    logger: {
+      warn: () => {},
+      error: () => {},
+      log: () => {},
+    },
   });
 
+  const actualRoutes = routes !== undefined ? routes : ["/"];
+
+  // TODO put the test application providers in a separat thing that we pass to infrastructure providers
   return (
-    <InfrastructureProviders queryClient={queryClient}>
+    <InfrastructureProviders queryClient={queryClient} routes={actualRoutes}>
       <AuthenticationProvider {...authentication}>
         <QueuedOrdersProvider
           queuedOrder={queuedOrder ?? undefined}
@@ -87,12 +104,12 @@ const customRender = (
   ui: React.ReactElement,
   options: Omit<RenderOptions, "queries"> & {
     wrapperProps?: any;
-    storeState?: any;
-    routes: string[];
+    storeState?: StoreState;
+    routes?: string[];
   } = {
     wrapperProps: {},
     storeState: {},
-    routes: ["/"],
+    routes: undefined,
   }
 ) => {
   const wrapper = (props: any) => (
@@ -116,3 +133,31 @@ export {customRender as render};
 export const flushAllPromises = () => new Promise((resolve) => setImmediate(resolve));
 
 // TODO also add mirage / msw mock server here
+
+export const getMember = (member: Partial<MemberType> = {}): MemberType => {
+  return {
+    fullname: "John snow",
+    id: 1,
+    firstName: "John",
+    surname: "Snow",
+    latest_purchase_at: null,
+    age: 18,
+    prominent: null,
+    cosmetics: undefined,
+    ...member,
+  };
+};
+
+export const getProduct = (product: Partial<Product> = {}): Product => {
+  return {
+    id: 27,
+    name: "Ice Tea",
+    price: 60,
+    position: 999,
+    category: "Fris",
+    image: "",
+    splash_image: "",
+    age_restriction: null,
+    ...product,
+  };
+};

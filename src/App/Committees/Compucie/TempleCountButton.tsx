@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 const handleResponse = (response: any) => {
   if (!response.data) {

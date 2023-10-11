@@ -62,7 +62,7 @@ const Compucie = ({compucie, scriptcie, selectMember, reloadApplication}: Props)
                button will be placed at the right most part of the grid
              */}
       </div>
-      <NavLink exact to="/settings" className="tile button">
+      <NavLink to="/settings" className="tile button">
         <FontAwesomeIcon icon={"cogs"} size="lg" />
       </NavLink>
     </nav>

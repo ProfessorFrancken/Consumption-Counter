@@ -1,18 +1,14 @@
-import React from "react";
-import App from "./App";
 import AvailableProducts from "./Products/";
 import Prominent from "./Prominent";
 import RecentMembers from "./Recent";
 import {render, screen, within} from "test-utils";
 import clock from "jest-plugin-clock";
 import {mockedState} from "./MockedState";
+import AppContainer from "./AppContainer";
 
 function setup(routes = ["/"]) {
-  const props = {menuItems: []};
   const storeState = mockedState();
-  const app = render(<App {...props} />, {storeState, routes});
-
-  return {props, app};
+  return render(<AppContainer />, {storeState, routes});
 }
 
 describe("rendering", () => {
@@ -44,15 +40,15 @@ describe("rendering", () => {
       {path: "/statistics", component: "Statistics", title: "Statistics"},
       {path: "/committees", component: "Committees", title: "Committees"},
       {path: "/committees/0", component: "Members", title: "Compucie"},
-      {path: "/pricelist", component: "PriceList", title: "Pricelist"},
+      {path: "/products/pricelist", component: "PriceList", title: "Pricelist"},
       {path: "/recent", component: RecentMembers, title: "Recent"},
-      {path: "/products", component: AvailableProducts, title: "John Snow"},
+      {path: "/products?memberId=1", component: AvailableProducts, title: "John Snow"},
       {path: "/members/0", component: "Members", title: ""},
     ];
 
     screens.forEach((screen) => {
       it(`renders ${screen.path}`, () => {
-        const {app} = setup([screen.path]);
+        const app = setup([screen.path]);
 
         const title = app.getByRole("heading", {level: 1});
         expect(title).toHaveTextContent(screen.title);

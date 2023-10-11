@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "react-query";
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 import {AppEvent, FETCH_STATISTICS_EVENT, BUY_ORDER_SUCCESS_EVENT} from "actions";
@@ -89,11 +89,10 @@ type State = {
   statistics: Statistic[];
 };
 const StatisticsContext = React.createContext<State | undefined>(undefined);
-export const StatisticsProvider: React.FC<{statistics?: Statistic[]}> = ({
-  statistics: defaultStatistics,
-  children,
-  ...props
-}) => {
+export const StatisticsProvider: React.FC<{
+  statistics?: Statistic[];
+  children: React.ReactNode;
+}> = ({statistics: defaultStatistics, children, ...props}) => {
   const statisticsQuery = useFetchStatistics(defaultStatistics);
   const statistics = useBusReducer(statisticsReducer, []);
 

@@ -1,10 +1,10 @@
 import Members from "./../Members/Members";
-import {useOrder} from "App/Products/OrdersContext";
+import {useSelectMember} from "App/Products/OrdersContext";
 import {useRecentBuyers} from "App/Transactions/TransactionsContext";
 
 const RecentScreen = () => {
   const recentMembers = useRecentBuyers();
-  const {selectMember} = useOrder();
+  const selectMember = useSelectMember();
 
   return <Members members={recentMembers} selectMember={selectMember} />;
 };

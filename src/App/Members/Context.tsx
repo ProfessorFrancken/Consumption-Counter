@@ -1,8 +1,8 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "react-query";
-import api from "api";
-import {MemberType} from "App/Members/Members";
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import {chunk, orderBy} from "lodash";
+import {MemberType} from "./Members";
+import api from "./../../api";
 
 const useFetchMembers = (members?: MemberType[]) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -82,11 +82,10 @@ type State = {
   members: MemberType[];
 };
 const MembersContext = React.createContext<State | undefined>(undefined);
-export const MembersProvider: React.FC<{members?: MemberType[]}> = ({
-  members: defaultMembers,
-  children,
-  ...props
-}) => {
+export const MembersProvider: React.FC<{
+  members?: MemberType[];
+  children: React.ReactNode;
+}> = ({members: defaultMembers, children, ...props}) => {
   const membersQuery = useFetchMembers(defaultMembers);
 
   return (

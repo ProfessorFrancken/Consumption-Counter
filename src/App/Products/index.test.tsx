@@ -1,7 +1,7 @@
 import React from "react";
 import AvailableProducts from "./index";
-import {render, fireEvent} from "test-utils";
-import {useOrder} from "./OrdersContext";
+import {render, fireEvent, getMember, getProduct} from "test-utils";
+import {useSelectedMember, useSelectMember} from "./OrdersContext";
 import {MemberType} from "App/Members/Members";
 import clock from "jest-plugin-clock";
 import ProductsScreen from "./index";
@@ -10,17 +10,19 @@ it("renders, and it does not include products that a member is not allowed to bu
   const storeState = {
     products: {
       Bier: [
-        {name: "Hertog Jan", image: "", id: 1, age_restriction: 18, category: "Bier"},
+        getProduct({id: 1, name: "Hertog Jan", age_restriction: 18, category: "Bier"}),
       ],
-      Fris: [
-        {name: "Ice Tea", image: "", id: 2, age_restriction: null, category: "Fris"},
-      ],
+      Fris: [getProduct({id: 2, name: "Ice Tea", category: "Fris"})],
       Eten: [],
     },
-    order: {member: {age: 17}, products: []},
+    order: {
+      products: [],
+    },
+    members: [getMember({age: 17})],
   };
   const {queryByLabelText, getByLabelText, getAllByRole} = render(<AvailableProducts />, {
     storeState,
+    routes: ["?memberId=1"],
   });
 
   expect(queryByLabelText("beer category")).toBeNull();
@@ -34,30 +36,44 @@ it("shows the amount of products that are currently being orderd", () => {
   const storeState = {
     products: {
       Bier: [
-        {name: "Hertog Jan", image: "", id: 1, age_restriction: 18, category: "Bier"},
+        getProduct({
+          name: "Hertog Jan",
+          id: 1,
+          age_restriction: 18,
+          category: "Bier",
+        }),
       ],
       Fris: [
-        {name: "Ice Tea", image: "", id: 2, age_restriction: null, category: "Fris"},
+        getProduct({
+          name: "Ice Tea",
+          id: 2,
+          age_restriction: null,
+          category: "Fris",
+        }),
       ],
       Eten: [],
     },
     order: {
-      member: {age: 19},
       products: [
-        {
+        getProduct({
           id: 1,
           name: "Hertog Jan",
           price: 65,
-        },
-        {
+          category: "Bier",
+        }),
+        getProduct({
           id: 1,
           name: "Hertog Jan",
           price: 65,
-        },
+          category: "Bier",
+        }),
       ],
     },
   };
-  const {getAllByLabelText} = render(<AvailableProducts />, {storeState});
+  const {getAllByLabelText} = render(<AvailableProducts />, {
+    storeState,
+    routes: ["?memberId=1"],
+  });
 
   const orderedProducts = getAllByLabelText("amount ordered");
   expect(orderedProducts).toHaveLength(1);
@@ -66,26 +82,30 @@ it("shows the amount of products that are currently being orderd", () => {
 
 describe("Selecting a member", () => {
   const SelectMember: React.FC<{member: MemberType}> = ({member}) => {
-    const {selectMember, order} = useOrder();
+    const selectedMember = useSelectedMember();
+    const selectMember = useSelectMember();
 
-    if (order.member) {
-      return <span>{order.member.fullname}</span>;
+    if (selectedMember) {
+      return <span>{selectedMember.fullname}</span>;
     }
 
     return <button onClick={() => selectMember(member)}>Select {member.fullname}</button>;
   };
 
   clock.set("2018-01-01");
-  const member = {
-    id: 33,
-    fistName: "John",
+  const member: MemberType = {
+    id: 1,
+    firstName: "John",
     surname: "Snow",
     fullname: "John Snow",
     latest_purchase_at: null,
     age: 0,
+    prominent: null,
+    cosmetics: undefined,
   };
   const state = {
-    storeState: {order: {member: undefined, products: []}},
+    storeState: {order: {products: []}},
+    routes: ["/"],
   };
 
   it("Selects a member when they do not have a latest purchse", () => {
@@ -138,17 +158,14 @@ describe("Selecting a member", () => {
 describe("Listing available products", () => {
   clock.set("2018-01-01");
 
-  const member = {
-    id: 33,
-    fistName: "John",
-    surname: "Snow",
-    fullname: "John Snow",
+  const member = getMember({
     latest_purchase_at: new Date("2017-12-30"),
     age: 19,
-  };
+  });
   it("Shows products to a member", () => {
     const state = {
-      storeState: {order: {member, products: []}},
+      storeState: {order: {products: []}},
+      routes: ["/?memberId=1"],
     };
 
     const {getByRole} = render(<ProductsScreen />, state);
@@ -159,7 +176,13 @@ describe("Listing available products", () => {
 
   it("Doesn't show alcohol minors", () => {
     const state = {
-      storeState: {order: {member: {...member, age: 0}, products: []}},
+      storeState: {
+        members: [{...member, age: 17}],
+        order: {
+          products: [],
+        },
+      },
+      routes: ["/?memberId=1"],
     };
 
     const {getByRole, queryByRole} = render(<ProductsScreen />, state);
@@ -169,43 +192,39 @@ describe("Listing available products", () => {
   });
 
   it("Shows the amount of a product a member is about to purchase", () => {
-    const hertog = {
+    const hertog = getProduct({
       id: 3,
       name: "Hertog Jan",
       price: 68,
-      position: 1,
       category: "Bier",
-      image: "wCwnyLXTVdPEnKRXjw9I.png",
-      splash_image: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
       age_restriction: 18,
-    };
-    const iceTea = {
+    });
+    const iceTea = getProduct({
       id: 27,
       name: "Ice Tea",
       price: 60,
-      position: 999,
       category: "Fris",
-      image: "",
-      age_restriction: null,
-    };
+    });
 
     const state = {
-      storeState: {order: {member, products: [hertog, hertog, iceTea]}},
+      storeState: {order: {products: [hertog, hertog, iceTea]}},
+      routes: ["/?memberId=1"],
     };
 
     const {getByRole} = render(<ProductsScreen />, state);
     expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
     expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
     expect(getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Hertog Jan/})).toHaveTextContent(2);
-    expect(getByRole("button", {name: /Ice Tea/})).toHaveTextContent(1);
+    expect(getByRole("button", {name: /Hertog Jan/})).toHaveTextContent("2");
+    expect(getByRole("button", {name: /Ice Tea/})).toHaveTextContent("1");
   });
 
   describe("Before 4", () => {
     clock.set("2018-01-01 15:00:00");
     it("Locks beer before 4", () => {
       const state = {
-        storeState: {order: {member, products: []}},
+        storeState: {order: {products: []}},
+        routes: ["/?memberId=1"],
       };
 
       const {getByRole} = render(<ProductsScreen />, state);
@@ -215,15 +234,20 @@ describe("Listing available products", () => {
 
       expect(getByRole("button", {name: /Ice Tea/})).not.toBeDisabled();
       expect(getByRole("button", {name: /Kinder Bueno/})).not.toBeDisabled();
-      expect(getByRole("button", {name: /Hertog Jan/})).toBeDisabled();
+
+      // We don't want to disable buying beer before 4 but we do want to discourage it
+      const btn = getByRole("button", {name: /Hertog Jan/});
+      expect(getByRole("button", {name: /Hertog Jan/})).not.toBeDisabled();
+      expect(btn.className).toContain("locked");
     });
   });
 
-  describe("After 4 ", () => {
+  describe("After 4", () => {
     clock.set("2018-01-01 16:00:00");
     it("Locks beer before 4", () => {
       const state = {
-        storeState: {order: {member, products: []}},
+        storeState: {order: {products: []}},
+        routes: ["/?memberId=1"],
       };
 
       const {getByRole} = render(<ProductsScreen />, state);

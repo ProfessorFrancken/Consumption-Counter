@@ -12,7 +12,7 @@ describe("Transaction context", () => {
   it("Requires the TransactionsProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectTransaction />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

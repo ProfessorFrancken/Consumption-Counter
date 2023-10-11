@@ -1,6 +1,6 @@
 import React from "react";
 import Members, {MemberType} from "./../Members/Members";
-import {useOrder} from "App/Products/OrdersContext";
+import {useSelectMember} from "App/Products/OrdersContext";
 import nedap from "./../../assets/nedap-logo.png";
 import axios from "axios";
 import {useMembers} from "App/Members/Context";
@@ -72,7 +72,7 @@ const Present = ({members, selectMember}: PresentProps) => {
 
 const PresentScreen = () => {
   const {members} = useMembers();
-  const {selectMember} = useOrder();
+  const selectMember = useSelectMember();
 
   return <Present selectMember={selectMember} members={members} />;
 };

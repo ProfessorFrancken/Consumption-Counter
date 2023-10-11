@@ -1,8 +1,6 @@
 export function mockedState() {
   return {
-    router: {
-      locationBeforeTransitions: null,
-    },
+    order: defaultOrder,
   };
 }
 
@@ -13,11 +11,6 @@ export const defaultAuthentication = {
 };
 
 export const defaultOrder = {
-  member: {
-    id: 1,
-    fullname: "John Snow",
-    age: 19,
-  },
   products: [],
 };
 
@@ -92,3 +85,125 @@ export const defaultCommitteeeMembers = [
 ];
 
 export const defaultBoardMembers = [{member_id: 1, function: "King"}];
+
+export const mocks = {
+  members: [
+    {
+      id: 314,
+      voornaam: "John",
+      initialen: "",
+      tussenvoegsel: "",
+      achternaam: "Snow",
+      geboortedatum: "1993-04-26",
+      prominent: null,
+      kleur: null,
+      afbeelding: null,
+      bijnaam: null,
+      button_width: null,
+      button_height: null,
+      latest_purchase_at: "2018-01-01 00:00:00",
+    },
+  ],
+
+  products: [
+    {
+      id: 1,
+      naam: "Hertog Jan",
+      prijs: "0.6500",
+      categorie: "Bier",
+      positie: 999,
+      beschikbaar: 1,
+      afbeelding: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
+      splash_afbeelding: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
+      kleur: null,
+    },
+    {
+      id: 3,
+      naam: "Grolsch",
+      prijs: "0.6500",
+      categorie: "Eten",
+      positie: 999,
+      beschikbaar: 1,
+      afbeelding: "Uo6qQC4Hm8TUqyNjw2G4.jpg",
+      splash_afbeelding: null,
+      kleur: null,
+    },
+    {
+      id: 2,
+      naam: "Heineken",
+      prijs: "0.6000",
+      categorie: "Fris",
+      positie: 999,
+      beschikbaar: 0,
+      afbeelding: "",
+      splash_afbeelding: null,
+      kleur: null,
+    },
+  ],
+
+  orders: {
+    single: {
+      order: {
+        member: {
+          id: 314,
+          firstName: "John",
+          surname: "Snow",
+          fullname: "John Snow",
+        },
+        products: [
+          {
+            id: 1,
+            name: "Hertog Jan",
+            price: 65,
+          },
+        ],
+        ordered_at: 1514764800000,
+      },
+    },
+    multiple: {
+      order: {
+        member: {
+          id: 314,
+          firstName: "John",
+          surname: "Snow",
+        },
+        products: [
+          {
+            id: 1,
+            name: "Hertog Jan",
+            price: 65,
+          },
+          {
+            id: 1,
+            name: "Hertog Jan",
+            price: 65,
+          },
+          {
+            id: 1,
+            name: "Hertog Jan",
+            price: 65,
+          },
+        ],
+        ordered_at: 1514764800000,
+      },
+    },
+  },
+
+  committees: [
+    {
+      commissie_id: 14,
+      lid_id: 314,
+      jaar: 2018,
+      functie: "King",
+      naam: "Night's Watch",
+    },
+    {
+      commissie_id: 0,
+      lid_id: 314,
+      jaar: 2018,
+      functie: "King",
+      naam: "Compucie",
+    },
+  ],
+  boards: [{lid_id: 314, jaar: 2018, functie: "King"}],
+};

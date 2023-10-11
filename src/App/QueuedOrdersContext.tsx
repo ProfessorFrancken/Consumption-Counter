@@ -4,7 +4,7 @@ import {pick, maxBy} from "lodash";
 import {MemberType} from "./Members/Members";
 import {Order, Product} from "./Products/OrdersContext";
 import api from "api";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router";
 import useLocalStorage from "./useLocalStorage";
 import {useBus} from "ts-bus/react";
 
@@ -27,7 +27,7 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     defaultQueuedOrders
   );
   const bus = useBus();
-  const {push} = useHistory();
+  const navigate = useNavigate();
 
   const dequeQueuedOrder = (order: OrderedOrder) => {
     setQueuedOrders((orders: QueuedOrder[]) =>
@@ -70,24 +70,12 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
     }
   };
 
-  const makeOrder = ({member, products}: Order) => {
-    const date = new Date();
-
-    if (member === undefined) {
-      throw new Error("Can't make an order without a member");
-    }
-
-    const order = {member, products, ordered_at: date.getTime()};
-
+  // TODO: rewrite put this into OrdersContext, and make QueuedOrders a fallback for
+  // failed orders instead
+  const makeOrder = (order: OrderedOrder) => {
     setQueuedOrders((orders: QueuedOrder[]) => {
       return [{order, fails: 0, state: "queued" as const}, ...orders];
     });
-
-    push("/");
-
-    orderTimeoutQueue[order.ordered_at] = setTimeout(() => {
-      buyOrder(order);
-    }, TIME_TO_CANCEL);
   };
 
   const cancelOrder = (order: OrderedOrder) => {
@@ -109,7 +97,7 @@ export const TIME_TO_CANCEL = 7000;
 type State = {
   queuedOrders: QueuedOrder[];
   queuedOrder: QueuedOrder | null;
-  makeOrder: (order: Order) => void;
+  makeOrder: (order: OrderedOrder) => void;
   buyOrder: (order: OrderedOrder) => void;
   cancelOrder: (order: OrderedOrder) => void;
 };
@@ -118,6 +106,7 @@ const QueuedOrdersContext = React.createContext<State | undefined>(undefined);
 export const QueuedOrdersProvider: React.FC<{
   queuedOrder?: QueuedOrder | null;
   queuedOrders?: QueuedOrder[];
+  children: React.ReactNode;
 }> = ({
   queuedOrder: defaultQueuedOrder = null,
   queuedOrders: defaultQueuedOrders = [],

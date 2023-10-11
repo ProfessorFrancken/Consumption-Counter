@@ -1,8 +1,11 @@
 import * as React from "react";
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import {useProducts, ProductsProvider} from "./ProductsContext";
-import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
+import {useOrder} from "./OrdersContext";
+import {render as renderApp, getProduct} from "test-utils";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
@@ -21,15 +24,21 @@ describe("Product context", () => {
     );
   };
 
-  it("Selects a member when they do not have a latest purchse", async () => {
-    // TODO: replace by msw or miragejs
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`${base_api}/products`, {
-      response: {products},
-      headers: {"content-type": "application/json"},
-    });
+  const server = setupServer(
+    rest.get("*/products", (req, res, ctx) => {
+      return res(ctx.json({products}));
+    })
+  );
 
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("Selects a member when they do not have a latest purchse", async () => {
     const {findByText} = render(
       <InfrastructureProviders>
         <ProductsProvider>
@@ -46,10 +55,37 @@ describe("Product context", () => {
   it("Requires the ProductsProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectProduct />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();
+  });
+
+  it("Doensn't allow an order without a member", () => {
+    const MakeOrder: React.FC = () => {
+      const [failed, setFailed] = React.useState(false);
+      const {makeOrder} = useOrder();
+
+      const onClick = () => {
+        try {
+          makeOrder({products: [getProduct()]});
+        } catch {
+          setFailed(true);
+        }
+      };
+
+      if (failed) {
+        return <div>Failed</div>;
+      }
+
+      return <button onClick={onClick}>Make order</button>;
+    };
+
+    const {getByRole, getByText} = renderApp(<MakeOrder />);
+
+    fireEvent.click(getByRole("button"));
+
+    expect(getByText("Failed")).toBeInTheDocument();
   });
 });
 

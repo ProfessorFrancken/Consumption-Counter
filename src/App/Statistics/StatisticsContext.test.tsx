@@ -1,10 +1,11 @@
 import * as React from "react";
 import {render} from "@testing-library/react";
 import {useStatistics, statisticsReducer, StatisticsProvider} from "./StatisticsContext";
-import moxios from "moxios";
 import {InfrastructureProviders} from "Root";
 import clock from "jest-plugin-clock";
 import {BUY_ORDER_SUCCESS_EVENT, FETCH_STATISTICS_EVENT} from "actions";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 describe("Statistics context", () => {
   clock.set("2021-01-01");
@@ -28,17 +29,21 @@ describe("Statistics context", () => {
     );
   };
 
-  it("Fetches a list of statistics", async () => {
-    // TODO: replace by msw or miragejs
-    moxios.install();
-    moxios.stubRequest(
-      /statistics\/categories\?startDate=2019-01-01&endDate=2021-01-01/,
-      {
-        response: {statistics},
-        headers: {"content-type": "application/json"},
-      }
-    );
+  const server = setupServer(
+    rest.get("*/statistics/categories", (req, res, ctx) => {
+      return res(ctx.json({statistics}));
+    })
+  );
 
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("Fetches a list of statistics", async () => {
     const {findByText} = render(
       <InfrastructureProviders>
         <StatisticsProvider>
@@ -53,7 +58,7 @@ describe("Statistics context", () => {
   it("Requires the StatisticsProvider", () => {
     const spy = jest.spyOn(console, "error").mockImplementation();
     expect(() => render(<SelectStatistic />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(3);
 
     spy.mockReset();
     spy.mockRestore();

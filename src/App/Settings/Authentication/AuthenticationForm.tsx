@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import decode from "jwt-decode";
 import moment from "moment";
 import {useForm} from "react-hook-form";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router";
 
 const Button = ({children, ...props}: any) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
@@ -58,13 +58,17 @@ const AuthenticateButton = ({request, token}: any) => {
 };
 
 const AuthenticationForm = ({authenticate, token, request, error}: any) => {
-  const {handleSubmit, register, errors} = useForm();
-  const {push} = useHistory();
+  const {
+    handleSubmit,
+    register,
+    formState: {errors},
+  } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(({password}) => {
     authenticate(password, {
       onSuccess: () => {
-        push("/loading");
+        navigate("/loading");
       },
     });
   });
@@ -82,11 +86,10 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
           <div className="form-group col-lg-5 col-md-8 col-sm-10 col-12">
             <input
               type="password"
-              name="password"
               placeholder="Passphrase"
               autoFocus
               className={error ? "form-control is-invalid" : "form-control"}
-              ref={register({
+              {...register("password", {
                 required: "Required",
                 minLength: {
                   value: 6,
@@ -95,7 +98,9 @@ const AuthenticationForm = ({authenticate, token, request, error}: any) => {
               })}
             />
             {errors.password ? (
-              <p className="invalid-feedback text-dark">{errors.password.message}</p>
+              <p className="invalid-feedback text-dark">
+                {String(errors.password.message)}
+              </p>
             ) : null}
 
             {error ? <p className="invalid-feedback">{invalidFeedback(error)}</p> : null}

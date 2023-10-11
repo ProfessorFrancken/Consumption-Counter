@@ -1,8 +1,8 @@
 import React from "react";
 import {default as SelectCommitteeMembersContainer} from "./index";
-import {Route} from "react-router-dom";
 import {render} from "test-utils";
 import clock from "jest-plugin-clock";
+import {Route, Routes} from "react-router-dom";
 
 describe("committees", () => {
   clock.set("2018-01-01");
@@ -36,11 +36,9 @@ describe("committees", () => {
     };
     const routes = ["/committees/1"];
     const {getByRole} = render(
-      <Route
-        exact
-        path="/committees/:page"
-        component={SelectCommitteeMembersContainer}
-      />,
+      <Routes>
+        <Route path="/committees/:page" element={<SelectCommitteeMembersContainer />} />
+      </Routes>,
       {storeState, routes}
     );
 
@@ -71,11 +69,9 @@ describe("committees", () => {
     };
     const routes = ["/committees/1"];
     const {getByRole, queryByRole} = render(
-      <Route
-        exact
-        path="/committees/:page"
-        component={SelectCommitteeMembersContainer}
-      />,
+      <Routes>
+        <Route path="/committees/:page" element={<SelectCommitteeMembersContainer />} />
+      </Routes>,
       {storeState, routes}
     );
 

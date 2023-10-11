@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "react-query";
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 
@@ -31,10 +31,12 @@ const useFetchActivities = (activities?: Activity[]) => {
         after,
         before,
       });
+
       return response.activities.map(mapActivity);
     },
     enabled: activities === undefined,
     initialData: activities,
+    refetchInterval: 60 * 60 * 1000,
   });
 };
 
@@ -43,11 +45,10 @@ type State = {
   activities: Activity[];
 };
 const ActivitiesContext = React.createContext<State | undefined>(undefined);
-export const ActivitiesProvider: React.FC<{activities?: Activity[]}> = ({
-  activities: defaultActivities,
-  children,
-  ...props
-}) => {
+export const ActivitiesProvider: React.FC<{
+  activities?: Activity[];
+  children: React.ReactNode;
+}> = ({activities: defaultActivities, children, ...props}) => {
   const activitiesQuery = useFetchActivities(defaultActivities);
   const activities: Activity[] = defaultActivities ?? activitiesQuery.data ?? [];
 

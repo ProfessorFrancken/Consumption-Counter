@@ -1,9 +1,10 @@
 import {Factory} from "miragejs";
-import faker from "faker";
+import {faker} from "@faker-js/faker";
 
 export const ProductFactory = Factory.extend({
   id: (i: any) => parseInt(i, 10),
   product_id() {
+    // @ts-expect-error huh
     return this.id;
   },
   kleur: null,
@@ -33,9 +34,9 @@ export const ProductFactory = Factory.extend({
     return categories[i % categories.length];
   },
   prijs() {
-    return faker.commerce.price(0.01, 5.0, 4);
+    return faker.commerce.price({min: 0.01, max: 5.0, dec: 4});
   },
-  naam(i: any) {
+  naam() {
     return faker.commerce.product();
   },
 });

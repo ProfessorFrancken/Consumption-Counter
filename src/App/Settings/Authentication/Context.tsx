@@ -1,5 +1,5 @@
 import React from "react";
-import {UseMutateFunction, useMutation} from "react-query";
+import {UseMutateFunction, useMutation} from "@tanstack/react-query";
 import AuthenticationForm from "./AuthenticationForm";
 import logo from "assets/logo.png";
 import api from "./../../../api";
@@ -24,23 +24,24 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
     try {
       const response = await api.post("/authenticate", {password});
       const token = response.token as string;
+      setToken({token});
       return token;
-    } catch (e) {
+    } catch (e: unknown) {
+      // @ts-expect-error This is a known limitation
       throw new Error(e.response.statusText as string);
     }
   };
 
-  return useMutation<string, Error, string>("login", login, {
-    onSuccess: (token: string) => {
-      setToken({token});
-    },
+  return useMutation<string, Error, string>({
+    mutationKey: ["login"],
+    mutationFn: login,
   });
 }
 
-export const AuthenticationProvider: React.FC<{token?: string}> = ({
-  token: defaultToken,
-  ...props
-}) => {
+export const AuthenticationProvider: React.FC<{
+  token?: string;
+  children: React.ReactNode;
+}> = ({token: defaultToken, ...props}) => {
   //
   const [{token}, setToken] = useLocalStorage("plus_one_authorization", {
     token: defaultToken,

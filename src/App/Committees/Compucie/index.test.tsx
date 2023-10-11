@@ -1,17 +1,52 @@
 import React from "react";
-import {render, fireEvent} from "test-utils";
+import {render, fireEvent, screen} from "test-utils";
 import CompucieScreen from "./index";
-import moxios from "moxios";
-import {history} from "Root";
+import {Route, Routes} from "react-router";
+import {setupServer} from "msw/lib/node";
+import {rest} from "msw";
 
 describe("Compucie screen", () => {
-  beforeEach(() => {
-    moxios.install();
-    const base_api = process.env.REACT_APP_API_SERVER;
-    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php`, {
-      responseText: "10",
-      status: 200,
-    });
+  const server = setupServer(
+    rest.get("*/members", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/products", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/boards", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/committees", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/statistics", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/statistics/categories", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.get("*/activities", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+    rest.post("*/orders", (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+
+    rest.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
+      return res(ctx.text("10"));
+    }),
+
+    rest.post("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
+      return res(ctx.json({}));
+    })
+  );
+
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterAll(() => {
+    server.close();
   });
 
   it("renders", () => {
@@ -42,11 +77,10 @@ describe("Compucie screen", () => {
   });
 
   it("Decreases the temple count", async () => {
-    moxios.stubRequest(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`, {});
     const {findByRole, getByRole} = render(<CompucieScreen />);
 
     expect(
-      await findByRole("button", {name: /Decrease Temple Count \(10\)/i, exact: false})
+      await findByRole("button", {name: /Decrease Temple Count \(10\)/i})
     ).toBeInTheDocument();
     fireEvent.click(getByRole("button", {name: /Decrease Temple Count \(10\)/}));
 
@@ -56,9 +90,16 @@ describe("Compucie screen", () => {
   });
 
   it("Reloads the application", async () => {
-    const {queryByRole, findByRole, getByRole} = render(<CompucieScreen />);
+    const {getByRole} = render(
+      <Routes>
+        <Route path="/compucie" element={<CompucieScreen />} />
+        <Route path="*" element={<span role="progressbar">loading</span>} />
+      </Routes>,
+      {routes: ["/compucie"]}
+    );
 
     fireEvent.click(getByRole("button", {name: /Refresh/}));
-    expect(history.location.pathname).toBe("/loading");
+
+    expect(await screen.findByRole("progressbar")).toBeInTheDocument();
   });
 });
