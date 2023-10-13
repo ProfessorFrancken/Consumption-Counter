@@ -17,7 +17,7 @@ const PurchasesOfWeek = ({purchases, today, icon, type}: any) => {
       >
         <h4 className="mb-1" style={{color: "#a4afb9"}}>
           {purchases.reduce((total: any, purchases: any) => total + purchases[type], 0)}
-          <FontAwesomeIcon icon={icon} size="lg" className="text-muted ml-2" />
+          <FontAwesomeIcon icon={icon} size="1x" className="ms-1" />
         </h4>
         <small className="text-uppercase" style={{color: "#a4afb9"}}>
           {today[type]} today

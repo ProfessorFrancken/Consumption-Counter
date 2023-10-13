@@ -49,7 +49,7 @@ button {
   width: 100vw;
   height: 100vh;
   display: grid;
-  grid-template-columns: [sidebar] var(--menuSize) [content] 1fr;
+  grid-template-columns: [sidebar] var(--menuSize) [content] minmax(0, 1fr);
   grid-template-rows:
     [header] var(--rowSize) [content] auto [arrow-overflow] var(--arrowOverflow)
     [footer] var(--footerSize) [footer-end];
