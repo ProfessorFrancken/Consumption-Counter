@@ -11,14 +11,17 @@ const FooterActions = styled.div`
 
 const FooterContainer = styled.footer`
   padding-left: 110px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-column-gap: 2rem;
+
   justify-content: space-between;
   background-color: var(--sidebar-primary);
   line-height: var(--footerSize);
 `;
 
 const Footer = () => (
-  <FooterContainer className="footer">
+  <FooterContainer className="footer gap-x-3">
     <Sponsors />
     <FooterActions>
       <CancelOrder />

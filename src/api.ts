@@ -19,7 +19,7 @@ function authHeader() {
   }
 }
 
-async function get(uri: string, params?: any) {
+async function get<T extends unknown>(uri: string, params?: any): Promise<T> {
   const requestOptions = {
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +28,7 @@ async function get(uri: string, params?: any) {
     params,
   };
 
-  return axios.get(baseApi + uri, requestOptions).then(handleResponse);
+  return axios.get<T>(baseApi + uri, requestOptions).then(handleResponse);
 }
 
 async function post(uri: any, body: any) {

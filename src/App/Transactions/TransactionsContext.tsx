@@ -1,53 +1,110 @@
-import React from "react";
+import React, {useEffect, useMemo} from "react";
 import {MemberType} from "App/Members/Members";
-import {take, uniqBy} from "lodash";
+import {take, uniq} from "lodash";
 import {useMembers} from "App/Members/Context";
 import {AppEvent, BUY_ORDER_SUCCESS_EVENT} from "actions";
 import {OrderedOrder} from "App/QueuedOrdersContext";
-import {useBusReducer} from "ts-bus/react";
+import {useBus} from "ts-bus/react";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import api from "./../../api";
+import {useProducts} from "App/Products/ProductsContext";
 
 const RECENT_MEBMERS = 6 * 5;
 
-function recentBuyersReducer(state: number[], event: AppEvent) {
-  switch (event.type) {
-    case BUY_ORDER_SUCCESS_EVENT.toString():
-      return take(
-        uniqBy([event.payload.order.member.id, ...state], (member: any) => member),
-        RECENT_MEBMERS
-      );
-    default:
-      return state;
-  }
-}
+type TransactionFromOrder = {
+  id: number;
+  member_id: number;
+  product_id: number;
+  amount: number;
+  ordered_at: string; // datetime string
+  price: number;
+};
 
-const KEEP_TRACK_OF_N_TRANSCACTIONS = 10;
-type RecentBuyerId = number;
-function transactionsReducer(state: OrderedOrder[] = [], event: AppEvent) {
-  switch (event.type) {
-    case BUY_ORDER_SUCCESS_EVENT.toString():
-      return take([event.payload.order, ...state], KEEP_TRACK_OF_N_TRANSCACTIONS);
-    default:
-      return state;
-  }
-}
+const useOrdersQuery = () => {
+  return useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      return (await api.get<{orders: TransactionFromOrder[]}>("/orders")).orders;
+    },
+  });
+};
 
 type State = {
   transactions: OrderedOrder[];
-  recentBuyers: RecentBuyerId[];
 };
 const TransactionsContext = React.createContext<State | undefined>(undefined);
 export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
   children,
   ...props
 }) => {
-  const transactions = useBusReducer(transactionsReducer, []);
-  const recentBuyers = useBusReducer(recentBuyersReducer, []);
+  const {members} = useMembers();
+  const {products} = useProducts();
+  const orders = useOrdersQuery();
+
+  const queryClient = useQueryClient();
+  const bus = useBus();
+  useEffect(() => {
+    const unsubscribe = bus.subscribe(BUY_ORDER_SUCCESS_EVENT, (event: AppEvent) => {
+      if (event.type !== BUY_ORDER_SUCCESS_EVENT.toString()) {
+        return;
+      }
+
+      const [date, time] = new Date(event.payload.order.ordered_at)
+        .toISOString()
+        .split("T");
+
+      const hourMinutesSeconds = time.split(".").at(0);
+
+      const orderedAt = `${date} ${hourMinutesSeconds}`;
+
+      const newOrders = event.payload.order.products.map((product, idx) => {
+        return {
+          // Create a random id based on time and idx, making sure we don't
+          // create duplicates ones in our tests that mock date
+          id: new Date().getTime() + idx,
+          member_id: event.payload.order.member.id,
+          product_id: product.id,
+          amount: 1,
+          ordered_at: orderedAt,
+          price: product.price,
+        };
+      });
+
+      queryClient.setQueryData<TransactionFromOrder[]>(["orders"], (orders) => {
+        return orders === undefined ? newOrders : [...orders, ...newOrders];
+      });
+    });
+
+    return () => unsubscribe();
+  }, [bus, queryClient, members]);
+
+  const transactions = useMemo(() => {
+    if (!orders.data) {
+      return [];
+    }
+
+    return orders.data
+      .map((order): OrderedOrder | undefined => {
+        const member = members.find((member) => member.id === order.member_id)!;
+        const product = products?.find((product) => product.id === order.product_id)!;
+
+        if (member === undefined || product === undefined) {
+          return undefined;
+        }
+
+        return {
+          ordered_at: new Date(order.ordered_at).getTime(),
+          products: [product],
+          member,
+        };
+      })
+      .filter((order): order is OrderedOrder => order !== undefined);
+  }, [orders.data, members, products]);
 
   return (
     <TransactionsContext.Provider
       value={{
         transactions,
-        recentBuyers,
         ...props,
       }}
     >
@@ -67,7 +124,16 @@ export const useTransactions = () => {
 };
 
 export function useRecentBuyers() {
-  const {recentBuyers} = useTransactions();
+  const orders = useOrdersQuery();
+
+  const recentBuyers = useMemo(() => {
+    if (!orders.data) {
+      return [];
+    }
+
+    return take(uniq(orders.data.map((order) => order.member_id)), RECENT_MEBMERS);
+  }, [orders.data]);
+
   const {members} = useMembers();
   return (
     recentBuyers

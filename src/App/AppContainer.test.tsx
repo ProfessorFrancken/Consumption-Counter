@@ -48,6 +48,12 @@ describe("Consumption Counter", () => {
     rest.post("*/orders", (req, res, ctx) => {
       return res(ctx.status(200));
     }),
+    rest.get("*/orders", (req, res, ctx) => {
+      return res(ctx.json({products: []}));
+    }),
+    rest.get("*/sponsors", (req, res, ctx) => {
+      return res(ctx.json({sponsors: []}));
+    }),
     rest.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
       return res(ctx.text("10"));
     }),
