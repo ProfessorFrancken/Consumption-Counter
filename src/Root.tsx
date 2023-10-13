@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {
   BrowserRouter,
   createBrowserRouter,
@@ -23,10 +23,11 @@ type Props = {
 export const InfrastructureProviders: React.FC<Props> = ({
   children,
   routes,
-  queryClient = new QueryClient(),
-  bus = new EventBus(),
+  queryClient: defaultQueryClient = new QueryClient(),
+  bus: defaultEventBus = new EventBus(),
 }) => {
-  //const memoryRouter = createMemoryRouter(createAppRoutes(ApplicationProviders));
+  const [queryClient] = useState(defaultQueryClient);
+  const [bus] = useState(defaultEventBus);
 
   return (
     <BusProvider value={bus}>
