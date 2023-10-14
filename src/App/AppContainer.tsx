@@ -27,7 +27,7 @@ import Loading from "../Loading";
 import {useCommittees} from "./Committees/CommitteesContext";
 import {useBoards} from "./Prominent/BoardsContext";
 import {useMembers} from "./Members/Context";
-import {useStatistics} from "./Statistics/StatisticsContext";
+import {useStatistics, useStatisticsQuery} from "./Statistics/StatisticsContext";
 import {ApplicationProviders} from "ApplicationProviders";
 import "./FontAwesome";
 
@@ -35,7 +35,7 @@ const useMenuItems = () => {
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
   const {membersQuery} = useMembers();
-  const {statisticsQuery} = useStatistics();
+  const statisticsQuery = useStatisticsQuery();
 
   return [
     {

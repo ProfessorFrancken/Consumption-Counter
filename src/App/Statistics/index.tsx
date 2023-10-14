@@ -9,7 +9,7 @@ import {OrderedOrder} from "App/QueuedOrdersContext";
 import {Product} from "App/Products/OrdersContext";
 import {Activity, useActivities} from "App/Activities/ActivitiesContext";
 import {useTransactions} from "App/Transactions/TransactionsContext";
-import {Statistic, useStatistics} from "./StatisticsContext";
+import {Statistic, useStatistics, useStatisticsQuery} from "./StatisticsContext";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -172,12 +172,12 @@ const Statistics = ({
 
 const StatisticsSreen = () => {
   const {activities} = useActivities();
-  const {statistics} = useStatistics();
+  const statisticsQuery = useStatisticsQuery();
   const transactions = useTransactions();
 
   return (
     <Statistics
-      statistics={statistics}
+      statistics={statisticsQuery.data ?? []}
       activities={activities}
       transactions={transactions}
     />

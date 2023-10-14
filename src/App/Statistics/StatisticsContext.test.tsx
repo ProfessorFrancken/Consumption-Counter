@@ -1,6 +1,6 @@
 import * as React from "react";
 import {render} from "@testing-library/react";
-import {useStatistics, StatisticsProvider} from "./StatisticsContext";
+import {StatisticsProvider, useStatisticsQuery} from "./StatisticsContext";
 import {InfrastructureProviders} from "Root";
 import clock from "jest-plugin-clock";
 import {setupServer} from "msw/lib/node";
@@ -10,15 +10,15 @@ describe("Statistics context", () => {
   clock.set("2021-01-01");
 
   const SelectStatistic: React.FC = () => {
-    const {statistics} = useStatistics();
+    const statisticsQuery = useStatisticsQuery();
 
-    if (statistics === undefined) {
+    if (statisticsQuery.data === undefined) {
       return null;
     }
 
     return (
       <ul>
-        {statistics.map((statistic, idx) => (
+        {statisticsQuery.data.map((statistic, idx) => (
           <li key={idx}>
             {statistic.date}: {statistic.beer}, {statistic.soda}, {statistic.food}:{" "}
             {statistic.total}

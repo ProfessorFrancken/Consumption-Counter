@@ -11,7 +11,7 @@ export type Statistic = {
   food: number;
 };
 
-const useFetchStatistics = (statistics?: Statistic[]) => {
+export const useStatisticsQuery = (statistics?: Statistic[]) => {
   return useQuery<Statistic[]>({
     queryKey: ["statistics", "categories"],
     queryFn: async () => {
@@ -52,23 +52,17 @@ const useFetchStatistics = (statistics?: Statistic[]) => {
 
 type State = {
   statisticsQuery: QueryObserverResult<Statistic[]>;
-  statistics: Statistic[];
 };
 const StatisticsContext = React.createContext<State | undefined>(undefined);
 export const StatisticsProvider: React.FC<{
   statistics?: Statistic[];
   children: React.ReactNode;
-}> = ({statistics: defaultStatistics, children, ...props}) => {
-  const statisticsQuery = useFetchStatistics(defaultStatistics);
+}> = ({statistics: defaultStatistics, children}) => {
+  console.log({defaultStatistics});
+  const statisticsQuery = useStatisticsQuery(defaultStatistics);
 
   return (
-    <StatisticsContext.Provider
-      value={{
-        statisticsQuery,
-        statistics: statisticsQuery.data ?? [],
-        ...props,
-      }}
-    >
+    <StatisticsContext.Provider value={{statisticsQuery}}>
       {children}
     </StatisticsContext.Provider>
   );

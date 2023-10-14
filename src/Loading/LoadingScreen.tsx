@@ -7,7 +7,7 @@ import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";
 import {useActivities} from "App/Activities/ActivitiesContext";
-import {useStatistics} from "App/Statistics/StatisticsContext";
+import {useStatistics, useStatisticsQuery} from "App/Statistics/StatisticsContext";
 
 type Feature = {
   query: QueryObserverResult;
@@ -54,7 +54,7 @@ const LoadingScreen = () => {
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();
   const {activitiesQuery} = useActivities();
-  const {statisticsQuery} = useStatistics();
+  const statisticsQuery = useStatisticsQuery();
 
   const queries = [
     productsQuery,
