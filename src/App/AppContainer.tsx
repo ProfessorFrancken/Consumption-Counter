@@ -63,7 +63,7 @@ const useMenuItems = () => {
       label: "Committees",
     },
     {
-      icon: "chart-bar",
+      icon: "chart-column",
       url: "/statistics",
       loading: statisticsQuery.isLoading,
       label: "Statistics",

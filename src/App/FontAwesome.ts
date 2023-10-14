@@ -9,7 +9,7 @@ import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {faClock} from "@fortawesome/free-solid-svg-icons";
 import {faUsers} from "@fortawesome/free-solid-svg-icons";
-import {faChartBar} from "@fortawesome/free-solid-svg-icons";
+import {faChartColumn} from "@fortawesome/free-solid-svg-icons";
 import {faChessQueen} from "@fortawesome/free-solid-svg-icons";
 import {faArrowCircleLeft} from "@fortawesome/free-solid-svg-icons";
 import {faCheckCircle} from "@fortawesome/free-solid-svg-icons";
@@ -29,7 +29,7 @@ library.add(
   faHome,
   faClock,
   faUsers,
-  faChartBar,
+  faChartColumn,
   faChessQueen,
   faCheckSquare,
   faCoffee,
