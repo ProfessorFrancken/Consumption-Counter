@@ -9,38 +9,9 @@ import {useQuery, useQueryClient} from "@tanstack/react-query";
 import api from "./../../api";
 import {useProducts} from "App/Products/ProductsContext";
 
-const RECENT_MEBMERS = 6 * 5;
-
-type TransactionFromOrder = {
-  id: number;
-  member_id: number;
-  product_id: number;
-  amount: number;
-  ordered_at: string; // datetime string
-  price: number;
-};
-
-const useOrdersQuery = () => {
-  return useQuery({
-    queryKey: ["orders"],
-    queryFn: async () => {
-      return (await api.get<{orders: TransactionFromOrder[]}>("/orders")).orders;
-    },
-  });
-};
-
-type State = {
-  transactions: OrderedOrder[];
-};
-const TransactionsContext = React.createContext<State | undefined>(undefined);
 export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
   children,
-  ...props
 }) => {
-  const {members} = useMembers();
-  const {products} = useProducts();
-  const orders = useOrdersQuery();
-
   const queryClient = useQueryClient();
   const bus = useBus();
   useEffect(() => {
@@ -76,7 +47,33 @@ export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
     });
 
     return () => unsubscribe();
-  }, [bus, queryClient, members]);
+  }, [bus, queryClient]);
+
+  return <>{children}</>;
+};
+
+type TransactionFromOrder = {
+  id: number;
+  member_id: number;
+  product_id: number;
+  amount: number;
+  ordered_at: string; // datetime string
+  price: number;
+};
+
+const useOrdersQuery = () => {
+  return useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      return (await api.get<{orders: TransactionFromOrder[]}>("/orders")).orders;
+    },
+  });
+};
+
+export const useTransactions = () => {
+  const {members} = useMembers();
+  const {products} = useProducts();
+  const orders = useOrdersQuery();
 
   const transactions = useMemo(() => {
     if (!orders.data) {
@@ -101,28 +98,10 @@ export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
       .filter((order): order is OrderedOrder => order !== undefined);
   }, [orders.data, members, products]);
 
-  return (
-    <TransactionsContext.Provider
-      value={{
-        transactions,
-        ...props,
-      }}
-    >
-      {children}
-    </TransactionsContext.Provider>
-  );
+  return {transactions};
 };
 
-export const useTransactions = () => {
-  const context = React.useContext(TransactionsContext);
-
-  if (!context) {
-    throw new Error(`useTransactions must be used within a TransactionsContext`);
-  }
-
-  return context;
-};
-
+const RECENT_MEBMERS = 6 * 5;
 export function useRecentBuyers() {
   const orders = useOrdersQuery();
 
