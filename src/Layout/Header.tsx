@@ -78,7 +78,7 @@ const Header = ({onClick, failedOrders}: any) => (
       T.F.V. 'Professor Francken'
     </h2>
     {failedOrders > 0 && (
-      <div className="ml-3">
+      <div className="ms-2">
         <NavLink to="/settings">
           <div className="badge badge-danger">{failedOrders}</div>
         </NavLink>

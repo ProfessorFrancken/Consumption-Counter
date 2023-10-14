@@ -1,11 +1,12 @@
-import React, {useMemo, useState} from "react";
+import React, {useMemo, useRef, useState} from "react";
 import {MemberType} from "App/Members/Members";
 import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
-import {useQueuedOrders} from "App/QueuedOrdersContext";
+import {TIME_TO_CANCEL, useQueuedOrders} from "App/QueuedOrdersContext";
 import {useNavigate} from "react-router";
 import {createSearchParams, useSearchParams} from "react-router-dom";
 import {useMembers} from "App/Members/Context";
+import {useMutation, UseMutationResult} from "@tanstack/react-query";
 
 export type Product = {
   id: number;
@@ -76,31 +77,81 @@ type State = {
   addProductToOrder: (product: Product) => void;
   reset: () => void;
   order: Order;
-  makeOrder: (order: Order) => void;
+  makeOrderMutation: UseMutationResult<void, unknown, Order & {member: MemberType}>;
+  cancelOrder: () => void;
 };
 
 const useMakeOrder = (reset: () => void) => {
   const member = useSelectedMember();
-  const {makeOrder: queueOrder} = useQueuedOrders();
+  const {
+    makeOrder: queueOrder,
+    buyOrder,
+    cancelOrder: cancelQueuedOrder,
+  } = useQueuedOrders();
+  const navigate = useNavigate();
 
-  const makeOrder = (order: Order) => {
-    if (member === undefined) {
-      throw new Error("Can't make an order without a member");
+  const cancelOrderRef = useRef<() => void>();
+  const cancelOrder = () => {
+    if (cancelOrderRef.current) {
+      cancelOrderRef.current();
     }
-
-    // HERE needs to be with member
-    const date = new Date();
-
-    queueOrder({
-      member,
-      products: order.products,
-      ordered_at: date.getTime(),
-    });
-
-    reset();
   };
 
-  return makeOrder;
+  // TODO
+  const makeOrderMutation = useMutation({
+    mutationFn: async (order: Order & {member: MemberType}) => {
+      const member = order.member;
+
+      if (member === undefined) {
+        throw new Error("Can't make an order without a member");
+      }
+
+      const date = new Date();
+
+      // TODO: rename to prepare order?
+      const queuedOrder = {
+        member,
+        products: order.products,
+        ordered_at: date.getTime(),
+      };
+      queueOrder(queuedOrder);
+
+      //console.log("navigating before buying");
+      navigate("/");
+
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(resolve, TIME_TO_CANCEL);
+        cancelOrderRef.current = () => {
+          //console.log("cancelling");
+          cancelQueuedOrder(queuedOrder);
+          clearTimeout(timeout);
+          reject();
+        };
+      });
+
+      buyOrder({
+        member,
+        products: order.products,
+        ordered_at: date.getTime(),
+      });
+
+      reset();
+    },
+    onMutate: () => {
+      //console.log("mutate");
+    },
+    onSuccess: () => {
+      //console.log("success");
+    },
+    onError: () => {
+      //console.log("error");
+    },
+    meta: {
+      member,
+    },
+  });
+
+  return {cancelOrder, makeOrderMutation};
 };
 
 export const OrderContext = React.createContext<State | undefined>(undefined);
@@ -115,7 +166,7 @@ export const OrderProvider: React.FC<{
     setOrderedProducts([]);
   };
 
-  const makeOrder = useMakeOrder(reset);
+  const {makeOrderMutation, cancelOrder} = useMakeOrder(reset);
   const addProductToOrder = (product: Product) => {
     setOrderedProducts((products) => [...products, product]);
   };
@@ -130,7 +181,8 @@ export const OrderProvider: React.FC<{
         addProductToOrder,
         reset,
         order,
-        makeOrder,
+        makeOrderMutation,
+        cancelOrder,
       }}
       {...props}
     />

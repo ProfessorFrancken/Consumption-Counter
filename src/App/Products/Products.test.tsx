@@ -31,10 +31,12 @@ it("adds products to an order when clicked", async () => {
     addProductToOrder: addToOrder,
     reset: () => {},
     order: {products: [], member: undefined},
-    makeOrder,
+    makeOrderMutation: {mutate: makeOrder},
+    cancelOrder: () => {},
   };
 
   const products = (
+    // @ts-expect-error this is ugly but mockin the use mutation is a bit too much
     <OrderContext.Provider value={value}>
       <Products />
     </OrderContext.Provider>
@@ -57,6 +59,7 @@ it("adds products to an order when clicked", async () => {
   fireEvent.mouseUp(screen.getByLabelText("Buy Kinder Bueno"));
 
   expect(makeOrder).toBeCalledWith({
+    member: defaultMembers[0],
     products: [kinderBueno],
   });
 });

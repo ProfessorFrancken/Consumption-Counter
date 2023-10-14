@@ -75,6 +75,7 @@ describe("Consumption Counter", () => {
 
   afterEach(() => {
     MockDate.reset();
+    jest.runAllTimers();
   });
 
   const selectRangeIncludingJohnSnow = (app: any) => {
@@ -99,13 +100,16 @@ describe("Consumption Counter", () => {
   };
 
   const expectOrderToBeBought = async (app: any) => {
+    expect(await app.findByText(/Cancel buying .*/)).toBeInTheDocument();
     expect(screen.getByLabelText("location")).toHaveTextContent("/");
-    expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
 
     act(() => {
       jest.advanceTimersByTime(10000);
     });
-    expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
+    });
 
     fireEvent.click(app.getByLabelText("Recent"));
     expect(await app.findByLabelText("John Snow")).toBeInTheDocument();
@@ -139,8 +143,8 @@ describe("Consumption Counter", () => {
     expect(screen.getByLabelText("location")).toHaveTextContent("/prominent");
   };
 
-  const cancelOrder = (app: any) => {
-    const btn = app.getByRole("button", {name: /Cancel buying.*/i});
+  const cancelOrder = async (app: any) => {
+    const btn = await app.findByRole("button", {name: /Cancel buying.*/i});
     expect(btn).toBeInTheDocument();
     fireEvent.click(btn);
     expect(btn).not.toBeInTheDocument();
@@ -212,7 +216,7 @@ describe("Consumption Counter", () => {
 
     addHertogJanToOrder(app);
 
-    cancelOrder(app);
+    await cancelOrder(app);
   });
 
   it("is possible to buy products using the prominent list", async () => {
@@ -272,7 +276,10 @@ describe("Consumption Counter", () => {
     const splashStyle = {backgroundImage: `url("${background}")`};
     const layout = app.getByTestId("layout");
 
-    expect(layout).toHaveStyle(splashStyle);
+    await waitFor(() => {
+      expect(layout).toHaveStyle(splashStyle);
+    });
+
     await expectOrderToBeBought(app);
     expect(layout).not.toHaveStyle(splashStyle);
   });
@@ -284,32 +291,45 @@ describe("Consumption Counter", () => {
     selectRangeIncludingJohnSnow(app);
     selectJohnSnow(app);
 
+    await waitFor(() => {
+      expect(screen.getByLabelText("location")).toHaveTextContent("/products");
+    });
     addHertogJanToOrder(app);
 
     // Buy another product by clicking the go back button
-    expect(screen.getByLabelText("location")).toHaveTextContent("/");
+    await waitFor(() => {
+      expect(screen.getByLabelText("location")).not.toHaveTextContent("/products");
+    });
+
     selectJohnSnow(app);
 
-    expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
+    expect(await app.findByText(/Cancel buying .*/)).toBeInTheDocument();
     act(() => {
       jest.advanceTimersByTime(TIME_TO_CANCEL);
     });
-    expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
-
-    act(() => {
-      MockDate.set(new Date(1514764800001));
+    await waitFor(() => {
+      expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
     });
+
+    expect(screen.getByLabelText("location")).toHaveTextContent("/products");
     addHertogJanToOrder(app);
+    await waitFor(() => {
+      expect(screen.getByLabelText("location")).not.toHaveTextContent("/products");
+    });
+
     selectStatistics(app);
 
     expect(await app.findAllByText("bought by John Snow")).toHaveLength(1);
-    expect(app.getByText(/Cancel buying .*/)).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(await app.findByText(/Cancel buying .*/)).toBeInTheDocument();
+    });
 
     act(() => {
       jest.advanceTimersByTime(TIME_TO_CANCEL);
     });
-    selectStatistics(app);
-    expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
+    await waitFor(async () => {
+      expect(app.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(app.getAllByText(/bought by.*/)).toHaveLength(2);
@@ -345,7 +365,7 @@ describe("Consumption Counter", () => {
     act(() => {
       jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
     });
-    const cancelBtn = app.getByText(/Cancel buying .*/);
+    const cancelBtn = await app.findByText(/Cancel buying .*/);
     fireEvent.click(cancelBtn);
     expect(cancelBtn).not.toBeInTheDocument();
 

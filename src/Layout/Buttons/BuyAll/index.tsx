@@ -1,11 +1,11 @@
-import React from "react";
 import Price from "App/Price";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation} from "react-router-dom";
-import {useOrder} from "App/Products/OrdersContext";
+import {useOrder, useSelectedMember} from "App/Products/OrdersContext";
 
 const BuyAll = () => {
-  const {order, makeOrder} = useOrder();
+  const member = useSelectedMember();
+  const {order, makeOrderMutation} = useOrder();
   const {pathname} = useLocation();
 
   if (!pathname.includes("/products")) {
@@ -17,7 +17,14 @@ const BuyAll = () => {
   }
 
   return (
-    <button className="button buyAllButton" onClick={() => makeOrder(order)}>
+    <button
+      className="button buyAllButton"
+      onClick={() => {
+        if (member) {
+          makeOrderMutation.mutate({...order, member});
+        }
+      }}
+    >
       <FontAwesomeIcon icon={"check-circle"} size="lg" />
       <span style={{marginLeft: ".5em"}}>
         Buy it all! (<Price products={order.products} />)

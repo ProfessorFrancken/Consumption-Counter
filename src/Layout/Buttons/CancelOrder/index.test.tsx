@@ -1,56 +1,69 @@
-import React from "react";
+import React, {useEffect} from "react";
 import CancelOrder from ".";
-import {fireEvent, render} from "test-utils";
+import {fireEvent, getMember, getProduct, render, screen} from "test-utils";
+import {useOrder} from "App/Products/OrdersContext";
 
 afterEach(() => {
   localStorage.removeItem("plus_one_order_queue");
 });
 
 describe("<CancelOrder>", () => {
-  it("cancels orders", () => {
-    const member = {id: 2, firstName: "John", surname: "Snow"};
-    const products = [{id: 1, price: 100, name: "Pils"}];
-    const storeState = {
-      queuedOrder: {
-        order: {products, member, ordered_at: 1},
-        ordered_at: 1,
-      },
-    };
-    const {getByRole, queryByRole} = render(<CancelOrder />, {storeState});
+  it("cancels orders", async () => {
+    const member = getMember({id: 2, firstName: "John", surname: "Snow"});
+    const products = [getProduct({id: 1, price: 100, name: "Pils"})];
 
-    expect(getByRole("button")).toHaveTextContent("Cancel buying Pils for €1.00");
-    fireEvent.click(getByRole("button"));
-    expect(queryByRole("button")).not.toBeInTheDocument();
+    const App = () => {
+      const {makeOrderMutation} = useOrder();
+
+      useEffect(() => {
+        makeOrderMutation.mutate({member, products});
+      }, []);
+
+      return <CancelOrder />;
+    };
+
+    render(<App />);
+
+    expect(await screen.findByRole("button")).toHaveTextContent(
+      "Cancel buying Pils for €1.00"
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  it("does not show all products when buying multiple products", () => {
-    const member = {id: 2, firstName: "John", surname: "Snow"};
+  it("does not show all products when buying multiple products", async () => {
+    const member = getMember({id: 2, firstName: "John", surname: "Snow"});
     const products = [
-      {id: 1, price: 100, name: "Pils"},
-      {id: 2, price: 100, name: "Kinder bueno"},
+      getProduct({id: 1, price: 100, name: "Pils"}),
+      getProduct({id: 2, price: 100, name: "Kinder bueno"}),
     ];
-    const storeState = {
-      queuedOrder: {
-        order: {products, member, ordered_at: 1},
-        ordered_at: 1,
-      },
-    };
-    const {getByRole, queryByRole} = render(<CancelOrder />, {storeState});
 
-    expect(getByRole("button")).toHaveTextContent(
+    const App = () => {
+      const {makeOrderMutation} = useOrder();
+
+      useEffect(() => {
+        makeOrderMutation.mutate({member, products});
+      }, []);
+
+      return <CancelOrder />;
+    };
+
+    render(<App />);
+
+    expect(await screen.findByRole("button")).toHaveTextContent(
       "Cancel buying multiple products for €2.00"
     );
 
-    fireEvent.click(getByRole("button"));
+    fireEvent.click(screen.getByRole("button"));
 
-    expect(queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("isn't shown when no order is queud", () => {
     const storeState = {queuedOrder: null};
 
-    const {queryByRole} = render(<CancelOrder />, {storeState});
+    render(<CancelOrder />, {storeState});
 
-    expect(queryByRole("button")).toBeNull();
+    expect(screen.queryByRole("button")).toBeNull();
   });
 });
