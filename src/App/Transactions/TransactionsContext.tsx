@@ -1,58 +1,19 @@
-import React, {useEffect, useMemo} from "react";
+import React, {useMemo} from "react";
 import {MemberType} from "App/Members/Members";
 import {take, uniq} from "lodash";
 import {useMembers} from "App/Members/Context";
-import {AppEvent, BUY_ORDER_SUCCESS_EVENT} from "actions";
 import {OrderedOrder} from "App/QueuedOrdersContext";
-import {useBus} from "ts-bus/react";
-import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import api from "./../../api";
 import {useProducts} from "App/Products/ProductsContext";
 
 export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
   children,
 }) => {
-  const queryClient = useQueryClient();
-  const bus = useBus();
-  useEffect(() => {
-    const unsubscribe = bus.subscribe(BUY_ORDER_SUCCESS_EVENT, (event: AppEvent) => {
-      if (event.type !== BUY_ORDER_SUCCESS_EVENT.toString()) {
-        return;
-      }
-
-      const [date, time] = new Date(event.payload.order.ordered_at)
-        .toISOString()
-        .split("T");
-
-      const hourMinutesSeconds = time.split(".").at(0);
-
-      const orderedAt = `${date} ${hourMinutesSeconds}`;
-
-      const newOrders = event.payload.order.products.map((product, idx) => {
-        return {
-          // Create a random id based on time and idx, making sure we don't
-          // create duplicates ones in our tests that mock date
-          id: new Date().getTime() + idx,
-          member_id: event.payload.order.member.id,
-          product_id: product.id,
-          amount: 1,
-          ordered_at: orderedAt,
-          price: product.price,
-        };
-      });
-
-      queryClient.setQueryData<TransactionFromOrder[]>(["orders"], (orders) => {
-        return orders === undefined ? newOrders : [...orders, ...newOrders];
-      });
-    });
-
-    return () => unsubscribe();
-  }, [bus, queryClient]);
-
   return <>{children}</>;
 };
 
-type TransactionFromOrder = {
+type OrderTransaction = {
   id: number;
   member_id: number;
   product_id: number;
@@ -65,7 +26,7 @@ const useOrdersQuery = () => {
   return useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      return (await api.get<{orders: TransactionFromOrder[]}>("/orders")).orders;
+      return (await api.get<{orders: OrderTransaction[]}>("/orders")).orders;
     },
   });
 };

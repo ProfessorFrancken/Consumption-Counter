@@ -6,7 +6,7 @@ import {TIME_TO_CANCEL, useQueuedOrders} from "App/QueuedOrdersContext";
 import {useNavigate} from "react-router";
 import {createSearchParams, useSearchParams} from "react-router-dom";
 import {useMembers} from "App/Members/Context";
-import {useMutation, UseMutationResult} from "@tanstack/react-query";
+import {useMutation, UseMutationResult, useQueryClient} from "@tanstack/react-query";
 
 export type Product = {
   id: number;
@@ -97,6 +97,8 @@ const useMakeOrder = (reset: () => void) => {
     }
   };
 
+  const queryClient = useQueryClient();
+
   // TODO
   const makeOrderMutation = useMutation({
     mutationFn: async (order: Order & {member: MemberType}) => {
@@ -129,19 +131,52 @@ const useMakeOrder = (reset: () => void) => {
         };
       });
 
-      buyOrder({
+      const newOrder = {
         member,
         products: order.products,
         ordered_at: date.getTime(),
-      });
+      };
+      await buyOrder(newOrder);
 
       reset();
+      return newOrder;
     },
     onMutate: () => {
       //console.log("mutate");
     },
-    onSuccess: () => {
+    onSuccess: (order) => {
       //console.log("success");
+
+      const [date, time] = new Date(order.ordered_at).toISOString().split("T");
+
+      const hourMinutesSeconds = time.split(".").at(0);
+
+      const orderedAt = `${date} ${hourMinutesSeconds}`;
+
+      const newOrders = order.products.map((product, idx) => {
+        return {
+          // Create a random id based on time and idx, making sure we don't
+          // create duplicates ones in our tests that mock date
+          id: new Date().getTime() + idx,
+          member_id: order.member.id,
+          product_id: product.id,
+          amount: 1,
+          ordered_at: orderedAt,
+          price: product.price,
+        };
+      });
+
+      type OrderTransaction = {
+        id: number;
+        member_id: number;
+        product_id: number;
+        amount: number;
+        ordered_at: string; // datetime string
+        price: number;
+      };
+      queryClient.setQueryData<OrderTransaction[]>(["orders"], (orders) => {
+        return orders === undefined ? newOrders : [...orders, ...newOrders];
+      });
     },
     onError: () => {
       //console.log("error");
