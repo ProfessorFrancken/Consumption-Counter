@@ -1,9 +1,8 @@
 import * as React from "react";
 import {render} from "@testing-library/react";
-import {useStatistics, statisticsReducer, StatisticsProvider} from "./StatisticsContext";
+import {useStatistics, StatisticsProvider} from "./StatisticsContext";
 import {InfrastructureProviders} from "Root";
 import clock from "jest-plugin-clock";
-import {BUY_ORDER_SUCCESS_EVENT, FETCH_STATISTICS_EVENT} from "actions";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
 
@@ -73,61 +72,3 @@ const statistics = [
     food: "1",
   },
 ];
-
-describe("Statistics reducer", () => {
-  it("fetches statistics", () => {
-    expect(
-      statisticsReducer(
-        [],
-        FETCH_STATISTICS_EVENT({
-          statistics: [{date: "2018-06-01", total: 1, beer: 1, soda: 1, food: 1}],
-        })
-      )
-    ).toEqual([{date: "2018-06-01", total: 1, beer: 1, soda: 1, food: 1}]);
-  });
-
-  it("records statistics after a product is purchased", () => {
-    const productProps = {
-      name: "HJ",
-      price: 0,
-      position: 0,
-      image: "",
-      splash_image: "",
-      age_restriction: null,
-    };
-    const orderAction = BUY_ORDER_SUCCESS_EVENT({
-      order: {
-        member: {
-          id: 1,
-          firstName: "John",
-          surname: "Snow",
-          fullname: "John Snow",
-          latest_purchase_at: null,
-          prominent: null,
-          age: 33,
-          cosmetics: undefined,
-        },
-        products: [
-          {id: 3, category: "Bier", ...productProps},
-          {id: 4, category: "Fris", ...productProps},
-          {id: 4, category: "Fris", ...productProps},
-          {id: 5, category: "Eten", ...productProps},
-        ],
-        ordered_at: new Date("2018-06-01T18:00:00").getTime(),
-      },
-    });
-
-    expect(
-      statisticsReducer(
-        [
-          {date: "2018-05-01", total: 1, beer: 1, soda: 0, food: 0},
-          {date: "2018-06-01", total: 3, beer: 1, soda: 1, food: 1},
-        ],
-        orderAction
-      )
-    ).toEqual([
-      {date: "2018-05-01", total: 1, beer: 1, soda: 0, food: 0},
-      {date: "2018-06-01", total: 7, beer: 2, soda: 3, food: 2},
-    ]);
-  });
-});
