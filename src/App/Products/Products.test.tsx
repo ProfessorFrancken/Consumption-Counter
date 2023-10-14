@@ -1,5 +1,5 @@
 import {defaultMembers} from "App/MockedState";
-import {render, fireEvent, getProduct} from "test-utils";
+import {render, fireEvent, getProduct, screen} from "test-utils";
 import {Product, OrderContext} from "./OrdersContext";
 import Products from "./Products";
 
@@ -43,7 +43,7 @@ it("adds products to an order when clicked", async () => {
   );
 
   const kinderBueno = getProduct({name: "Kinder Bueno", id: 2});
-  const screen = render(products, {
+  render(products, {
     routes: ["?memberId=1"],
     storeState: {
       products: {

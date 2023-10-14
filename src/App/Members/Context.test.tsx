@@ -1,5 +1,5 @@
 import * as React from "react";
-import {render} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import {InfrastructureProviders} from "Root";
 import {useMembers, MembersProvider} from "App/Members/Context";
 import moment from "moment";
@@ -73,7 +73,7 @@ describe("Member context", () => {
   });
 
   it("Fetches a list of members", async () => {
-    const {findByText} = render(
+    render(
       <InfrastructureProviders>
         <MembersProvider>
           <SelectMember />
@@ -81,11 +81,11 @@ describe("Member context", () => {
       </InfrastructureProviders>
     );
 
-    expect(await findByText("John Snow - 33")).toBeInTheDocument();
+    expect(await screen.findByText("John Snow - 33")).toBeInTheDocument();
 
     // It defaults to age of 0 so that someone with an unkown birthday
     // won't be able to buy beer
-    expect(await findByText("Eddard the Stark - 0")).toBeInTheDocument();
+    expect(await screen.findByText("Eddard the Stark - 0")).toBeInTheDocument();
   });
 
   it("Requires the MembersProvider", () => {

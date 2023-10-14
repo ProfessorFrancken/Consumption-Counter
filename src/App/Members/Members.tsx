@@ -1,4 +1,3 @@
-import React from "react";
 import Member from "./MemberButton";
 
 export type MemberType = {

@@ -1,4 +1,5 @@
 import React from "react";
+import {screen} from "@testing-library/react";
 import {default as ProminentContainer} from "./index";
 import {render, within} from "test-utils";
 import clock from "jest-plugin-clock";
@@ -29,14 +30,12 @@ describe("prominent", () => {
         {member_id: 2, year: 2017, function: "King"},
       ],
     };
-    const {getAllByLabelText, getByLabelText, getAllByRole} = render(
-      <ProminentContainer />,
-      {storeState}
-    );
 
-    expect(getAllByLabelText("board")).toHaveLength(1);
-    const board = getByLabelText("board");
-    expect(getAllByRole("button", board)).toHaveLength(2);
+    render(<ProminentContainer />, {storeState});
+
+    expect(screen.getAllByLabelText("board")).toHaveLength(1);
+    const board = screen.getByLabelText("board");
+    expect(screen.getAllByRole("button", board)).toHaveLength(2);
   });
 
   it("ignores members that aren't in the system", () => {
@@ -55,12 +54,13 @@ describe("prominent", () => {
         {member_id: 2, year: 2017, function: "King"},
       ],
     };
-    const {getAllByLabelText, getByLabelText} = render(<ProminentContainer />, {
+
+    render(<ProminentContainer />, {
       storeState,
     });
 
-    expect(getAllByLabelText("board")).toHaveLength(1);
-    const board = getByLabelText("board");
+    expect(screen.getAllByLabelText("board")).toHaveLength(1);
+    const board = screen.getByLabelText("board");
     expect(within(board).getAllByRole("button")).toHaveLength(1);
   });
 
@@ -102,9 +102,9 @@ describe("prominent", () => {
         {member_id: 1, year: 2012, function: "King"},
       ],
     };
-    const {getByLabelText} = render(<ProminentContainer />, {storeState});
+    render(<ProminentContainer />, {storeState});
 
-    const board = getByLabelText("prominent members");
+    const board = screen.getByLabelText("prominent members");
     expect(within(board).getAllByRole("button", board)).toHaveLength(1);
   });
 });

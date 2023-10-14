@@ -1,5 +1,5 @@
 import * as React from "react";
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import {render as renderApp} from "test-utils";
 import {useQueuedOrders} from "./QueuedOrdersContext";
 import {rest} from "msw";
@@ -86,10 +86,10 @@ describe("QueuedOrders context", () => {
       },
     };
 
-    const {getByRole, findByText} = renderApp(<MakeOrder />, state);
+    renderApp(<MakeOrder />, state);
 
-    fireEvent.click(getByRole("button"));
+    fireEvent.click(screen.getByRole("button"));
 
-    expect(await findByText("Fails: 2")).toBeInTheDocument();
+    expect(await screen.findByText("Fails: 2")).toBeInTheDocument();
   });
 });

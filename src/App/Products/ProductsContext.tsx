@@ -20,23 +20,39 @@ const useFetchProducts = (products?: Product[]) => {
   return useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: async () => {
-      const mapProducts = (product: any): Product => {
+      const response = await api.get<{
+        products: Array<{
+          id: number;
+          naam: string;
+          prijs: number;
+          categorie: "Bier" | "Eten" | "Fris";
+          positie: number;
+          beschikbaar: boolean;
+          afbeelding: string;
+          btw: string;
+          eenheden: number;
+          created_at: string;
+          updated_at: string;
+          product_id: number;
+          splash_afbeelding: string | null;
+          kleur: string | null;
+        }>;
+      }>("/products");
+
+      return response.products.map((product): Product => {
         return {
-          id: parseInt(product.id, 10),
+          id: parseInt(product.id as unknown as string, 10),
           name: product.naam as string,
 
           // Note we parse the price and then convert it to fulll cents
-          price: 100 * parseFloat(product.prijs),
-          position: parseInt(product.positie, 10),
+          price: 100 * parseFloat(product.prijs as unknown as string),
+          position: parseInt(product.positie as unknown as string, 10),
           category: product.categorie as "Bier" | "Fris" | "Eten",
           image: product.afbeelding as string,
           splash_image: product.splash_afbeelding as string,
           age_restriction: product.categorie === "Bier" ? 18 : null,
         };
-      };
-
-      const response = await api.get("/products");
-      return response.products.map(mapProducts);
+      });
     },
     onSuccess: preLoadImages,
     enabled: products === undefined,

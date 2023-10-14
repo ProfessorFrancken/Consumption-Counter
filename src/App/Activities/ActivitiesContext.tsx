@@ -19,20 +19,26 @@ const useFetchActivities = (activities?: Activity[]) => {
   return useQuery<Activity[]>({
     queryKey: ["activities"],
     queryFn: async () => {
-      const mapActivity = (activity: any): Activity => {
+      const response = await api.get<{
+        activities: Array<{
+          title: string;
+          description: string;
+          location: string;
+          startDate: string;
+          endDate: string;
+        }>;
+      }>("/statistics/activities", {
+        after,
+        before,
+      });
+
+      return response.activities.map((activity): Activity => {
         return {
           ...activity,
           startDate: moment(activity.startDate).format("YYYY-MM-DD"),
           endDate: moment(activity.endDate).format("YYYY-MM-DD"),
         };
-      };
-
-      const response = await api.get("/statistics/activities", {
-        after,
-        before,
       });
-
-      return response.activities.map(mapActivity);
     },
     enabled: activities === undefined,
     initialData: activities,

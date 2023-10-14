@@ -1,41 +1,44 @@
-import React from "react";
+import React, {useRef} from "react";
 type Props = {
   timeout?: number;
   onClick: () => void;
   onLongPress: () => void;
 };
 export const useOnLongPress = ({timeout: delay = 500, onClick, onLongPress}: Props) => {
-  const [triggered, setTriggered] = React.useState(false);
+  const onPressRef = useRef<ReturnType<typeof setTimeout>>();
+
   React.useEffect(() => {
-    if (!triggered) {
-      return;
-    }
-
-    const long = setTimeout(() => {
-      onLongPress();
-      setTriggered(false);
-    }, delay);
-
     return () => {
-      clearTimeout(long);
+      if (onPressRef.current) {
+        clearTimeout(onPressRef.current);
+      }
     };
-  }, [triggered, onLongPress, setTriggered, delay]);
+  }, [delay]);
 
   const onDown = () => {
-    setTriggered(true);
+    const long = setTimeout(() => {
+      onLongPress();
+      onPressRef.current = undefined;
+    }, delay);
+
+    onPressRef.current = long;
   };
   const onUp = () => {
-    if (triggered) {
+    if (onPressRef.current) {
+      clearTimeout(onPressRef.current);
       onClick();
     }
-    setTriggered(false);
+    onPressRef.current = undefined;
   };
 
   return {
     onMouseDown: onDown,
+    onPointerDown: onDown,
     onTouchStart: onDown,
+
     onMouseUp: onUp,
-    onTouchCancel: onUp,
+    onPointerUp: onUp,
     onTouchEnd: onUp,
+    onTouchCancel: onUp,
   };
 };

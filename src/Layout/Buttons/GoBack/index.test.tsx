@@ -1,6 +1,5 @@
-import React from "react";
 import GoBack from ".";
-import {render, fireEvent} from "test-utils";
+import {render, fireEvent, screen} from "test-utils";
 
 afterEach(() => {
   localStorage.removeItem("plus_one_order_queue");
@@ -11,19 +10,19 @@ describe("<GoBack />", () => {
     const storeState = {queuedOrder: null};
     const routes = ["/products"];
 
-    const {getByRole} = render(<GoBack />, {storeState, routes});
+    render(<GoBack />, {storeState, routes});
 
-    fireEvent.click(getByRole("button"));
-    expect(getByRole("button")).toHaveTextContent("Go back");
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.getByRole("button")).toHaveTextContent("Go back");
   });
 
   it("doesn't render on the frontpage if no order is queued", () => {
     const storeState = {queuedOrder: null};
     const routes = ["/"];
 
-    const {queryByRole} = render(<GoBack />, {storeState, routes});
+    render(<GoBack />, {storeState, routes});
 
-    expect(queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("goes back to a previous customer", () => {
@@ -54,9 +53,9 @@ describe("<GoBack />", () => {
         },
       },
     };
-    const {getByRole} = render(<GoBack />, {storeState});
+    render(<GoBack />, {storeState});
 
-    fireEvent.click(getByRole("button"));
-    expect(getByRole("button")).toHaveTextContent("John Snow");
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.getByRole("button")).toHaveTextContent("John Snow");
   });
 });

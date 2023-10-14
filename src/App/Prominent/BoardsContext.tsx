@@ -19,16 +19,16 @@ const useFetchBoardMembers = (boardMembers?: BoardMember[]) => {
   return useQuery<BoardMember[]>({
     queryKey: ["boards"],
     queryFn: async () => {
-      const mapBoard = (boardMember: any): BoardMember => {
+      const response = await api.get<{
+        boardMembers: Array<{lid_id: number; jaar: number; functie: string}>;
+      }>("/boards");
+      return response.boardMembers.map((boardMember): BoardMember => {
         return {
-          member_id: parseInt(boardMember.lid_id, 10),
+          member_id: parseInt(boardMember.lid_id as unknown as string, 10),
           year: boardMember.jaar,
           function: boardMember.functie,
         };
-      };
-
-      const response = await api.get("/boards");
-      return response.boardMembers.map(mapBoard);
+      });
     },
     enabled: boardMembers === undefined,
     initialData: boardMembers,

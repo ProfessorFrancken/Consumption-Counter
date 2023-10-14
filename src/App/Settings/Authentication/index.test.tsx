@@ -1,4 +1,5 @@
 import React from "react";
+import {screen} from "@testing-library/react";
 import Authentication from "./index";
 import {render, fireEvent} from "test-utils";
 import {setupServer} from "msw/lib/node";
@@ -27,30 +28,30 @@ describe("Authentication", () => {
   });
 
   it("Shows a warning that the system is not authenticated", () => {
-    const {getByRole, getByText} = render(<Authentication />, {
+    render(<Authentication />, {
       storeState: {authentication: {token: null}},
     });
 
     expect(
-      getByText(
+      screen.getByText(
         "You need to authenticate with our server in order to connect the Consumption Counter."
       )
     ).toBeInTheDocument();
-    expect(getByRole("button")).toHaveTextContent("Authenticate");
+    expect(screen.getByRole("button")).toHaveTextContent("Authenticate");
   });
 
   it("authenticates the plus one system", async () => {
-    const {getByText, findByText, getByPlaceholderText} = render(<Authentication />, {
+    render(<Authentication />, {
       storeState: {authentication: {token: null}},
     });
 
-    fireEvent.change(getByPlaceholderText("Passphrase"), {
+    fireEvent.change(screen.getByPlaceholderText("Passphrase"), {
       target: {value: "some long passphrase"},
     });
-    fireEvent.submit(getByText("Authenticate"));
+    fireEvent.submit(screen.getByText("Authenticate"));
 
     expect(
-      await findByText("The system is authentiated until", {exact: false})
+      await screen.findByText("The system is authentiated until", {exact: false})
     ).toBeInTheDocument();
   });
 });

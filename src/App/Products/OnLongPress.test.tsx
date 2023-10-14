@@ -1,4 +1,5 @@
 import React from "react";
+import {screen} from "@testing-library/react";
 import {render, fireEvent, act} from "test-utils";
 import {useOnLongPress} from "./OnLongPress";
 
@@ -18,12 +19,10 @@ describe("<OnLongPress>", () => {
     const wasClicked = jest.fn();
     const wasLongPressed = jest.fn();
 
-    const {getByRole} = render(
-      <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
-    );
+    render(<OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />);
 
-    fireEvent.mouseDown(getByRole("button"));
-    fireEvent.mouseUp(getByRole("button"));
+    fireEvent.mouseDown(screen.getByRole("button"));
+    fireEvent.mouseUp(screen.getByRole("button"));
 
     expect(wasClicked).toBeCalled();
     expect(wasLongPressed).not.toBeCalled();
@@ -36,17 +35,15 @@ describe("<OnLongPress>", () => {
     const wasClicked = jest.fn();
     const wasLongPressed = jest.fn();
 
-    const {getByRole} = render(
-      <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
-    );
+    render(<OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />);
 
-    fireEvent.mouseDown(getByRole("button"));
+    fireEvent.mouseDown(screen.getByRole("button"));
     expect(wasClicked).not.toBeCalled();
     act(() => {
       jest.advanceTimersByTime(100);
     });
     expect(wasClicked).not.toBeCalled();
-    fireEvent.mouseUp(getByRole("button"));
+    fireEvent.mouseUp(screen.getByRole("button"));
 
     expect(wasClicked).not.toBeCalled();
     expect(wasLongPressed).toBeCalled();
@@ -60,12 +57,10 @@ describe("<OnLongPress>", () => {
       const wasClicked = jest.fn();
       const wasLongPressed = jest.fn();
 
-      const {getByRole} = render(
-        <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
-      );
+      render(<OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />);
 
-      fireEvent.touchStart(getByRole("button"));
-      fireEvent.touchEnd(getByRole("button"));
+      fireEvent.touchStart(screen.getByRole("button"));
+      fireEvent.touchEnd(screen.getByRole("button"));
 
       expect(wasClicked).toBeCalled();
       expect(wasLongPressed).not.toBeCalled();
@@ -78,15 +73,13 @@ describe("<OnLongPress>", () => {
       const wasClicked = jest.fn();
       const wasLongPressed = jest.fn();
 
-      const {getByRole} = render(
-        <OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />
-      );
+      render(<OnLongPress onClick={wasClicked} onLongPress={wasLongPressed} />);
 
-      fireEvent.touchStart(getByRole("button"));
+      fireEvent.touchStart(screen.getByRole("button"));
       act(() => {
         jest.advanceTimersByTime(100);
       });
-      fireEvent.touchEnd(getByRole("button"));
+      fireEvent.touchEnd(screen.getByRole("button"));
 
       expect(wasClicked).not.toBeCalled();
       expect(wasLongPressed).toBeCalled();

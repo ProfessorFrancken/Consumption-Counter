@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import {useMemo} from "react";
 import {MemberType} from "App/Members/Members";
 import {take, uniq} from "lodash";
 import {useMembers} from "App/Members/Context";
@@ -22,6 +22,7 @@ const useOrdersQuery = () => {
     queryFn: async () => {
       return (await api.get<{orders: OrderTransaction[]}>("/orders")).orders;
     },
+    staleTime: Infinity,
   });
 };
 

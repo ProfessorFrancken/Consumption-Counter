@@ -38,7 +38,6 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "styled-components": "^6.0.8",
-    "ts-bus": "^2.3.1",
     "typescript": "^4.9.0",
     "victory": "^36.6.11"
   },
@@ -120,11 +119,6 @@
     ],
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
-    }
-  },
-  "overrides": {
-    "ts-bus": {
-      "react": "^18.2.0"
     }
   }
 }
