@@ -18,7 +18,6 @@ import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient} from "@tanstack/react-query";
-import {TransactionsProvider} from "App/Transactions/TransactionsContext";
 import {MemberType} from "App/Members/Members";
 
 type StoreState = {
@@ -86,7 +85,7 @@ const AllTheProviders: React.FC<{
                   <OrderProvider order={order ?? undefined}>
                     <ActivitiesProvider activities={activities ?? undefined}>
                       <StatisticsProvider statistics={statistics ?? undefined}>
-                        <TransactionsProvider>{children}</TransactionsProvider>
+                        {children}
                       </StatisticsProvider>
                     </ActivitiesProvider>
                   </OrderProvider>

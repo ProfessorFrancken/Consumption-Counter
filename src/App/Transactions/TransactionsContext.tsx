@@ -7,12 +7,6 @@ import {useQuery} from "@tanstack/react-query";
 import api from "./../../api";
 import {useProducts} from "App/Products/ProductsContext";
 
-export const TransactionsProvider: React.FC<{children: React.ReactNode}> = ({
-  children,
-}) => {
-  return <>{children}</>;
-};
-
 type OrderTransaction = {
   id: number;
   member_id: number;
@@ -36,7 +30,7 @@ export const useTransactions = () => {
   const {products} = useProducts();
   const orders = useOrdersQuery();
 
-  const transactions = useMemo(() => {
+  return useMemo(() => {
     if (!orders.data) {
       return [];
     }
@@ -58,8 +52,6 @@ export const useTransactions = () => {
       })
       .filter((order): order is OrderedOrder => order !== undefined);
   }, [orders.data, members, products]);
-
-  return {transactions};
 };
 
 const RECENT_MEBMERS = 6 * 5;
