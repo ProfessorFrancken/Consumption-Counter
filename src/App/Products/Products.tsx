@@ -35,7 +35,8 @@ const Category = ({
 };
 
 const Products = () => {
-  const {order, makeOrder, addProductToOrder} = useOrder();
+  const {order, makeOrderMutation, addProductToOrder} = useOrder();
+  const member = useSelectedMember();
   const products = useOrderableProducts();
 
   const beer = products["Bier"] || [];
@@ -44,10 +45,16 @@ const Products = () => {
 
   const hasPlacedATeporaryOrder = order.products.length > 0;
 
-  const handleClick = (product: ProductType) =>
-    hasPlacedATeporaryOrder
-      ? addProductToOrder(product)
-      : makeOrder({products: [product]});
+  const handleClick = (product: ProductType) => {
+    if (hasPlacedATeporaryOrder) {
+      addProductToOrder(product);
+      return;
+    }
+
+    if (member) {
+      makeOrderMutation.mutate({products: [product], member});
+    }
+  };
 
   return (
     <div className="productsGrid">

@@ -14,17 +14,21 @@ const buttonStyle = (member: any) => ({
   flexGrow: 1,
   ...smallButton(member.cosmetics.button),
 });
-const Member = ({member, onClick, style = {}}: any) => (
-  <button
-    key={member.id}
-    className="tile button"
-    onClick={() => onClick(member)}
-    style={buttonStyle(member)}
-    aria-label={member.fullname}
-  >
-    &nbsp;
-    {member.cosmetics.nickname ? member.cosmetics.nickname : member.fullname}
-    &nbsp;
-  </button>
-);
+const Member = ({member, onClick, style = {}}: any) => {
+  return (
+    <button
+      key={member.id}
+      className="tile button"
+      onClick={() => {
+        onClick(member);
+      }}
+      style={buttonStyle(member)}
+      aria-label={member.fullname}
+    >
+      &nbsp;
+      {member.cosmetics.nickname ? member.cosmetics.nickname : member.fullname}
+      &nbsp;
+    </button>
+  );
+};
 export default Member;

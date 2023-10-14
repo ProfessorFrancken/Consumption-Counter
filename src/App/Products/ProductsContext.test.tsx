@@ -1,11 +1,11 @@
 import * as React from "react";
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import {useProducts, ProductsProvider} from "./ProductsContext";
 import {InfrastructureProviders} from "Root";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
 import {useOrder} from "./OrdersContext";
-import {render as renderApp, getProduct} from "test-utils";
+import {render as renderApp, getProduct, getMember} from "test-utils";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
@@ -61,17 +61,19 @@ describe("Product context", () => {
     spy.mockRestore();
   });
 
-  it("Doensn't allow an order without a member", () => {
+  it("Doensn't allow an order without a member", async () => {
     const MakeOrder: React.FC = () => {
       const [failed, setFailed] = React.useState(false);
-      const {makeOrder} = useOrder();
+      const {makeOrderMutation} = useOrder();
 
       const onClick = () => {
-        try {
-          makeOrder({products: [getProduct()]});
-        } catch {
-          setFailed(true);
-        }
+        makeOrderMutation
+          // @ts-expect-error TODO we can remove this test now, but let's keep it until we
+          // are certain that the interface won't change
+          .mutateAsync({products: [getProduct()], member: undefined})
+          .catch(() => {
+            setFailed(true);
+          });
       };
 
       if (failed) {
@@ -85,7 +87,7 @@ describe("Product context", () => {
 
     fireEvent.click(getByRole("button"));
 
-    expect(getByText("Failed")).toBeInTheDocument();
+    expect(await screen.findByText("Failed")).toBeInTheDocument();
   });
 });
 
