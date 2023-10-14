@@ -17,14 +17,20 @@ const PurchasesOfWeek = ({purchases, today, icon, type}: any) => {
       >
         <h4 className="mb-1" style={{color: "#a4afb9"}}>
           {purchases.reduce((total: any, purchases: any) => total + purchases[type], 0)}
-          <FontAwesomeIcon icon={icon} size="1x" className="ms-1" />
+          <FontAwesomeIcon icon={icon} size="1x" className="text-muted ms-1" />
         </h4>
         <small className="text-uppercase" style={{color: "#a4afb9"}}>
           {today[type]} today
         </small>
       </div>
       <div>
-        <VictoryChart height={150} width={400} domainPadding={{x: 10, y: 0}} padding={35}>
+        <VictoryChart
+          height={150}
+          width={400}
+          domainPadding={{x: 10, y: 0}}
+          padding={35}
+          scale={{x: "time", y: "linear"}}
+        >
           <VictoryAxis
             tickFormat={(date) => moment(date).format("ddd")}
             style={{
