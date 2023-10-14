@@ -2,11 +2,14 @@ import React, {useMemo, useRef, useState} from "react";
 import {MemberType} from "App/Members/Members";
 import {useProducts} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
-import {TIME_TO_CANCEL, useQueuedOrders} from "App/QueuedOrdersContext";
+import {OrderedOrder, TIME_TO_CANCEL, useQueuedOrders} from "App/QueuedOrdersContext";
 import {useNavigate} from "react-router";
 import {createSearchParams, useSearchParams} from "react-router-dom";
 import {useMembers} from "App/Members/Context";
 import {useMutation, UseMutationResult, useQueryClient} from "@tanstack/react-query";
+import {OrderTransaction} from "App/Transactions/TransactionsContext";
+import {Statistic} from "App/Statistics/StatisticsContext";
+import moment from "moment";
 
 export type Product = {
   id: number;
@@ -77,12 +80,15 @@ type State = {
   addProductToOrder: (product: Product) => void;
   reset: () => void;
   order: Order;
-  makeOrderMutation: UseMutationResult<void, unknown, Order & {member: MemberType}>;
+  makeOrderMutation: UseMutationResult<
+    OrderedOrder,
+    unknown,
+    Order & {member: MemberType}
+  >;
   cancelOrder: () => void;
 };
 
 const useMakeOrder = (reset: () => void) => {
-  const member = useSelectedMember();
   const {
     makeOrder: queueOrder,
     buyOrder,
@@ -110,12 +116,12 @@ const useMakeOrder = (reset: () => void) => {
 
       const date = new Date();
 
-      // TODO: rename to prepare order?
       const queuedOrder = {
         member,
         products: order.products,
         ordered_at: date.getTime(),
       };
+      // TODO: rename to prepare order?
       queueOrder(queuedOrder);
 
       //console.log("navigating before buying");
@@ -141,12 +147,7 @@ const useMakeOrder = (reset: () => void) => {
       reset();
       return newOrder;
     },
-    onMutate: () => {
-      //console.log("mutate");
-    },
     onSuccess: (order) => {
-      //console.log("success");
-
       const [date, time] = new Date(order.ordered_at).toISOString().split("T");
 
       const hourMinutesSeconds = time.split(".").at(0);
@@ -166,23 +167,53 @@ const useMakeOrder = (reset: () => void) => {
         };
       });
 
-      type OrderTransaction = {
-        id: number;
-        member_id: number;
-        product_id: number;
-        amount: number;
-        ordered_at: string; // datetime string
-        price: number;
-      };
       queryClient.setQueryData<OrderTransaction[]>(["orders"], (orders) => {
         return orders === undefined ? newOrders : [...orders, ...newOrders];
       });
-    },
-    onError: () => {
-      //console.log("error");
-    },
-    meta: {
-      member,
+
+      queryClient.setQueryData<Statistic[]>(
+        ["statistics", "categories"],
+        (statistics) => {
+          if (statistics === undefined) {
+            return undefined;
+          }
+
+          const dateOfNewOrder = moment(order.ordered_at).format("YYYY-MM-DD");
+          const previousStatisticForDate = statistics.find((statistic) => {
+            return statistic.date === dateOfNewOrder;
+          });
+
+          const beer = order.products.filter(({category}) => category === "Bier").length;
+          const soda = order.products.filter(({category}) => category === "Fris").length;
+          const food = order.products.filter(({category}) => category === "Eten").length;
+
+          if (previousStatisticForDate === undefined) {
+            return [
+              {
+                date: dateOfNewOrder,
+                total: order.products.length,
+                beer,
+                soda,
+                food,
+              },
+              ...statistics,
+            ];
+          }
+
+          return statistics.map((statistic) => {
+            if (statistic.date === moment(order.ordered_at).format("YYYY-MM-DD")) {
+              return {
+                date: statistic.date,
+                total: statistic.total + order.products.length,
+                beer: statistic.beer + beer,
+                soda: statistic.soda + soda,
+                food: statistic.food + food,
+              };
+            }
+            return statistic;
+          });
+        }
+      );
     },
   });
 

@@ -1,4 +1,3 @@
-import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import {VictoryChart, VictoryBar, VictoryAxis} from "victory";

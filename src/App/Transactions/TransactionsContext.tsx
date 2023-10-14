@@ -7,7 +7,7 @@ import {useQuery} from "@tanstack/react-query";
 import api from "./../../api";
 import {useProducts} from "App/Products/ProductsContext";
 
-type OrderTransaction = {
+export type OrderTransaction = {
   id: number;
   member_id: number;
   product_id: number;

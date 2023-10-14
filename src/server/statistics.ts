@@ -30,7 +30,7 @@ export const seedStatistics = (server: any) => {
 
   const days = getDaysArray(
     moment().subtract(2, "years").toDate(),
-    moment().toDate()
+    moment().add(1, "day").toDate()
   ).reverse();
 
   days.forEach((day) => {
