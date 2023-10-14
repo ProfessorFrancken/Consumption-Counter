@@ -173,7 +173,7 @@ const Statistics = ({
 const StatisticsSreen = () => {
   const {activities} = useActivities();
   const {statistics} = useStatistics();
-  const {transactions} = useTransactions();
+  const transactions = useTransactions();
 
   return (
     <Statistics
