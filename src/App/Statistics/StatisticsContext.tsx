@@ -1,5 +1,5 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 
@@ -50,30 +50,12 @@ export const useStatisticsQuery = (statistics?: Statistic[]) => {
   });
 };
 
-type State = {
-  statisticsQuery: QueryObserverResult<Statistic[]>;
-};
-const StatisticsContext = React.createContext<State | undefined>(undefined);
 export const StatisticsProvider: React.FC<{
   statistics?: Statistic[];
   children: React.ReactNode;
 }> = ({statistics: defaultStatistics, children}) => {
-  console.log({defaultStatistics});
+  // TODO: get rid of this query, after refactoring unit tests
   const statisticsQuery = useStatisticsQuery(defaultStatistics);
 
-  return (
-    <StatisticsContext.Provider value={{statisticsQuery}}>
-      {children}
-    </StatisticsContext.Provider>
-  );
-};
-
-export const useStatistics = () => {
-  const context = React.useContext(StatisticsContext);
-
-  if (!context) {
-    throw new Error(`useStatistics must be used within a StatisticsContext`);
-  }
-
-  return context;
+  return <> {children} </>;
 };
