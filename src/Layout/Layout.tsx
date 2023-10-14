@@ -1,4 +1,3 @@
-import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -6,7 +5,7 @@ import logo from "assets/logo.png";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
 import {useMembers} from "App/Members/Context";
-import {useStatistics, useStatisticsQuery} from "App/Statistics/StatisticsContext";
+import {useStatisticsQuery} from "App/Statistics/StatisticsContext";
 import {useBackgroundFromOrder, useFailedOrders} from "App/QueuedOrdersContext";
 import {useNavigate} from "react-router";
 

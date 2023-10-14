@@ -70,27 +70,27 @@ describe("Compucie screen", () => {
         },
       ],
     };
-    const {getByRole} = render(<CompucieScreen />, {storeState});
+    render(<CompucieScreen />, {storeState});
 
-    expect(getByRole("button", {name: /John Snow/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Arya Stark/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /John Snow/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Arya Stark/})).toBeInTheDocument();
   });
 
   it("Decreases the temple count", async () => {
-    const {findByRole, getByRole} = render(<CompucieScreen />);
+    render(<CompucieScreen />);
 
     expect(
-      await findByRole("button", {name: /Decrease Temple Count \(10\)/i})
+      await screen.findByRole("button", {name: /Decrease Temple Count \(10\)/i})
     ).toBeInTheDocument();
-    fireEvent.click(getByRole("button", {name: /Decrease Temple Count \(10\)/}));
+    fireEvent.click(screen.getByRole("button", {name: /Decrease Temple Count \(10\)/}));
 
     expect(
-      await findByRole("button", {name: /Decrease Temple Count \(9\)/})
+      await screen.findByRole("button", {name: /Decrease Temple Count \(9\)/})
     ).toBeInTheDocument();
   });
 
   it("Reloads the application", async () => {
-    const {getByRole} = render(
+    render(
       <Routes>
         <Route path="/compucie" element={<CompucieScreen />} />
         <Route path="*" element={<span role="progressbar">loading</span>} />
@@ -98,7 +98,7 @@ describe("Compucie screen", () => {
       {routes: ["/compucie"]}
     );
 
-    fireEvent.click(getByRole("button", {name: /Refresh/}));
+    fireEvent.click(screen.getByRole("button", {name: /Refresh/}));
 
     expect(await screen.findByRole("progressbar")).toBeInTheDocument();
   });

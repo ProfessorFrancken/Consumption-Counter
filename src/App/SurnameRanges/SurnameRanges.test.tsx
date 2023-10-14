@@ -1,30 +1,29 @@
-import React from "react";
 import SurnameRanges from "./SurnameRanges";
-import {render, fireEvent} from "test-utils";
+import {render, fireEvent, screen} from "test-utils";
 
 describe("selecting a range of surnames", () => {
   it("shows a list of ranges of surnames the user can select", () => {
-    const wrapper = render(
+    render(
       <SurnameRanges
         ranges={[{idx: 0, members: [], surname_start: "A", surname_end: "B"}]}
         selectRange={() => {}}
       />
     );
 
-    expect(wrapper.getByRole("button")).toHaveTextContent("A-B");
+    expect(screen.getByRole("button")).toHaveTextContent("A-B");
   });
 
   it("is possible to select a range", () => {
     const selectRange = jest.fn();
 
-    const {getByRole} = render(
+    render(
       <SurnameRanges
         ranges={[{idx: 0, members: [], surname_start: "A", surname_end: "B"}]}
         selectRange={selectRange}
       />
     );
 
-    fireEvent.click(getByRole("button"));
+    fireEvent.click(screen.getByRole("button"));
 
     expect(selectRange).toBeCalledWith({
       idx: 0,
@@ -35,7 +34,7 @@ describe("selecting a range of surnames", () => {
   });
 
   it("Renders all ranges", () => {
-    const {getAllByRole} = render(
+    render(
       <SurnameRanges
         ranges={[
           {idx: 0, members: [], surname_start: "A", surname_end: "B"},
@@ -46,6 +45,6 @@ describe("selecting a range of surnames", () => {
       />
     );
 
-    expect(getAllByRole("button")).toHaveLength(3);
+    expect(screen.getAllByRole("button")).toHaveLength(3);
   });
 });

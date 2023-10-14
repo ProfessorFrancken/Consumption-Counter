@@ -5,7 +5,7 @@ import {InfrastructureProviders} from "Root";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
 import {useOrder} from "./OrdersContext";
-import {render as renderApp, getProduct, getMember} from "test-utils";
+import {render as renderApp, getProduct} from "test-utils";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
@@ -39,7 +39,7 @@ describe("Product context", () => {
   });
 
   it("Selects a member when they do not have a latest purchse", async () => {
-    const {findByText} = render(
+    render(
       <InfrastructureProviders>
         <ProductsProvider>
           <SelectProduct />
@@ -47,9 +47,9 @@ describe("Product context", () => {
       </InfrastructureProviders>
     );
 
-    expect(await findByText("Hertog Jan")).toBeInTheDocument();
-    expect(await findByText("Grolsch")).toBeInTheDocument();
-    expect(await findByText("Heineken")).toBeInTheDocument();
+    expect(await screen.findByText("Hertog Jan")).toBeInTheDocument();
+    expect(await screen.findByText("Grolsch")).toBeInTheDocument();
+    expect(await screen.findByText("Heineken")).toBeInTheDocument();
   });
 
   it("Requires the ProductsProvider", () => {
@@ -83,9 +83,9 @@ describe("Product context", () => {
       return <button onClick={onClick}>Make order</button>;
     };
 
-    const {getByRole, getByText} = renderApp(<MakeOrder />);
+    renderApp(<MakeOrder />);
 
-    fireEvent.click(getByRole("button"));
+    fireEvent.click(screen.getByRole("button"));
 
     expect(await screen.findByText("Failed")).toBeInTheDocument();
   });

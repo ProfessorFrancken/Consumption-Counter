@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  createRoutesFromElements,
-  MemoryRouter,
-  Outlet,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {OrderProvider} from "App/Products/OrdersContext";
 import {ProductsProvider} from "App/Products/ProductsContext";

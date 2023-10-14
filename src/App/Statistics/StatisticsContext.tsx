@@ -47,6 +47,7 @@ export const useStatisticsQuery = (statistics?: Statistic[]) => {
     },
     enabled: statistics === undefined,
     initialData: statistics,
+    staleTime: Infinity,
   });
 };
 
@@ -55,7 +56,7 @@ export const StatisticsProvider: React.FC<{
   children: React.ReactNode;
 }> = ({statistics: defaultStatistics, children}) => {
   // TODO: get rid of this query, after refactoring unit tests
-  const statisticsQuery = useStatisticsQuery(defaultStatistics);
+  useStatisticsQuery(defaultStatistics);
 
-  return <> {children} </>;
+  return <>{children}</>;
 };

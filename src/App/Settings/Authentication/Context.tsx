@@ -26,7 +26,7 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
       const token = response.token as string;
       setToken({token});
       return token;
-    } catch (e: unknown) {
+    } catch (e) {
       // @ts-expect-error This is a known limitation
       throw new Error(e.response.statusText as string);
     }

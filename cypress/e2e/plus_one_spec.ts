@@ -357,7 +357,10 @@ describe("Francken Consumption Counter", () => {
         }),
         year: 2020,
       });
+
       cy.login();
+
+      cy.clock(new Date("01-01-2020"));
 
       cy.get('[href="/committees"]').click();
       cy.get(".titleName > span").should("contain", "Committees");

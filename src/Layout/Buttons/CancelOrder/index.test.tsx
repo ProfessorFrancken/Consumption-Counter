@@ -15,9 +15,10 @@ describe("<CancelOrder>", () => {
     const App = () => {
       const {makeOrderMutation} = useOrder();
 
+      const mutate = makeOrderMutation.mutate;
       useEffect(() => {
-        makeOrderMutation.mutate({member, products});
-      }, []);
+        mutate({member, products});
+      }, [mutate]);
 
       return <CancelOrder />;
     };
@@ -41,9 +42,10 @@ describe("<CancelOrder>", () => {
     const App = () => {
       const {makeOrderMutation} = useOrder();
 
+      const mutate = makeOrderMutation.mutate;
       useEffect(() => {
-        makeOrderMutation.mutate({member, products});
-      }, []);
+        mutate({member, products});
+      }, [mutate]);
 
       return <CancelOrder />;
     };

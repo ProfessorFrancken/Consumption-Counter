@@ -1,5 +1,5 @@
 import Header from "./Header";
-import {render} from "test-utils";
+import {render, screen} from "test-utils";
 
 it("renders a buy more button when visiting the products page", () => {
   const storeState = {
@@ -8,7 +8,7 @@ it("renders a buy more button when visiting the products page", () => {
 
   const routes = ["/products?memberId=1"];
 
-  const {getByText} = render(<Header />, {storeState, routes});
+  render(<Header />, {storeState, routes});
 
-  expect(getByText("Show prices")).toBeDefined();
+  expect(screen.getByText("Show prices")).toBeDefined();
 });

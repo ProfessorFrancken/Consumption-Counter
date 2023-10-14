@@ -1,5 +1,5 @@
 import React from "react";
-import {render, fireEvent} from "@testing-library/react";
+import {render, fireEvent, screen} from "@testing-library/react";
 import useLocalStorage from "./useLocalStorage";
 
 describe("useLocalStorage", () => {
@@ -18,21 +18,21 @@ describe("useLocalStorage", () => {
   };
 
   it("Acts like use state", () => {
-    const {getByRole} = render(<Component />);
+    render(<Component />);
 
-    const btn = getByRole("button", {name: "initial text"});
+    const btn = screen.getByRole("button", {name: "initial text"});
     expect(btn).toBeInTheDocument();
 
     fireEvent.click(btn);
-    expect(getByRole("button", {name: "hoi"})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "hoi"})).toBeInTheDocument();
   });
 
   it("Returns the initial value if localstorage has invalid state", () => {
     localStorage.setItem(key, JSON.stringify({text: "test"}));
 
-    const {getByRole} = render(<Component />);
+    render(<Component />);
 
-    const btn = getByRole("button", {name: "test"});
+    const btn = screen.getByRole("button", {name: "test"});
     expect(btn).toBeInTheDocument();
   });
 
@@ -40,9 +40,9 @@ describe("useLocalStorage", () => {
     localStorage.setItem(key, "test{");
     const spy = jest.spyOn(console, "warn").mockImplementation();
 
-    const {getByRole} = render(<Component />);
+    render(<Component />);
 
-    const btn = getByRole("button", {name: "initial text"});
+    const btn = screen.getByRole("button", {name: "initial text"});
     expect(btn).toBeInTheDocument();
 
     expect(spy).toHaveBeenCalledTimes(1);
@@ -57,9 +57,9 @@ describe("useLocalStorage", () => {
       throw new Error("TEST");
     });
 
-    const {getByRole} = render(<Component />);
+    render(<Component />);
 
-    const btn = getByRole("button", {name: "initial text"});
+    const btn = screen.getByRole("button", {name: "initial text"});
     expect(btn).toBeInTheDocument();
 
     expect(spy).toHaveBeenCalledTimes(1);

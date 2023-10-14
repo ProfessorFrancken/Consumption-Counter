@@ -40,8 +40,26 @@ const useFetchMembers = (members?: MemberType[]) => {
   return useQuery<MemberType[]>({
     queryKey: ["members"],
     queryFn: async () => {
-      const mapMembers = (lid: any) => ({
-        id: parseInt(lid.id, 10),
+      const response = await api.get<{
+        members: Array<{
+          id: number;
+          voornaam: string;
+          initialen: string;
+          tussenvoegsel: string;
+          achternaam: string;
+          geboortedatum: string; // yyyy-mm-dd
+          prominent: number | null;
+          kleur: string | null;
+          afbeelding: string | null;
+          bijnaam: string | null;
+          button_width: number | null;
+          button_height: number | null;
+          latest_purchase_at: number | null;
+        }>;
+      }>("/members");
+
+      const members = response.members.map((lid) => ({
+        id: parseInt(lid.id as unknown as string, 10),
         firstName: lid.voornaam,
         surname: lid.achternaam,
 
@@ -65,10 +83,8 @@ const useFetchMembers = (members?: MemberType[]) => {
             height: lid.button_height,
           },
         },
-      });
+      }));
 
-      const response = await api.get("/members");
-      const members = response.members.map(mapMembers);
       return orderBy(members, (member: any) => member.surname);
     },
     enabled: members === undefined,

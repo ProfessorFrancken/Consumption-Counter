@@ -5,9 +5,6 @@ export const SCREEN_SAVER_TIMEOUT = 30000;
 
 const ScreenSaver = () => {
   const navigate = useNavigate();
-  const goHome = () => navigate("/");
-  const goToScreenSaver = () => navigate("/statistics");
-
   const location = useLocation();
 
   const [pathname, setPathname] = React.useState(location.pathname);
@@ -22,13 +19,13 @@ const ScreenSaver = () => {
 
     const screenSaver =
       pathname === "/"
-        ? setTimeout(goToScreenSaver, 2 * SCREEN_SAVER_TIMEOUT)
-        : setTimeout(goHome, SCREEN_SAVER_TIMEOUT);
+        ? setTimeout(() => navigate("/statistics"), 2 * SCREEN_SAVER_TIMEOUT)
+        : setTimeout(() => navigate("/"), SCREEN_SAVER_TIMEOUT);
 
     return () => {
       clearTimeout(screenSaver);
     };
-  }, [pathname, goToScreenSaver, goHome]);
+  }, [pathname, navigate]);
   return null;
 };
 

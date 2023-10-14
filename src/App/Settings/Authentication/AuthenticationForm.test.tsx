@@ -1,10 +1,10 @@
-import React from "react";
+import {screen} from "@testing-library/react";
 import AuthenticationForm from "./AuthenticationForm";
-import {render, fireEvent} from "test-utils";
+import {render} from "test-utils";
 
 describe("<AuthenticationForm />", () => {
   it("shows a warning if the system is not authenticated", () => {
-    const {getByRole} = render(
+    render(
       <AuthenticationForm
         changePassword={jest.fn()}
         submit={jest.fn()}
@@ -15,14 +15,14 @@ describe("<AuthenticationForm />", () => {
       />
     );
 
-    expect(getByRole("button")).toHaveTextContent("Authenticate");
+    expect(screen.getByRole("button")).toHaveTextContent("Authenticate");
   });
 
   it("is possible to refresh a token if a token is already present", () => {
     const token =
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4";
 
-    const {getByRole} = render(
+    render(
       <AuthenticationForm
         changePassword={jest.fn()}
         submit={jest.fn()}
@@ -33,11 +33,11 @@ describe("<AuthenticationForm />", () => {
       />
     );
 
-    expect(getByRole("button")).toHaveTextContent("Refresh token");
+    expect(screen.getByRole("button")).toHaveTextContent("Refresh token");
   });
 
   it("shows a waiting message when authenticating", () => {
-    const {getByRole} = render(
+    render(
       <AuthenticationForm
         changePassword={jest.fn()}
         submit={jest.fn()}
@@ -48,13 +48,13 @@ describe("<AuthenticationForm />", () => {
       />
     );
 
-    expect(getByRole("button")).toHaveTextContent("Waiting");
-    expect(getByRole("button")).toHaveAttribute("disabled");
+    expect(screen.getByRole("button")).toHaveTextContent("Waiting");
+    expect(screen.getByRole("button")).toHaveAttribute("disabled");
   });
 
   describe("error messages", () => {
     it("tells the user if their password was incorrect", () => {
-      const {getByText} = render(
+      render(
         <AuthenticationForm
           changePassword={jest.fn()}
           submit={jest.fn()}
@@ -65,11 +65,11 @@ describe("<AuthenticationForm />", () => {
         />
       );
 
-      expect(getByText("The given password was incorrect")).toBeInTheDocument();
+      expect(screen.getByText("The given password was incorrect")).toBeInTheDocument();
     });
 
     it("tells the user if something went wrong on the server", () => {
-      const {getByText} = render(
+      render(
         <AuthenticationForm
           changePassword={jest.fn()}
           submit={jest.fn()}
@@ -80,7 +80,7 @@ describe("<AuthenticationForm />", () => {
         />
       );
 
-      expect(getByText("call the compucie", {exact: false})).toBeInTheDocument();
+      expect(screen.getByText("call the compucie", {exact: false})).toBeInTheDocument();
     });
   });
 });

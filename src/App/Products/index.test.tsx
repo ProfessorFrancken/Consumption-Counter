@@ -1,4 +1,5 @@
 import React from "react";
+import {screen} from "@testing-library/react";
 import AvailableProducts from "./index";
 import {render, fireEvent, getMember, getProduct} from "test-utils";
 import {useSelectedMember, useSelectMember} from "./OrdersContext";
@@ -20,16 +21,17 @@ it("renders, and it does not include products that a member is not allowed to bu
     },
     members: [getMember({age: 17})],
   };
-  const {queryByLabelText, getByLabelText, getAllByRole} = render(<AvailableProducts />, {
+
+  render(<AvailableProducts />, {
     storeState,
     routes: ["?memberId=1"],
   });
 
-  expect(queryByLabelText("beer category")).toBeNull();
-  expect(queryByLabelText("soda category")).not.toBeNull();
+  expect(screen.queryByLabelText("beer category")).toBeNull();
+  expect(screen.getByLabelText("soda category")).toBeInTheDocument();
 
-  const soda = getByLabelText("soda category");
-  expect(getAllByRole("button", soda)).toHaveLength(1);
+  const soda = screen.getByLabelText("soda category");
+  expect(screen.getAllByRole("button", soda)).toHaveLength(1);
 });
 
 it("shows the amount of products that are currently being orderd", () => {
@@ -70,12 +72,13 @@ it("shows the amount of products that are currently being orderd", () => {
       ],
     },
   };
-  const {getAllByLabelText} = render(<AvailableProducts />, {
+
+  render(<AvailableProducts />, {
     storeState,
     routes: ["?memberId=1"],
   });
 
-  const orderedProducts = getAllByLabelText("amount ordered");
+  const orderedProducts = screen.getAllByLabelText("amount ordered");
   expect(orderedProducts).toHaveLength(1);
   expect(orderedProducts[0]).toHaveTextContent("2");
 });
@@ -111,46 +114,46 @@ describe("Selecting a member", () => {
   it("Selects a member when they do not have a latest purchse", () => {
     window.confirm = jest.fn().mockImplementationOnce(() => true);
 
-    const {getByRole, getByText} = render(<SelectMember member={member} />, state);
+    render(<SelectMember member={member} />, state);
 
-    fireEvent.click(getByRole("button"));
-    expect(getByText("John Snow")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.getByText("John Snow")).toBeInTheDocument();
     expect(window.confirm).toHaveBeenCalled();
   });
 
   it("Selects a member when their latest purchase was recent", () => {
-    const {getByRole, getByText} = render(
+    render(
       <SelectMember member={{...member, latest_purchase_at: new Date("2017-12-30")}} />,
       state
     );
 
-    fireEvent.click(getByRole("button"));
-    expect(getByText("John Snow")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.getByText("John Snow")).toBeInTheDocument();
   });
 
   it("Selects a member after confirming they want to be selected", () => {
     window.confirm = jest.fn().mockImplementationOnce(() => true);
 
-    const {getByRole, getByText} = render(
+    render(
       <SelectMember member={{...member, latest_purchase_at: new Date("2016-12-30")}} />,
       state
     );
 
-    fireEvent.click(getByRole("button"));
-    expect(getByText("John Snow")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.getByText("John Snow")).toBeInTheDocument();
     expect(window.confirm).toHaveBeenCalled();
   });
 
   it("Does not select a member if they do not confirm they want to be selected", () => {
     window.confirm = jest.fn().mockImplementationOnce(() => false);
 
-    const {getByRole, queryByText} = render(
+    render(
       <SelectMember member={{...member, latest_purchase_at: new Date("2016-12-30")}} />,
       state
     );
 
-    fireEvent.click(getByRole("button"));
-    expect(queryByText("John Snow")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.queryByText("John Snow")).not.toBeInTheDocument();
     expect(window.confirm).toHaveBeenCalled();
   });
 });
@@ -168,10 +171,10 @@ describe("Listing available products", () => {
       routes: ["/?memberId=1"],
     };
 
-    const {getByRole} = render(<ProductsScreen />, state);
-    expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
+    render(<ProductsScreen />, state);
+    expect(screen.getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
   });
 
   it("Doesn't show alcohol minors", () => {
@@ -185,10 +188,10 @@ describe("Listing available products", () => {
       routes: ["/?memberId=1"],
     };
 
-    const {getByRole, queryByRole} = render(<ProductsScreen />, state);
-    expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
-    expect(queryByRole("button", {name: /Hertog Jan/})).not.toBeInTheDocument();
+    render(<ProductsScreen />, state);
+    expect(screen.getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: /Hertog Jan/})).not.toBeInTheDocument();
   });
 
   it("Shows the amount of a product a member is about to purchase", () => {
@@ -211,12 +214,12 @@ describe("Listing available products", () => {
       routes: ["/?memberId=1"],
     };
 
-    const {getByRole} = render(<ProductsScreen />, state);
-    expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
-    expect(getByRole("button", {name: /Hertog Jan/})).toHaveTextContent("2");
-    expect(getByRole("button", {name: /Ice Tea/})).toHaveTextContent("1");
+    render(<ProductsScreen />, state);
+    expect(screen.getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: /Hertog Jan/})).toHaveTextContent("2");
+    expect(screen.getByRole("button", {name: /Ice Tea/})).toHaveTextContent("1");
   });
 
   describe("Before 4", () => {
@@ -227,17 +230,17 @@ describe("Listing available products", () => {
         routes: ["/?memberId=1"],
       };
 
-      const {getByRole} = render(<ProductsScreen />, state);
-      expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
-      expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
-      expect(getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
+      render(<ProductsScreen />, state);
+      expect(screen.getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
+      expect(screen.getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
+      expect(screen.getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
 
-      expect(getByRole("button", {name: /Ice Tea/})).not.toBeDisabled();
-      expect(getByRole("button", {name: /Kinder Bueno/})).not.toBeDisabled();
+      expect(screen.getByRole("button", {name: /Ice Tea/})).not.toBeDisabled();
+      expect(screen.getByRole("button", {name: /Kinder Bueno/})).not.toBeDisabled();
 
       // We don't want to disable buying beer before 4 but we do want to discourage it
-      const btn = getByRole("button", {name: /Hertog Jan/});
-      expect(getByRole("button", {name: /Hertog Jan/})).not.toBeDisabled();
+      const btn = screen.getByRole("button", {name: /Hertog Jan/});
+      expect(screen.getByRole("button", {name: /Hertog Jan/})).not.toBeDisabled();
       expect(btn.className).toContain("locked");
     });
   });
@@ -250,14 +253,14 @@ describe("Listing available products", () => {
         routes: ["/?memberId=1"],
       };
 
-      const {getByRole} = render(<ProductsScreen />, state);
-      expect(getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
-      expect(getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
-      expect(getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
+      render(<ProductsScreen />, state);
+      expect(screen.getByRole("button", {name: /Ice Tea/})).toBeInTheDocument();
+      expect(screen.getByRole("button", {name: /Kinder Bueno/})).toBeInTheDocument();
+      expect(screen.getByRole("button", {name: /Hertog Jan/})).toBeInTheDocument();
 
-      expect(getByRole("button", {name: /Ice Tea/})).not.toBeDisabled();
-      expect(getByRole("button", {name: /Kinder Bueno/})).not.toBeDisabled();
-      expect(getByRole("button", {name: /Hertog Jan/})).not.toBeDisabled();
+      expect(screen.getByRole("button", {name: /Ice Tea/})).not.toBeDisabled();
+      expect(screen.getByRole("button", {name: /Kinder Bueno/})).not.toBeDisabled();
+      expect(screen.getByRole("button", {name: /Hertog Jan/})).not.toBeDisabled();
     });
   });
 });

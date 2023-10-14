@@ -1,5 +1,5 @@
 import * as React from "react";
-import {render} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import {useCommittees, CommitteesProvider} from "./CommitteesContext";
 import {InfrastructureProviders} from "Root";
 import {MembersProvider} from "App/Members/Context";
@@ -55,7 +55,7 @@ describe("Committee context", () => {
   });
 
   it("Fetches a list of committees", async () => {
-    const {findByText} = render(
+    render(
       <InfrastructureProviders>
         <MembersProvider
           members={[
@@ -78,8 +78,8 @@ describe("Committee context", () => {
       </InfrastructureProviders>
     );
 
-    expect(await findByText("Compucie")).toBeInTheDocument();
-    expect(await findByText("Night's Watch")).toBeInTheDocument();
+    expect(await screen.findByText("Compucie")).toBeInTheDocument();
+    expect(await screen.findByText("Night's Watch")).toBeInTheDocument();
   });
 
   it("Requires the CommitteesProvider", () => {

@@ -1,7 +1,5 @@
-import React from "react";
-import {render} from "test-utils";
+import {render, screen} from "test-utils";
 import LoadingScreen from "./index";
-import {baseApi} from "api";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
 
@@ -60,17 +58,17 @@ describe("Loading screen", () => {
         },
       ],
     };
-    const {getByRole, getByLabelText, findByLabelText} = render(<LoadingScreen />, {
+    render(<LoadingScreen />, {
       storeState,
     });
 
     expect(
-      getByRole("heading", {name: "Loading consumption counter..."})
+      screen.getByRole("heading", {name: "Loading consumption counter..."})
     ).toBeInTheDocument();
 
-    expect(getByLabelText("Loading Members")).toBeInTheDocument();
-    expect(getByLabelText("Loading Boards")).toBeInTheDocument();
-    expect(getByLabelText("Succesfully loaded Committees")).toBeInTheDocument();
-    expect(await findByLabelText("Failed loading Boards")).toBeInTheDocument();
+    expect(screen.getByLabelText("Loading Members")).toBeInTheDocument();
+    expect(screen.getByLabelText("Loading Boards")).toBeInTheDocument();
+    expect(screen.getByLabelText("Succesfully loaded Committees")).toBeInTheDocument();
+    expect(await screen.findByLabelText("Failed loading Boards")).toBeInTheDocument();
   });
 });

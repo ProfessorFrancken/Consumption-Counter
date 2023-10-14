@@ -1,5 +1,5 @@
 import * as React from "react";
-import {render} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import {useBoards, BoardsProvider} from "./BoardsContext";
 import {InfrastructureProviders} from "Root";
 import {MembersProvider} from "App/Members/Context";
@@ -48,7 +48,7 @@ describe("Board context", () => {
   });
 
   it("Fetches a list of boards", async () => {
-    const {findByText} = render(
+    render(
       <InfrastructureProviders>
         <MembersProvider
           members={[
@@ -71,7 +71,7 @@ describe("Board context", () => {
       </InfrastructureProviders>
     );
 
-    expect(await findByText("John Snow - 2018")).toBeInTheDocument();
+    expect(await screen.findByText("John Snow - 2018")).toBeInTheDocument();
   });
 
   it("Requires the BoardsProvider", () => {

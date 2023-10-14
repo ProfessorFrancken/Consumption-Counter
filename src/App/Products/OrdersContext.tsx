@@ -168,7 +168,7 @@ const useMakeOrder = (reset: () => void) => {
       });
 
       queryClient.setQueryData<OrderTransaction[]>(["orders"], (orders) => {
-        return orders === undefined ? newOrders : [...orders, ...newOrders];
+        return orders === undefined ? newOrders : [...newOrders, ...orders];
       });
 
       queryClient.setQueryData<Statistic[]>(
@@ -268,11 +268,10 @@ const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType)
 };
 
 export const useOrderableProducts = () => {
-  const {order} = useOrder();
   const {products = []} = useProducts();
   const member = useSelectedMember();
 
-  return React.useMemo(() => {
+  return useMemo(() => {
     const availableProducts = products.filter((product: Product) =>
       memberIsAllowedToPurchaseProduct(product, member)
     );
@@ -285,7 +284,7 @@ export const useOrderableProducts = () => {
       Fris: Product[];
       Eten: Product[];
     };
-  }, [products, order, member]);
+  }, [products, member]);
 };
 
 export const useOrder = () => {

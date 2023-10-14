@@ -32,10 +32,10 @@ describe("rendering", () => {
     expect(main.getByRole("button")).toHaveTextContent("Snow-Snow");
   });
 
-  describe("rendering screens depending on state", () => {
+  describe("rendering routes depending on state", () => {
     clock.set("2018-01-01");
 
-    const screens = [
+    const routes = [
       {path: "/prominent", component: Prominent, title: "Prominent"},
       {path: "/statistics", component: "Statistics", title: "Statistics"},
       {path: "/committees", component: "Committees", title: "Committees"},
@@ -46,12 +46,12 @@ describe("rendering", () => {
       {path: "/members/0", component: "Members", title: ""},
     ];
 
-    screens.forEach((screen) => {
-      it(`renders ${screen.path}`, () => {
-        const app = setup([screen.path]);
+    routes.forEach((route) => {
+      it(`renders ${route.path}`, () => {
+        setup([route.path]);
 
-        const title = app.getByRole("heading", {level: 1});
-        expect(title).toHaveTextContent(screen.title);
+        const title = screen.getByRole("heading", {level: 1});
+        expect(title).toHaveTextContent(route.title);
       });
     });
   });

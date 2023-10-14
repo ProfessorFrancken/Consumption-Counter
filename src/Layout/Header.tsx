@@ -1,5 +1,4 @@
-import React from "react";
-import {useOrder, useSelectedMember} from "App/Products/OrdersContext";
+import {useSelectedMember} from "App/Products/OrdersContext";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {NavLink, Route, Routes, useParams} from "react-router-dom";
 

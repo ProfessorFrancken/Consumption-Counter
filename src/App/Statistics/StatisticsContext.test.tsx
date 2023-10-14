@@ -1,5 +1,5 @@
 import * as React from "react";
-import {render} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import {StatisticsProvider, useStatisticsQuery} from "./StatisticsContext";
 import {InfrastructureProviders} from "Root";
 import clock from "jest-plugin-clock";
@@ -43,7 +43,7 @@ describe("Statistics context", () => {
   });
 
   it("Fetches a list of statistics", async () => {
-    const {findByText} = render(
+    render(
       <InfrastructureProviders>
         <StatisticsProvider>
           <SelectStatistic />
@@ -51,7 +51,7 @@ describe("Statistics context", () => {
       </InfrastructureProviders>
     );
 
-    expect(await findByText("2021-02-01: 33, 3, 1: 37")).toBeInTheDocument();
+    expect(await screen.findByText("2021-02-01: 33, 3, 1: 37")).toBeInTheDocument();
   });
 
   it("Requires the StatisticsProvider", () => {

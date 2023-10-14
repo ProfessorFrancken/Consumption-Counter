@@ -123,6 +123,18 @@ export function makeServer({environment = "development"} = {}) {
       this.post("/orders", () => {
         return {order: 1};
       });
+      this.get("/orders", () => {
+        return {orders: []};
+      });
+      this.get("/sponsors", () => {
+        return {
+          sponsors: [
+            {name: "S[ck]rip(t|t?c)ie", image: ""},
+            {name: "Compucie", image: ""},
+            {name: "Borrelcie", image: ""},
+          ],
+        };
+      });
       this.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", () => {
         return 1;
       });

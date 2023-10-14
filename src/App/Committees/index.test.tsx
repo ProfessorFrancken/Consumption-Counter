@@ -1,4 +1,5 @@
 import React from "react";
+import {screen} from "@testing-library/react";
 import {default as CommitteesContainer} from "./index";
 import {render, within} from "test-utils";
 import clock from "jest-plugin-clock";
@@ -24,9 +25,11 @@ describe("committees", () => {
         },
       ],
     };
-    const {getByLabelText} = render(<CommitteesContainer />, {storeState});
+    render(<CommitteesContainer />, {storeState});
 
-    expect(within(getByLabelText("committees")).getAllByRole("button")).toHaveLength(1);
+    expect(
+      within(screen.getByLabelText("committees")).getAllByRole("button")
+    ).toHaveLength(1);
   });
 
   it("ignores committee members that aren't in the system", () => {
@@ -47,8 +50,10 @@ describe("committees", () => {
         },
       ],
     };
-    const {getByLabelText} = render(<CommitteesContainer />, {storeState});
+    render(<CommitteesContainer />, {storeState});
 
-    expect(within(getByLabelText("committees")).getAllByRole("button")).toHaveLength(1);
+    expect(
+      within(screen.getByLabelText("committees")).getAllByRole("button")
+    ).toHaveLength(1);
   });
 });

@@ -1,4 +1,5 @@
 import React from "react";
+import {screen} from "@testing-library/react";
 import {default as SelectCommitteeMembersContainer} from "./index";
 import {render} from "test-utils";
 import clock from "jest-plugin-clock";
@@ -35,15 +36,16 @@ describe("committees", () => {
       ],
     };
     const routes = ["/committees/1"];
-    const {getByRole} = render(
+
+    render(
       <Routes>
         <Route path="/committees/:page" element={<SelectCommitteeMembersContainer />} />
       </Routes>,
       {storeState, routes}
     );
 
-    expect(getByRole("button", {name: "John Snow"})).toBeInTheDocument();
-    expect(getByRole("button", {name: "Arya Stark"})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "John Snow"})).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "Arya Stark"})).toBeInTheDocument();
   });
 
   it("only shows committee members from the current board year", () => {
@@ -68,14 +70,15 @@ describe("committees", () => {
       ],
     };
     const routes = ["/committees/1"];
-    const {getByRole, queryByRole} = render(
+
+    render(
       <Routes>
         <Route path="/committees/:page" element={<SelectCommitteeMembersContainer />} />
       </Routes>,
       {storeState, routes}
     );
 
-    expect(getByRole("button", {name: "Arya Stark"})).toBeInTheDocument();
-    expect(queryByRole("button", {name: "John Snow"})).not.toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "Arya Stark"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "John Snow"})).not.toBeInTheDocument();
   });
 });

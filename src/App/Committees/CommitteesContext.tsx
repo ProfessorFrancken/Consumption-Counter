@@ -35,7 +35,16 @@ const useFetchCommitteeMembers = (committeeMembers?: CommitteeMember[]) => {
         };
       };
 
-      const response = await api.get("/committees");
+      const response = await api.get<{
+        committees: {
+          commissie_id: string; // number
+          functie: string;
+          jaar: number;
+          lid_id: string; // number
+          naam: string;
+        }[];
+      }>("/committees");
+
       return response.committees.map(mapCommittee);
     },
     enabled: committeeMembers === undefined,
