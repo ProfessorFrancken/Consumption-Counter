@@ -96,7 +96,7 @@ type State = {
   queuedOrders: QueuedOrder[];
   queuedOrder: QueuedOrder | null;
   makeOrder: (order: OrderedOrder) => void;
-  buyOrder: (order: OrderedOrder) => void;
+  buyOrder: (order: OrderedOrder) => Promise<void>;
   cancelOrder: (order: OrderedOrder) => void;
 };
 
