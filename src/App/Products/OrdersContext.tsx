@@ -142,9 +142,11 @@ const useMakeOrder = (reset: () => void) => {
         products: order.products,
         ordered_at: date.getTime(),
       };
-      await buyOrder(newOrder);
 
       reset();
+
+      await buyOrder(newOrder);
+
       return newOrder;
     },
     onSuccess: (order) => {

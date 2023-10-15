@@ -61,6 +61,8 @@ const useQueuedOrderState = (defaultQueuedOrders: QueuedOrder[] = []) => {
             : otherOrder;
         })
       );
+
+      throw ex;
     }
   };
 
