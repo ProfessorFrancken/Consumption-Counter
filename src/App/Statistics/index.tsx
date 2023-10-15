@@ -1,5 +1,5 @@
 import React from "react";
-import {groupBy, map} from "lodash";
+import {groupBy, map, take} from "lodash";
 import Price from "./../Price";
 import moment from "moment";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -10,6 +10,7 @@ import {Product} from "App/Products/OrdersContext";
 import {Activity, useActivities} from "App/Activities/ActivitiesContext";
 import {useTransactions} from "App/Transactions/TransactionsContext";
 import {Statistic, useStatisticsQuery} from "./StatisticsContext";
+import {styled} from "styled-components";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -85,6 +86,13 @@ const Transactions = ({transactions}: {transactions: OrderedOrder[]}) => {
   );
 };
 
+const StatisticsGrid = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const Statistics = ({
   statistics = [],
   activities = [],
@@ -122,58 +130,61 @@ const Statistics = ({
   }));
 
   return (
-    <div className="d-flex flex-column justify-content-between h-100">
+    <StatisticsGrid>
       <div className="row">
         <div className="col">
-          <div className="row">
-            {/* TODO: make these graphics instead of solid backgrounds */}
-            <div className="col">
-              <PurchasesOfWeek
-                purchases={purchases}
-                today={purchasesToday}
-                type="total"
-                icon="shopping-cart"
-              />
-            </div>
-            <div className="col">
-              <PurchasesOfWeek
-                purchases={purchases}
-                today={purchasesToday}
-                type="beer"
-                icon="beer"
-              />
-            </div>
-            <div className="col">
-              <PurchasesOfWeek
-                purchases={purchases}
-                today={purchasesToday}
-                type="soda"
-                icon={["fab", "gulp"]}
-              />
-            </div>
-            <div className="col">
-              <PurchasesOfWeek
-                purchases={purchases}
-                today={purchasesToday}
-                type="food"
-                icon="utensils"
-              />
-            </div>
-          </div>
-          <div className="border-top pt-2 mt-4">
-            <Transactions transactions={transactions} />
-          </div>
+          <PurchasesOfWeek
+            purchases={purchases}
+            today={purchasesToday}
+            type="total"
+            icon="shopping-cart"
+          />
+        </div>
+        <div className="col">
+          <PurchasesOfWeek
+            purchases={purchases}
+            today={purchasesToday}
+            type="beer"
+            icon="beer"
+          />
+        </div>
+        <div className="col">
+          <PurchasesOfWeek
+            purchases={purchases}
+            today={purchasesToday}
+            type="soda"
+            icon={["fab", "gulp"]}
+          />
+        </div>
+        <div className="col">
+          <PurchasesOfWeek
+            purchases={purchases}
+            today={purchasesToday}
+            type="food"
+            icon="utensils"
+          />
         </div>
       </div>
+      <div
+        style={{
+          overflowY: "scroll",
+          minHeight: 0,
+          minWidth: 0,
+          flex: "1 1 0",
+        }}
+        className="py-3"
+      >
+        <Transactions transactions={transactions} />
+      </div>
       <HeatMap statistics={statistics} activities={activities} />
-    </div>
+    </StatisticsGrid>
   );
 };
 
 const StatisticsSreen = () => {
   const {activities} = useActivities();
   const statisticsQuery = useStatisticsQuery();
-  const transactions = useTransactions();
+  const transactions = take(useTransactions(), 30);
 
   return (
     <Statistics
