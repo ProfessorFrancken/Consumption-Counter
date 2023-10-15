@@ -54,7 +54,9 @@ describe("QueuedOrders context", () => {
       const {buyOrder, queuedOrders} = useQueuedOrders();
 
       const onClick = () => {
-        buyOrder(queuedOrders[0].order);
+        buyOrder(queuedOrders[0].order).catch(() => {
+          // ignore
+        });
       };
 
       return (

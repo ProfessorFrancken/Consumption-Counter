@@ -1,9 +1,9 @@
 import React from "react";
 import {UseMutateFunction, useMutation} from "@tanstack/react-query";
 import AuthenticationForm from "./AuthenticationForm";
-import logo from "assets/logo.png";
 import api from "./../../../api";
 import useLocalStorage from "App/useLocalStorage";
+import {UnauthenticatedLayout} from "App/UnauthenticatedLayout";
 
 type State = {
   request: boolean;
@@ -59,22 +59,10 @@ export const AuthenticationProvider: React.FC<{
   if (!value.token) {
     return (
       <AuthenticationContext.Provider value={value} {...props}>
-        <div className="d-flex align-items-center justify-content-center h-100">
-          <div className="d-flex align-items-center">
-            <div className="mr-5">
-              <img
-                src={logo}
-                className="franckenLogo img-fluid"
-                width={225}
-                alt="Logo of T.F.V. 'Professor Francken'"
-              />
-            </div>
-            <div>
-              <h1>Francken Consumption Counter</h1>
-              <AuthenticationForm {...value} />
-            </div>
-          </div>
-        </div>
+        <UnauthenticatedLayout>
+          <h1>Francken Consumption Counter</h1>
+          <AuthenticationForm {...value} />
+        </UnauthenticatedLayout>
       </AuthenticationContext.Provider>
     );
   }

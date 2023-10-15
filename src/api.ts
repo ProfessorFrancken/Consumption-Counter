@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, {isAxiosError} from "axios";
+import {json} from "react-router-dom";
 
 export const baseApi = process.env.REACT_APP_API_SERVER;
 
@@ -28,18 +29,36 @@ async function get<T extends unknown>(uri: string, params?: any): Promise<T> {
     params,
   };
 
-  return axios.get<T>(baseApi + uri, requestOptions).then(handleResponse);
+  try {
+    const response = await axios.get<T>(baseApi + uri, requestOptions);
+
+    return handleResponse(response);
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw json({message: error.message}, {status: error.response?.status});
+    }
+
+    throw error;
+  }
 }
 
 async function post(uri: any, body: any) {
-  return axios
-    .post(baseApi + uri, body, {
+  try {
+    const response = await axios.post(baseApi + uri, body, {
       headers: {
         "Content-Type": "application/json",
         ...authHeader(),
       },
-    })
-    .then(handleResponse);
+    });
+
+    return handleResponse(response);
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw json({message: error.message}, {status: error.response?.status});
+    }
+
+    throw error;
+  }
 }
 
 function handleResponse(response: any) {
