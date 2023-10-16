@@ -1,10 +1,9 @@
 import * as React from "react";
-import {render, screen} from "@testing-library/react";
+import {screen} from "@testing-library/react";
 import {useCommittees} from "./CommitteesContext";
-import {InfrastructureProviders} from "Root";
-import {MembersProvider} from "App/Members/Context";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
+import {render} from "test-utils";
 
 describe("Committee context", () => {
   const SelectCommittee: React.FC = () => {
@@ -25,18 +24,22 @@ describe("Committee context", () => {
 
   const committeeMembers = [
     {
-      commissie_id: 14,
-      lid_id: 314,
-      jaar: 2018,
-      functie: "King",
-      naam: "Night's Watch",
+      member_id: 314,
+      year: 2018,
+      function: "King",
+      committee: {
+        id: 14,
+        name: "Night's Watch",
+      },
     },
     {
-      commissie_id: 0,
-      lid_id: 314,
-      jaar: 2018,
-      functie: "King",
-      naam: "Compucie",
+      member_id: 314,
+      year: 2018,
+      function: "King",
+      committee: {
+        id: 0,
+        name: "Compucie",
+      },
     },
   ];
 
@@ -55,26 +58,23 @@ describe("Committee context", () => {
   });
 
   it("Fetches a list of committees", async () => {
-    render(
-      <InfrastructureProviders>
-        <MembersProvider
-          members={[
-            {
-              id: 314,
-              firstName: "John",
-              surname: "Snow",
-              fullname: "John Snow",
-              age: 18,
-              cosmetics: undefined,
-              latest_purchase_at: null,
-              prominent: null,
-            },
-          ]}
-        >
-          <SelectCommittee />
-        </MembersProvider>
-      </InfrastructureProviders>
-    );
+    render(<SelectCommittee />, {
+      storeState: {
+        members: [
+          {
+            id: 314,
+            firstName: "John",
+            surname: "Snow",
+            fullname: "John Snow",
+            age: 18,
+            cosmetics: undefined,
+            latest_purchase_at: null,
+            prominent: null,
+          },
+        ],
+        committeeMembers,
+      },
+    });
 
     expect(await screen.findByText("Compucie")).toBeInTheDocument();
     expect(await screen.findByText("Night's Watch")).toBeInTheDocument();

@@ -1,16 +1,15 @@
 import * as React from "react";
-import {render, screen} from "@testing-library/react";
+import {screen} from "@testing-library/react";
 import {useBoards} from "./BoardsContext";
-import {InfrastructureProviders} from "Root";
-import {MembersProvider} from "App/Members/Context";
 import {rest} from "msw";
 import {setupServer} from "msw/node";
+import {render} from "test-utils";
 
 const boardMembers = [
   {
-    lid_id: 314,
-    jaar: 2018,
-    functie: "King",
+    member_id: 314,
+    year: 2018,
+    function: "King",
   },
 ];
 
@@ -48,26 +47,23 @@ describe("Board context", () => {
   });
 
   it("Fetches a list of boards", async () => {
-    render(
-      <InfrastructureProviders>
-        <MembersProvider
-          members={[
-            {
-              id: 314,
-              firstName: "John",
-              surname: "Snow",
-              fullname: "John Snow",
-              age: 33,
-              prominent: null,
-              cosmetics: undefined,
-              latest_purchase_at: null,
-            },
-          ]}
-        >
-          <SelectBoard />
-        </MembersProvider>
-      </InfrastructureProviders>
-    );
+    render(<SelectBoard />, {
+      storeState: {
+        members: [
+          {
+            id: 314,
+            firstName: "John",
+            surname: "Snow",
+            fullname: "John Snow",
+            age: 18,
+            cosmetics: undefined,
+            latest_purchase_at: null,
+            prominent: null,
+          },
+        ],
+        boardMembers,
+      },
+    });
 
     expect(await screen.findByText("John Snow - 2018")).toBeInTheDocument();
   });

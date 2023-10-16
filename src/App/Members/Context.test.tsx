@@ -1,7 +1,7 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
 import {InfrastructureProviders} from "Root";
-import {useMembers, MembersProvider} from "App/Members/Context";
+import {useMembers} from "App/Members/Context";
 import moment from "moment";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
@@ -75,9 +75,7 @@ describe("Member context", () => {
   it("Fetches a list of members", async () => {
     render(
       <InfrastructureProviders>
-        <MembersProvider>
-          <SelectMember />
-        </MembersProvider>
+        <SelectMember />
       </InfrastructureProviders>
     );
 
@@ -86,15 +84,6 @@ describe("Member context", () => {
     // It defaults to age of 0 so that someone with an unkown birthday
     // won't be able to buy beer
     expect(await screen.findByText("Eddard the Stark - 0")).toBeInTheDocument();
-  });
-
-  it("Requires the MembersProvider", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(() => render(<SelectMember />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(3);
-
-    spy.mockReset();
-    spy.mockRestore();
   });
 
   // it only shows current active members
