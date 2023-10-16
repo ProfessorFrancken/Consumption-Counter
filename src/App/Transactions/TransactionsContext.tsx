@@ -28,8 +28,10 @@ const useOrdersQuery = () => {
 
 export const useTransactions = () => {
   const {members} = useMembers();
-  const {products} = useProducts();
   const orders = useOrdersQuery();
+
+  const {productsQuery} = useProducts();
+  const products = productsQuery.data;
 
   return useMemo(() => {
     if (!orders.data) {
