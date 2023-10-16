@@ -1,12 +1,12 @@
-import React from "react";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {useMemo, useState} from "react";
+import {useQuery} from "@tanstack/react-query";
 import {chunk, orderBy} from "lodash";
 import {MemberType} from "./Members";
 import api from "./../../api";
 
-const useFetchMembers = (members?: MemberType[]) => {
+const useMembersQuery = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = React.useState<HTMLImageElement[]>([]);
+  const [images, setImages] = useState<HTMLImageElement[]>([]);
 
   const preLoadImages = (members: MemberType[]) => {
     const images = members
@@ -87,51 +87,22 @@ const useFetchMembers = (members?: MemberType[]) => {
 
       return orderBy(members, (member: any) => member.surname);
     },
-    enabled: members === undefined,
-    initialData: members,
+    staleTime: Infinity,
     onSuccess: preLoadImages,
   });
 };
 
-type State = {
-  membersQuery: QueryObserverResult<MemberType[]>;
-  members: MemberType[];
-};
-const MembersContext = React.createContext<State | undefined>(undefined);
-export const MembersProvider: React.FC<{
-  members?: MemberType[];
-  children: React.ReactNode;
-}> = ({members: defaultMembers, children, ...props}) => {
-  const membersQuery = useFetchMembers(defaultMembers);
-
-  return (
-    <MembersContext.Provider
-      value={{
-        membersQuery,
-        members: defaultMembers ?? membersQuery.data ?? [],
-        ...props,
-      }}
-    >
-      {children}
-    </MembersContext.Provider>
-  );
-};
-
 export const useMembers = () => {
-  const context = React.useContext(MembersContext);
+  const membersQuery = useMembersQuery();
 
-  if (!context) {
-    throw new Error(`useMembers must be used within a MembersContext`);
-  }
-
-  return context;
+  return {membersQuery, members: membersQuery.data ?? []};
 };
 
 const MEMBERS_PER_RANGE = 6 * 5;
 export const useGroupedSurnames = () => {
   const {members} = useMembers();
 
-  return React.useMemo(() => {
+  return useMemo(() => {
     return chunk(members, MEMBERS_PER_RANGE).map((members, idx) => ({
       idx,
       members,

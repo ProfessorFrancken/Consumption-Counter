@@ -10,7 +10,6 @@ import {
 import {InfrastructureProviders} from "Root";
 import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
 import {defaultBoardMembers} from "App/MockedState";
-import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {QueryClient} from "@tanstack/react-query";
 import {MemberType} from "App/Members/Members";
@@ -63,7 +62,13 @@ const AllTheProviders: React.FC<{
     },
   });
 
-  queryClient.setQueryData(["products"], products);
+  if (members) {
+    queryClient.setQueryData(["members"], members);
+  }
+
+  if (products) {
+    queryClient.setQueryData(["products"], products);
+  }
 
   if (boardMembers) {
     queryClient.setQueryData(["boards"], boardMembers);
@@ -90,9 +95,7 @@ const AllTheProviders: React.FC<{
           queuedOrder={queuedOrder ?? undefined}
           queuedOrders={queuedOrders ?? undefined}
         >
-          <MembersProvider members={members ?? undefined}>
-            <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
-          </MembersProvider>
+          <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
         </QueuedOrdersProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>

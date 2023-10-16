@@ -3,6 +3,7 @@ import api from "api";
 import {MemberType} from "App/Members/Members";
 import {groupBy, sortBy, take} from "lodash";
 import {useMembers} from "App/Members/Context";
+import {useMemo} from "react";
 
 const SHOW_N_PROMINENT = 10;
 const SHOW_N_BOARDS = 5;
@@ -39,14 +40,16 @@ export const useBoards = () => {
 
   // TODO: extract this (and the same code for committees) to a useWithMembers(memberCollection) hook
   const {members} = useMembers();
-  const boardMembers: BoardMember[] = (boardsQuery.data ?? [])
-    .map((member) => {
-      return {
-        ...member,
-        member: members.find(({id}: MemberType) => id === member.member_id),
-      };
-    })
-    .filter(({member}) => member !== undefined);
+  const boardMembers: BoardMember[] = useMemo(() => {
+    return (boardsQuery.data ?? [])
+      .map((member) => {
+        return {
+          ...member,
+          member: members.find(({id}: MemberType) => id === member.member_id),
+        };
+      })
+      .filter(({member}) => member !== undefined);
+  }, [boardsQuery.data, members]);
 
   return {boardsQuery, boardMembers};
 };

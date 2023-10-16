@@ -271,12 +271,12 @@ const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType)
 
 export const useOrderableProducts = () => {
   const productsQuery = useProductsQuery();
-  const products = productsQuery.data ?? [];
+  const products = productsQuery.data;
 
   const member = useSelectedMember();
 
   return useMemo(() => {
-    const availableProducts = products.filter((product: Product) =>
+    const availableProducts = (products ?? []).filter((product: Product) =>
       memberIsAllowedToPurchaseProduct(product, member)
     );
 
