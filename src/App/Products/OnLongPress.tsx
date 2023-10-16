@@ -17,7 +17,9 @@ export const useOnLongPress = ({timeout: delay = 500, onClick, onLongPress}: Pro
 
   const onDown = () => {
     const long = setTimeout(() => {
-      onLongPress();
+      if (onPressRef.current) {
+        onLongPress();
+      }
       onPressRef.current = undefined;
     }, delay);
 
