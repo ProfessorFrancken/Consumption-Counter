@@ -1,6 +1,6 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
-import {useActivities, ActivitiesProvider} from "./ActivitiesContext";
+import {useActivities} from "./ActivitiesContext";
 import {InfrastructureProviders} from "Root";
 import {rest} from "msw";
 import {setupServer} from "msw/node";
@@ -49,23 +49,12 @@ describe("Activities context", () => {
   it("Fetches a list of activities", async () => {
     render(
       <InfrastructureProviders>
-        <ActivitiesProvider>
-          <SelectActivity />
-        </ActivitiesProvider>
+        <SelectActivity />
       </InfrastructureProviders>
     );
 
     expect(screen.getByRole("list")).toBeInTheDocument();
 
     expect(await screen.findByText("Crash & Compile")).toBeInTheDocument();
-  });
-
-  it("Requires the ActivitiesProvider", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(() => render(<SelectActivity />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(3);
-
-    spy.mockReset();
-    spy.mockRestore();
   });
 });

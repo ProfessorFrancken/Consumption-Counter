@@ -1,5 +1,4 @@
-import React from "react";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 
@@ -11,7 +10,7 @@ export type Activity = {
   endDate: string;
 };
 
-const useFetchActivities = (activities?: Activity[]) => {
+const useActivitiesQuery = () => {
   // Select activities in the past 2 years as well as any future activites for the next year
   const after = moment().subtract(2, "years").format("YYYY-MM-DD");
   const before = moment().add(1, "years").format("YYYY-MM-DD");
@@ -40,43 +39,15 @@ const useFetchActivities = (activities?: Activity[]) => {
         };
       });
     },
-    enabled: activities === undefined,
-    initialData: activities,
-    refetchInterval: 60 * 60 * 1000,
+    staleTime: Infinity,
+    // TODO: figure out how to fix an issue with jest timers...?
+    //refetchInterval: 60 * 60 * 1000,
   });
 };
 
-type State = {
-  activitiesQuery: QueryObserverResult<Activity[]>;
-  activities: Activity[];
-};
-const ActivitiesContext = React.createContext<State | undefined>(undefined);
-export const ActivitiesProvider: React.FC<{
-  activities?: Activity[];
-  children: React.ReactNode;
-}> = ({activities: defaultActivities, children, ...props}) => {
-  const activitiesQuery = useFetchActivities(defaultActivities);
-  const activities: Activity[] = defaultActivities ?? activitiesQuery.data ?? [];
-
-  return (
-    <ActivitiesContext.Provider
-      value={{
-        activitiesQuery,
-        activities,
-        ...props,
-      }}
-    >
-      {children}
-    </ActivitiesContext.Provider>
-  );
-};
-
 export const useActivities = () => {
-  const context = React.useContext(ActivitiesContext);
+  const activitiesQuery = useActivitiesQuery();
+  const activities: Activity[] = activitiesQuery.data ?? [];
 
-  if (!context) {
-    throw new Error(`useActivities must be used within a ActivitiesContext`);
-  }
-
-  return context;
+  return {activities, activitiesQuery};
 };
