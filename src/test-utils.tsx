@@ -68,6 +68,8 @@ const AllTheProviders: React.FC<{
     },
   });
 
+  queryClient.setQueryData(["products"], products);
+
   const actualRoutes = routes !== undefined ? routes : ["/"];
 
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers

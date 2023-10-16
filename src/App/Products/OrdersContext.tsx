@@ -270,7 +270,9 @@ const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType)
 };
 
 export const useOrderableProducts = () => {
-  const {products = []} = useProducts();
+  const {productsQuery} = useProducts();
+  const products = productsQuery.data ?? [];
+
   const member = useSelectedMember();
 
   return useMemo(() => {

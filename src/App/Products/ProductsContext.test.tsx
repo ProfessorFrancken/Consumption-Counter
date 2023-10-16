@@ -9,7 +9,8 @@ import {render as renderApp, getProduct} from "test-utils";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
-    const {products} = useProducts();
+    const {productsQuery} = useProducts();
+    const products = productsQuery.data ?? [];
 
     if (products === undefined) {
       return <span>Hoi</span>;

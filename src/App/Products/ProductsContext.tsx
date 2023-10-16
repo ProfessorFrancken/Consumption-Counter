@@ -55,27 +55,23 @@ const useFetchProducts = (products?: Product[]) => {
       });
     },
     onSuccess: preLoadImages,
-    enabled: products === undefined,
-    initialData: products,
+    staleTime: Infinity,
   });
 };
 
 type State = {
   productsQuery: QueryObserverResult<Product[]>;
-  products: Product[] | undefined;
 };
 const ProductsContext = React.createContext<State | undefined>(undefined);
 export const ProductsProvider: React.FC<{
-  products?: Product[];
   children: React.ReactNode;
-}> = ({products: defaultProducts, children, ...props}) => {
-  const productsQuery = useFetchProducts(defaultProducts);
+}> = ({children, ...props}) => {
+  const productsQuery = useFetchProducts();
 
   return (
     <ProductsContext.Provider
       value={{
         productsQuery,
-        products: defaultProducts ?? productsQuery.data,
         ...props,
       }}
     >
