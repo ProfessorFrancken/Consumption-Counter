@@ -1,6 +1,6 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
-import {useBoards, BoardsProvider} from "./BoardsContext";
+import {useBoards} from "./BoardsContext";
 import {InfrastructureProviders} from "Root";
 import {MembersProvider} from "App/Members/Context";
 import {rest} from "msw";
@@ -64,23 +64,12 @@ describe("Board context", () => {
             },
           ]}
         >
-          <BoardsProvider>
-            <SelectBoard />
-          </BoardsProvider>
+          <SelectBoard />
         </MembersProvider>
       </InfrastructureProviders>
     );
 
     expect(await screen.findByText("John Snow - 2018")).toBeInTheDocument();
-  });
-
-  it("Requires the BoardsProvider", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(() => render(<SelectBoard />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(3);
-
-    spy.mockReset();
-    spy.mockRestore();
   });
 
   // it only shows current active members

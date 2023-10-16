@@ -1,5 +1,4 @@
-import React from "react";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import api from "api";
 import {MemberType} from "App/Members/Members";
 import {groupBy, sortBy, take} from "lodash";
@@ -15,13 +14,14 @@ export type BoardMember = {
   member?: MemberType;
 };
 
-const useFetchBoardMembers = (boardMembers?: BoardMember[]) => {
+const useBoardMembersQuery = () => {
   return useQuery<BoardMember[]>({
     queryKey: ["boards"],
     queryFn: async () => {
       const response = await api.get<{
         boardMembers: Array<{lid_id: number; jaar: number; functie: string}>;
       }>("/boards");
+
       return response.boardMembers.map((boardMember): BoardMember => {
         return {
           member_id: parseInt(boardMember.lid_id as unknown as string, 10),
@@ -30,25 +30,16 @@ const useFetchBoardMembers = (boardMembers?: BoardMember[]) => {
         };
       });
     },
-    enabled: boardMembers === undefined,
-    initialData: boardMembers,
+    staleTime: Infinity,
   });
 };
 
-type State = {
-  boardsQuery: QueryObserverResult<BoardMember[]>;
-  boardMembers: BoardMember[];
-};
-const BoardsContext = React.createContext<State | undefined>(undefined);
-export const BoardsProvider: React.FC<{
-  boardMembers?: BoardMember[];
-  children: React.ReactNode;
-}> = ({boardMembers: defaultBoardMembers, children, ...props}) => {
-  const boardsQuery = useFetchBoardMembers(defaultBoardMembers);
+export const useBoards = () => {
+  const boardsQuery = useBoardMembersQuery();
 
   // TODO: extract this (and the same code for committees) to a useWithMembers(memberCollection) hook
   const {members} = useMembers();
-  const boardMembers: BoardMember[] = (defaultBoardMembers ?? boardsQuery.data ?? [])
+  const boardMembers: BoardMember[] = (boardsQuery.data ?? [])
     .map((member) => {
       return {
         ...member,
@@ -57,27 +48,7 @@ export const BoardsProvider: React.FC<{
     })
     .filter(({member}) => member !== undefined);
 
-  return (
-    <BoardsContext.Provider
-      value={{
-        boardsQuery,
-        boardMembers,
-        ...props,
-      }}
-    >
-      {children}
-    </BoardsContext.Provider>
-  );
-};
-
-export const useBoards = () => {
-  const context = React.useContext(BoardsContext);
-
-  if (!context) {
-    throw new Error(`useBoards must be used within a BoardsContext`);
-  }
-
-  return context;
+  return {boardsQuery, boardMembers};
 };
 
 export const useMostRecentBoards = () => {
