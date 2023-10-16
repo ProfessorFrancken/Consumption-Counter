@@ -20,7 +20,7 @@ const useOrdersQuery = () => {
   return useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      return (await api.get<{orders: OrderTransaction[]}>("/orders")).orders;
+      return (await api.get<{orders: OrderTransaction[]}>("/orders")).orders ?? [];
     },
     staleTime: Infinity,
   });

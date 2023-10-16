@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {MemberType} from "App/Members/Members";
 import {useProductsQuery} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
@@ -50,7 +50,6 @@ function didNotRecentlyOrderAProduct(member: MemberType) {
 
 export const useSelectMember = () => {
   const navigate = useNavigate();
-  const {reset} = useOrder();
   return (member: MemberType) => {
     if (didNotRecentlyOrderAProduct(member)) {
       if (!window.confirm(`Are you sure you want to select ${member.fullname}?`)) {
@@ -58,8 +57,6 @@ export const useSelectMember = () => {
         return;
       }
     }
-
-    reset();
 
     navigate({
       pathname: "/products",
@@ -233,6 +230,16 @@ export const OrderProvider: React.FC<{
   const reset = () => {
     setOrderedProducts([]);
   };
+
+  const previousMemberId = useRef(member?.id);
+  useEffect(() => {
+    previousMemberId.current = member?.id;
+  }, [member]);
+  useEffect(() => {
+    if (member?.id !== previousMemberId.current) {
+      reset();
+    }
+  }, [member, previousMemberId, reset]);
 
   const {makeOrderMutation, cancelOrder} = useMakeOrder(reset);
   const addProductToOrder = (product: Product) => {

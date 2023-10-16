@@ -1,4 +1,3 @@
-import React from "react";
 import Compucie from "./Compucie";
 import {useCompucie} from "../CommitteesContext";
 import {useQueryClient} from "@tanstack/react-query";

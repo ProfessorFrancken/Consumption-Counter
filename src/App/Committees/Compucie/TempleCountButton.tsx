@@ -24,10 +24,11 @@ const useTempleCount = () => {
       count === undefined ? 0 : count - 1
     );
   };
-  const mutation = useMutation(
-    () => axios.post(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`),
-    {onSuccess: decreaseTempleCount}
-  );
+  const mutation = useMutation({
+    mutationFn: () =>
+      axios.post(`https://borrelcie.vodka/chwazorcle/hoeveel.php?increment=-1`),
+    onSuccess: decreaseTempleCount,
+  });
 
   return [query.data, mutation.mutate] as const;
 };
