@@ -9,7 +9,6 @@ import {
 } from "App/MockedState";
 import {InfrastructureProviders} from "Root";
 import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
-import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {defaultBoardMembers} from "App/MockedState";
 import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
@@ -72,6 +71,10 @@ const AllTheProviders: React.FC<{
     queryClient.setQueryData(["boards"], boardMembers);
   }
 
+  if (committeeMembers) {
+    queryClient.setQueryData(["committees"], committeeMembers);
+  }
+
   const actualRoutes = routes !== undefined ? routes : ["/"];
 
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers
@@ -83,15 +86,13 @@ const AllTheProviders: React.FC<{
           queuedOrders={queuedOrders ?? undefined}
         >
           <MembersProvider members={members ?? undefined}>
-            <CommitteesProvider committeeMembers={committeeMembers ?? undefined}>
-              <OrderProvider order={order ?? undefined}>
-                <ActivitiesProvider activities={activities ?? undefined}>
-                  <StatisticsProvider statistics={statistics ?? undefined}>
-                    {children}
-                  </StatisticsProvider>
-                </ActivitiesProvider>
-              </OrderProvider>
-            </CommitteesProvider>
+            <OrderProvider order={order ?? undefined}>
+              <ActivitiesProvider activities={activities ?? undefined}>
+                <StatisticsProvider statistics={statistics ?? undefined}>
+                  {children}
+                </StatisticsProvider>
+              </ActivitiesProvider>
+            </OrderProvider>
           </MembersProvider>
         </QueuedOrdersProvider>
       </AuthenticationProvider>
