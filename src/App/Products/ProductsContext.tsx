@@ -1,9 +1,9 @@
 import React from "react";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import api from "api";
 import {Product} from "./OrdersContext";
 
-const useFetchProducts = (products?: Product[]) => {
+export const useProductsQuery = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setImages] = React.useState<HTMLImageElement[]>([]);
 
@@ -57,35 +57,4 @@ const useFetchProducts = (products?: Product[]) => {
     onSuccess: preLoadImages,
     staleTime: Infinity,
   });
-};
-
-type State = {
-  productsQuery: QueryObserverResult<Product[]>;
-};
-const ProductsContext = React.createContext<State | undefined>(undefined);
-export const ProductsProvider: React.FC<{
-  children: React.ReactNode;
-}> = ({children, ...props}) => {
-  const productsQuery = useFetchProducts();
-
-  return (
-    <ProductsContext.Provider
-      value={{
-        productsQuery,
-        ...props,
-      }}
-    >
-      {children}
-    </ProductsContext.Provider>
-  );
-};
-
-export const useProducts = () => {
-  const context = React.useContext(ProductsContext);
-
-  if (!context) {
-    throw new Error(`useProducts must be used within a ProductsContext`);
-  }
-
-  return context;
 };

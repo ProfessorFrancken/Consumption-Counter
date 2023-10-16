@@ -1,6 +1,6 @@
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useProducts} from "App/Products/ProductsContext";
+import {useProductsQuery} from "App/Products/ProductsContext";
 import {QueryObserverResult} from "@tanstack/react-query";
 import {useCommittees} from "App/Committees/CommitteesContext";
 import {useBoards} from "App/Prominent/BoardsContext";
@@ -48,7 +48,7 @@ const LoadFeatureListItem = ({feature}: {feature: Feature}) => {
 };
 
 const LoadingScreen = () => {
-  const {productsQuery} = useProducts();
+  const productsQuery = useProductsQuery();
   const {membersQuery} = useMembers();
   const {committeesQuery} = useCommittees();
   const {boardsQuery} = useBoards();

@@ -1,7 +1,6 @@
 import React from "react";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {OrderProvider} from "App/Products/OrdersContext";
-import {ProductsProvider} from "App/Products/ProductsContext";
 import "./index.css";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
@@ -16,19 +15,17 @@ export const ApplicationProviders: React.FC<{children: React.ReactNode}> = ({
   return (
     <AuthenticationProvider>
       <QueuedOrdersProvider>
-        <ProductsProvider>
-          <MembersProvider>
-            <CommitteesProvider>
-              <BoardsProvider>
-                <OrderProvider>
-                  <ActivitiesProvider>
-                    <StatisticsProvider>{children}</StatisticsProvider>
-                  </ActivitiesProvider>
-                </OrderProvider>
-              </BoardsProvider>
-            </CommitteesProvider>
-          </MembersProvider>
-        </ProductsProvider>
+        <MembersProvider>
+          <CommitteesProvider>
+            <BoardsProvider>
+              <OrderProvider>
+                <ActivitiesProvider>
+                  <StatisticsProvider>{children}</StatisticsProvider>
+                </ActivitiesProvider>
+              </OrderProvider>
+            </BoardsProvider>
+          </CommitteesProvider>
+        </MembersProvider>
       </QueuedOrdersProvider>
     </AuthenticationProvider>
   );

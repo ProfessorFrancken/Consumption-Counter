@@ -9,7 +9,6 @@ import {
 } from "App/MockedState";
 import {InfrastructureProviders} from "Root";
 import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
-import {ProductsProvider} from "App/Products/ProductsContext";
 import {CommitteesProvider} from "App/Committees/CommitteesContext";
 import {BoardsProvider} from "App/Prominent/BoardsContext";
 import {defaultBoardMembers} from "App/MockedState";
@@ -80,21 +79,19 @@ const AllTheProviders: React.FC<{
           queuedOrder={queuedOrder ?? undefined}
           queuedOrders={queuedOrders ?? undefined}
         >
-          <ProductsProvider products={products ?? undefined}>
-            <MembersProvider members={members ?? undefined}>
-              <CommitteesProvider committeeMembers={committeeMembers ?? undefined}>
-                <BoardsProvider boardMembers={boardMembers ?? undefined}>
-                  <OrderProvider order={order ?? undefined}>
-                    <ActivitiesProvider activities={activities ?? undefined}>
-                      <StatisticsProvider statistics={statistics ?? undefined}>
-                        {children}
-                      </StatisticsProvider>
-                    </ActivitiesProvider>
-                  </OrderProvider>
-                </BoardsProvider>
-              </CommitteesProvider>
-            </MembersProvider>
-          </ProductsProvider>
+          <MembersProvider members={members ?? undefined}>
+            <CommitteesProvider committeeMembers={committeeMembers ?? undefined}>
+              <BoardsProvider boardMembers={boardMembers ?? undefined}>
+                <OrderProvider order={order ?? undefined}>
+                  <ActivitiesProvider activities={activities ?? undefined}>
+                    <StatisticsProvider statistics={statistics ?? undefined}>
+                      {children}
+                    </StatisticsProvider>
+                  </ActivitiesProvider>
+                </OrderProvider>
+              </BoardsProvider>
+            </CommitteesProvider>
+          </MembersProvider>
         </QueuedOrdersProvider>
       </AuthenticationProvider>
     </InfrastructureProviders>
