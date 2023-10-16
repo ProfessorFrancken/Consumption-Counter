@@ -15,7 +15,7 @@ export type BoardMember = {
 };
 
 const useBoardMembersQuery = () => {
-  return useQuery<BoardMember[]>({
+  return useQuery({
     queryKey: ["boards"],
     queryFn: async () => {
       const response = await api.get<{

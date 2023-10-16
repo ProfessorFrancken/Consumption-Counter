@@ -17,7 +17,7 @@ export const useProductsQuery = () => {
     setImages(images);
   };
 
-  return useQuery<Product[]>({
+  return useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const response = await api.get<{

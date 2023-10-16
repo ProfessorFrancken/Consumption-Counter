@@ -20,7 +20,7 @@ type CommitteeMember = {
 };
 
 const useCommitteeMembersQuery = () => {
-  return useQuery<CommitteeMember[]>({
+  return useQuery({
     queryKey: ["committees"],
     queryFn: async () => {
       const mapCommittee = (member: any): CommitteeMember => {

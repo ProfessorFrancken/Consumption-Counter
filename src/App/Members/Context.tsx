@@ -37,7 +37,7 @@ const useFetchMembers = (members?: MemberType[]) => {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
 
-  return useQuery<MemberType[]>({
+  return useQuery({
     queryKey: ["members"],
     queryFn: async () => {
       const response = await api.get<{
