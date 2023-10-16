@@ -1,4 +1,3 @@
-import React from "react";
 import {useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
@@ -11,7 +10,7 @@ export type Statistic = {
   food: number;
 };
 
-export const useStatisticsQuery = (statistics?: Statistic[]) => {
+export const useStatisticsQuery = () => {
   return useQuery<Statistic[]>({
     queryKey: ["statistics", "categories"],
     queryFn: async () => {
@@ -45,18 +44,6 @@ export const useStatisticsQuery = (statistics?: Statistic[]) => {
 
       return response.statistics.map(mapStatistic);
     },
-    enabled: statistics === undefined,
-    initialData: statistics,
     staleTime: Infinity,
   });
-};
-
-export const StatisticsProvider: React.FC<{
-  statistics?: Statistic[];
-  children: React.ReactNode;
-}> = ({statistics: defaultStatistics, children}) => {
-  // TODO: get rid of this query, after refactoring unit tests
-  useStatisticsQuery(defaultStatistics);
-
-  return <>{children}</>;
 };

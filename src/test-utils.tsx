@@ -12,7 +12,6 @@ import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
 import {defaultBoardMembers} from "App/MockedState";
 import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
-import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient} from "@tanstack/react-query";
 import {MemberType} from "App/Members/Members";
 
@@ -77,6 +76,9 @@ const AllTheProviders: React.FC<{
   if (activities) {
     queryClient.setQueryData(["activities"], activities);
   }
+  if (statistics) {
+    queryClient.setQueryData(["statistics", "categories"], statistics);
+  }
 
   const actualRoutes = routes !== undefined ? routes : ["/"];
 
@@ -89,11 +91,7 @@ const AllTheProviders: React.FC<{
           queuedOrders={queuedOrders ?? undefined}
         >
           <MembersProvider members={members ?? undefined}>
-            <OrderProvider order={order ?? undefined}>
-              <StatisticsProvider statistics={statistics ?? undefined}>
-                {children}
-              </StatisticsProvider>
-            </OrderProvider>
+            <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
           </MembersProvider>
         </QueuedOrdersProvider>
       </AuthenticationProvider>
