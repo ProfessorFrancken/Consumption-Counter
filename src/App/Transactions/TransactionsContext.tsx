@@ -5,7 +5,7 @@ import {useMembers} from "App/Members/Context";
 import {OrderedOrder} from "App/QueuedOrdersContext";
 import {useQuery} from "@tanstack/react-query";
 import api from "./../../api";
-import {useProducts} from "App/Products/ProductsContext";
+import {useProductsQuery} from "App/Products/ProductsContext";
 
 export type OrderTransaction = {
   id: number;
@@ -30,7 +30,7 @@ export const useTransactions = () => {
   const {members} = useMembers();
   const orders = useOrdersQuery();
 
-  const {productsQuery} = useProducts();
+  const productsQuery = useProductsQuery();
   const products = productsQuery.data;
 
   return useMemo(() => {

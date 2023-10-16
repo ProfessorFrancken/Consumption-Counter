@@ -1,6 +1,6 @@
 import React, {useMemo, useRef, useState} from "react";
 import {MemberType} from "App/Members/Members";
-import {useProducts} from "./ProductsContext";
+import {useProductsQuery} from "./ProductsContext";
 import {sortBy, groupBy} from "lodash";
 import {OrderedOrder, TIME_TO_CANCEL, useQueuedOrders} from "App/QueuedOrdersContext";
 import {useNavigate} from "react-router";
@@ -270,7 +270,7 @@ const memberIsAllowedToPurchaseProduct = (product: Product, member?: MemberType)
 };
 
 export const useOrderableProducts = () => {
-  const {productsQuery} = useProducts();
+  const productsQuery = useProductsQuery();
   const products = productsQuery.data ?? [];
 
   const member = useSelectedMember();

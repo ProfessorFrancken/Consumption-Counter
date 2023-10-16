@@ -1,6 +1,6 @@
 import * as React from "react";
 import {fireEvent, render, screen} from "@testing-library/react";
-import {useProducts, ProductsProvider} from "./ProductsContext";
+import {useProductsQuery} from "./ProductsContext";
 import {InfrastructureProviders} from "Root";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
@@ -9,7 +9,7 @@ import {render as renderApp, getProduct} from "test-utils";
 
 describe("Product context", () => {
   const SelectProduct: React.FC = () => {
-    const {productsQuery} = useProducts();
+    const productsQuery = useProductsQuery();
     const products = productsQuery.data ?? [];
 
     if (products === undefined) {
@@ -42,24 +42,13 @@ describe("Product context", () => {
   it("Selects a member when they do not have a latest purchse", async () => {
     render(
       <InfrastructureProviders>
-        <ProductsProvider>
-          <SelectProduct />
-        </ProductsProvider>
+        <SelectProduct />
       </InfrastructureProviders>
     );
 
     expect(await screen.findByText("Hertog Jan")).toBeInTheDocument();
     expect(await screen.findByText("Grolsch")).toBeInTheDocument();
     expect(await screen.findByText("Heineken")).toBeInTheDocument();
-  });
-
-  it("Requires the ProductsProvider", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(() => render(<SelectProduct />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(3);
-
-    spy.mockReset();
-    spy.mockRestore();
   });
 
   it("Doensn't allow an order without a member", async () => {
