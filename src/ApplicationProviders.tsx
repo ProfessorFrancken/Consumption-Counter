@@ -4,7 +4,6 @@ import {OrderProvider} from "App/Products/OrdersContext";
 import "./index.css";
 import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
-import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 
 export const ApplicationProviders: React.FC<{children: React.ReactNode}> = ({
   children,
@@ -13,9 +12,7 @@ export const ApplicationProviders: React.FC<{children: React.ReactNode}> = ({
     <AuthenticationProvider>
       <QueuedOrdersProvider>
         <MembersProvider>
-          <OrderProvider>
-            <StatisticsProvider>{children}</StatisticsProvider>
-          </OrderProvider>
+          <OrderProvider>{children}</OrderProvider>
         </MembersProvider>
       </QueuedOrdersProvider>
     </AuthenticationProvider>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
-import {StatisticsProvider, useStatisticsQuery} from "./StatisticsContext";
+import {useStatisticsQuery} from "./StatisticsContext";
 import {InfrastructureProviders} from "Root";
 import clock from "jest-plugin-clock";
 import {setupServer} from "msw/lib/node";
@@ -45,22 +45,11 @@ describe("Statistics context", () => {
   it("Fetches a list of statistics", async () => {
     render(
       <InfrastructureProviders>
-        <StatisticsProvider>
-          <SelectStatistic />
-        </StatisticsProvider>
+        <SelectStatistic />
       </InfrastructureProviders>
     );
 
     expect(await screen.findByText("2021-02-01: 33, 3, 1: 37")).toBeInTheDocument();
-  });
-
-  it("Requires the StatisticsProvider", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(() => render(<SelectStatistic />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(3);
-
-    spy.mockReset();
-    spy.mockRestore();
   });
 });
 
