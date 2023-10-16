@@ -1,10 +1,10 @@
-import React from "react";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import api from "api";
 import {useNavigate} from "react-router";
 import {groupBy, uniqBy} from "lodash";
 import {MemberType} from "App/Members/Members";
 import {useMembers} from "App/Members/Context";
+import {useCallback, useMemo} from "react";
 
 type Committee = {
   id: number;
@@ -19,7 +19,7 @@ type CommitteeMember = {
   member?: MemberType;
 };
 
-const useFetchCommitteeMembers = (committeeMembers?: CommitteeMember[]) => {
+const useCommitteeMembersQuery = () => {
   return useQuery<CommitteeMember[]>({
     queryKey: ["committees"],
     queryFn: async () => {
@@ -47,81 +47,55 @@ const useFetchCommitteeMembers = (committeeMembers?: CommitteeMember[]) => {
 
       return response.committees.map(mapCommittee);
     },
-    enabled: committeeMembers === undefined,
-    initialData: committeeMembers,
+    staleTime: Infinity,
   });
 };
 
-type State = {
-  committeesQuery: QueryObserverResult<CommitteeMember[]>;
-  committees: Committee[] | undefined;
-  committeeMembers: CommitteeMember[];
-  selectCommittee: (committee: Committee) => void;
-};
-const CommitteesContext = React.createContext<State | undefined>(undefined);
-export const CommitteesProvider: React.FC<{
-  committeeMembers?: CommitteeMember[];
-  children: React.ReactNode;
-}> = ({committeeMembers: defaultCommitteeMembers, children, ...props}) => {
+export const useCommittees = () => {
   const navigate = useNavigate();
   const {members} = useMembers();
 
-  const committeesQuery = useFetchCommitteeMembers(defaultCommitteeMembers);
+  const committeesQuery = useCommitteeMembersQuery();
 
-  const selectCommittee = (committee: Committee) => {
-    navigate(`/committees/${committee.id}`);
+  const selectCommittee = useCallback(
+    (committee: Committee) => {
+      navigate(`/committees/${committee.id}`);
+    },
+    [navigate]
+  );
+
+  const committeeMembers: CommitteeMember[] = useMemo(() => {
+    return (committeesQuery.data ?? [])
+      .map((member) => {
+        return {
+          ...member,
+          member: members.find(({id}: MemberType) => id === member.member_id),
+        };
+      })
+      .filter(({member}) => member !== undefined);
+  }, [members, committeesQuery.data]);
+
+  const committees = useMemo(() => {
+    return uniqBy(
+      committeeMembers.reduce(
+        (committees: Committee[], member: CommitteeMember) => [
+          ...committees,
+          member.committee,
+        ],
+        [] as Committee[]
+      ),
+      (committee: Committee) => committee.id
+    );
+  }, [committeeMembers]);
+
+  return {
+    committeesQuery,
+    selectCommittee,
+    committees,
+    committeeMembers,
   };
-
-  const committeeMembers: CommitteeMember[] = (
-    defaultCommitteeMembers ??
-    committeesQuery.data ??
-    []
-  )
-    .map((member) => {
-      return {
-        ...member,
-        member: members.find(({id}: MemberType) => id === member.member_id),
-      };
-    })
-    .filter(({member}) => member !== undefined);
-
-  const committees = uniqBy(
-    committeeMembers.reduce(
-      (committees: Committee[], member: CommitteeMember) => [
-        ...committees,
-        member.committee,
-      ],
-      [] as Committee[]
-    ),
-    (committee: Committee) => committee.id
-  );
-
-  return (
-    <CommitteesContext.Provider
-      value={{
-        committeesQuery,
-        selectCommittee,
-        committees,
-        committeeMembers,
-        ...props,
-      }}
-    >
-      {children}
-    </CommitteesContext.Provider>
-  );
 };
 
-export const useCommittees = () => {
-  const context = React.useContext(CommitteesContext);
-
-  if (!context) {
-    throw new Error(`useCommittees must be used within a CommitteesContext`);
-  }
-
-  return context;
-};
-
-export const useExistingCommitteeMembers = () => {};
 export const useCommitteeMembers = (committeeId: number): MemberType[] => {
   const now = new Date();
   const {committeeMembers = []} = useCommittees();

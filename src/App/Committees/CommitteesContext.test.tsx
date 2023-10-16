@@ -1,6 +1,6 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
-import {useCommittees, CommitteesProvider} from "./CommitteesContext";
+import {useCommittees} from "./CommitteesContext";
 import {InfrastructureProviders} from "Root";
 import {MembersProvider} from "App/Members/Context";
 import {setupServer} from "msw/lib/node";
@@ -71,24 +71,13 @@ describe("Committee context", () => {
             },
           ]}
         >
-          <CommitteesProvider>
-            <SelectCommittee />
-          </CommitteesProvider>
+          <SelectCommittee />
         </MembersProvider>
       </InfrastructureProviders>
     );
 
     expect(await screen.findByText("Compucie")).toBeInTheDocument();
     expect(await screen.findByText("Night's Watch")).toBeInTheDocument();
-  });
-
-  it("Requires the CommitteesProvider", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(() => render(<SelectCommittee />)).toThrow();
-    expect(spy).toHaveBeenCalledTimes(3);
-
-    spy.mockReset();
-    spy.mockRestore();
   });
 
   // it only shows current active members
