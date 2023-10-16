@@ -12,7 +12,6 @@ import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
 import {defaultBoardMembers} from "App/MockedState";
 import {MembersProvider} from "App/Members/Context";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
-import {ActivitiesProvider} from "App/Activities/ActivitiesContext";
 import {StatisticsProvider} from "App/Statistics/StatisticsContext";
 import {QueryClient} from "@tanstack/react-query";
 import {MemberType} from "App/Members/Members";
@@ -75,6 +74,10 @@ const AllTheProviders: React.FC<{
     queryClient.setQueryData(["committees"], committeeMembers);
   }
 
+  if (activities) {
+    queryClient.setQueryData(["activities"], activities);
+  }
+
   const actualRoutes = routes !== undefined ? routes : ["/"];
 
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers
@@ -87,11 +90,9 @@ const AllTheProviders: React.FC<{
         >
           <MembersProvider members={members ?? undefined}>
             <OrderProvider order={order ?? undefined}>
-              <ActivitiesProvider activities={activities ?? undefined}>
-                <StatisticsProvider statistics={statistics ?? undefined}>
-                  {children}
-                </StatisticsProvider>
-              </ActivitiesProvider>
+              <StatisticsProvider statistics={statistics ?? undefined}>
+                {children}
+              </StatisticsProvider>
             </OrderProvider>
           </MembersProvider>
         </QueuedOrdersProvider>
