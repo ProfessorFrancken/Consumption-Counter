@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "api";
 import {MemberType} from "App/Members/Members";
 import {groupBy, sortBy, take} from "lodash";
@@ -15,8 +15,8 @@ export type BoardMember = {
   member?: MemberType;
 };
 
-const useBoardMembersQuery = () => {
-  return useQuery({
+export const boardMembersQueryOptions = () => {
+  return queryOptions({
     queryKey: ["boards"],
     queryFn: async () => {
       const response = await api.get<{
@@ -33,6 +33,10 @@ const useBoardMembersQuery = () => {
     },
     staleTime: Infinity,
   });
+};
+
+export const useBoardMembersQuery = () => {
+  return useQuery(boardMembersQueryOptions());
 };
 
 export const useBoards = () => {

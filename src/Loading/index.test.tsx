@@ -1,7 +1,11 @@
-import {render, screen} from "test-utils";
 import LoadingScreen from "./index";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
+import {useBoardMembersQuery} from "App/Prominent/BoardsContext";
+import {render, screen} from "@testing-library/react";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {MemoryRouter} from "react-router";
+import {ReactNode} from "react";
 
 describe("Loading screen", () => {
   const members = [
@@ -28,6 +32,21 @@ describe("Loading screen", () => {
     }),
     rest.get("*/boards", (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({error: "moi"}));
+    }),
+    rest.get("*/products", (req, res, ctx) => {
+      return res(ctx.json({products: []}));
+    }),
+    rest.get("*/statistics", (req, res, ctx) => {
+      return res(ctx.json({statistics: []}));
+    }),
+    rest.get("*/statistics/categories", (req, res, ctx) => {
+      return res(ctx.json({statistics: []}));
+    }),
+    rest.get("*/activities", (req, res, ctx) => {
+      return res(ctx.json({activities: []}));
+    }),
+    rest.get("*/orders", (req, res, ctx) => {
+      return res(ctx.json({products: []}));
     })
   );
 
@@ -40,10 +59,13 @@ describe("Loading screen", () => {
   });
 
   it("renders", async () => {
-    const storeState = {
-      members: null,
-      boardMembers: null,
-      committeeMembers: [
+    const queryClient = new QueryClient({
+      defaultOptions: {queries: {retry: false}},
+    });
+
+    queryClient.setQueryData(
+      ["committees"],
+      [
         {
           member_id: 1,
           year: 2017,
@@ -56,11 +78,16 @@ describe("Loading screen", () => {
           function: "",
           committee: {id: 2, name: "s[ck]rip(t|t?c)ie"},
         },
-      ],
-    };
-    render(<LoadingScreen />, {
-      storeState,
-    });
+      ]
+    );
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <LoadingScreen />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
 
     expect(
       screen.getByRole("heading", {name: "Loading consumption counter..."})

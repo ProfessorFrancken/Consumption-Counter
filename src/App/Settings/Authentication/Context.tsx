@@ -50,7 +50,7 @@ export const AuthenticationProvider: React.FC<{
   const login = useLogin(setToken);
 
   const value = {
-    request: login.isLoading,
+    request: login.isPending,
     token: token,
     error: login.isError && login.error !== null ? login.error.message : null,
     authenticate: login.mutate,

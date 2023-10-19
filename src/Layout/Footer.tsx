@@ -1,4 +1,3 @@
-import React from "react";
 import BuyAll from "Layout/Buttons/BuyAll";
 import GoBack from "Layout/Buttons/GoBack";
 import CancelOrder from "Layout/Buttons/CancelOrder";

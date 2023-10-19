@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "api";
 import {useNavigate} from "react-router";
 import {groupBy, uniqBy} from "lodash";
@@ -19,8 +19,8 @@ type CommitteeMember = {
   member?: MemberType;
 };
 
-const useCommitteeMembersQuery = () => {
-  return useQuery({
+export const committeeMembersQueryOptions = () => {
+  return queryOptions({
     queryKey: ["committees"],
     queryFn: async () => {
       const mapCommittee = (member: any): CommitteeMember => {
@@ -49,6 +49,10 @@ const useCommitteeMembersQuery = () => {
     },
     staleTime: Infinity,
   });
+};
+
+const useCommitteeMembersQuery = () => {
+  return useQuery(committeeMembersQueryOptions());
 };
 
 export const useCommittees = () => {

@@ -16,6 +16,9 @@ const ScreenSaver = () => {
     if (pathname === "/statistics") {
       return;
     }
+    if (pathname === "/loading") {
+      return;
+    }
 
     const screenSaver =
       pathname === "/"

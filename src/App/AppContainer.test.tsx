@@ -38,7 +38,7 @@ describe("Consumption Counter", () => {
     rest.get("*/committees", (req, res, ctx) => {
       return res(ctx.json({committees: mocks.committees}));
     }),
-    rest.get("*/statistics", (req, res, ctx) => {
+    rest.get("*/statistics/categories", (req, res, ctx) => {
       return res(ctx.json({statistics: []}));
     }),
     rest.get("*/activities", (req, res, ctx) => {

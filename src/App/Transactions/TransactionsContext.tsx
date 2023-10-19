@@ -3,7 +3,7 @@ import {MemberType} from "App/Members/Members";
 import {take, uniq} from "lodash";
 import {useMembers} from "App/Members/Context";
 import {OrderedOrder} from "App/QueuedOrdersContext";
-import {useQuery} from "@tanstack/react-query";
+import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "./../../api";
 import {useProductsQuery} from "App/Products/ProductsContext";
 
@@ -16,14 +16,18 @@ export type OrderTransaction = {
   price: number;
 };
 
-const useOrdersQuery = () => {
-  return useQuery({
+export const ordersQueryOptions = () => {
+  return queryOptions({
     queryKey: ["orders"],
     queryFn: async () => {
       return (await api.get<{orders: OrderTransaction[]}>("/orders")).orders ?? [];
     },
     staleTime: Infinity,
   });
+};
+
+const useOrdersQuery = () => {
+  return useQuery(ordersQueryOptions());
 };
 
 export const useTransactions = () => {
