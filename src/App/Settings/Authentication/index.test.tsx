@@ -1,4 +1,3 @@
-import React from "react";
 import {screen} from "@testing-library/react";
 import Authentication from "./index";
 import {render, fireEvent} from "test-utils";

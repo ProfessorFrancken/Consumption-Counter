@@ -1,4 +1,4 @@
-import {ReactNode, StrictMode, useMemo, useState} from "react";
+import {ReactNode, StrictMode, Suspense, useMemo, useState} from "react";
 import {
   BrowserRouter,
   createBrowserRouter,
@@ -9,6 +9,7 @@ import {createAppRoutes} from "./App/AppContainer";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
 import {ApplicationProviders} from "ApplicationProviders";
+import LoadingScreen from "Loading";
 
 type Props = {
   queryClient?: QueryClient;
@@ -34,29 +35,26 @@ export const InfrastructureProviders = ({
   );
 };
 
-const DevelopMentProviders = ({children}: {children: ReactNode}) => {
-  return <>{children}</>;
-};
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+      staleTime: Infinity,
+    },
+  },
+});
 
-export const router = createBrowserRouter(createAppRoutes(ApplicationProviders));
+export const router = createBrowserRouter(
+  createAppRoutes(queryClient, ApplicationProviders)
+);
 
 const Root = () => {
-  const queryClient = useMemo(() => {
-    return new QueryClient({
-      defaultOptions: {
-        queries: {
-          refetchOnWindowFocus: false, // default: true
-        },
-      },
-    });
-  }, []);
-
   return (
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <DevelopMentProviders>
+        <Suspense fallback={<LoadingScreen />}>
           <RouterProvider router={router} />
-        </DevelopMentProviders>
+        </Suspense>
       </QueryClientProvider>
     </StrictMode>
   );

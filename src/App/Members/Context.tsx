@@ -1,45 +1,28 @@
-import {useMemo, useState} from "react";
-import {useQuery} from "@tanstack/react-query";
+import {useEffect, useMemo, useState} from "react";
+import {queryOptions, useQuery, useSuspenseQuery} from "@tanstack/react-query";
 import {chunk, orderBy} from "lodash";
 import {MemberType} from "./Members";
 import api from "./../../api";
 
-const useMembersQuery = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
+const calculateAge = (lid: {geboortedatum: string}) => {
+  const birthdayString = lid.geboortedatum;
+  if (birthdayString === null) {
+    return 0;
+  }
+  const birthday = new Date(Date.parse(birthdayString));
 
-  const preLoadImages = (members: MemberType[]) => {
-    const images = members
-      .filter((member) => member.cosmetics && member.cosmetics.image)
-      .map((member) => {
-        if (member.cosmetics && member.cosmetics.image) {
-          let img = new Image();
-          img.src = member?.cosmetics?.image;
-          return img;
-        }
-        return null;
-      })
-      .filter((image): image is HTMLImageElement => image !== null);
+  const date = new Date();
+  const ageDifMs = date.getTime() - birthday.getTime();
+  const ageDate = new Date(ageDifMs);
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+};
 
-    setImages(images);
-  };
-
-  const calculateAge = (lid: any) => {
-    const birthdayString = lid.geboortedatum;
-    if (birthdayString === null) {
-      return 0;
-    }
-    const birthday = new Date(Date.parse(birthdayString));
-
-    const date = new Date();
-    const ageDifMs = date.getTime() - birthday.getTime();
-    const ageDate = new Date(ageDifMs);
-    return Math.abs(ageDate.getUTCFullYear() - 1970);
-  };
-
-  return useQuery({
+export const membersQueryOptions = () => {
+  return queryOptions({
     queryKey: ["members"],
     queryFn: async () => {
+      //await new Promise((resolve) => setTimeout(resolve, 6000));
+
       const response = await api.get<{
         members: Array<{
           id: number;
@@ -88,8 +71,37 @@ const useMembersQuery = () => {
       return orderBy(members, (member: any) => member.surname);
     },
     staleTime: Infinity,
-    onSuccess: preLoadImages,
   });
+};
+
+const useMembersQuery = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [images, setImages] = useState<HTMLImageElement[]>([]);
+
+  const preLoadImages = (members: MemberType[]) => {
+    const images = members
+      .filter((member) => member.cosmetics && member.cosmetics.image)
+      .map((member) => {
+        if (member.cosmetics && member.cosmetics.image) {
+          let img = new Image();
+          img.src = member?.cosmetics?.image;
+          return img;
+        }
+        return null;
+      })
+      .filter((image): image is HTMLImageElement => image !== null);
+
+    setImages(images);
+  };
+
+  //const query = useSuspenseQuery(membersQueryOptions());
+  const query = useQuery(membersQueryOptions());
+  useEffect(() => {
+    if (query.data) {
+      preLoadImages(query.data);
+    }
+  }, [query.data]);
+  return query;
 };
 
 export const useMembers = () => {

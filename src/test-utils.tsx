@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Suspense} from "react";
 import {render, RenderOptions} from "@testing-library/react";
 import {AuthenticationProvider} from "App/Settings/Authentication/Context";
 import {
@@ -81,6 +81,7 @@ const AllTheProviders: React.FC<{
   if (activities) {
     queryClient.setQueryData(["activities"], activities);
   }
+
   if (statistics) {
     queryClient.setQueryData(["statistics", "categories"], statistics);
   }
@@ -89,16 +90,18 @@ const AllTheProviders: React.FC<{
 
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers
   return (
-    <InfrastructureProviders queryClient={queryClient} routes={actualRoutes}>
-      <AuthenticationProvider {...authentication}>
-        <QueuedOrdersProvider
-          queuedOrder={queuedOrder ?? undefined}
-          queuedOrders={queuedOrders ?? undefined}
-        >
-          <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
-        </QueuedOrdersProvider>
-      </AuthenticationProvider>
-    </InfrastructureProviders>
+    <Suspense fallback={<div>Loading...</div>}>
+      <InfrastructureProviders queryClient={queryClient} routes={actualRoutes}>
+        <AuthenticationProvider {...authentication}>
+          <QueuedOrdersProvider
+            queuedOrder={queuedOrder ?? undefined}
+            queuedOrders={queuedOrders ?? undefined}
+          >
+            <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
+          </QueuedOrdersProvider>
+        </AuthenticationProvider>
+      </InfrastructureProviders>
+    </Suspense>
   );
 };
 

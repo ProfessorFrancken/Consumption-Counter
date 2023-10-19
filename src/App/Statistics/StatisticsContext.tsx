@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 
@@ -10,8 +10,8 @@ export type Statistic = {
   food: number;
 };
 
-export const useStatisticsQuery = () => {
-  return useQuery<Statistic[]>({
+export const statisticsQueryOptions = () => {
+  return queryOptions({
     queryKey: ["statistics", "categories"],
     queryFn: async () => {
       const startDate = moment().subtract(2, "years").format("YYYY-MM-DD");
@@ -46,4 +46,8 @@ export const useStatisticsQuery = () => {
     },
     staleTime: Infinity,
   });
+};
+
+export const useStatisticsQuery = () => {
+  return useQuery(statisticsQueryOptions());
 };

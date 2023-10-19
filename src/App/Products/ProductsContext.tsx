@@ -1,23 +1,10 @@
-import React from "react";
-import {useQuery} from "@tanstack/react-query";
+import React, {useEffect} from "react";
+import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "api";
 import {Product} from "./OrdersContext";
 
-export const useProductsQuery = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setImages] = React.useState<HTMLImageElement[]>([]);
-
-  const preLoadImages = (products: Product[]) => {
-    const images = products.map((product) => {
-      let img = new Image();
-      img.src = product.image;
-      return img;
-    });
-
-    setImages(images);
-  };
-
-  return useQuery({
+export const productsQueryOptions = () => {
+  return queryOptions({
     queryKey: ["products"],
     queryFn: async () => {
       const response = await api.get<{
@@ -54,7 +41,31 @@ export const useProductsQuery = () => {
         };
       });
     },
-    onSuccess: preLoadImages,
     staleTime: Infinity,
   });
+};
+
+export const useProductsQuery = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setImages] = React.useState<HTMLImageElement[]>([]);
+
+  const preLoadImages = (products: Product[]) => {
+    const images = products.map((product) => {
+      let img = new Image();
+      img.src = product.image;
+      return img;
+    });
+
+    setImages(images);
+  };
+
+  const query = useQuery(productsQueryOptions());
+
+  useEffect(() => {
+    if (query.data) {
+      preLoadImages(query.data);
+    }
+  }, [query.data]);
+
+  return query;
 };
