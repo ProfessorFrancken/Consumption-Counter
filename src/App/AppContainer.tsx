@@ -11,35 +11,36 @@ import {
   Await,
   useLoaderData,
 } from "react-router-dom";
-import ScreenSaver from "./ScreenSaver";
-import SurnameRanges from "App/SurnameRanges";
-import SelectMemberFromSurnameRange from "App/SurnameRanges/SelectMemberFromSurnameRange";
-import BuyProducts from "App/Products/";
-import PriceList from "App/Products/PriceList/";
-import Prominent from "./Prominent/";
-import Committees from "./Committees/";
-import SelectMemberFromCommittee from "./Committees/SelectMemberFromCommittee";
-import RecentMembers from "./Recent/";
-import Compucie from "./Committees/Compucie/";
-import Authenticate from "./Settings/Authentication/";
-import Settings from "./Settings/";
-import Statistics from "./Statistics/";
-import Present from "./Present/";
-import {Layout} from "../Layout/Layout";
+import RedirectWhenIdle from "./../components/redirect-when-idle";
+import SurnameRanges from "../routes/index";
+import SelectMemberFromSurnameRange from "../routes/members/index";
+import Products from "../routes/products/index";
+import PriceList from "../routes/products/pricelist/index";
+import Prominent from "../routes/prominent/index";
+import Committees from "../routes/committees/index";
+import SelectMemberFromCommittee from "../routes/committees/members/index";
+import RecentMembers from "./../routes/recent/index";
+import Compucie from "../routes/compucie/index";
+import Settings from "./../routes/compucie/settings/index";
+import Statistics from "../routes/statistics/index";
+import Present from "./../routes/present/index";
+import {Layout} from "../components/layout/layout";
 import Loading from "../Loading";
 import {ApplicationProviders} from "ApplicationProviders";
-import "./FontAwesome";
+import "./../components/font-awesome";
 import {UnauthenticatedLayout} from "./UnauthenticatedLayout";
-import AuthenticationForm from "./Settings/Authentication/AuthenticationForm";
+import AuthenticationForm from "../components/authentication/authentication-form";
 import LoadingScreen from "../Loading";
 import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
-import {membersQueryOptions} from "./Members/Context";
-import {productsQueryOptions} from "./Products/ProductsContext";
-import {committeeMembersQueryOptions} from "./Committees/CommitteesContext";
-import {boardMembersQueryOptions} from "./Prominent/BoardsContext";
-import {statisticsQueryOptions} from "./Statistics/StatisticsContext";
-import {ordersQueryOptions} from "./Transactions/TransactionsContext";
+import {productsQueryOptions} from "../queries/products";
+import {committeeMembersQueryOptions} from "../queries/committees";
+import {boardMembersQueryOptions} from "../queries/boards";
+import {statisticsQueryOptions} from "./../queries/statistics";
+import {ordersQueryOptions} from "../queries/orders";
+import moment from "moment";
+import {activitiesQueryOptions} from "../queries/activities";
+import {membersQueryOptions} from "../queries/members";
 
 function isErrorResponse(error: any): error is ErrorResponse {
   return (
@@ -84,7 +85,7 @@ const ErrorBoundaryLayout = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Await resolve={data.queries}>
-        <ScreenSaver />
+        <RedirectWhenIdle />
         <Outlet />
       </Await>
     </Suspense>
@@ -114,6 +115,8 @@ export const createAppRoutes = (
 
           // Preload all the data that we need to show any of the screens,
           // once this is done we can act as if the application is offline first
+          const after = moment().subtract(2, "years").format("YYYY-MM-DD");
+          const before = moment().add(1, "years").format("YYYY-MM-DD");
           const queries = Promise.all([
             queryClient.ensureQueryData(membersQueryOptions()),
             queryClient.ensureQueryData(productsQueryOptions()),
@@ -121,6 +124,7 @@ export const createAppRoutes = (
             queryClient.ensureQueryData(boardMembersQueryOptions()),
             queryClient.ensureQueryData(statisticsQueryOptions()),
             queryClient.ensureQueryData(ordersQueryOptions()),
+            queryClient.ensureQueryData(activitiesQueryOptions({after, before})),
           ]);
 
           // If we didn't finish loading the data in half a second, then
@@ -145,14 +149,13 @@ export const createAppRoutes = (
         >
           <Route index element={<SurnameRanges />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="authenticate" element={<Authenticate />} />
           <Route path="compucie" element={<Compucie />} />
           <Route path="prominent" element={<Prominent />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="committees" element={<Committees />} />
           <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
           <Route path="recent" element={<RecentMembers />} />
-          <Route path="products" element={<BuyProducts />} />
+          <Route path="products" element={<Products />} />
           <Route path="products/pricelist" element={<PriceList />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="present" element={<Present />} />
@@ -170,7 +173,7 @@ export const AppContainer = () => {
       <Route
         element={
           <>
-            <ScreenSaver />
+            <RedirectWhenIdle />
             <Outlet />
           </>
         }
@@ -186,14 +189,13 @@ export const AppContainer = () => {
         >
           <Route index element={<SurnameRanges />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="authenticate" element={<Authenticate />} />
           <Route path="compucie" element={<Compucie />} />
           <Route path="prominent" element={<Prominent />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="committees" element={<Committees />} />
           <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
           <Route path="recent" element={<RecentMembers />} />
-          <Route path="products" element={<BuyProducts />} />
+          <Route path="products" element={<Products />} />
           <Route path="products/pricelist" element={<PriceList />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="present" element={<Present />} />

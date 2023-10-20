@@ -135,9 +135,6 @@ export function makeServer({environment = "development"} = {}) {
           ],
         };
       });
-      this.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", () => {
-        return 1;
-      });
       this.get("https://borrelcie.vodka/present/data.php", (_) => {
         return ["Mark"];
       });

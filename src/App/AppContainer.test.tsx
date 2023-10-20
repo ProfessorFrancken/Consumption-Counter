@@ -2,7 +2,7 @@ import AppContainerWithoutLocation from "./AppContainer";
 import MockDate from "mockdate";
 import {render, fireEvent, act, screen} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
-import {SCREEN_SAVER_TIMEOUT} from "./ScreenSaver";
+import {SCREEN_SAVER_TIMEOUT} from "./../components/redirect-when-idle";
 import {waitFor, within} from "@testing-library/react";
 import {useLocation} from "react-router";
 import {setupServer} from "msw/node";
@@ -52,12 +52,6 @@ describe("Consumption Counter", () => {
     }),
     rest.get("*/sponsors", (req, res, ctx) => {
       return res(ctx.json({sponsors: []}));
-    }),
-    rest.get("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
-      return res(ctx.text("10"));
-    }),
-    rest.post("https://borrelcie.vodka/chwazorcle/hoeveel.php", (req, res, ctx) => {
-      return res(ctx.json({}));
     })
   );
 
