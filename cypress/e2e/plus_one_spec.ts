@@ -2,7 +2,7 @@
 import {association} from "miragejs";
 import {makeServer} from "../../src/server/index";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
-import {SCREEN_SAVER_TIMEOUT} from "./../../src/App/ScreenSaver";
+import {SCREEN_SAVER_TIMEOUT} from "./../../src/components/redirect-when-idle";
 import moment from "moment";
 
 const member = {

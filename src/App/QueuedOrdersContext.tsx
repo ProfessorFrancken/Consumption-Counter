@@ -1,9 +1,9 @@
 import React from "react";
 import {pick, maxBy} from "lodash";
-import {MemberType} from "./Members/Members";
-import {Product} from "./Products/OrdersContext";
+import {MemberType} from "../queries/members";
+import {Product} from "../components/orders-context";
 import api from "api";
-import useLocalStorage from "./useLocalStorage";
+import useLocalStorage from "./../utils/use-local-storage";
 
 export type OrderedOrder = {
   ordered_at: number;

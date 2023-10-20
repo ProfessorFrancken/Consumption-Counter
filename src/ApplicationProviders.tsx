@@ -1,6 +1,6 @@
 import React from "react";
-import {AuthenticationProvider} from "App/Settings/Authentication/Context";
-import {OrderProvider} from "App/Products/OrdersContext";
+import {AuthenticationProvider} from "./components/authentication/context";
+import {OrderProvider} from "./components/orders-context";
 import "./index.css";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 

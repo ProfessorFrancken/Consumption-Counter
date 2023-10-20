@@ -1,6 +1,6 @@
 import React, {Suspense} from "react";
 import {render, RenderOptions} from "@testing-library/react";
-import {AuthenticationProvider} from "App/Settings/Authentication/Context";
+import {AuthenticationProvider} from "./components/authentication/context";
 import {
   defaultAuthentication,
   defaultCommitteeeMembers,
@@ -8,11 +8,11 @@ import {
   defaultProducts,
 } from "App/MockedState";
 import {InfrastructureProviders} from "Root";
-import {Product, Order, OrderProvider} from "App/Products/OrdersContext";
+import {Product, Order, OrderProvider} from "./components/orders-context";
 import {defaultBoardMembers} from "App/MockedState";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {QueryClient} from "@tanstack/react-query";
-import {MemberType} from "App/Members/Members";
+import {MemberType} from "./queries/members";
 
 type StoreState = {
   authentication?: any;

@@ -1,11 +1,9 @@
 import LoadingScreen from "./index";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";
-import {useBoardMembersQuery} from "App/Prominent/BoardsContext";
 import {render, screen} from "@testing-library/react";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {MemoryRouter} from "react-router";
-import {ReactNode} from "react";
 
 describe("Loading screen", () => {
   const members = [

@@ -1,6 +1,6 @@
-import AvailableProducts from "./Products/";
-import Prominent from "./Prominent";
-import RecentMembers from "./Recent";
+import Products from "../routes/products/index";
+import Prominent from "../routes/prominent/index";
+import RecentMembers from "./../routes/recent/index";
 import {render, screen, within} from "test-utils";
 import clock from "jest-plugin-clock";
 import {mockedState} from "./MockedState";
@@ -42,7 +42,7 @@ describe("rendering", () => {
       {path: "/committees/0", component: "Members", title: "Compucie"},
       {path: "/products/pricelist", component: "PriceList", title: "Pricelist"},
       {path: "/recent", component: RecentMembers, title: "Recent"},
-      {path: "/products?memberId=1", component: AvailableProducts, title: "John Snow"},
+      {path: "/products?memberId=1", component: Products, title: "John Snow"},
       {path: "/members/0", component: "Members", title: ""},
     ];
 
