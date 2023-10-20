@@ -55,11 +55,6 @@ const AllTheProviders: React.FC<{
 
   const queryClient = new QueryClient({
     defaultOptions: {queries: {retry: false}},
-    logger: {
-      warn: () => {},
-      error: () => {},
-      log: () => {},
-    },
   });
 
   if (members) {

@@ -64,22 +64,27 @@ export const useTransactions = () => {
 const RECENT_MEBMERS = 6 * 5;
 export function useRecentBuyers() {
   const orders = useOrdersQuery();
+  const {members} = useMembers();
 
-  const recentBuyers = useMemo(() => {
+  return useMemo((): MemberType[] => {
     if (!orders.data) {
       return [];
     }
 
-    return take(uniq(orders.data.map((order) => order.member_id)), RECENT_MEBMERS);
-  }, [orders.data]);
+    const recentBuyersIds = take(
+      uniq(orders.data.map((order) => order.member_id)),
+      RECENT_MEBMERS
+    );
 
-  const {members} = useMembers();
-  return (
-    recentBuyers
-      .map((recent: number) => members.find((member: MemberType) => member.id === recent))
+    const recentBuyers = recentBuyersIds
+      .map((recent: number): MemberType | undefined =>
+        members.find((member: MemberType) => member.id === recent)
+      )
       // exclude members that couldn't be found (for instance guests)
       .filter(
         (member: MemberType | undefined): member is MemberType => member !== undefined
-      )
-  );
+      );
+
+    return recentBuyers;
+  }, [orders.data, members]);
 }
