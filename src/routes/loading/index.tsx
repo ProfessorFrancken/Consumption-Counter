@@ -1,14 +1,14 @@
 import {NavLink} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {productsQueryOptions} from "../queries/products";
-import {QueryObserverResult, useQuery} from "@tanstack/react-query";
-import {committeeMembersQueryOptions} from "../queries/committees";
-import {boardMembersQueryOptions} from "../queries/boards";
-import {activitiesQueryOptions} from "../queries/activities";
-import {statisticsQueryOptions} from "../queries/statistics";
 import moment from "moment";
-import {ordersQueryOptions} from "../queries/orders";
-import {membersQueryOptions} from "../queries/members";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {productsQueryOptions} from "../../queries/products";
+import {QueryObserverResult, useQuery} from "@tanstack/react-query";
+import {committeeMembersQueryOptions} from "../../queries/committees";
+import {boardMembersQueryOptions} from "../../queries/boards";
+import {activitiesQueryOptions} from "../../queries/activities";
+import {statisticsQueryOptions} from "../../queries/statistics";
+import {ordersQueryOptions} from "../../queries/orders";
+import {membersQueryOptions} from "../../queries/members";
 
 type Feature = {
   query: QueryObserverResult | undefined;

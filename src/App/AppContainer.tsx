@@ -25,12 +25,11 @@ import Settings from "./../routes/compucie/settings/index";
 import Statistics from "../routes/statistics/index";
 import Present from "./../routes/present/index";
 import {Layout} from "../components/layout/layout";
-import Loading from "../Loading";
 import {ApplicationProviders} from "ApplicationProviders";
 import "./../components/font-awesome";
 import {UnauthenticatedLayout} from "./UnauthenticatedLayout";
 import AuthenticationForm from "../components/authentication/authentication-form";
-import LoadingScreen from "../Loading";
+import Loading from "../routes/loading/index";
 import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
 import {productsQueryOptions} from "../queries/products";
@@ -52,6 +51,8 @@ function isErrorResponse(error: any): error is ErrorResponse {
 
 const ErrorBoundary = () => {
   const error = useRouteError();
+
+  console.log({error});
 
   if (isRouteErrorResponse(error) || isErrorResponse(error)) {
     if ([401, 403].includes(error.status)) {
@@ -82,8 +83,9 @@ const ErrorBoundary = () => {
 const ErrorBoundaryLayout = () => {
   const data = useLoaderData() as {queries: unknown};
 
+  console.log("error boundary layout", data);
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <Suspense fallback={<Loading />}>
       <Await resolve={data.queries}>
         <RedirectWhenIdle />
         <Outlet />
@@ -129,9 +131,27 @@ export const createAppRoutes = (
 
           // If we didn't finish loading the data in half a second, then
           // defer the queries and show a loading screen
-          await Promise.any([queries, sleep(200)]);
+          let waitTime = {time: 0};
 
-          return defer({queries});
+          console.log("waiting?");
+          await Promise.any([queries, sleep(200).then(() => (waitTime.time = 600))]);
+          console.log("done waitting");
+
+          console.log(waitTime);
+
+          if (waitTime.time !== 0) {
+            console.log("sleeping?");
+            //await sleep(waitTime);
+          }
+
+          return defer({
+            queries: queries.then(async (data) => {
+              console.log("ahoi@", waitTime);
+              await sleep(waitTime.time);
+              console.log("done sleeping");
+              return data;
+            }),
+          });
         }}
       >
         <Route path="/loading" element={<Loading />} />
