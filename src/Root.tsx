@@ -9,7 +9,7 @@ import {createAppRoutes} from "./App/AppContainer";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
 import {ApplicationProviders} from "ApplicationProviders";
-import LoadingScreen from "Loading";
+import Loading from "./routes/loading/index";
 
 type Props = {
   queryClient?: QueryClient;
@@ -52,7 +52,7 @@ const Root = () => {
   return (
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={<Loading />}>
           <RouterProvider router={router} />
         </Suspense>
       </QueryClientProvider>
