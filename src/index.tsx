@@ -1,6 +1,6 @@
 import {createRoot} from "react-dom/client";
 import Root from "./root";
-import makeServer from "./server/index";
+import makeServer from "./test-utils/server/index";
 
 makeServer();
 
