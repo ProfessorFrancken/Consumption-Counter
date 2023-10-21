@@ -7,7 +7,7 @@ import {waitFor, within} from "@testing-library/react";
 import {useLocation} from "react-router";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
-import {mocks} from "./MockedState";
+import {mocks} from "./../test-utils/mocked-state";
 
 // Ugly hack that allows us to read the browser's current location
 const AppContainer = () => {

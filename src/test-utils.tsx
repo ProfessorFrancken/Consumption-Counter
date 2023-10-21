@@ -3,13 +3,13 @@ import {render, RenderOptions} from "@testing-library/react";
 import {AuthenticationProvider} from "./components/authentication/context";
 import {
   defaultAuthentication,
+  defaultBoardMembers,
   defaultCommitteeeMembers,
   defaultMembers,
   defaultProducts,
-} from "App/MockedState";
+} from "./test-utils/mocked-state";
 import {InfrastructureProviders} from "Root";
 import {Product, Order, OrderProvider} from "./components/orders-context";
-import {defaultBoardMembers} from "App/MockedState";
 import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
 import {QueryClient} from "@tanstack/react-query";
 import {MemberType} from "./queries/members";
