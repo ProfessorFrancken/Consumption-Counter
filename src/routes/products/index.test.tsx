@@ -11,7 +11,7 @@ import {MemberType} from "../../queries/members";
 import clock from "jest-plugin-clock";
 import ProductsScreen from "./index";
 import {Product} from "queries/products";
-import {defaultMembers} from "App/MockedState";
+import {defaultMembers} from "../../test-utils/mocked-state";
 
 it("renders without crashing", () => {
   render(<Products />);
