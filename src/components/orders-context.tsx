@@ -2,7 +2,11 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {MemberType} from "../queries/members";
 import {useProductsQuery} from "../queries/products";
 import {sortBy, groupBy} from "lodash";
-import {OrderedOrder, TIME_TO_CANCEL, useQueuedOrders} from "App/QueuedOrdersContext";
+import {
+  OrderedOrder,
+  TIME_TO_CANCEL,
+  useQueuedOrders,
+} from "./orders/queued-orders-context";
 import {useNavigate} from "react-router";
 import {createSearchParams, useSearchParams} from "react-router-dom";
 import {useMembers} from "../queries/members";

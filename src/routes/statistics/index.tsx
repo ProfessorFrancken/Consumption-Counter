@@ -3,7 +3,7 @@ import moment from "moment";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import HeatMap from "./../../components/statistics/heat-map";
 import PurchasesOfWeek from "./../../components/statistics/purchases-of-week";
-import {OrderedOrder} from "App/QueuedOrdersContext";
+import {OrderedOrder} from "../../components/orders/queued-orders-context";
 import {Product} from "../../components/orders-context";
 import {Activity, useActivities} from "../../queries/activities";
 import {useTransactions} from "../../queries/orders";

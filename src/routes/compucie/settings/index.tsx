@@ -1,4 +1,8 @@
-import {QueuedOrder, OrderedOrder, useQueuedOrders} from "App/QueuedOrdersContext";
+import {
+  QueuedOrder,
+  OrderedOrder,
+  useQueuedOrders,
+} from "./../../../components/orders/queued-orders-context";
 import Moment from "react-moment";
 import ProductsPrice from "../../../components/products-price";
 import {groupBy, map} from "lodash";

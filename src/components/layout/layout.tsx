@@ -6,7 +6,7 @@ import {useCommittees} from "../../queries/committees";
 import {useBoards} from "../../queries/boards";
 import {useMembers} from "../../queries/members";
 import {useStatisticsQuery} from "../../queries/statistics";
-import {useBackgroundFromOrder, useFailedOrders} from "App/QueuedOrdersContext";
+import {useBackgroundFromOrder, useFailedOrders} from "../orders/queued-orders-context";
 import {useNavigate} from "react-router";
 
 const backgroundFromProduct = (background: string | null) => {

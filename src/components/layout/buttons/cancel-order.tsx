@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ProductsPrice from "../../products-price";
-import {useQueuedOrders} from "App/QueuedOrdersContext";
+import {useQueuedOrders} from "../../../components/orders/queued-orders-context";
 import {useOrder} from "../../../components/orders-context";
 
 const products = (order: any) => {
