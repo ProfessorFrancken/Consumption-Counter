@@ -3,7 +3,7 @@ import {UseMutateFunction, useMutation} from "@tanstack/react-query";
 import AuthenticationForm from "./authentication-form";
 import api from "./../../api";
 import useLocalStorage from "../../utils/use-local-storage";
-import {UnauthenticatedLayout} from "App/UnauthenticatedLayout";
+import {UnauthenticatedLayout} from "../layout/unauthenticated-layout";
 
 type State = {
   request: boolean;
