@@ -11,35 +11,35 @@ import {
   Await,
   useLoaderData,
 } from "react-router-dom";
-import RedirectWhenIdle from "./../components/redirect-when-idle";
-import SurnameRanges from "../routes/index";
-import SelectMemberFromSurnameRange from "../routes/members/index";
-import Products from "../routes/products/index";
-import PriceList from "../routes/products/pricelist/index";
-import Prominent from "../routes/prominent/index";
-import Committees from "../routes/committees/index";
-import SelectMemberFromCommittee from "../routes/committees/members/index";
-import RecentMembers from "./../routes/recent/index";
-import Compucie from "../routes/compucie/index";
-import Settings from "./../routes/compucie/settings/index";
-import Statistics from "../routes/statistics/index";
-import Present from "./../routes/present/index";
-import {Layout} from "../components/layout/layout";
+import RedirectWhenIdle from "./components/redirect-when-idle";
+import SurnameRanges from "./routes/index";
+import SelectMemberFromSurnameRange from "./routes/members/index";
+import Products from "./routes/products/index";
+import PriceList from "./routes/products/pricelist/index";
+import Prominent from "./routes/prominent/index";
+import Committees from "./routes/committees/index";
+import SelectMemberFromCommittee from "./routes/committees/members/index";
+import RecentMembers from "./routes/recent/index";
+import Compucie from "./routes/compucie/index";
+import Settings from "./routes/compucie/settings/index";
+import Statistics from "./routes/statistics/index";
+import Present from "./routes/present/index";
+import {Layout} from "./components/layout/layout";
 import {ApplicationProviders} from "ApplicationProviders";
-import "./../components/font-awesome";
-import {UnauthenticatedLayout} from "./../components/layout/unauthenticated-layout";
-import AuthenticationForm from "../components/authentication/authentication-form";
-import Loading from "../routes/loading/index";
+import "./components/font-awesome";
+import {UnauthenticatedLayout} from "./components/layout/unauthenticated-layout";
+import AuthenticationForm from "./components/authentication/authentication-form";
+import Loading from "./routes/loading/index";
 import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
-import {productsQueryOptions} from "../queries/products";
-import {committeeMembersQueryOptions} from "../queries/committees";
-import {boardMembersQueryOptions} from "../queries/boards";
-import {statisticsQueryOptions} from "./../queries/statistics";
-import {ordersQueryOptions} from "../queries/orders";
+import {productsQueryOptions} from "./queries/products";
+import {committeeMembersQueryOptions} from "./queries/committees";
+import {boardMembersQueryOptions} from "./queries/boards";
+import {statisticsQueryOptions} from "./queries/statistics";
+import {ordersQueryOptions} from "./queries/orders";
 import moment from "moment";
-import {activitiesQueryOptions} from "../queries/activities";
-import {membersQueryOptions} from "../queries/members";
+import {activitiesQueryOptions} from "./queries/activities";
+import {membersQueryOptions} from "./queries/members";
 
 function isErrorResponse(error: any): error is ErrorResponse {
   return (
