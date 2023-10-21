@@ -10,7 +10,7 @@ import {
 } from "./test-utils/mocked-state";
 import {InfrastructureProviders} from "Root";
 import {Product, Order, OrderProvider} from "./components/orders-context";
-import {QueuedOrdersProvider} from "App/QueuedOrdersContext";
+import {QueuedOrdersProvider} from "./components/orders/queued-orders-context";
 import {QueryClient} from "@tanstack/react-query";
 import {MemberType} from "./queries/members";
 

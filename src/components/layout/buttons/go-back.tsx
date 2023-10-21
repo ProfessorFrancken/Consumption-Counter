@@ -1,7 +1,7 @@
 import {useSelectMember} from "../../../components/orders-context";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useQueuedOrders} from "App/QueuedOrdersContext";
+import {useQueuedOrders} from "../../orders/queued-orders-context";
 
 const GoBack = () => {
   const {queuedOrder} = useQueuedOrders();

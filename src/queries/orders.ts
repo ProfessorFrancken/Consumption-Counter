@@ -2,7 +2,7 @@ import {useMemo} from "react";
 import {MemberType} from "./members";
 import {take, uniq} from "lodash";
 import {useMembers} from "./members";
-import {OrderedOrder} from "App/QueuedOrdersContext";
+import {OrderedOrder} from "../components/orders/queued-orders-context";
 import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "../api";
 import {useProductsQuery} from "./products";
