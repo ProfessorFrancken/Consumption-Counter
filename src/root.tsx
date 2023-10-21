@@ -40,6 +40,7 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false, // default: true
       staleTime: Infinity,
+      gcTime: Infinity,
     },
   },
 });
@@ -53,7 +54,12 @@ const Root = () => {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <Suspense fallback={<Loading />}>
-          <RouterProvider router={router} />
+          <RouterProvider
+            router={router}
+            future={{
+              v7_startTransition: true,
+            }}
+          />
         </Suspense>
       </QueryClientProvider>
     </StrictMode>
