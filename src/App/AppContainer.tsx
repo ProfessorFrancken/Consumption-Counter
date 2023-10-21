@@ -27,7 +27,7 @@ import Present from "./../routes/present/index";
 import {Layout} from "../components/layout/layout";
 import {ApplicationProviders} from "ApplicationProviders";
 import "./../components/font-awesome";
-import {UnauthenticatedLayout} from "./UnauthenticatedLayout";
+import {UnauthenticatedLayout} from "./../components/layout/unauthenticated-layout";
 import AuthenticationForm from "../components/authentication/authentication-form";
 import Loading from "../routes/loading/index";
 import {Suspense} from "react";
