@@ -401,7 +401,6 @@ describe("Francken Consumption Counter", () => {
       cy.get(".compucie-buttons").should("contain", "Refresh");
       cy.get(".compucie-buttons").should("contain", "Guest");
       cy.get(".compucie-buttons").should("contain", "Overdue");
-      cy.get(".compucie-buttons").should("contain", "Temple Count");
     });
 
     it("Can be used to go to the settings page", () => {

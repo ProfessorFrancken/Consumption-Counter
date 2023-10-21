@@ -113,13 +113,13 @@ export const createAppRoutes = (
         errorElement={<ErrorBoundary />}
         loader={async () => {
           // TODO: figure out why Mirage isn't working immediately
-          await sleep(500);
+          await sleep(10);
 
           // Preload all the data that we need to show any of the screens,
           // once this is done we can act as if the application is offline first
           const after = moment().subtract(2, "years").format("YYYY-MM-DD");
           const before = moment().add(1, "years").format("YYYY-MM-DD");
-          const queries = Promise.all([
+          const queries = await Promise.all([
             queryClient.ensureQueryData(membersQueryOptions()),
             queryClient.ensureQueryData(productsQueryOptions()),
             queryClient.ensureQueryData(committeeMembersQueryOptions()),
@@ -128,6 +128,8 @@ export const createAppRoutes = (
             queryClient.ensureQueryData(ordersQueryOptions()),
             queryClient.ensureQueryData(activitiesQueryOptions({after, before})),
           ]);
+
+          return defer({queries});
 
           // If we didn't finish loading the data in half a second, then
           // defer the queries and show a loading screen
