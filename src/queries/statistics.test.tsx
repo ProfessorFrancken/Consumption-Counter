@@ -1,7 +1,7 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
 import {useStatisticsQuery} from "./statistics";
-import {InfrastructureProviders} from "Root";
+import {InfrastructureProviders} from "root";
 import clock from "jest-plugin-clock";
 import {setupServer} from "msw/lib/node";
 import {rest} from "msw";

@@ -8,7 +8,7 @@ import {
 import {createAppRoutes} from "./app-container";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
-import {ApplicationProviders} from "ApplicationProviders";
+import {ApplicationProviders} from "./application-providers";
 import Loading from "./routes/loading/index";
 
 type Props = {
