@@ -1,13 +1,13 @@
-import AppContainerWithoutLocation from "./AppContainer";
+import AppContainerWithoutLocation from "./app-container";
 import MockDate from "mockdate";
 import {render, fireEvent, act, screen} from "test-utils";
 import {TIME_TO_CANCEL} from "App/QueuedOrdersContext";
-import {SCREEN_SAVER_TIMEOUT} from "./../components/redirect-when-idle";
+import {SCREEN_SAVER_TIMEOUT} from "./components/redirect-when-idle";
 import {waitFor, within} from "@testing-library/react";
 import {useLocation} from "react-router";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
-import {mocks} from "./../test-utils/mocked-state";
+import {mocks} from "./test-utils/mocked-state";
 
 // Ugly hack that allows us to read the browser's current location
 const AppContainer = () => {

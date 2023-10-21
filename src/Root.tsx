@@ -5,7 +5,7 @@ import {
   MemoryRouter,
   RouterProvider,
 } from "react-router-dom";
-import {createAppRoutes} from "./App/AppContainer";
+import {createAppRoutes} from "./app-container";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
 import {ApplicationProviders} from "ApplicationProviders";
