@@ -25,7 +25,7 @@ import Settings from "./routes/compucie/settings/index";
 import Statistics from "./routes/statistics/index";
 import Present from "./routes/present/index";
 import {Layout} from "./components/layout/layout";
-import {ApplicationProviders} from "ApplicationProviders";
+import {ApplicationProviders} from "./application-providers";
 import "./components/font-awesome";
 import {UnauthenticatedLayout} from "./components/layout/unauthenticated-layout";
 import AuthenticationForm from "./components/authentication/authentication-form";
