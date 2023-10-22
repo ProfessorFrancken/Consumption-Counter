@@ -1,7 +1,7 @@
 import {screen} from "@testing-library/react";
 import Settings from "./index";
 import {render, fireEvent} from "test-utils";
-import {setupServer} from "msw/lib/node";
+import {setupServer} from "msw/node";
 import {rest} from "msw";
 
 describe("Settings", () => {
