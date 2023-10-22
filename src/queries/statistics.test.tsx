@@ -3,7 +3,7 @@ import {render, screen} from "@testing-library/react";
 import {useStatisticsQuery} from "./statistics";
 import {InfrastructureProviders} from "root";
 import clock from "jest-plugin-clock";
-import {setupServer} from "msw/lib/node";
+import {setupServer} from "msw/node";
 import {rest} from "msw";
 
 describe("Statistics context", () => {

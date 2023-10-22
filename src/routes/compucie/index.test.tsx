@@ -2,7 +2,7 @@ import React from "react";
 import {render, fireEvent, screen} from "test-utils";
 import CompucieScreen from "./index";
 import {Route, Routes} from "react-router";
-import {setupServer} from "msw/lib/node";
+import {setupServer} from "msw/node";
 import {rest} from "msw";
 
 describe("Compucie screen", () => {
