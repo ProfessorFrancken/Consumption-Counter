@@ -1,7 +1,7 @@
 import * as React from "react";
 import {screen} from "@testing-library/react";
 import {useCommittees} from "./committees";
-import {setupServer} from "msw/lib/node";
+import {setupServer} from "msw/node";
 import {rest} from "msw";
 import {render} from "test-utils";
 
