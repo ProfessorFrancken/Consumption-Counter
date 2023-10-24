@@ -2,7 +2,7 @@ import * as React from "react";
 import {render, screen} from "@testing-library/react";
 import {useMembers} from "./members";
 import moment from "moment";
-import {setupServer} from "msw/lib/node";
+import {setupServer} from "msw/node";
 import {rest} from "msw";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
