@@ -325,6 +325,10 @@ describe("Francken Consumption Counter", () => {
       cy.get('[href="/recent"]').click();
       cy.tick(TIME_TO_CANCEL);
 
+      // Due to some weird issue with mocking the time we need to force the page to reload
+      cy.get('[href="/prominent"]').click();
+      cy.get('[href="/recent"]').click();
+
       cy.get(".titleName > span").should("contain", "Recent");
       cy.get(".tilesGrid > :nth-child(2)").should("contain", member.fullName);
       cy.get(".tilesGrid > :nth-child(1)").should("contain", "Arya Stark");
@@ -355,12 +359,10 @@ describe("Francken Consumption Counter", () => {
           tussenvoegsel: "",
           bijnaam: "",
         }),
-        year: 2020,
+        year: new Date().getFullYear(),
       });
 
       cy.login();
-
-      cy.clock(new Date("01-01-2020"));
 
       cy.get('[href="/committees"]').click();
       cy.get(".titleName > span").should("contain", "Committees");

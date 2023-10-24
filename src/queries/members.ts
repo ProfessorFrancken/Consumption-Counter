@@ -1,4 +1,4 @@
-import {queryOptions, useSuspenseQuery} from "@tanstack/react-query";
+import {queryOptions, useQuery} from "@tanstack/react-query";
 import {chunk, orderBy} from "lodash";
 import {useEffect, useMemo, useState} from "react";
 import api from "./../api";
@@ -96,7 +96,7 @@ export const membersQueryOptions = () => {
 };
 
 export const useMembers = () => {
-  const membersQuery = useSuspenseQuery(membersQueryOptions());
+  const membersQuery = useQuery(membersQueryOptions());
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<HTMLImageElement[]>([]);
