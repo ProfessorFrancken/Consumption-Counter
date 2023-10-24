@@ -40,6 +40,7 @@ import {ordersQueryOptions} from "./queries/orders";
 import moment from "moment";
 import {activitiesQueryOptions} from "./queries/activities";
 import {membersQueryOptions} from "./queries/members";
+import {BuyProductsForMemberTitle, CommitteeTitle} from "components/layout/header";
 
 function isErrorResponse(error: any): error is ErrorResponse {
   return (
@@ -86,10 +87,8 @@ const ErrorBoundaryLayout = () => {
   console.log("error boundary layout", data);
   return (
     <Suspense fallback={<Loading />}>
-      <Await resolve={data.queries}>
-        <RedirectWhenIdle />
-        <Outlet />
-      </Await>
+      <RedirectWhenIdle />
+      <Outlet />
     </Suspense>
   );
 };
@@ -102,88 +101,97 @@ export const createAppRoutes = (
 ) => {
   return createRoutesFromElements(
     <Route
+      path="/"
       element={
         <ApplicationProvidersComponent>
-          <Outlet />
+          <ErrorBoundaryLayout />
         </ApplicationProvidersComponent>
       }
+      errorElement={<ErrorBoundary />}
     >
+      <Route path="loading" element={<Loading />} />
+
       <Route
-        element={<ErrorBoundaryLayout />}
-        errorElement={<ErrorBoundary />}
-        loader={async () => {
-          // TODO: figure out why Mirage isn't working immediately
-          await sleep(10);
-
-          // Preload all the data that we need to show any of the screens,
-          // once this is done we can act as if the application is offline first
-          const after = moment().subtract(2, "years").format("YYYY-MM-DD");
-          const before = moment().add(1, "years").format("YYYY-MM-DD");
-          const queries = await Promise.all([
-            queryClient.ensureQueryData(membersQueryOptions()),
-            queryClient.ensureQueryData(productsQueryOptions()),
-            queryClient.ensureQueryData(committeeMembersQueryOptions()),
-            queryClient.ensureQueryData(boardMembersQueryOptions()),
-            queryClient.ensureQueryData(statisticsQueryOptions()),
-            queryClient.ensureQueryData(ordersQueryOptions()),
-            queryClient.ensureQueryData(activitiesQueryOptions({after, before})),
-          ]);
-
-          return defer({queries});
-
-          // If we didn't finish loading the data in half a second, then
-          // defer the queries and show a loading screen
-          let waitTime = {time: 0};
-
-          console.log("waiting?");
-          await Promise.any([queries, sleep(200).then(() => (waitTime.time = 600))]);
-          console.log("done waitting");
-
-          console.log(waitTime);
-
-          if (waitTime.time !== 0) {
-            console.log("sleeping?");
-            //await sleep(waitTime);
-          }
-
-          return defer({
-            queries: queries.then(async (data) => {
-              console.log("ahoi@", waitTime);
-              await sleep(waitTime.time);
-              console.log("done sleeping");
-              return data;
-            }),
-          });
-        }}
+        element={
+          <Layout>
+            <Outlet />
+          </Layout>
+        }
       >
-        <Route path="/loading" element={<Loading />} />
+        <Route index element={<SurnameRanges />} />
         <Route
-          path=""
-          element={
-            <Layout>
-              <Outlet />
-            </Layout>
-          }
-          loader={() => {
-            //console.log("loading...");
-            return null;
+          path="settings"
+          element={<Settings />}
+          handle={{
+            title: <span>Settings</span>,
           }}
-        >
-          <Route index element={<SurnameRanges />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="compucie" element={<Compucie />} />
-          <Route path="prominent" element={<Prominent />} />
-          <Route path="statistics" element={<Statistics />} />
-          <Route path="committees" element={<Committees />} />
-          <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
-          <Route path="recent" element={<RecentMembers />} />
-          <Route path="products" element={<Products />} />
-          <Route path="products/pricelist" element={<PriceList />} />
-          <Route path="statistics" element={<Statistics />} />
-          <Route path="present" element={<Present />} />
-          <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
-          <Route path="members" element={<Navigate to="/" />} />
-        </Route>
+        />
+        <Route path="compucie" element={<Compucie />} />
+        <Route
+          path="prominent"
+          element={<Prominent />}
+          handle={{
+            title: <span>Prominent</span>,
+          }}
+        />
+        <Route
+          path="statistics"
+          element={<Statistics />}
+          handle={{
+            title: <span>Statistics</span>,
+          }}
+        />
+        <Route
+          path="committees"
+          element={<Committees />}
+          handle={{
+            title: <span>Committees</span>,
+          }}
+        />
+        <Route
+          path="committees/:page"
+          element={<SelectMemberFromCommittee />}
+          handle={{
+            title: <CommitteeTitle />,
+          }}
+        />
+        <Route
+          path="recent"
+          element={<RecentMembers />}
+          handle={{
+            title: <span>Recent</span>,
+          }}
+        />
+        <Route
+          path="products"
+          element={<Products />}
+          handle={{
+            title: <BuyProductsForMemberTitle />,
+          }}
+        />
+        <Route
+          path="products/pricelist"
+          element={<PriceList />}
+          handle={{
+            title: <span>Pricelist</span>,
+          }}
+        />
+        <Route
+          path="statistics"
+          element={<Statistics />}
+          handle={{
+            title: <span>Statistics</span>,
+          }}
+        />
+        <Route
+          path="present"
+          element={<Present />}
+          handle={{
+            title: <span>Present</span>,
+          }}
+        />
+        <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
+        <Route path="members" element={<Navigate to="/" />} />
       </Route>
     </Route>
   );

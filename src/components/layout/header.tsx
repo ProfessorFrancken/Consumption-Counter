@@ -1,8 +1,9 @@
 import {useSelectedMember} from "../orders-context";
 import {useCommittees} from "../../queries/committees";
-import {NavLink, Route, Routes, useParams} from "react-router-dom";
+import {NavLink, Route, Routes, useMatches, useParams} from "react-router-dom";
+import {ReactNode} from "react";
 
-const CommitteeTitle = () => {
+export const CommitteeTitle = () => {
   const params = useParams<{page: string}>();
   const {committees = []} = useCommittees();
   const selectedCommittee = committees.find(
@@ -12,7 +13,7 @@ const CommitteeTitle = () => {
   return <span>{selectedCommittee ? selectedCommittee.name : "Unknown committee"}</span>;
 };
 
-const BuyProductsForMemberTitle = () => {
+export const BuyProductsForMemberTitle = () => {
   const member = useSelectedMember();
 
   if (member === undefined) {
@@ -24,20 +25,21 @@ const BuyProductsForMemberTitle = () => {
 };
 
 const HeaderTitle = () => {
+  const matches = useMatches();
+  const lastMatch = matches.at(-1);
+
+  if (lastMatch === undefined) {
+    return null;
+  }
+  if (lastMatch.handle === undefined) {
+    return null;
+  }
+
+  const titleHandle = lastMatch.handle as {title: ReactNode};
+
   return (
     <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
-      <Routes>
-        <Route path="/products/pricelist" Component={() => <span>Pricelist</span>} />
-        <Route path="/settings" Component={() => <span>Settings</span>} />
-        <Route path="/prominent" Component={() => <span>Prominent</span>} />
-        <Route path="/recent" Component={() => <span>Recent</span>} />
-        <Route path="/committees" Component={() => <span>Committees</span>} />
-        <Route path="/statistics" Component={() => <span>Statistics</span>} />
-        <Route path="/screensaver" Component={() => <span>Screensaver</span>} />
-        <Route path="/committees/:page" element={<CommitteeTitle />} />
-        <Route path="/products" element={<BuyProductsForMemberTitle />} />
-        <Route path="/present" Component={() => <span>Present</span>} />
-      </Routes>
+      {titleHandle.title}
     </h1>
   );
 };
@@ -51,7 +53,7 @@ const ShowPriceList = () => {
 
   return <NavLink to={`./pricelist?memberId=${member.id}`}>Show prices</NavLink>;
 };
-const GoBacToBuying = () => {
+const GoBackToBuying = () => {
   const member = useSelectedMember();
 
   if (!member) {
@@ -67,7 +69,7 @@ const Header = ({onClick, failedOrders}: any) => (
     <div className="header-item d-flex justify-content-center">
       <Routes>
         <Route path="/products" element={<ShowPriceList />} />
-        <Route path="/products/pricelist" element={<GoBacToBuying />} />
+        <Route path="/products/pricelist" element={<GoBackToBuying />} />
       </Routes>
     </div>
     <h2
