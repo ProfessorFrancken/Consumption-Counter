@@ -11,7 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 type Props = {
   compucie: MemberType[];
   scriptcie: MemberType[];
-  selectMember: (member: any) => void;
+  selectMember: (member: MemberType) => void;
   reloadApplication: () => void;
 };
 
@@ -27,11 +27,13 @@ const Compucie = ({compucie, scriptcie, selectMember, reloadApplication}: Props)
       <Member
         member={{
           id: -1,
+          firstName: "",
+          surname: "",
           fullname: "Refresh",
           age: 101,
           prominent: 0,
           latest_purchase_at: new Date(),
-          cosmetics: {},
+          cosmetics: undefined,
         }}
         onClick={() => reloadApplication()}
       />
@@ -39,11 +41,13 @@ const Compucie = ({compucie, scriptcie, selectMember, reloadApplication}: Props)
       <Member
         member={{
           id: 1098,
+          firstName: "",
+          surname: "",
           fullname: "Guest",
           age: 101,
           prominent: 0,
           latest_purchase_at: new Date(),
-          cosmetics: {},
+          cosmetics: undefined,
         }}
         onClick={selectMember}
       />
@@ -51,11 +55,13 @@ const Compucie = ({compucie, scriptcie, selectMember, reloadApplication}: Props)
       <Member
         member={{
           id: 1098,
+          firstName: "",
+          surname: "",
           fullname: "Overdue",
           age: 101,
           prominent: 0,
           latest_purchase_at: new Date(),
-          cosmetics: {},
+          cosmetics: undefined,
         }}
         onClick={selectMember}
       />

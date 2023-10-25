@@ -23,18 +23,6 @@ export const committeeMembersQueryOptions = () => {
   return queryOptions({
     queryKey: ["committees"],
     queryFn: async () => {
-      const mapCommittee = (member: any): CommitteeMember => {
-        return {
-          member_id: parseInt(member.lid_id, 10),
-          year: member.jaar,
-          function: member.functie,
-          committee: {
-            id: parseInt(member.commissie_id, 10),
-            name: member.naam,
-          },
-        };
-      };
-
       const response = await api.get<{
         committees: {
           commissie_id: string; // number
@@ -45,7 +33,17 @@ export const committeeMembersQueryOptions = () => {
         }[];
       }>("/committees");
 
-      return response.committees.map(mapCommittee);
+      return response.committees.map((member): CommitteeMember => {
+        return {
+          member_id: parseInt(member.lid_id, 10),
+          year: member.jaar,
+          function: member.functie,
+          committee: {
+            id: parseInt(member.commissie_id, 10),
+            name: member.naam,
+          },
+        };
+      });
     },
     staleTime: Infinity,
   });

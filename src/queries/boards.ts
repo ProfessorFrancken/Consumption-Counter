@@ -73,7 +73,11 @@ export const useMostRecentBoards = () => {
   );
 };
 
-function recentlyPurchasedAProduct(member: MemberType) {
+function recentlyPurchasedAProduct(member: MemberType | undefined) {
+  if (member === undefined) {
+    return false;
+  }
+
   const latest_purchase_at =
     typeof member.latest_purchase_at === "string"
       ? new Date(member.latest_purchase_at)
@@ -95,19 +99,20 @@ export const useActiveBoardMembers = () => {
   const recentBoards = useMostRecentBoards();
 
   // Filter out all members who are allready shown in the board collumns
-  const recentBoardMembersId = recentBoards.reduce((members: any, board: any) => {
-    return [...members, ...board.map((member: any) => member.member.id)];
+  const recentBoardMembersId = recentBoards.reduce((members: number[], board) => {
+    return [...members, ...board.map((member) => member.member?.id ?? -1)];
   }, []);
+
+  const activeBoardMembers = boardMembers
+    .map((boardMember) => boardMember.member)
+    .filter((member): member is MemberType => recentlyPurchasedAProduct(member));
 
   // Show all members that aren't shown in the boards grid and
   // who have recently purchased something
   return take(
-    sortBy(
-      boardMembers
-        .map((boardMember: any) => boardMember.member)
-        .filter(recentlyPurchasedAProduct),
-      (member: any) => -member.prominent
-    ).filter((member: any) => !recentBoardMembersId.includes(member.id)), // don't include members who are shown as a board member
+    sortBy(activeBoardMembers, (member) => -(member.prominent ?? 0)).filter(
+      (member) => !recentBoardMembersId.includes(member.id)
+    ), // don't include members who are shown as a board member
     SHOW_N_PROMINENT
   );
 };

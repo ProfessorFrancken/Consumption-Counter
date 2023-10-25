@@ -8,7 +8,7 @@ it("renders a buy more button when visiting the products page", () => {
 
   const routes = ["/products?memberId=1"];
 
-  render(<Header />, {storeState, routes});
+  render(<Header onClick={jest.fn()} />, {storeState, routes});
 
   expect(screen.getByText("Show prices")).toBeDefined();
 });
