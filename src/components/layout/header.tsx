@@ -1,6 +1,6 @@
 import {useSelectedMember} from "../orders-context";
 import {useCommittees} from "../../queries/committees";
-import {NavLink, Route, Routes, useMatches, useParams} from "react-router-dom";
+import {NavLink, useLocation, useMatches, useParams} from "react-router-dom";
 import {ReactNode} from "react";
 
 export const CommitteeTitle = () => {
@@ -44,33 +44,25 @@ const HeaderTitle = () => {
   );
 };
 
-const ShowPriceList = () => {
-  const member = useSelectedMember();
-
-  if (!member) {
-    return null;
-  }
-
-  return <NavLink to={`./pricelist?memberId=${member.id}`}>Show prices</NavLink>;
-};
 const GoBackToBuying = () => {
   const member = useSelectedMember();
+  const location = useLocation();
 
   if (!member) {
     return null;
   }
 
-  return <NavLink to={`/products?memberId=${member.id}`}>Buy products</NavLink>;
+  if (location.pathname.includes("pricelist")) {
+    return <NavLink to={`/products?memberId=${member.id}`}>Buy products</NavLink>;
+  }
+  return <NavLink to={`/products/pricelist?memberId=${member.id}`}>Show prices</NavLink>;
 };
 
 const Header = ({onClick, failedOrders}: any) => (
   <header className="header">
     <HeaderTitle />
     <div className="header-item d-flex justify-content-center">
-      <Routes>
-        <Route path="/products" element={<ShowPriceList />} />
-        <Route path="/products/pricelist" element={<GoBackToBuying />} />
-      </Routes>
+      <GoBackToBuying />
     </div>
     <h2
       className="association header-item text-right h4 d-flex align-items-center font-weight-normal mb-0"
