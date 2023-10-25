@@ -29,10 +29,18 @@ const HeaderTitle = () => {
   const lastMatch = matches.at(-1);
 
   if (lastMatch === undefined) {
-    return null;
+    return (
+      <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
+        &nbsp;
+      </h1>
+    );
   }
   if (lastMatch.handle === undefined) {
-    return null;
+    return (
+      <h1 className="titleName header-item h4 d-flex align-items-center font-weight-normal mb-0">
+        &nbsp;
+      </h1>
+    );
   }
 
   const titleHandle = lastMatch.handle as {title: ReactNode};
