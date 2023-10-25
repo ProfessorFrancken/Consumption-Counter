@@ -4,6 +4,7 @@ import {sortBy} from "lodash";
 import {MemberType} from "../../queries/members";
 import {BoardMember} from "../../queries/boards";
 import Member from "./../../components/member-button";
+import {Fragment} from "react";
 
 type Props = {
   prominent: MemberType[];
@@ -21,15 +22,21 @@ const Prominent = ({prominent, boards, selectMember}: Props) => (
     <div className="boardsRow">
       {boards.map((members, idx) => (
         <div className="boardColumn" key={idx} aria-label="board">
-          {sortBy(members, (member: any) => member.function)
+          {sortBy(members, (member) => member.function)
             .reverse()
-            .map((member: any) => (
-              <Member
-                member={member.member}
-                key={member.member.id}
-                onClick={selectMember}
-              />
-            ))}
+            .map((member) => {
+              if (member.member === undefined) {
+                return <Fragment key={member.member_id} />;
+              }
+
+              return (
+                <Member
+                  member={member.member}
+                  key={member.member.id}
+                  onClick={selectMember}
+                />
+              );
+            })}
         </div>
       ))}
     </div>

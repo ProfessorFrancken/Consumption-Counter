@@ -2,7 +2,7 @@ import {useOrderableProducts} from "../../../components/orders-context";
 import Price from "../../../components/price";
 import {Product as ProductType} from "./../../../queries/products";
 
-const Product = ({product}: any) => (
+const Product = ({product}: {product: ProductType}) => (
   <button
     className="button tile"
     style={{
@@ -19,10 +19,10 @@ const Product = ({product}: any) => (
   </button>
 );
 
-const Category = ({category}: any) =>
+const Category = ({category}: {category: {name: string; products: ProductType[]}}) =>
   category.products.length > 0 ? (
     <nav className="categoryRow">
-      {category.products.map((product: any) => (
+      {category.products.map((product) => (
         <Product product={product} key={product.id} />
       ))}
     </nav>

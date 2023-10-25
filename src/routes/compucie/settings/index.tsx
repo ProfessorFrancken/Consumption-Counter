@@ -13,8 +13,8 @@ import {useAuthentication} from "./../../../components/authentication/context";
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Pick<Product, "id" | "name" | "price">[]) =>
   map(
-    groupBy(products, (product: any) => product.id),
-    (product: any) =>
+    groupBy(products, (product) => product.id),
+    (product) =>
       product.length === 1
         ? `${product[0].name}`
         : `${product[0].name} (${product.length}x)`
@@ -62,7 +62,7 @@ const RetryAll = ({
 }) => (
   <button
     className="btn btn-success"
-    onClick={() => orders.forEach((order: any) => buy(order.order))}
+    onClick={() => orders.forEach((order) => buy(order.order))}
   >
     Retry all
   </button>
@@ -102,7 +102,7 @@ const QueuedOrders = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order: any, idx: any) => (
+          {orders.map((order, idx) => (
             <FailedOrder order={order} buy={buy} cancel={cancel} key={idx} />
           ))}
         </tbody>

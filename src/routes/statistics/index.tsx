@@ -14,11 +14,11 @@ import ProductsPrice from "../../components/products-price";
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
   map(
-    groupBy(products, (product: any) => product.id),
-    (product: any) =>
-      product.length === 1
-        ? `${product[0].name}`
-        : `${product[0].name} (${product.length}x)`
+    groupBy(products, (product: Product) => product.id),
+    (products: Product[]) =>
+      products.length === 1
+        ? `${products[0].name}`
+        : `${products[0].name} (${products.length}x)`
   ).join(", ");
 
 const ProductIcon = ({products}: {products: Product[]}) => {
@@ -55,13 +55,7 @@ const Transaction = ({order}: {order: OrderedOrder}) => (
     <div>
       <strong>
         <ProductIcon products={order.products} />
-        {listOfProducts(order.products)} for{" "}
-        <ProductsPrice
-          products={order.products}
-          price={order.products
-            .map((product: any) => product.price)
-            .reduce((sum: any, price: any) => sum + price, 0)}
-        />
+        {listOfProducts(order.products)} for <ProductsPrice products={order.products} />
       </strong>{" "}
       <small>bought by {order.member.fullname}</small>
     </div>
@@ -76,7 +70,7 @@ const Transactions = ({transactions}: {transactions: OrderedOrder[]}) => {
       className="list-unstyled recent-orders"
       style={{columnCount: 2, paddingLeft: 0, fontSize: "0.95em"}}
     >
-      {transactions.map((transaction: OrderedOrder, idx: any) => (
+      {transactions.map((transaction: OrderedOrder, idx) => (
         <li key={idx} className="py-2">
           <Transaction order={transaction} />
         </li>
@@ -107,7 +101,7 @@ const Statistics = ({
     (statistic) => moment(statistic.date).format("YYYY-MM-DD") === todayFormat
   ) || {total: 0, beer: 0, soda: 0, food: 0};
 
-  const getFirstMondayOfWeek = function (week: any, year: any) {
+  const getFirstMondayOfWeek = function (week: number, year: number) {
     return moment().seconds(0).minutes(0).hours(0).day("Monday").year(year).week(week);
   };
 

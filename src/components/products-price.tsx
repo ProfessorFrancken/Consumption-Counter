@@ -1,9 +1,9 @@
-const totalPrice = (products: any) =>
-  products
-    .map((product: any) => product.price)
-    .reduce((sum: any, price: any) => sum + price, 0);
+import {Product} from "queries/products";
 
-const ProductsPrice = ({products}: any) => (
+const totalPrice = (products: Pick<Product, "price">[]) =>
+  products.map((product) => product.price).reduce((sum, price) => sum + price, 0);
+
+const ProductsPrice = ({products}: {products: Pick<Product, "price">[]}) => (
   <span>
     {new Intl.NumberFormat("en-EN", {
       style: "currency",

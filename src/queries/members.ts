@@ -89,7 +89,7 @@ export const membersQueryOptions = () => {
         })
       );
 
-      return orderBy(members, (member: any) => member.surname);
+      return orderBy(members, (member) => member.surname);
     },
     staleTime: Infinity,
   });

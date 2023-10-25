@@ -1,11 +1,5 @@
 import {useCommittees} from "../../queries/committees";
 
-const CommitteeButton = ({committee, onClick}: any) => (
-  <button className="button tile" onClick={() => onClick(committee)}>
-    {committee.name}
-  </button>
-);
-
 export type Committee = {
   members?: {}[];
   id: number;
@@ -20,7 +14,13 @@ type CommitteesProps = {
 const Committees = ({committees, selectCommittee}: CommitteesProps) => (
   <nav className="tilesGrid" aria-label="committees">
     {committees.map((committee, idx) => (
-      <CommitteeButton committee={committee} onClick={selectCommittee} key={idx} />
+      <button
+        key={idx}
+        className="button tile"
+        onClick={() => selectCommittee(committee)}
+      >
+        {committee.name}
+      </button>
     ))}
   </nav>
 );

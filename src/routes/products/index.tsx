@@ -16,7 +16,7 @@ const AmountBeingOrdered = ({amount}: {amount: number}) => {
   );
 };
 
-const ProductName = ({product}: any) => <span>{product.name}</span>;
+const ProductName = ({product}: {product: ProductType}) => <span>{product.name}</span>;
 
 const isProductLocked = (product: ProductType, hour: number) => {
   if (product.category === "Bier") {
@@ -62,7 +62,7 @@ const Product = ({
       {...handlers}
     >
       {orderAmount === 0 ? (
-        <ProductName product={product} amount={orderAmount} />
+        <ProductName product={product} />
       ) : (
         <AmountBeingOrdered amount={orderAmount} />
       )}

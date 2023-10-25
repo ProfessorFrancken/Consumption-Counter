@@ -1,9 +1,9 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ProductsPrice from "../../products-price";
 import {useQueuedOrders} from "../../../components/orders/queued-orders-context";
-import {useOrder} from "../../../components/orders-context";
+import {Order, useOrder} from "../../../components/orders-context";
 
-const products = (order: any) => {
+const products = (order: Order) => {
   return order.products.length === 1 ? order.products[0].name : "multiple products";
 };
 

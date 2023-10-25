@@ -17,19 +17,6 @@ export const statisticsQueryOptions = () => {
       const startDate = moment().subtract(2, "years").format("YYYY-MM-DD");
       const endDate = moment().add(1, "day").format("YYYY-MM-DD");
 
-      const mapStatistic = (statistic: any): Statistic => {
-        const beer = parseInt(statistic.beer, 10);
-        const soda = parseInt(statistic.soda, 10);
-        const food = parseInt(statistic.food, 10);
-        return {
-          date: statistic.date,
-          total: beer + soda + food,
-          beer,
-          soda,
-          food,
-        };
-      };
-
       const response = await api.get<{
         statistics: {
           date: string; // 'yyyy-mm-dd'
@@ -42,7 +29,18 @@ export const statisticsQueryOptions = () => {
         endDate,
       });
 
-      return response.statistics.map(mapStatistic);
+      return response.statistics.map((statistic): Statistic => {
+        const beer = parseInt(statistic.beer, 10);
+        const soda = parseInt(statistic.soda, 10);
+        const food = parseInt(statistic.food, 10);
+        return {
+          date: statistic.date,
+          total: beer + soda + food,
+          beer,
+          soda,
+          food,
+        };
+      });
     },
     staleTime: Infinity,
   });

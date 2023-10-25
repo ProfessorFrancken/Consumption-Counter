@@ -13,19 +13,17 @@ type PresentMemberType = {
 };
 const names: PresentMemberType[] = [{francken_id: "1403", name: "Mark", screen: true}];
 
-const handleResponse = (response: any) => {
-  if (!response.data) {
-    return Promise.reject(response.statusText);
-  }
-  return response.data;
-};
-
 const useFetchPresentMembers = (members: MemberType[]) => {
   const [presentMembers, setPresentMembers] = React.useState<string[]>([]);
   React.useEffect(() => {
     axios
       .get(`https://borrelcie.vodka/present/data.php`)
-      .then(handleResponse)
+      .then((response) => {
+        if (!response.data) {
+          return Promise.reject(response.statusText);
+        }
+        return response.data;
+      })
       .then(
         (members) => setPresentMembers(members),
         () => setPresentMembers([])
