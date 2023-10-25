@@ -2,7 +2,9 @@ import {StrictMode, Suspense, useState} from "react";
 import {
   BrowserRouter,
   createBrowserRouter,
-  MemoryRouter,
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
   RouterProvider,
 } from "react-router-dom";
 import {createAppRoutes} from "./app-container";
@@ -24,13 +26,14 @@ export const InfrastructureProviders = ({
 }: Props) => {
   const [queryClient] = useState(defaultQueryClient);
 
+  const router = createMemoryRouter(
+    createRoutesFromElements(<Route path="/*" element={children} />),
+    {initialEntries: routes ?? ["/"]}
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
-      {routes !== undefined ? (
-        <MemoryRouter initialEntries={routes ?? []}>{children}</MemoryRouter>
-      ) : (
-        <BrowserRouter>{children}</BrowserRouter>
-      )}
+      <RouterProvider router={router} />
     </QueryClientProvider>
   );
 };
