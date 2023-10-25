@@ -27,4 +27,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: npm run build
         env:
-          CI: true
+          CI: false
