@@ -1,23 +1,23 @@
 name: End-to-end tests
 on:
-    - push
-    - pull_request
+  - push
+  - pull_request
 jobs:
-    cypress-run:
-        runs-on: ubuntu-latest
-        env:
-            CI: true
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  cypress-run:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Cypress run
-              uses: cypress-io/github-action@v2
-              with:
-                  start: npm start
-                  wait-on: http://localhost:3000
-              env:
-                  # pass the Dashboard record key as an environment variable
-                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-                  # pass GitHub token to allow accurately detecting a build vs a re-run build
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start
+          wait-on: http://localhost:3000
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
