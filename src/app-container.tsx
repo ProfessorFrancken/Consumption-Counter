@@ -7,8 +7,6 @@ import {
   useRouteError,
   isRouteErrorResponse,
   ErrorResponse,
-  defer,
-  Await,
   useLoaderData,
 } from "react-router-dom";
 import RedirectWhenIdle from "./components/redirect-when-idle";
@@ -32,14 +30,6 @@ import AuthenticationForm from "./components/authentication/authentication-form"
 import Loading from "./routes/loading/index";
 import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
-import {productsQueryOptions} from "./queries/products";
-import {committeeMembersQueryOptions} from "./queries/committees";
-import {boardMembersQueryOptions} from "./queries/boards";
-import {statisticsQueryOptions} from "./queries/statistics";
-import {ordersQueryOptions} from "./queries/orders";
-import moment from "moment";
-import {activitiesQueryOptions} from "./queries/activities";
-import {membersQueryOptions} from "./queries/members";
 import {BuyProductsForMemberTitle, CommitteeTitle} from "components/layout/header";
 
 function isErrorResponse(error: any): error is ErrorResponse {
@@ -92,8 +82,6 @@ const ErrorBoundaryLayout = () => {
     </Suspense>
   );
 };
-
-const sleep = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
 
 export const createAppRoutes = (
   queryClient: QueryClient,
@@ -224,7 +212,13 @@ export const AppContainer = () => {
           <Route path="statistics" element={<Statistics />} />
           <Route path="committees" element={<Committees />} />
           <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
-          <Route path="recent" element={<RecentMembers />} />
+          <Route
+            path="recent"
+            element={<RecentMembers />}
+            handle={{
+              title: <span>Recent</span>,
+            }}
+          />
           <Route path="products" element={<Products />} />
           <Route path="products/pricelist" element={<PriceList />} />
           <Route path="statistics" element={<Statistics />} />

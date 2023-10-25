@@ -74,7 +74,7 @@ it("adds products to an order when clicked", async () => {
   });
 });
 
-it("it does not include products that a member is not allowed to buy (due to age distriction)", () => {
+it("does not include products that a member is not allowed to buy (due to age distriction)", () => {
   const storeState = {
     products: {
       Bier: [

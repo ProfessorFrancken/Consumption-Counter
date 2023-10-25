@@ -1,6 +1,5 @@
 import {StrictMode, Suspense, useState} from "react";
 import {
-  BrowserRouter,
   createBrowserRouter,
   createMemoryRouter,
   createRoutesFromElements,
@@ -12,6 +11,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
 import {ApplicationProviders} from "./application-providers";
 import Loading from "./routes/loading/index";
+import {BuyProductsForMemberTitle, CommitteeTitle} from "components/layout/header";
 
 type Props = {
   queryClient?: QueryClient;
@@ -27,7 +27,74 @@ export const InfrastructureProviders = ({
   const [queryClient] = useState(defaultQueryClient);
 
   const router = createMemoryRouter(
-    createRoutesFromElements(<Route path="/*" element={children} />),
+    createRoutesFromElements(
+      <Route path="/*" element={children}>
+        <Route index />
+        <Route
+          path="settings"
+          handle={{
+            title: <span>Settings</span>,
+          }}
+        />
+        <Route path="compucie" />
+        <Route
+          path="prominent"
+          handle={{
+            title: <span>Prominent</span>,
+          }}
+        />
+        <Route
+          path="statistics"
+          handle={{
+            title: <span>Statistics</span>,
+          }}
+        />
+        <Route
+          path="committees"
+          handle={{
+            title: <span>Committees</span>,
+          }}
+        />
+        <Route
+          path="committees/:page"
+          handle={{
+            title: <CommitteeTitle />,
+          }}
+        />
+        <Route
+          path="recent"
+          handle={{
+            title: <span>Recent</span>,
+          }}
+        />
+        <Route
+          path="products"
+          handle={{
+            title: <BuyProductsForMemberTitle />,
+          }}
+        />
+        <Route
+          path="products/pricelist"
+          handle={{
+            title: <span>Pricelist</span>,
+          }}
+        />
+        <Route
+          path="statistics"
+          handle={{
+            title: <span>Statistics</span>,
+          }}
+        />
+        <Route
+          path="present"
+          handle={{
+            title: <span>Present</span>,
+          }}
+        />
+        <Route path="members/:page" />
+        <Route path="members" />
+      </Route>
+    ),
     {initialEntries: routes ?? ["/"]}
   );
 
