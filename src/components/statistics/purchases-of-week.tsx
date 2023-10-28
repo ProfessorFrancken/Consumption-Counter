@@ -1,8 +1,28 @@
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import moment from "moment";
+import {Statistic} from "queries/statistics";
 import {VictoryChart, VictoryBar, VictoryAxis} from "victory";
 
-const PurchasesOfWeek = ({purchases, today, icon, type}: any) => {
+type Purchases = Omit<Statistic, "date"> & {
+  date: Date | string;
+  beer: number;
+  soda: number;
+  food: number;
+  total: number;
+};
+
+const PurchasesOfWeek = ({
+  purchases,
+  today,
+  icon,
+  type,
+}: {
+  purchases: Purchases[];
+  today: Purchases;
+  icon: IconProp;
+  type: "beer" | "soda" | "food" | "total";
+}) => {
   return (
     <div className="p-0 bg-dark text-white" style={{position: "relative"}}>
       <div
@@ -15,7 +35,10 @@ const PurchasesOfWeek = ({purchases, today, icon, type}: any) => {
         }}
       >
         <h4 className="mb-1" style={{color: "#a4afb9"}}>
-          {purchases.reduce((total: any, purchases: any) => total + purchases[type], 0)}
+          {purchases.reduce(
+            (total: number, purchases: Purchases) => total + purchases[type],
+            0
+          )}
           <FontAwesomeIcon icon={icon} size="1x" className="text-muted ms-1" />
         </h4>
         <small className="text-uppercase" style={{color: "#a4afb9"}}>

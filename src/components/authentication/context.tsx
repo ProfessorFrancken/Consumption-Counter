@@ -2,10 +2,11 @@ import React from "react";
 import {UseMutateFunction, useMutation} from "@tanstack/react-query";
 import AuthenticationForm from "./authentication-form";
 import api from "./../../api";
-import useLocalStorage from "../../utils/use-local-storage";
+//import useLocalStorage from "../../utils/use-local-storage";
 import {UnauthenticatedLayout} from "../layout/unauthenticated-layout";
+import {useLocalStorage} from "usehooks-ts";
 
-type State = {
+export type State = {
   request: boolean;
   token: string | undefined;
   error: string | null;
@@ -20,6 +21,7 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
       const response = await api.post("/authenticate", {password});
       const token = response.token as string;
       setToken({token});
+
       return token;
     } catch (e) {
       // @ts-expect-error This is a known limitation
@@ -37,18 +39,7 @@ export const AuthenticationProvider: React.FC<{
   token?: string;
   children: React.ReactNode;
 }> = ({token: defaultToken, ...props}) => {
-  const [{token}, setToken] = useLocalStorage("plus_one_authorization", {
-    token: defaultToken,
-  });
-
-  const login = useLogin(setToken);
-
-  const value = {
-    request: login.isPending,
-    token: token,
-    error: login.isError && login.error !== null ? login.error.message : null,
-    authenticate: login.mutate,
-  };
+  const value = useAuthentication(defaultToken);
 
   return (
     <AuthenticationContext.Provider value={value} {...props}>
@@ -64,12 +55,18 @@ export const AuthenticationProvider: React.FC<{
   );
 };
 
-export const useAuthentication = () => {
-  const context = React.useContext(AuthenticationContext);
+export const useAuthentication = (defaultToken?: string) => {
+  const [{token}, setToken] = useLocalStorage("plus_one_authorization", {
+    token: defaultToken,
+  });
 
-  if (!context) {
-    throw new Error(`useAuthentication must be used within a AuthenticationProvider`);
-  }
+  const login = useLogin(setToken);
 
-  return context;
+  const value = {
+    request: login.isPending,
+    token: token,
+    error: login.isError && login.error !== null ? login.error.message : null,
+    authenticate: login.mutate,
+  };
+  return value;
 };

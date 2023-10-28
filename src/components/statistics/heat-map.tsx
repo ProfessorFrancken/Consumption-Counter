@@ -12,37 +12,37 @@ const HeatMap: React.FC<{
   }
   const end = statistics[0];
   const start = statistics[statistics.length - 1];
-  const titleForValue = (value: any) => {
+
+  const titleForValue = (value: Statistic) => {
     if (value === null) {
       return null;
     }
-    const activity = activities.find(
-      (activity) => (activity as any).startDate === value.date
-    );
+    const activity = activities.find((activity) => activity.startDate === value.date);
     if (activity) {
       return `Date: ${new Date(value.date).toDateString()} - Activty: ${
-        (activity as any).title
+        activity.title
       }- Beer: ${value.beer}, Food: ${value.food}, Soda: ${value.soda}`;
     }
     return `Date: ${new Date(value.date).toDateString()} - Beer: ${value.beer}, Food: ${
       value.food
     }, Soda: ${value.soda}`;
   };
-  const classToBeUsed = (value: any) => {
+
+  const classToBeUsed = (value: Statistic) => {
     if (!value) {
       return "color-empty";
     }
-    const activity = activities.find(
-      (activity) => (activity as any).startDate === value.date
-    );
+    const activity = activities.find((activity) => activity.startDate === value.date);
     return activity ? "activity" : "color-empty";
   };
+
   const totalPurchases = statistics.reduce(
     (sum, {beer, soda, food}) => sum + beer + soda + food,
     0
   );
+
   const averagePurchases = totalPurchases / statistics.length;
-  const colorToBeUsed = (value: any) => {
+  const colorToBeUsed = (value: Statistic) => {
     if (value.date === null) {
       return "rgba(0, 0, 0, 0)";
     }
@@ -84,7 +84,8 @@ const HeatMap: React.FC<{
         ${Math.min(1, total / averagePurchases)}
         )`;
   };
-  const tooltip = (value: any) => {
+
+  const tooltip = (value: Statistic) => {
     if (value === null || value.date === null) {
       return undefined;
     }
@@ -95,22 +96,23 @@ const HeatMap: React.FC<{
     }
     return {style: {fill: colorToBeUsed(value)}};
   };
+
   return (
     <CalendarHeatmap
       horizontal={true}
-      startDate={new Date((start as any).date)}
-      endDate={new Date((end as any).date)}
+      startDate={new Date(start.date)}
+      endDate={new Date(end.date)}
       values={statistics}
       titleForValue={titleForValue}
       gutterSize={3}
       showWeekdayLabels={true}
       classForValue={classToBeUsed}
       tooltipDataAttrs={tooltip}
-      onClick={(value: any) =>
+      onClick={(value) =>
         console.log(
           value,
           tooltip(value),
-          activities.find((activity) => (activity as any).startDate === value.date)
+          activities.find((activity) => activity.startDate === value.date)
         )
       }
       showOutOfRangeDays={true}

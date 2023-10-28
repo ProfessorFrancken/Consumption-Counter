@@ -99,7 +99,7 @@ const Statistics = ({
   const todayFormat = today.format("YYYY-MM-DD");
   const purchasesToday = statistics.find(
     (statistic) => moment(statistic.date).format("YYYY-MM-DD") === todayFormat
-  ) || {total: 0, beer: 0, soda: 0, food: 0};
+  ) || {total: 0, beer: 0, soda: 0, food: 0, date: todayFormat};
 
   const getFirstMondayOfWeek = function (week: number, year: number) {
     return moment().seconds(0).minutes(0).hours(0).day("Monday").year(year).week(week);
