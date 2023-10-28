@@ -1,18 +1,24 @@
-import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import decode from "jwt-decode";
 import moment from "moment";
+import {ReactNode} from "react";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router";
-import {State} from "./context";
+import {useAuthentication} from "./context";
 
-const Button = ({children, ...props}: any) => (
-  <button className="btn btn-secondary mb-2" {...props} type="submit">
+const Button = ({
+  children,
+  disabled = false,
+}: {
+  children: ReactNode;
+  disabled?: boolean;
+}) => (
+  <button className="btn btn-secondary mb-2" type="submit" disabled={disabled}>
     {children}
   </button>
 );
 
-const authenticated = (token: any) => {
+const authenticated = (token: string) => {
   const decoded = decode(token);
   const expiration = new Date((decoded as any).exp * 1000);
   return (
@@ -38,7 +44,13 @@ const invalidFeedback = (error: string) => {
     : "There probably was an unexpected error on the server, call the compucie to solve this.";
 };
 
-const AuthenticateButton = ({request, token}: any) => {
+const AuthenticateButton = ({
+  request,
+  token,
+}: {
+  request: boolean;
+  token: string | undefined;
+}) => {
   if (request) {
     return <Button disabled>Waiting</Button>;
   }
@@ -58,7 +70,8 @@ const AuthenticateButton = ({request, token}: any) => {
   );
 };
 
-const AuthenticationForm = ({authenticate, token, request, error}: State) => {
+const AuthenticationForm = () => {
+  const {authenticate, token, request, error} = useAuthentication();
   const {
     handleSubmit,
     register,
