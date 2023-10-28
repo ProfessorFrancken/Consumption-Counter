@@ -1,10 +1,9 @@
 import {Factory} from "miragejs";
 import {faker} from "@faker-js/faker";
 
-export const ProductFactory = Factory.extend({
+export const productFactoryDefinition = {
   id: (i: any) => parseInt(i, 10),
   product_id() {
-    // @ts-expect-error huh
     return this.id;
   },
   kleur: null,
@@ -26,17 +25,19 @@ export const ProductFactory = Factory.extend({
     ];
     return images[i % images.length];
   },
-  beschikbaar: 1,
+  beschikbaar: true,
   positie: 1,
-  categorie(i: any) {
+  categorie(i: any): "Bier" | "Fris" | "Eten" {
     const categories = ["Bier", "Fris", "Eten"];
 
-    return categories[i % categories.length];
+    return categories[i % categories.length] as "Bier" | "Fris" | "Eten";
   },
   prijs() {
-    return faker.commerce.price({min: 0.01, max: 5.0, dec: 4});
+    return faker.number.float({min: 0.01, max: 5.0});
   },
   naam() {
     return faker.commerce.product();
   },
-});
+};
+
+export const ProductFactory = Factory.extend(productFactoryDefinition);

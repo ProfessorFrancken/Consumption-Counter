@@ -192,7 +192,7 @@ const makeEnvironmentSpecificServer = () => {
 
   //return;
   if (process.env.NODE_ENV === "development") {
-    return makeDevServer();
+    // return makeDevServer();
   }
 
   return null;
