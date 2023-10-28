@@ -1,5 +1,7 @@
 import {Factory} from "miragejs";
 import {faker} from "@faker-js/faker";
+import {ApiProductsResponse} from "queries/products";
+import {ArrayElement} from "types";
 
 export const productFactoryDefinition = {
   id: (i: any) => parseInt(i, 10),
@@ -38,6 +40,28 @@ export const productFactoryDefinition = {
   naam() {
     return faker.commerce.product();
   },
+};
+
+type ApiProduct = ArrayElement<ApiProductsResponse["products"]>;
+export const getProductApi = (product: Partial<ApiProduct>): ApiProduct => {
+  const idx = product.id ?? 0;
+  return {
+    id: idx,
+    product_id: idx,
+    kleur: null,
+    splash_afbeelding: productFactoryDefinition.splash_afbeelding(idx),
+    updated_at: productFactoryDefinition.updated_at,
+    created_at: productFactoryDefinition.created_at,
+    eenheden: productFactoryDefinition.eenheden,
+    btw: productFactoryDefinition.btw,
+    afbeelding: productFactoryDefinition.afbeelding(idx),
+    beschikbaar: productFactoryDefinition.beschikbaar,
+    positie: productFactoryDefinition.positie,
+    categorie: productFactoryDefinition.categorie(idx),
+    prijs: productFactoryDefinition.prijs(),
+    naam: productFactoryDefinition.naam(),
+    ...product,
+  };
 };
 
 export const ProductFactory = Factory.extend(productFactoryDefinition);

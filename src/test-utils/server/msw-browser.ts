@@ -1,16 +1,17 @@
 import {setupWorker} from "msw";
-import {memberFactoryDefinition} from "./members";
+import {getMemberApi} from "./members";
 import {range, sampleSize} from "lodash";
-import {productFactoryDefinition} from "./products";
-import {committeeFactoryDefinition} from "./committees";
+import {getProductApi} from "./products";
+import {getCommitteeMemberApi} from "./committees";
 import {faker} from "@faker-js/faker";
 import moment from "moment";
 import {getHandlers} from "./msw-handlers";
+import {getBoardMemberApi} from "./boards";
 
 faker.seed(33);
 
 const members = [
-  {
+  getMemberApi({
     latest_purchase_at: "2020-03-08 22:05:49",
     button_height: null,
     button_width: null,
@@ -25,75 +26,26 @@ const members = [
     initialen: "M.S.",
     voornaam: "Mark",
     id: 1403,
-  },
+  }),
   ...range(0, 300).map((idx) => {
-    const voornaam = memberFactoryDefinition.voornaam();
-    const achternaam = memberFactoryDefinition.achternaam();
-    const tussenvoegsel = memberFactoryDefinition.tussenvoegsel(idx);
-    const geboortedatum = memberFactoryDefinition.geboortedatum(idx);
-    const afbeelding = memberFactoryDefinition.afbeelding(idx);
-    const button_width = memberFactoryDefinition.button_width(idx);
-    const button_height = memberFactoryDefinition.button_height(idx);
-    const bijnaam = memberFactoryDefinition.bijnaam(idx);
-    const kleur = memberFactoryDefinition.kleur(idx);
-    const prominent = null;
-    const latest_purchase_at = memberFactoryDefinition.latest_purchase_at(idx);
-
-    return {
-      id: idx,
-      latest_purchase_at,
-      button_height,
-      button_width,
-      bijnaam,
-      afbeelding,
-      kleur,
-      prominent,
-      geboortedatum,
-      achternaam,
-      tussenvoegsel,
-      initialen: `${voornaam[0]}. ${achternaam[0]}`,
-      voornaam,
-    };
+    return getMemberApi({id: idx});
   }),
 ];
 
 const products = range(0, 30).map((idx) => {
-  return {
-    id: idx,
-    product_id: idx,
-    kleur: null,
-    splash_afbeelding: productFactoryDefinition.splash_afbeelding(idx),
-    updated_at: productFactoryDefinition.updated_at,
-    created_at: productFactoryDefinition.created_at,
-    eenheden: productFactoryDefinition.eenheden,
-    btw: productFactoryDefinition.btw,
-    afbeelding: productFactoryDefinition.afbeelding(idx),
-    beschikbaar: productFactoryDefinition.beschikbaar,
-    positie: productFactoryDefinition.positie,
-    categorie: productFactoryDefinition.categorie(idx),
-    prijs: productFactoryDefinition.prijs(),
-    naam: productFactoryDefinition.naam(),
-  };
+  return getProductApi({id: idx});
 });
 
 const year = new Date().getFullYear();
 const committees = range(0, 10).flatMap((idx) => {
   const committeeMembers = sampleSize(members, Math.ceil(10 * Math.random() + 5));
-  const committee = {
-    id: idx,
-    naam: committeeFactoryDefinition.name(idx),
-  };
 
-  const functions = ["", "", "", "Treasurer", "President"];
-
-  return committeeMembers.map((committeeMember, cmIdx) => {
-    return {
-      commissie_id: `${committee.id}`,
-      naam: committee.naam,
-      jaar: year,
+  return committeeMembers.map((committeeMember) => {
+    return getCommitteeMemberApi({
+      commissie_id: `${idx}`,
       lid_id: `${committeeMember.id}`,
-      functie: functions[cmIdx % functions.length],
-    };
+      jaar: year,
+    });
   });
 });
 
@@ -101,14 +53,11 @@ const boardMembers = range(0, 20).flatMap((boardIdx) => {
   const boardYear = year - boardIdx;
   const boardMembers = sampleSize(members, Math.ceil(3 * Math.random() + 3));
 
-  const functions = ["President", "Treasurer", "Secretary", "Intern", "Extern"];
-
   return boardMembers.map((boardMember, idx) => {
-    return {
-      functie: functions[idx % functions.length],
+    return getBoardMemberApi({
       lid_id: boardMember.id,
       jaar: boardYear,
-    };
+    });
   });
 });
 

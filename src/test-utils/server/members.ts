@@ -2,6 +2,8 @@
 import {Factory, trait} from "miragejs";
 import {faker} from "@faker-js/faker";
 import moment from "moment";
+import {ApiMembersResponse} from "queries/members";
+import {ArrayElement} from "types";
 
 export const memberFactoryDefinition = {
   id: (i: any) => parseInt(i, 10),
@@ -93,4 +95,38 @@ export const memberFactoryDefinition = {
   },
   prominent: null,
 };
+
+type ApiMember = ArrayElement<ApiMembersResponse["members"]>;
+export const getMemberApi = (member: Partial<ApiMember>): ApiMember => {
+  const idx = member.id ?? 0;
+  const voornaam = memberFactoryDefinition.voornaam();
+  const achternaam = memberFactoryDefinition.achternaam();
+  const tussenvoegsel = memberFactoryDefinition.tussenvoegsel(idx);
+  const geboortedatum = memberFactoryDefinition.geboortedatum(idx);
+  const afbeelding = memberFactoryDefinition.afbeelding(idx);
+  const button_width = memberFactoryDefinition.button_width(idx);
+  const button_height = memberFactoryDefinition.button_height(idx);
+  const bijnaam = memberFactoryDefinition.bijnaam(idx);
+  const kleur = memberFactoryDefinition.kleur(idx);
+  const prominent = null;
+  const latest_purchase_at = memberFactoryDefinition.latest_purchase_at(idx);
+
+  return {
+    id: idx,
+    latest_purchase_at,
+    button_height,
+    button_width,
+    bijnaam,
+    afbeelding,
+    kleur,
+    prominent,
+    geboortedatum,
+    achternaam,
+    tussenvoegsel,
+    initialen: `${voornaam[0]}. ${achternaam[0]}`,
+    voornaam,
+    ...member,
+  };
+};
+
 export const MemberFactory = Factory.extend(memberFactoryDefinition);
