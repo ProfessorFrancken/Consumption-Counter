@@ -114,10 +114,7 @@
     ]
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/server/**"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}", "!src/test-utils/**"],
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
     }
