@@ -1,15 +1,17 @@
-/* eslint-disable no-undef */
-import {association} from "miragejs";
-import {makeServer} from "../../src/test-utils/server/index";
 import {TIME_TO_CANCEL} from "./../../src/components/orders/queued-orders-context";
 import {SCREEN_SAVER_TIMEOUT} from "./../../src/components/redirect-when-idle";
-import moment from "moment";
+import {mswHandlers} from "../support/msw-handlers";
 
 const member = {
   firstName: "John",
   lastName: "Snow",
   fullName: "John Snow",
 };
+
+const date = new Date();
+
+const past = new Date();
+past.setYear(past.getFullYear() - 1);
 
 const thisWeek = [
   // The previous Sunday isn't displayed
@@ -23,132 +25,8 @@ const thisWeek = [
   new Date(2020, 2, 12),
 ];
 
-let server;
 beforeEach(() => {
-  server = makeServer({environment: "test"});
-  server.logging = true;
-  const date = new Date();
-  server.create("member", {
-    latest_purchase_at: date.toISOString(),
-    geboortedatum: "1993-04-26",
-    achternaam: member.lastName,
-    voornaam: member.firstName,
-    tussenvoegsel: "",
-    bijnaam: "",
-  });
-
-  server.create("member", {
-    id: 1403,
-    latest_purchase_at: date.toISOString(),
-    geboortedatum: "1993-04-26",
-    achternaam: "Redeman",
-    voornaam: "Mark",
-    tussenvoegsel: "",
-    bijnaam: "",
-  });
-
-  server.create("product", {
-    categorie: "Bier",
-    naam: "Hertog Jan",
-  });
-
-  server.create("product", {
-    categorie: "Eten",
-    naam: "Mars",
-  });
-
-  server.create("product", {
-    categorie: "Fris",
-    naam: "Ice Tea",
-    prijs: "0.6100",
-  });
-
-  server.create("product", {
-    categorie: "Fris",
-    naam: "Goede morgen!",
-  });
-
-  server.create("product", {
-    categorie: "Fris",
-    naam: "Pepsi max",
-    splash_afbeelding:
-      "https://old.professorfrancken.nl/database/streep/afbeeldingen/ECDOccDsQVmRRRpyBnN1.jpeg",
-  });
-
-  server.create("member", {
-    achternaam: "Sjaars",
-    voornaam: "Sjaars",
-    tussenvoegsel: "",
-    bijnaam: "Sjaars",
-    geboortedatum: "2003-01-01",
-  });
-
-  server.create("committeeMember", {
-    committee: association({
-      id: 1,
-      name: "s[ck]rip(t|t?c)ie",
-    }),
-    member: association({
-      id: 33,
-      latest_purchase_at: "2020-03-08 22:05:49",
-      geboortedatum: "1993-04-26",
-      achternaam: "Baars",
-      voornaam: "Sven",
-      tussenvoegsel: "",
-      bijnaam: "ir. Sven",
-    }),
-    year: new Date().getFullYear(),
-  });
-
-  server.create("committeeMember", {
-    committee: association({
-      id: 1,
-      name: "s[ck]rip(t|t?c)ie",
-    }),
-    member: association({
-      id: 1403,
-      latest_purchase_at: "2020-03-08 22:05:49",
-      geboortedatum: "1993-04-26",
-      achternaam: "Redeman",
-      voornaam: "Mark",
-      tussenvoegsel: "",
-      bijnaam: "",
-    }),
-    year: new Date().getFullYear(),
-  });
-
-  server.create("boardMember", {
-    board: association({
-      year: 2019,
-    }),
-    member: association({
-      bijnaam: "Dictadtor",
-      afbeelding:
-        "https://old.professorfrancken.nl/database/streep/afbeeldingen/nc1J3sNtthqGkeQy0tDf.jpeg",
-    }),
-  });
-
-  server.create("member", {
-    achternaam: "Stark",
-    voornaam: "Arya",
-    tussenvoegsel: "",
-    bijnaam: "Arya",
-    button_width: 70,
-    button_height: 40,
-    latest_purchase_at: "2020-03-08 22:05:49",
-    geboortedatum: "1993-04-26",
-  });
-
-  thisWeek.forEach((day, idx) => {
-    server.create("category", {
-      date: moment(day).format("YYYY-MM-DD"),
-      beer: 100 * (idx + 1),
-    });
-  });
-});
-
-afterEach(() => {
-  server.shutdown();
+  cy.interceptRequest(...mswHandlers);
 });
 
 describe("Francken Consumption Counter", () => {
@@ -257,17 +135,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Shows a warning when selecting an inactive member", () => {
-      const past = new Date();
-      past.setYear(past.getFullYear() - 1);
-      server.create("member", {
-        latest_purchase_at: past.toISOString(),
-        geboortedatum: "1993-01-01",
-        achternaam: "Stark",
-        voornaam: "Brandon",
-        tussenvoegsel: "",
-        bijnaam: "Brandon Stark",
-      });
-
       const stub = cy.stub();
       stub.onFirstCall().returns(false);
       cy.on("window:confirm", stub);
@@ -289,17 +156,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Allows selecting an inactive member after confirmation", () => {
-      const past = new Date();
-      past.setYear(past.getFullYear() - 1);
-      server.create("member", {
-        latest_purchase_at: past.toISOString(),
-        geboortedatum: "1993-01-01",
-        achternaam: "Stark",
-        voornaam: "Brandon",
-        tussenvoegsel: "",
-        bijnaam: "Brandon Stark",
-      });
-
       const stub = cy.stub();
       stub.onFirstCall().returns(true);
       cy.on("window:confirm", stub);
@@ -323,20 +179,6 @@ describe("Francken Consumption Counter", () => {
 
   describe("Prominent", () => {
     it("Buying via prominent", () => {
-      server.create("boardMember", {
-        board: association({
-          year: 2017,
-        }),
-        member: association({
-          id: 1403,
-          latest_purchase_at: "2020-03-08 22:05:49",
-          geboortedatum: "1993-04-26",
-          achternaam: "Redeman",
-          voornaam: "Mark",
-          tussenvoegsel: "",
-          bijnaam: "",
-        }),
-      });
       cy.login();
 
       cy.get('[href="/prominent"]').click();
@@ -353,36 +195,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Board member from 5 years ago", () => {
-      const date = new Date();
-
-      server.create("boardMember", {
-        board: association({
-          year: date.getFullYear() - 6,
-        }),
-        member: association({
-          id: 9999,
-          latest_purchase_at: date.toISOString(),
-          achternaam: "Stark",
-          voornaam: "Rickard",
-          tussenvoegsel: "",
-          bijnaam: "Rickard Stark",
-        }),
-      });
-      server.createList("boardMember", 5, {
-        board: association({year: date.getFullYear()}),
-      });
-      server.createList("boardMember", 5, {
-        board: association({year: date.getFullYear() - 1}),
-      });
-      server.createList("boardMember", 5, {
-        board: association({year: date.getFullYear() - 2}),
-      });
-      server.createList("boardMember", 5, {
-        board: association({year: date.getFullYear() - 3}),
-      });
-      server.createList("boardMember", 5, {
-        board: association({year: date.getFullYear() - 4}),
-      });
       cy.login();
 
       cy.get('[href="/prominent"]').click();
@@ -605,7 +417,7 @@ describe("Francken Consumption Counter", () => {
       cy.login();
 
       cy.get('[href="/prominent"]').click();
-      const jeanne = cy.get(".boardsRow > :nth-child(1) > :nth-child(1)");
+      const jeanne = cy.get(".boardsRow > :nth-child(5) > :nth-child(2)");
       jeanne.should("contain", "Dictadtor");
       jeanne.should(
         "have.css",
