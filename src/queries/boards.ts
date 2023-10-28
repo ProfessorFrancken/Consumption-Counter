@@ -5,6 +5,10 @@ import {groupBy, sortBy, take} from "lodash";
 import {useMembers} from "./members";
 import {useMemo} from "react";
 
+export type ApiBoardsResponse = {
+  boardMembers: Array<{lid_id: number; jaar: number; functie: string}>;
+};
+
 const SHOW_N_PROMINENT = 10;
 const SHOW_N_BOARDS = 5;
 
@@ -19,9 +23,7 @@ export const boardMembersQueryOptions = () => {
   return queryOptions({
     queryKey: ["boards"],
     queryFn: async () => {
-      const response = await api.get<{
-        boardMembers: Array<{lid_id: number; jaar: number; functie: string}>;
-      }>("/boards");
+      const response = await api.get<ApiBoardsResponse>("/boards");
 
       return response.boardMembers.map((boardMember): BoardMember => {
         return {

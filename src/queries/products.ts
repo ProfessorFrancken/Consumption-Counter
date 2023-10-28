@@ -2,6 +2,25 @@ import React, {useEffect} from "react";
 import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "api";
 
+export type ApiProductsResponse = {
+  products: Array<{
+    id: number;
+    naam: string;
+    prijs: number;
+    categorie: "Bier" | "Eten" | "Fris";
+    positie: number;
+    beschikbaar: boolean;
+    afbeelding: string;
+    btw: string;
+    eenheden: number;
+    created_at: string;
+    updated_at: string;
+    product_id: number;
+    splash_afbeelding: string | null;
+    kleur: string | null;
+  }>;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -17,24 +36,7 @@ export const productsQueryOptions = () => {
   return queryOptions({
     queryKey: ["products"],
     queryFn: async () => {
-      const response = await api.get<{
-        products: Array<{
-          id: number;
-          naam: string;
-          prijs: number;
-          categorie: "Bier" | "Eten" | "Fris";
-          positie: number;
-          beschikbaar: boolean;
-          afbeelding: string;
-          btw: string;
-          eenheden: number;
-          created_at: string;
-          updated_at: string;
-          product_id: number;
-          splash_afbeelding: string | null;
-          kleur: string | null;
-        }>;
-      }>("/products");
+      const response = await api.get<ApiProductsResponse>("/products");
 
       return response.products.map((product): Product => {
         return {
