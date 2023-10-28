@@ -2,9 +2,9 @@ import React from "react";
 import {UseMutateFunction, useMutation} from "@tanstack/react-query";
 import AuthenticationForm from "./authentication-form";
 import api from "./../../api";
-//import useLocalStorage from "../../utils/use-local-storage";
 import {UnauthenticatedLayout} from "../layout/unauthenticated-layout";
 import {useLocalStorage} from "usehooks-ts";
+import {ErrorResponse} from "react-router";
 
 export type State = {
   request: boolean;
@@ -15,6 +15,14 @@ export type State = {
 
 const AuthenticationContext = React.createContext<State | undefined>(undefined);
 
+function isErrorResponse(error: any): error is ErrorResponse {
+  return (
+    error != null &&
+    typeof error.status === "number" &&
+    typeof error.statusText === "string"
+  );
+}
+
 function useLogin(setToken: ({token}: {token: string}) => void) {
   const login = async (password: string) => {
     try {
@@ -24,6 +32,10 @@ function useLogin(setToken: ({token}: {token: string}) => void) {
 
       return token;
     } catch (e) {
+      if (isErrorResponse(e)) {
+        throw new Error(e.statusText as string);
+      }
+
       // @ts-expect-error This is a known limitation
       throw new Error(e.response.statusText as string);
     }
@@ -48,7 +60,7 @@ export const AuthenticationProvider: React.FC<{
       ) : (
         <UnauthenticatedLayout>
           <h1>Francken Consumption Counter</h1>
-          <AuthenticationForm {...value} />
+          <AuthenticationForm />
         </UnauthenticatedLayout>
       )}
     </AuthenticationContext.Provider>

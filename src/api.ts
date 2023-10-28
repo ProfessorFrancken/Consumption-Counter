@@ -54,7 +54,7 @@ async function post(uri: any, body: any) {
     return handleResponse(response);
   } catch (error) {
     if (isAxiosError(error)) {
-      throw json({message: error.message}, {status: error.response?.status});
+      throw error.response;
     }
 
     throw error;

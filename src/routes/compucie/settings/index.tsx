@@ -113,11 +113,9 @@ const QueuedOrders = () => {
 
 // Show all products that were bought and the amount of times they were bought
 const Settings = () => {
-  const authentication = useAuthentication();
-
   return (
     <div>
-      <AuthenticationForm {...authentication} />
+      <AuthenticationForm />
       <QueuedOrders />
     </div>
   );
