@@ -1,5 +1,8 @@
 // @ts-expect-error ts-migrate(2305) FIXME: Module '"miragejs"' has no exported member 'associ... Remove this comment to see the full error message
 import {Factory, association} from "miragejs";
+import {ApiBoardsResponse} from "queries/boards";
+import {ApiCommmitteesResponse} from "queries/committees";
+import {ArrayElement} from "types";
 
 export const committeeFactoryDefinition = {
   id(i: number) {
@@ -30,4 +33,22 @@ export const committeeMemberFactoryDefinition = {
     return 2018 + (i % 5);
   },
 };
+
 export const CommitteeMemberFactory = Factory.extend(committeeMemberFactoryDefinition);
+
+type ApiCommitteeMember = ArrayElement<ApiCommmitteesResponse["committees"]>;
+type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+
+const functions = ["", "", "", "Treasurer", "President"];
+export const getCommitteeMemberApi = (
+  committeeMember: AtLeast<ApiCommitteeMember, "commissie_id" | "lid_id">
+): ApiCommitteeMember => {
+  const idx = Number(committeeMember.lid_id) ?? 0;
+
+  return {
+    naam: committeeFactoryDefinition.name(idx),
+    jaar: new Date().getFullYear(),
+    functie: functions[idx % functions.length],
+    ...committeeMember,
+  };
+};
