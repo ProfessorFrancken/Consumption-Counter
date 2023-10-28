@@ -6,6 +6,16 @@ import {MemberType} from "../queries/members";
 import {useMembers} from "./members";
 import {useCallback, useMemo} from "react";
 
+export type ApiCommmitteesResponse = {
+  committees: {
+    commissie_id: string; // number
+    functie: string;
+    jaar: number;
+    lid_id: string; // number
+    naam: string;
+  }[];
+};
+
 type Committee = {
   id: number;
   name: string;
@@ -23,15 +33,7 @@ export const committeeMembersQueryOptions = () => {
   return queryOptions({
     queryKey: ["committees"],
     queryFn: async () => {
-      const response = await api.get<{
-        committees: {
-          commissie_id: string; // number
-          functie: string;
-          jaar: number;
-          lid_id: string; // number
-          naam: string;
-        }[];
-      }>("/committees");
+      const response = await api.get<ApiCommmitteesResponse>("/committees");
 
       return response.committees.map((member): CommitteeMember => {
         return {

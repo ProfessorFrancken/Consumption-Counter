@@ -3,6 +3,24 @@ import {chunk, orderBy} from "lodash";
 import {useEffect, useMemo, useState} from "react";
 import api from "./../api";
 
+export type ApiMembersResponse = {
+  members: Array<{
+    id: number;
+    voornaam: string;
+    initialen: string;
+    tussenvoegsel: string;
+    achternaam: string;
+    geboortedatum: string; // yyyy-mm-dd
+    prominent: number | null;
+    kleur: string | null;
+    afbeelding: string | null;
+    bijnaam: string | null;
+    button_width: number | null;
+    button_height: number | null;
+    latest_purchase_at: string | null;
+  }>;
+};
+
 export type MemberType = {
   id: number;
   firstName: string;
@@ -42,23 +60,7 @@ export const membersQueryOptions = () => {
   return queryOptions({
     queryKey: ["members"],
     queryFn: async () => {
-      const response = await api.get<{
-        members: Array<{
-          id: number;
-          voornaam: string;
-          initialen: string;
-          tussenvoegsel: string;
-          achternaam: string;
-          geboortedatum: string; // yyyy-mm-dd
-          prominent: number | null;
-          kleur: string | null;
-          afbeelding: string | null;
-          bijnaam: string | null;
-          button_width: number | null;
-          button_height: number | null;
-          latest_purchase_at: number | null;
-        }>;
-      }>("/members");
+      const response = await api.get<ApiMembersResponse>("/members");
 
       const members = response.members.map(
         (lid): MemberType => ({

@@ -2,6 +2,15 @@ import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "api";
 import moment from "moment";
 
+export type ApiStatisticsResponse = {
+  statistics: {
+    date: string; // 'yyyy-mm-dd'
+    beer: string;
+    soda: string;
+    food: string;
+  }[];
+};
+
 export type Statistic = {
   date: string;
   total: number;
@@ -17,14 +26,7 @@ export const statisticsQueryOptions = () => {
       const startDate = moment().subtract(2, "years").format("YYYY-MM-DD");
       const endDate = moment().add(1, "day").format("YYYY-MM-DD");
 
-      const response = await api.get<{
-        statistics: {
-          date: string; // 'yyyy-mm-dd'
-          beer: string;
-          soda: string;
-          food: string;
-        }[];
-      }>("/statistics/categories", {
+      const response = await api.get<ApiStatisticsResponse>("/statistics/categories", {
         startDate,
         endDate,
       });
