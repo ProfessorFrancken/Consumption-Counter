@@ -3,7 +3,7 @@ import {Factory, trait} from "miragejs";
 import {faker} from "@faker-js/faker";
 import moment from "moment";
 
-export const MemberFactory = Factory.extend({
+export const memberFactoryDefinition = {
   id: (i: any) => parseInt(i, 10),
 
   achternaam() {
@@ -92,4 +92,5 @@ export const MemberFactory = Factory.extend({
     return colors[i % colors.length];
   },
   prominent: null,
-});
+};
+export const MemberFactory = Factory.extend(memberFactoryDefinition);

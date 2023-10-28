@@ -1,7 +1,7 @@
 // @ts-expect-error ts-migrate(2305) FIXME: Module '"miragejs"' has no exported member 'associ... Remove this comment to see the full error message
 import {Factory, association} from "miragejs";
 
-export const CommitteeFactory = Factory.extend({
+export const committeeFactoryDefinition = {
   id(i: number) {
     return i % 40;
   },
@@ -14,9 +14,10 @@ export const CommitteeFactory = Factory.extend({
     }
     return `Committee ${i % 40}`;
   },
-});
+};
+export const CommitteeFactory = Factory.extend(committeeFactoryDefinition);
 
-export const CommitteeMemberFactory = Factory.extend({
+export const committeeMemberFactoryDefinition = {
   title(i: number) {
     const functions = ["", "", "", "Treasurer", "President"];
     return functions[i % functions.length];
@@ -28,4 +29,5 @@ export const CommitteeMemberFactory = Factory.extend({
   year(i: number) {
     return 2018 + (i % 5);
   },
-});
+};
+export const CommitteeMemberFactory = Factory.extend(committeeMemberFactoryDefinition);
