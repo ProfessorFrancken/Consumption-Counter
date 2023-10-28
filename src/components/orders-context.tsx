@@ -30,10 +30,17 @@ export type Product = {
 export const useSelectedMember = () => {
   const [searchParams] = useSearchParams();
   const {members} = useMembers();
+  const memberId = searchParams.has("memberId")
+    ? Number(searchParams.get("memberId"))
+    : undefined;
+
   return useMemo(() => {
-    const memberId = Number(searchParams.get("memberId"));
+    if (memberId === undefined) {
+      return undefined;
+    }
+
     return members.find(({id}) => id === memberId);
-  }, [members, searchParams]);
+  }, [members, memberId]);
 };
 
 function didNotRecentlyOrderAProduct(member: MemberType) {
