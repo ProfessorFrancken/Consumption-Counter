@@ -11,6 +11,18 @@ const member = {
   fullName: "John Snow",
 };
 
+const thisWeek = [
+  // The previous Sunday isn't displayed
+  new Date(2020, 2, 8),
+
+  // Start at Monday
+  new Date(2020, 2, 9),
+  new Date(2020, 2, 10),
+  new Date(2020, 2, 11),
+  // Up to Thursday
+  new Date(2020, 2, 12),
+];
+
 let server;
 beforeEach(() => {
   server = makeServer({environment: "test"});
@@ -49,6 +61,89 @@ beforeEach(() => {
     categorie: "Fris",
     naam: "Ice Tea",
     prijs: "0.6100",
+  });
+
+  server.create("product", {
+    categorie: "Fris",
+    naam: "Goede morgen!",
+  });
+
+  server.create("product", {
+    categorie: "Fris",
+    naam: "Pepsi max",
+    splash_afbeelding:
+      "https://old.professorfrancken.nl/database/streep/afbeeldingen/ECDOccDsQVmRRRpyBnN1.jpeg",
+  });
+
+  server.create("member", {
+    achternaam: "Sjaars",
+    voornaam: "Sjaars",
+    tussenvoegsel: "",
+    bijnaam: "Sjaars",
+    geboortedatum: "2003-01-01",
+  });
+
+  server.create("committeeMember", {
+    committee: association({
+      id: 1,
+      name: "s[ck]rip(t|t?c)ie",
+    }),
+    member: association({
+      id: 33,
+      latest_purchase_at: "2020-03-08 22:05:49",
+      geboortedatum: "1993-04-26",
+      achternaam: "Baars",
+      voornaam: "Sven",
+      tussenvoegsel: "",
+      bijnaam: "ir. Sven",
+    }),
+    year: new Date().getFullYear(),
+  });
+
+  server.create("committeeMember", {
+    committee: association({
+      id: 1,
+      name: "s[ck]rip(t|t?c)ie",
+    }),
+    member: association({
+      id: 1403,
+      latest_purchase_at: "2020-03-08 22:05:49",
+      geboortedatum: "1993-04-26",
+      achternaam: "Redeman",
+      voornaam: "Mark",
+      tussenvoegsel: "",
+      bijnaam: "",
+    }),
+    year: new Date().getFullYear(),
+  });
+
+  server.create("boardMember", {
+    board: association({
+      year: 2019,
+    }),
+    member: association({
+      bijnaam: "Dictadtor",
+      afbeelding:
+        "https://old.professorfrancken.nl/database/streep/afbeeldingen/nc1J3sNtthqGkeQy0tDf.jpeg",
+    }),
+  });
+
+  server.create("member", {
+    achternaam: "Stark",
+    voornaam: "Arya",
+    tussenvoegsel: "",
+    bijnaam: "Arya",
+    button_width: 70,
+    button_height: 40,
+    latest_purchase_at: "2020-03-08 22:05:49",
+    geboortedatum: "1993-04-26",
+  });
+
+  thisWeek.forEach((day, idx) => {
+    server.create("category", {
+      date: moment(day).format("YYYY-MM-DD"),
+      beer: 100 * (idx + 1),
+    });
   });
 });
 
@@ -297,14 +392,6 @@ describe("Francken Consumption Counter", () => {
 
   describe("Recent", () => {
     it("Shows members that recently bought a product", () => {
-      server.create("member", {
-        latest_purchase_at: "2020-03-08 22:05:49",
-        geboortedatum: "1993-04-26",
-        achternaam: "Stark",
-        voornaam: "Arya",
-        tussenvoegsel: "",
-        bijnaam: "",
-      });
       cy.login();
 
       // Mock clock so that we don't have to wait for the orders to be submitted
@@ -317,7 +404,7 @@ describe("Francken Consumption Counter", () => {
       cy.selectMember({
         nthSurname: 1,
         nthFirstname: 2,
-        name: "Arya Stark",
+        name: "Arya",
       });
       cy.buyIceTea();
       cy.tick(TIME_TO_CANCEL);
@@ -331,7 +418,7 @@ describe("Francken Consumption Counter", () => {
 
       cy.get(".titleName > span").should("contain", "Recent");
       cy.get(".tilesGrid > :nth-child(2)").should("contain", member.fullName);
-      cy.get(".tilesGrid > :nth-child(1)").should("contain", "Arya Stark");
+      cy.get(".tilesGrid > :nth-child(1)").should("contain", "Arya");
     });
   });
 
@@ -345,55 +432,22 @@ describe("Francken Consumption Counter", () => {
 
   describe("Commitees", () => {
     it("Allows selecting a member via committees", () => {
-      server.create("committeeMember", {
-        committee: association({
-          id: 1,
-          name: "HOI",
-        }),
-        member: association({
-          id: 1403,
-          latest_purchase_at: "2020-03-08 22:05:49",
-          geboortedatum: "1993-04-26",
-          achternaam: "Redeman",
-          voornaam: "Mark",
-          tussenvoegsel: "",
-          bijnaam: "",
-        }),
-        year: new Date().getFullYear(),
-      });
-
       cy.login();
 
       cy.get('[href="/committees"]').click();
       cy.get(".titleName > span").should("contain", "Committees");
 
-      cy.get(".tilesGrid > :nth-child(1)").should("contain", "HOI").click();
-      cy.get(".titleName > span").should("contain", "HOI");
+      cy.get(".tilesGrid > :nth-child(1)").should("contain", "s[ck]rip(t|t?c)ie").click();
+      cy.get(".titleName > span").should("contain", "s[ck]rip(t|t?c)ie");
 
       cy.get(".tilesGrid").should("contain", "Mark Redeman");
-      cy.get(".tilesGrid > :nth-child(1)").click();
+      cy.get(".tilesGrid > :nth-child(2)").click();
       cy.get(".titleName > span").should("contain", "Mark Redeman");
     });
   });
 
   describe("Compucie", () => {
     beforeEach(() => {
-      server.create("committeeMember", {
-        committee: association({
-          id: 1,
-          name: "s[ck]rip(t|t?c)ie",
-        }),
-        member: association({
-          id: 33,
-          latest_purchase_at: "2020-03-08 22:05:49",
-          geboortedatum: "1993-04-26",
-          achternaam: "Baars",
-          voornaam: "Sven",
-          tussenvoegsel: "",
-          bijnaam: "ir. Sven",
-        }),
-        year: 2020,
-      });
       cy.login();
     });
 
@@ -474,23 +528,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Shows the purchases from last week", () => {
-      const thisWeek = [
-        // The previous Sunday isn't displayed
-        new Date(2020, 2, 8),
-
-        // Start at Monday
-        new Date(2020, 2, 9),
-        new Date(2020, 2, 10),
-        new Date(2020, 2, 11),
-        // Up to Thursday
-        new Date(2020, 2, 12),
-      ];
-      thisWeek.forEach((day, idx) => {
-        server.create("category", {
-          date: moment(day).format("YYYY-MM-DD"),
-          beer: 100 * (idx + 1),
-        });
-      });
       cy.login();
 
       cy.clock(thisWeek[4].getTime(), ["Date"]);
@@ -506,26 +543,7 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Shows a heatmap of busy days", () => {
-      const getDaysArray = function (start, end) {
-        const days = [];
-        for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-          days.push(new Date(date));
-        }
-        return days;
-      };
-
-      const days = getDaysArray(
-        moment().subtract(2, "years").toDate(),
-        moment().toDate()
-      ).reverse();
-
-      days.forEach((day) => {
-        server.create("category", {
-          date: moment(day).format("YYYY-MM-DD"),
-        });
-      });
       cy.login();
-      cy.clock(days[0].getTime(), ["Date"]);
 
       cy.get('[href="/statistics"]').click();
       cy.get(".titleName > span").should("contain", "Statistics");
@@ -555,21 +573,15 @@ describe("Francken Consumption Counter", () => {
 
   describe("Easter eggs", () => {
     it("Shows a background of a product", () => {
-      server.create("product", {
-        categorie: "Fris",
-        naam: "Pepsi max",
-        splash_afbeelding:
-          "https://old.professorfrancken.nl/database/streep/afbeeldingen/ECDOccDsQVmRRRpyBnN1.jpeg",
-      });
       cy.login();
 
       cy.selectMember({name: member.fullName});
 
-      cy.get(".productsGrid > :nth-child(2) > :nth-child(2)").should(
+      cy.get(".productsGrid > :nth-child(2) > :nth-child(3)").should(
         "contain",
         "Pepsi max"
       );
-      cy.get(".productsGrid > :nth-child(2) > :nth-child(2)").click();
+      cy.get(".productsGrid > :nth-child(2) > :nth-child(3)").click();
       cy.get(".wrapper").should(
         "have.css",
         "background-image",
@@ -578,14 +590,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Shows a small member button", () => {
-      server.create("member", {
-        achternaam: "Stark",
-        voornaam: "Arya",
-        tussenvoegsel: "",
-        bijnaam: "Arya",
-        button_width: 70,
-        button_height: 40,
-      });
       cy.login();
 
       cy.get(`.tilesGrid > :nth-child(1)`).click();
@@ -598,16 +602,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Shows a member button with background", () => {
-      server.create("boardMember", {
-        board: association({
-          year: 2019,
-        }),
-        member: association({
-          bijnaam: "Dictadtor",
-          afbeelding:
-            "https://old.professorfrancken.nl/database/streep/afbeeldingen/nc1J3sNtthqGkeQy0tDf.jpeg",
-        }),
-      });
       cy.login();
 
       cy.get('[href="/prominent"]').click();
@@ -621,10 +615,6 @@ describe("Francken Consumption Counter", () => {
     });
 
     it("Locks goedemorgen after 12", () => {
-      server.create("product", {
-        categorie: "Fris",
-        naam: "Goede morgen!",
-      });
       cy.login();
 
       const after12 = new Date(2020, 2, 2, 13).getTime();
@@ -694,13 +684,6 @@ describe("Francken Consumption Counter", () => {
     it(`A minor isn't allowed to buy alcohol`, () => {
       const after4 = new Date(2020, 2, 2, 17).getTime();
       cy.clock(after4, ["Date"]);
-      server.create("member", {
-        achternaam: "Sjaars",
-        voornaam: "Sjaars",
-        tussenvoegsel: "",
-        bijnaam: "Sjaars",
-        geboortedatum: "2003-01-01",
-      });
       cy.login();
 
       // Normally we should be able to see beer
