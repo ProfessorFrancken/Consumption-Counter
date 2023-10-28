@@ -1,4 +1,4 @@
-import {screen} from "@testing-library/react";
+import {screen, waitFor} from "@testing-library/react";
 import Settings from "./index";
 import {render, fireEvent} from "test-utils";
 import {setupServer} from "msw/node";

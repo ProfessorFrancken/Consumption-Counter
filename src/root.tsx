@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   createMemoryRouter,
   createRoutesFromElements,
+  Outlet,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -29,70 +30,79 @@ export const InfrastructureProviders = ({
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/*" element={children}>
-        <Route index />
         <Route
           path="settings"
+          element={<></>}
           handle={{
             title: <span>Settings</span>,
           }}
         />
-        <Route path="compucie" />
+        <Route path="compucie" element={<></>} />
         <Route
           path="prominent"
+          element={<></>}
           handle={{
             title: <span>Prominent</span>,
           }}
         />
         <Route
           path="statistics"
+          element={<></>}
           handle={{
             title: <span>Statistics</span>,
           }}
         />
         <Route
           path="committees"
+          element={<></>}
           handle={{
             title: <span>Committees</span>,
           }}
         />
         <Route
           path="committees/:page"
+          element={<></>}
           handle={{
             title: <CommitteeTitle />,
           }}
         />
         <Route
           path="recent"
+          element={<></>}
           handle={{
             title: <span>Recent</span>,
           }}
         />
         <Route
           path="products"
+          element={<></>}
           handle={{
             title: <BuyProductsForMemberTitle />,
           }}
         />
         <Route
           path="products/pricelist"
+          element={<></>}
           handle={{
             title: <span>Pricelist</span>,
           }}
         />
         <Route
           path="statistics"
+          element={<></>}
           handle={{
             title: <span>Statistics</span>,
           }}
         />
         <Route
           path="present"
+          element={<></>}
           handle={{
             title: <span>Present</span>,
           }}
         />
-        <Route path="members/:page" />
-        <Route path="members" />
+        <Route path="members/:page" element={<></>} />
+        <Route path="members" element={<></>} />
       </Route>
     ),
     {initialEntries: routes ?? ["/"]}

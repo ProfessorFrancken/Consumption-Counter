@@ -4,6 +4,7 @@ import decode from "jwt-decode";
 import moment from "moment";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router";
+import {State} from "./context";
 
 const Button = ({children, ...props}: any) => (
   <button className="btn btn-secondary mb-2" {...props} type="submit">
@@ -57,7 +58,7 @@ const AuthenticateButton = ({request, token}: any) => {
   );
 };
 
-const AuthenticationForm = ({authenticate, token, request, error}: any) => {
+const AuthenticationForm = ({authenticate, token, request, error}: State) => {
   const {
     handleSubmit,
     register,
