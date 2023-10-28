@@ -3,7 +3,7 @@ import {pick, maxBy} from "lodash";
 import {MemberType} from "../../queries/members";
 import {Product} from "../orders-context";
 import api from "api";
-import useLocalStorage from "./../../utils/use-local-storage";
+import {useLocalStorage} from "usehooks-ts";
 
 export type OrderedOrder = {
   ordered_at: number;

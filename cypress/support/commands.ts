@@ -47,7 +47,7 @@ Cypress.Commands.add(
 
     cy.get(`.tilesGrid > :nth-child(${nthSurname})`).click();
 
-    cy.findByText(name).click();
+    cy.get(".tilesGrid").findByText(name).click();
 
     // Check that we have selected the given member by comparing the page title
     cy.get(".titleName > span").should("contain", name);
