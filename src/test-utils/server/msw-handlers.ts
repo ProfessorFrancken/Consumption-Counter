@@ -4,6 +4,7 @@ import {ApiCommmitteesResponse} from "queries/committees";
 import {ApiMembersResponse} from "queries/members";
 import {ApiProductsResponse} from "queries/products";
 import {ApiStatisticsResponse} from "queries/statistics";
+import {token} from "./authentication";
 
 export const getHandlers = ({
   products,
@@ -19,7 +20,16 @@ export const getHandlers = ({
   statistics: ApiStatisticsResponse["statistics"];
 }) => {
   const handlers = [
+    rest.post("*/authenticate", async (req, res, ctx) => {
+      const {password} = await req.json();
+      if (password !== "bitterballen") {
+        return res(ctx.status(401, "Unauthorized"));
+        //return new Response(401, {}, {error: "unauthorized"});
+      }
+      return res(ctx.json({token}));
+    }),
     rest.get("*/members", (req, res, ctx) => {
+      console.log("getting members?");
       return res(ctx.json({members}));
     }),
     rest.get("*/products", (req, res, ctx) => {
@@ -56,6 +66,9 @@ export const getHandlers = ({
     }),
     rest.get("https://old.professorfrancken.nl/*", (req, res, ctx) => {
       return res(ctx.status(204));
+    }),
+    rest.get("https://borrelcie.vodka/present/data.php", (req, res, ctx) => {
+      return res(ctx.json(["Mark"]));
     }),
   ];
 

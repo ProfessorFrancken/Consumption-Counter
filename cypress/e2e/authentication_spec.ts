@@ -1,27 +1,7 @@
-/* eslint-disable no-undef */
-import {makeServer} from "../../src/test-utils/server/index";
+import {mswHandlers} from "../support/msw-handlers";
 
-const member = {
-  firstName: "John",
-  lastName: "Snow",
-  fullName: "John SNow",
-};
-
-let server;
 beforeEach(() => {
-  server = makeServer({environment: "test"});
-  server.create("member", {
-    latest_purchase_at: "2020-03-08 22:05:49",
-    geboortedatum: "1993-04-26",
-    achternaam: member.lastName,
-    voornaam: member.firstName,
-    tussenvoegsel: "",
-    bijnaam: "",
-  });
-});
-
-afterEach(() => {
-  server.shutdown();
+  cy.interceptRequest(...mswHandlers);
 });
 
 describe("Authentication", () => {
@@ -47,7 +27,11 @@ describe("Authentication", () => {
     cy.findByRole("link", {name: /Open application/}).click();
 
     cy.location("pathname").should("eq", "/");
-    cy.findByText(member.lastName, {exact: false});
+
+    cy.findByRole("heading", {
+      level: 2,
+      name: "T.F.V. 'Professor Francken'",
+    }).click();
 
     cy.visit("/settings");
     cy.findByRole("button", {name: /Refresh token/});

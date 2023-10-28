@@ -144,6 +144,7 @@ export function makeServer({environment = "development"} = {}) {
 }
 
 const makeCypressServer = () => {
+  return;
   let cyServer = new Server({
     logging: true,
     urlPrefix: "http:francken.nl.localhost/",
@@ -179,20 +180,9 @@ const makeCypressServer = () => {
   return cyServer;
 };
 
-const makeDevServer = () => {
-  let server = makeServer();
-  server.logging = true;
-  return server;
-};
-
 const makeEnvironmentSpecificServer = () => {
   if ((window as any).Cypress) {
     return makeCypressServer();
-  }
-
-  //return;
-  if (process.env.NODE_ENV === "development") {
-    // return makeDevServer();
   }
 
   return null;
