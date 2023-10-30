@@ -1,11 +1,10 @@
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import moment from "moment";
 import {Statistic} from "queries/statistics";
-import {VictoryChart, VictoryBar, VictoryAxis} from "victory";
+import {WeeklyPurchasesAsBarGraph} from "./bar-example";
 
 type Purchases = Omit<Statistic, "date"> & {
-  date: Date | string;
+  date: Date;
   beer: number;
   soda: number;
   food: number;
@@ -24,14 +23,13 @@ const PurchasesOfWeek = ({
   type: "beer" | "soda" | "food" | "total";
 }) => {
   return (
-    <div className="p-0 bg-dark text-white" style={{position: "relative"}}>
+    <div className="p-0 bg-dark text-white position-relative" style={{height: "150px"}}>
       <div
+        className="position-absolute text-right"
         style={{
-          position: "absolute",
           top: "1.0em",
           right: "1.0em",
           zIndex: 100,
-          textAlign: "right",
         }}
       >
         <h4 className="mb-1" style={{color: "#a4afb9"}}>
@@ -39,34 +37,15 @@ const PurchasesOfWeek = ({
             (total: number, purchases: Purchases) => total + purchases[type],
             0
           )}
+          &nbsp;
           <FontAwesomeIcon icon={icon} size="1x" className="text-muted ms-1" />
         </h4>
         <small className="text-uppercase" style={{color: "#a4afb9"}}>
           {today[type]} today
         </small>
       </div>
-      <div>
-        <VictoryChart
-          height={150}
-          width={400}
-          domainPadding={{x: 10, y: 0}}
-          padding={35}
-          scale={{x: "time", y: "linear"}}
-        >
-          <VictoryAxis
-            tickFormat={(date) => moment(date).format("ddd")}
-            style={{
-              axis: {stroke: "transparant"},
-              tickLabels: {color: "#6c757d", fill: "rgb(108, 117, 125)"},
-            }}
-          />
-          <VictoryBar
-            data={purchases}
-            style={{data: {fill: "#6c757d"}}}
-            x={"date"}
-            y={type}
-          />
-        </VictoryChart>
+      <div className="p-2 pt-3 h-100 w-100">
+        <WeeklyPurchasesAsBarGraph purchases={purchases} type={type} />
       </div>
     </div>
   );

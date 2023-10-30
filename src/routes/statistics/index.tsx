@@ -111,10 +111,10 @@ const Statistics = ({
   };
 
   const purchases = thisWeek().map((day) => ({
-    total: 0,
-    beer: 0,
-    soda: 0,
-    food: 0,
+    total: Math.ceil(Math.random() * 100),
+    beer: Math.ceil(Math.random() * 200),
+    soda: Math.ceil(Math.random() * 300),
+    food: Math.ceil(Math.random() * 400),
     ...statistics.find(
       (statistic) =>
         moment(statistic.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
@@ -124,40 +124,38 @@ const Statistics = ({
 
   return (
     <StatisticsGrid>
-      <div className="row">
-        <div className="col">
-          <PurchasesOfWeek
-            purchases={purchases}
-            today={purchasesToday}
-            type="total"
-            icon="shopping-cart"
-          />
-        </div>
-        <div className="col">
-          <PurchasesOfWeek
-            purchases={purchases}
-            today={purchasesToday}
-            type="beer"
-            icon="beer"
-          />
-        </div>
-        <div className="col">
-          <PurchasesOfWeek
-            purchases={purchases}
-            today={purchasesToday}
-            type="soda"
-            icon={["fab", "gulp"]}
-          />
-        </div>
-        <div className="col">
-          <PurchasesOfWeek
-            purchases={purchases}
-            today={purchasesToday}
-            type="food"
-            icon="utensils"
-          />
-        </div>
+      <div
+        style={{
+          columnCount: 4,
+          columnGap: "2rem",
+        }}
+      >
+        <PurchasesOfWeek
+          purchases={purchases}
+          today={purchasesToday}
+          type="total"
+          icon="shopping-cart"
+        />
+        <PurchasesOfWeek
+          purchases={purchases}
+          today={purchasesToday}
+          type="beer"
+          icon="beer"
+        />
+        <PurchasesOfWeek
+          purchases={purchases}
+          today={purchasesToday}
+          type="soda"
+          icon={["fab", "gulp"]}
+        />
+        <PurchasesOfWeek
+          purchases={purchases}
+          today={purchasesToday}
+          type="food"
+          icon="utensils"
+        />
       </div>
+
       <div
         style={{
           overflowY: "scroll",
