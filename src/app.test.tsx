@@ -46,6 +46,17 @@ describe("rendering", () => {
       {path: "/members/0", component: "Members", title: ""},
     ];
 
+    beforeEach(() => {
+      Object.defineProperty(global, "ResizeObserver", {
+        writable: true,
+        value: jest.fn().mockImplementation(() => ({
+          observe: jest.fn(() => "Mocking works"),
+          unobserve: jest.fn(),
+          disconnect: jest.fn(),
+        })),
+      });
+    });
+
     routes.forEach((route) => {
       it(`renders ${route.path}`, () => {
         setup([route.path]);
