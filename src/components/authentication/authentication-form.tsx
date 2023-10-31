@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import decode from "jwt-decode";
+import {jwtDecode as decode} from "jwt-decode";
 import moment from "moment";
 import {ReactNode} from "react";
 import {useForm} from "react-hook-form";
