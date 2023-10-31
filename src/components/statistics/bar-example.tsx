@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {BarStack, Bar} from "@visx/shape";
+import {BarStack} from "@visx/shape";
 import {Group} from "@visx/group";
 import {AxisBottom} from "@visx/axis";
 import {scaleBand, scaleLinear, scaleOrdinal} from "@visx/scale";
@@ -71,26 +71,39 @@ function BarExample({
     });
   }, [data, yMax, type]);
 
+  const colorScale = useMemo(
+    () => scaleOrdinal({domain: [type], range: ["#6c757d"]}),
+    [type]
+  );
+
   return width < 10 ? null : (
     <svg width={width} height={height}>
       <Group>
-        {data.map((purchase) => {
-          const date = getDate(purchase);
-          const x = dateScale(date);
-          const height = purchaseScale(purchase[type]);
-          const width = dateScale.bandwidth();
-
-          return (
-            <Bar
-              key={date}
-              width={width}
-              x={x}
-              y={height}
-              fill="#6c757d"
-              height={purchaseScale.range()[0] - height}
-            />
-          );
-        })}
+        <BarStack<Purchase, PurchaseType>
+          data={data}
+          keys={[type]}
+          x={getDate}
+          xScale={dateScale}
+          yScale={purchaseScale}
+          color={colorScale}
+        >
+          {(barStacks) => {
+            return barStacks.map((barStack) => {
+              return barStack.bars.map((bar) => {
+                return (
+                  <rect
+                    key={`bar-stack-${barStack.index}-${bar.index}`}
+                    x={bar.x}
+                    y={bar.y}
+                    height={bar.height}
+                    width={bar.width}
+                    fill={"#6c757d"}
+                  />
+                );
+              });
+            });
+          }}
+        </BarStack>
 
         <AxisBottom
           top={yMax}

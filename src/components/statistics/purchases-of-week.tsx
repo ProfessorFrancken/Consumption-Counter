@@ -32,7 +32,7 @@ const PurchasesOfWeek = ({
           zIndex: 100,
         }}
       >
-        <h4 className="mb-1" style={{color: "#a4afb9"}}>
+        <h4 className="mb-1" style={{color: "#a4afb9"}} aria-label={`${type} purchases`}>
           {purchases.reduce(
             (total: number, purchases: Purchases) => total + purchases[type],
             0
@@ -40,7 +40,11 @@ const PurchasesOfWeek = ({
           &nbsp;
           <FontAwesomeIcon icon={icon} size="1x" className="text-muted ms-1" />
         </h4>
-        <small className="text-uppercase" style={{color: "#a4afb9"}}>
+        <small
+          className="text-uppercase"
+          style={{color: "#a4afb9"}}
+          aria-label={`${type} purchases today`}
+        >
           {today[type]} today
         </small>
       </div>

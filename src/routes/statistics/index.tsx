@@ -111,10 +111,10 @@ const Statistics = ({
   };
 
   const purchases = thisWeek().map((day) => ({
-    total: Math.ceil(Math.random() * 100),
-    beer: Math.ceil(Math.random() * 200),
-    soda: Math.ceil(Math.random() * 300),
-    food: Math.ceil(Math.random() * 400),
+    total: 0,
+    beer: 0,
+    soda: 0,
+    food: 0,
     ...statistics.find(
       (statistic) =>
         moment(statistic.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
