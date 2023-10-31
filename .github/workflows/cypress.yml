@@ -11,6 +11,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Init msw
+        run: npx msw init dist/
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
