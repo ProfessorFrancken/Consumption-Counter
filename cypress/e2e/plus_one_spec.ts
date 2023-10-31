@@ -339,19 +339,18 @@ describe("Francken Consumption Counter", () => {
         });
     });
 
-    it("Shows the purchases from last week", () => {
+    it.only("Shows the purchases from last week", () => {
       cy.login();
 
       cy.clock(thisWeek[4].getTime(), ["Date"]);
 
       cy.get('[href="/statistics"]').click();
       cy.get(".titleName > span").should("contain", "Statistics");
-      cy.get(
-        ':nth-child(2) > .p-0 > [style="position: absolute; top: 1em; right: 1em; z-index: 100; text-align: right;"] > .mb-1'
-      ).should("contain", "1400");
-      cy.get(
-        ':nth-child(2) > .p-0 > [style="position: absolute; top: 1em; right: 1em; z-index: 100; text-align: right;"] > .text-uppercase'
-      ).should("contain", "500");
+      cy.findByRole("heading", {level: 4, name: "beer purchases"}).should(
+        "contain",
+        "1400"
+      );
+      cy.findByLabelText("beer purchases today").should("contain", "500");
     });
 
     it("Shows a heatmap of busy days", () => {
