@@ -339,7 +339,7 @@ describe("Francken Consumption Counter", () => {
         });
     });
 
-    it.only("Shows the purchases from last week", () => {
+    it("Shows the purchases from last week", () => {
       cy.login();
 
       cy.clock(thisWeek[4].getTime(), ["Date"]);

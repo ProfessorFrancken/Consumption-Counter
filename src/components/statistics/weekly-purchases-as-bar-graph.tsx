@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {BarStack} from "@visx/shape";
+import {Bar} from "@visx/shape";
 import {Group} from "@visx/group";
 import {AxisBottom} from "@visx/axis";
 import {scaleBand, scaleLinear, scaleOrdinal} from "@visx/scale";
@@ -21,7 +21,7 @@ export type BarStackProps = {
   margin?: {top: number; right: number; bottom: number; left: number};
   events?: boolean;
 
-  purchases: Purchase[];
+  data: Purchase[];
   type: "beer" | "soda" | "food" | "total";
 };
 
@@ -35,16 +35,8 @@ const formatDate = (date: string) => format(parseDate(date)!);
 const toYYYYMMDD = timeFormat("%Y-%m-%d");
 const getDate = ({date}: Purchase) => toYYYYMMDD(date);
 
-function BarExample({
-  width,
-  height,
-  margin = defaultMargin,
-  purchases,
-  type,
-}: BarStackProps) {
-  const data = purchases;
-
-  const dateScale = useMemo(
+function BarExample({width, height, margin = defaultMargin, data, type}: BarStackProps) {
+  const xScale = useMemo(
     () =>
       scaleBand({
         domain: data.map(getDate),
@@ -57,12 +49,10 @@ function BarExample({
 
   const yMax = height - margin.top - 30;
 
-  const purchaseScale = useMemo(() => {
-    const purchaseTotals = data.reduce((allTotals, currentDate) => {
-      allTotals.push(currentDate[type]);
-
-      return allTotals;
-    }, [] as number[]);
+  const yScale = useMemo(() => {
+    const purchaseTotals = data.map((currentDate) => {
+      return currentDate[type];
+    });
 
     return scaleLinear<number>({
       domain: [0, Math.max(...purchaseTotals)],
@@ -71,51 +61,36 @@ function BarExample({
     });
   }, [data, yMax, type]);
 
-  const colorScale = useMemo(
-    () => scaleOrdinal({domain: [type], range: ["#6c757d"]}),
-    [type]
-  );
-
   return width < 10 ? null : (
     <svg width={width} height={height}>
       <Group>
-        <BarStack<Purchase, PurchaseType>
-          data={data}
-          keys={[type]}
-          x={getDate}
-          xScale={dateScale}
-          yScale={purchaseScale}
-          color={colorScale}
-        >
-          {(barStacks) => {
-            return barStacks.map((barStack) => {
-              return barStack.bars.map((bar) => {
-                return (
-                  <rect
-                    key={`bar-stack-${barStack.index}-${bar.index}`}
-                    x={bar.x}
-                    y={bar.y}
-                    height={bar.height}
-                    width={bar.width}
-                    fill={"#6c757d"}
-                  />
-                );
-              });
-            });
-          }}
-        </BarStack>
+        {data.map((purchase) => {
+          const [yDomainMin, yDomainMax] = yScale.domain();
+
+          const width = xScale.bandwidth();
+          const height = Math.max(
+            Math.min(yMax - yScale(purchase[type]) ?? 0, yDomainMax),
+            yDomainMin
+          );
+
+          const date = getDate(purchase);
+          const x = xScale(date);
+          const y = yMax - height;
+
+          return (
+            <Bar key={date} width={width} x={x} y={y} fill="#6c757d" height={height} />
+          );
+        })}
 
         <AxisBottom
           top={yMax}
-          scale={dateScale}
+          scale={xScale}
           tickFormat={formatDate}
-          stroke={""}
           hideTicks
           hideAxisLine
           tickLabelProps={{
             fontSize: 11,
             textAnchor: "middle",
-            color: "#6c757d",
             fill: "rgb(108, 117, 125)",
           }}
         />
@@ -134,7 +109,7 @@ export function WeeklyPurchasesAsBarGraph({
   return (
     <ParentSize debounceTime={10}>
       {({width, height}) => (
-        <BarExample width={width} height={height} type={type} purchases={purchases} />
+        <BarExample width={width} height={height} type={type} data={purchases} />
       )}
     </ParentSize>
   );
