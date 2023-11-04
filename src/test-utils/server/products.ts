@@ -42,7 +42,7 @@ export const productFactoryDefinition = {
   },
 };
 
-type ApiProduct = ArrayElement<ApiProductsResponse["products"]>;
+export type ApiProduct = ArrayElement<ApiProductsResponse["products"]>;
 export const getProductApi = (product: Partial<ApiProduct>): ApiProduct => {
   const idx = product.id ?? 0;
   return {

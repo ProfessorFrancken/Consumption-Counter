@@ -2,6 +2,7 @@ import {rest} from "msw";
 import {ApiBoardsResponse} from "queries/boards";
 import {ApiCommmitteesResponse} from "queries/committees";
 import {ApiMembersResponse} from "queries/members";
+import {ApiOrdersResponse} from "queries/orders";
 import {ApiProductsResponse} from "queries/products";
 import {ApiStatisticsResponse} from "queries/statistics";
 import {token} from "./authentication";
@@ -12,12 +13,14 @@ export const getHandlers = ({
   committees,
   boardMembers,
   statistics,
+  orders,
 }: {
   members: ApiMembersResponse["members"];
   products: ApiProductsResponse["products"];
   boardMembers: ApiBoardsResponse["boardMembers"];
   committees: ApiCommmitteesResponse["committees"];
   statistics: ApiStatisticsResponse["statistics"];
+  orders: ApiOrdersResponse["orders"];
 }) => {
   const handlers = [
     rest.post("*/authenticate", async (req, res, ctx) => {
@@ -29,7 +32,6 @@ export const getHandlers = ({
       return res(ctx.json({token}));
     }),
     rest.get("*/members", (req, res, ctx) => {
-      console.log("getting members?");
       return res(ctx.json({members}));
     }),
     rest.get("*/products", (req, res, ctx) => {
@@ -51,7 +53,7 @@ export const getHandlers = ({
       return res(ctx.status(200));
     }),
     rest.get("*/orders", (req, res, ctx) => {
-      return res(ctx.json({products: []}));
+      return res(ctx.json({orders}));
     }),
     rest.get("*/sponsors", (req, res, ctx) => {
       return res(

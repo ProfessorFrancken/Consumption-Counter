@@ -96,7 +96,7 @@ export const memberFactoryDefinition = {
   prominent: null,
 };
 
-type ApiMember = ArrayElement<ApiMembersResponse["members"]>;
+export type ApiMember = ArrayElement<ApiMembersResponse["members"]>;
 export const getMemberApi = (member: Partial<ApiMember>): ApiMember => {
   const idx = member.id ?? 0;
   const voornaam = memberFactoryDefinition.voornaam();

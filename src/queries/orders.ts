@@ -7,6 +7,7 @@ import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "../api";
 import {useProductsQuery} from "./products";
 
+export type ApiOrdersResponse = {orders: OrderTransaction[]};
 export type OrderTransaction = {
   id: number;
   member_id: number;
@@ -20,7 +21,7 @@ export const ordersQueryOptions = () => {
   return queryOptions({
     queryKey: ["orders"],
     queryFn: async () => {
-      return (await api.get<{orders: OrderTransaction[]}>("/orders")).orders ?? [];
+      return (await api.get<ApiOrdersResponse>("/orders")).orders ?? [];
     },
     staleTime: Infinity,
   });
@@ -36,6 +37,8 @@ export const useTransactions = () => {
 
   const productsQuery = useProductsQuery();
   const products = productsQuery.data;
+
+  console.log({orders, productsQuery, products});
 
   return useMemo(() => {
     if (!orders.data) {

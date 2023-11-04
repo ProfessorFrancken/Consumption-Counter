@@ -67,6 +67,7 @@ export const useProductsQuery = () => {
     if (!query.data) {
       return;
     }
+    return;
 
     const products = query.data;
 

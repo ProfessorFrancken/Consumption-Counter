@@ -1,12 +1,13 @@
 import {setupWorker} from "msw";
 import {getMemberApi} from "./members";
-import {range, sampleSize} from "lodash";
+import {range, sampleSize, sample, orderBy, groupBy} from "lodash";
 import {getProductApi} from "./products";
 import {getCommitteeMemberApi} from "./committees";
 import {faker} from "@faker-js/faker";
 import moment from "moment";
 import {getHandlers} from "./msw-handlers";
 import {getBoardMemberApi} from "./boards";
+import {getOrderApi} from "./orders";
 
 faker.seed(33);
 
@@ -61,13 +62,35 @@ const boardMembers = range(0, 20).flatMap((boardIdx) => {
   });
 });
 
+const ORDERS_PER_MEMBER = 40;
+const orders = orderBy(
+  range(0, members.length * ORDERS_PER_MEMBER).map((idx) => {
+    const member = sample(members)!;
+    const product = sample(products)!;
+
+    return getOrderApi({id: idx}, member, product);
+  }),
+  (order) => moment(order.ordered_at).unix()
+);
+
+const ordersByDate = groupBy(orders, (order) =>
+  moment(order.ordered_at).format("YYYY-MM-DD")
+);
+
+// NOTE: the heat map currently requires every date to be present,
+// will be fixed later
 const statistics = range(0, 2 * 365).map((idx) => {
   const date = moment().subtract(idx, "day").format("YYYY-MM-DD");
+
+  const beer = ordersByDate[date]?.filter((order) => order.type === "Bier")?.length ?? 0;
+  const soda = ordersByDate[date]?.filter((order) => order.type === "Fris")?.length ?? 0;
+  const food = ordersByDate[date]?.filter((order) => order.type === "Eten")?.length ?? 0;
+
   return {
     date,
-    beer: `${faker.number.int(330)}`,
-    soda: `${faker.number.int(100)}`,
-    food: `${faker.number.int(200)}`,
+    beer: `${beer}`,
+    soda: `${soda}`,
+    food: `${food}`,
   };
 });
 
@@ -79,5 +102,6 @@ export const worker = setupWorker(
     committees,
     boardMembers,
     statistics,
+    orders,
   })
 );

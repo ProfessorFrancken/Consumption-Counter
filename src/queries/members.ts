@@ -106,6 +106,7 @@ export const useMembers = () => {
     if (!membersQuery.data) {
       return;
     }
+    return;
 
     const members = membersQuery.data;
     const images = members
