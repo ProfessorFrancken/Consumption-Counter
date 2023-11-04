@@ -1,6 +1,5 @@
 // @ts-expect-error ts-migrate(2305) FIXME: Module '"miragejs"' has no exported member 'associ... Remove this comment to see the full error message
 import {Factory, association} from "miragejs";
-import {ApiBoardsResponse} from "queries/boards";
 import {ApiCommmitteesResponse} from "queries/committees";
 import {ArrayElement} from "types";
 

@@ -10,6 +10,7 @@ import {useTransactions} from "../../queries/orders";
 import {Statistic, useStatisticsQuery} from "./../../queries/statistics";
 import {styled} from "styled-components";
 import ProductsPrice from "../../components/products-price";
+import {useMemo} from "react";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -95,32 +96,44 @@ const Statistics = ({
   activities: Activity[];
   transactions: OrderedOrder[];
 }) => {
-  const today = moment();
-  const todayFormat = today.format("YYYY-MM-DD");
-  const purchasesToday = statistics.find(
-    (statistic) => moment(statistic.date).format("YYYY-MM-DD") === todayFormat
-  ) || {total: 0, beer: 0, soda: 0, food: 0, date: todayFormat};
+  const purchases = useMemo(() => {
+    const getFirstMondayOfWeek = function (week: number, year: number) {
+      return moment().seconds(0).minutes(0).hours(0).day("Monday").year(year).week(week);
+    };
 
-  const getFirstMondayOfWeek = function (week: number, year: number) {
-    return moment().seconds(0).minutes(0).hours(0).day("Monday").year(year).week(week);
-  };
-
-  const thisWeek = () => {
     const monday = getFirstMondayOfWeek(moment().week(), moment().year());
-    return [0, 1, 2, 3, 4, 5, 6].map((add) => monday.clone().add(add, "day"));
-  };
+    const thisWeek = [0, 1, 2, 3, 4, 5, 6].map((add) => monday.clone().add(add, "day"));
 
-  const purchases = thisWeek().map((day) => ({
-    total: 0,
-    beer: 0,
-    soda: 0,
-    food: 0,
-    ...statistics.find(
-      (statistic) =>
-        moment(statistic.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
-    ),
-    date: day.toDate(),
-  }));
+    return thisWeek.map((day) => ({
+      total: 0,
+      beer: 0,
+      soda: 0,
+      food: 0,
+      ...statistics.find(
+        (statistic) =>
+          moment(statistic.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
+      ),
+      date: day.toDate(),
+    }));
+  }, [statistics]);
+
+  const purchasesToday = useMemo(() => {
+    const today = moment();
+    const todayFormat = today.format("YYYY-MM-DD");
+
+    const statistic = statistics.find(
+      (statistic) => moment(statistic.date).format("YYYY-MM-DD") === todayFormat
+    );
+
+    return {
+      total: 0,
+      beer: 0,
+      soda: 0,
+      food: 0,
+      ...statistic,
+      date: moment(todayFormat).toDate(),
+    };
+  }, [statistics]);
 
   return (
     <StatisticsGrid>

@@ -2,7 +2,7 @@ import {useMemo} from "react";
 import {Bar} from "@visx/shape";
 import {Group} from "@visx/group";
 import {AxisBottom} from "@visx/axis";
-import {scaleBand, scaleLinear, scaleOrdinal} from "@visx/scale";
+import {scaleBand, scaleLinear} from "@visx/scale";
 import {timeParse, timeFormat} from "@visx/vendor/d3-time-format";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 

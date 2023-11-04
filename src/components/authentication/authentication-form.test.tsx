@@ -1,4 +1,4 @@
-import {fireEvent, screen, waitFor} from "@testing-library/react";
+import {fireEvent, screen} from "@testing-library/react";
 import AuthenticationForm from "./authentication-form";
 import {render} from "test-utils";
 import {setupServer} from "msw/node";
