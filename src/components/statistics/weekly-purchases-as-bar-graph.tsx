@@ -65,16 +65,15 @@ function BarExample({width, height, margin = defaultMargin, data, type}: BarStac
     <svg width={width} height={height}>
       <Group>
         {data.map((purchase) => {
-          const [yDomainMin, yDomainMax] = yScale.domain();
-
-          const width = xScale.bandwidth();
-          const height = Math.max(
-            Math.min(yMax - yScale(purchase[type]) ?? 0, yDomainMax),
-            yDomainMin
-          );
-
           const date = getDate(purchase);
+
           const x = xScale(date);
+          const width = xScale.bandwidth();
+
+          const [yDomainMin, yDomainMax] = yScale.domain();
+          const height =
+            yDomainMin === yDomainMax ? 0 : yMax - yScale(purchase[type]) ?? 0;
+
           const y = yMax - height;
 
           return (
