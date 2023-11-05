@@ -13,7 +13,7 @@ const RedirectWhenIdle = () => {
   }, [location, setPathname]);
 
   React.useEffect(() => {
-    if (pathname === "/statistics") {
+    if (pathname.includes("statistics")) {
       return;
     }
     if (pathname === "/loading") {
