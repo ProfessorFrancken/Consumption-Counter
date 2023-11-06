@@ -9,6 +9,7 @@ import {
   ScaleInput,
   scaleLinear,
   scaleOrdinal,
+  scaleThreshold,
 } from "@visx/scale";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import {GridRows, GridColumns} from "@visx/grid";
@@ -23,6 +24,7 @@ import {
   AnimatedAxis,
   AnimatedGrid,
 } from "@visx/xychart";
+import {LegendThreshold, LegendOrdinal} from "@visx/legend";
 
 export default function getSubTicks<Scale extends AnyD3Scale>(
   scale: Scale,
@@ -104,90 +106,103 @@ function BarExample({width, height, margin: old = defaultMargin, data}: BarStack
     [keys]
   );
 
+  const threshold = scaleOrdinal({
+    domain: ["Beer", "Food", "Soda"],
+    range: theme.colors,
+  });
+
   const subGridTicks = getTicks(yScale, 3 * 10);
+  console.log(theme);
 
   return (
-    <XYChart
-      theme={theme}
-      xScale={{type: "band", padding: 0.5}}
-      yScale={{type: "linear"}}
-    >
-      <AnimatedGrid
-        key={`grid`} // force animate on update
-        rows={true}
-        columns={false}
-        //animationTrajectory={animationTrajectory}
-        //numTicks={numTicks}
-      />
+    <div className="w-100 h-100">
+      <div style={{position: "absolute"}}>
+        <LegendOrdinal scale={threshold} />
+      </div>
+      <div className="w-100 h-100">
+        <XYChart
+          theme={theme}
+          xScale={{type: "band", padding: 0.5}}
+          yScale={{type: "linear"}}
+        >
+          <AnimatedGrid
+            key={`grid`} // force animate on update
+            rows={true}
+            columns={false}
+            //animationTrajectory={animationTrajectory}
+            //numTicks={numTicks}
+          />
 
-      <AnimatedBarStack>
-        <BarSeries
-          dataKey="Beer"
-          data={data}
-          xAccessor={(d) => d.name}
-          yAccessor={(d) => d.beer}
-          //colorAccessor={(d) => "red"}
-        />
-        <BarSeries
-          dataKey="Food"
-          data={data}
-          xAccessor={(d) => d.name}
-          yAccessor={(d) => d.food}
-          //colorAccessor={(d) => "green"}
-        />
-        <BarSeries
-          dataKey="Soda"
-          data={data}
-          xAccessor={(d) => d.name}
-          yAccessor={(d) => d.soda}
-          //colorAccessor={(d) => "blue"}
-        />
-      </AnimatedBarStack>
-      <AnimatedAxis
-        orientation="bottom"
-        key="hoi"
-        tickLabelProps={{
-          fontSize: 11,
-          textAnchor: "middle",
-          color: "#6c757d",
-          fill: "rgb(108, 117, 125)",
-        }}
-        numTicks={data.length}
-        tickComponent={(props) => {
-          const tickLabelSize = 10;
-          const tickRotate = -33;
-          const tickColor = "#8e205f";
-          const tick = props;
-          const tickX = tick.x;
-          const tickY = tick.y + 20; //+ tickLabelSize + props.tickLength;
+          <AnimatedBarStack>
+            <BarSeries
+              dataKey="Beer"
+              data={data}
+              xAccessor={(d) => d.name}
+              yAccessor={(d) => d.beer}
+              //colorAccessor={(d) => "red"}
+            />
+            <BarSeries
+              dataKey="Food"
+              data={data}
+              xAccessor={(d) => d.name}
+              yAccessor={(d) => d.food}
+              //colorAccessor={(d) => "green"}
+            />
+            <BarSeries
+              dataKey="Soda"
+              data={data}
+              xAccessor={(d) => d.name}
+              yAccessor={(d) => d.soda}
+              //colorAccessor={(d) => "blue"}
+            />
+          </AnimatedBarStack>
+          <AnimatedAxis
+            orientation="bottom"
+            key="hoi"
+            tickLabelProps={{
+              fontSize: 11,
+              textAnchor: "middle",
+              color: "#6c757d",
+              fill: "rgb(108, 117, 125)",
+            }}
+            numTicks={data.length}
+            tickComponent={(props) => {
+              const tickLabelSize = 10;
+              const tickRotate = -33;
+              const tickColor = "#8e205f";
+              const tick = props;
+              const tickX = tick.x;
+              const tickY = tick.y + 20; //+ tickLabelSize + props.tickLength;
 
-          console.log("ticking", tick);
-          return (
-            <text
-              transform={`translate(-10, 20) rotate(${tickRotate})`}
-              fontSize={tickLabelSize}
-              textAnchor="middle"
-            >
-              {tick.formattedValue}
-            </text>
-          );
+              //console.log("ticking", tick);
+              return (
+                <text
+                  transform={`translate(-10, 20) rotate(${tickRotate})`}
+                  fontSize={tickLabelSize}
+                  textAnchor="middle"
+                >
+                  {tick.formattedValue}
+                </text>
+              );
 
-          //const axisCenter = (props.axisToPoint.x - props.axisFromPoint.x) / 2;
+              //const axisCenter = (props.axisToPoint.x - props.axisFromPoint.x) / 2;
 
-          return <text>hoi</text>;
-        }}
-      />
-      <AnimatedAxis
-        orientation="left"
-        tickLabelProps={{
-          fontSize: 10,
-          textAnchor: "middle",
-          color: "#6c757d",
-          fill: "rgb(108, 117, 125)",
-        }}
-        label="Consumptions"
-      />
-    </XYChart>
+              return <text>hoi</text>;
+            }}
+          />
+          <AnimatedAxis
+            orientation="left"
+            tickLabelProps={{
+              fontSize: 10,
+              textAnchor: "middle",
+              color: "#6c757d",
+              fill: "rgb(108, 117, 125)",
+            }}
+            label="Consumptions"
+          />
+        </XYChart>
+      </div>
+    </div>
   );
 }
 
