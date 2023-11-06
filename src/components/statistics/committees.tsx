@@ -14,6 +14,15 @@ import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import {GridRows, GridColumns} from "@visx/grid";
 import {useCommittees} from "queries/committees";
 import moment, {Moment} from "moment";
+import {Spring} from "react-spring";
+import {
+  XYChart,
+  lightTheme as theme,
+  AnimatedBarStack,
+  AnimatedBarSeries as BarSeries,
+  AnimatedAxis,
+  AnimatedGrid,
+} from "@visx/xychart";
 
 export default function getSubTicks<Scale extends AnyD3Scale>(
   scale: Scale,
@@ -90,17 +99,6 @@ function BarExample({width, height, margin: old = defaultMargin, data}: BarStack
     });
   }, [data, yMax]);
 
-  const ySubScale = useMemo(() => {
-    const purchaseTotals = data.map((committee) => {
-      return committee.beer + committee.food + committee.soda;
-    });
-
-    return scaleLinear<number>({
-      domain: [0, Math.max(...purchaseTotals)],
-      range: [yMax, 0],
-    });
-  }, [data, yMax]);
-
   const colorScale = useMemo(
     () => scaleOrdinal({domain: keys, range: ["#6c757d", "red", "green"]}),
     [keys]
@@ -110,110 +108,89 @@ function BarExample({width, height, margin: old = defaultMargin, data}: BarStack
 
   return width < 10 ? null : (
     <svg width={width} height={height}>
-      <rect
-        x={0}
-        y={0}
-        width={width}
+      <XYChart
+        theme={theme}
+        xScale={{type: "band", padding: 0.5}}
+        yScale={{type: "linear"}}
         height={height}
-        fill={"#fafaba"}
-        fillOpacity={0.1}
-      />
-      <Group left={margin.left} top={margin.right}>
-        <rect
-          x={0}
-          y={0}
-          width={width - margin.left - margin.right}
-          height={height - margin.top - margin.bottom}
-          fill={"#bafaba"}
-          fillOpacity={0.1}
+        width={width}
+      >
+        <AnimatedGrid
+          key={`grid`} // force animate on update
+          rows={true}
+          columns={false}
+          //animationTrajectory={animationTrajectory}
+          //numTicks={numTicks}
         />
-        <GridRows
-          scale={yScale}
-          width={xMax}
-          height={yMax}
-          stroke="#eee"
-          tickValues={subGridTicks}
-        />
-        <GridRows scale={yScale} width={xMax} height={yMax} stroke="#e0e0e0" />
 
-        <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
-        <text x="-70" y="15" transform="rotate(-90)" fontSize={10}>
-          Temperature (°F)
-        </text>
-
-        <Group>
-          <BarStack<CommitteeData, Field>
+        <AnimatedBarStack>
+          <BarSeries
+            dataKey="Beer"
             data={data}
-            keys={["beer", "food", "soda"]}
-            x={(committeee) => committeee.name}
-            xScale={xScale}
-            yScale={yScale}
-            color={colorScale}
-          >
-            {(barStacks) => {
-              return barStacks.map((barStack) => {
-                return barStack.bars.map((bar) => {
-                  //const barHeight = (yScale(y0(bar)) || 0) - (yScale(y1(bar)) || 0);
-                  return (
-                    <rect
-                      key={`bar-stack-${barStack.index}-${bar.index}`}
-                      x={bar.x}
-                      y={bar.y}
-                      height={bar.height}
-                      width={bar.width}
-                      //fill={"#6c757d"}
-                      fill={bar.color}
-                    />
-                  );
-                });
-              });
-            }}
-          </BarStack>
-
-          <AxisBottom
-            top={yMax}
-            scale={xScale}
-            tickLabelProps={{
-              fontSize: 11,
-              textAnchor: "middle",
-              color: "#6c757d",
-              fill: "rgb(108, 117, 125)",
-            }}
-            numTicks={data.length}
-            tickComponent={(props) => {
-              const tickLabelSize = 10;
-              const tickRotate = -45;
-              const tickColor = "#8e205f";
-              const tick = props;
-              const tickX = tick.x;
-              const tickY = tick.y + 20; //+ tickLabelSize + props.tickLength;
-
-              return (
-                <text
-                  transform={`translate(${tickX}, ${tickY}) rotate(${tickRotate})`}
-                  fontSize={tickLabelSize}
-                  textAnchor="middle"
-                >
-                  {tick.formattedValue}
-                </text>
-              );
-
-              //const axisCenter = (props.axisToPoint.x - props.axisFromPoint.x) / 2;
-
-              return <text>hoi</text>;
-            }}
+            xAccessor={(d) => d.name}
+            yAccessor={(d) => d.beer}
+            //colorAccessor={(d) => "red"}
           />
-          <AxisLeft
-            scale={yScale}
-            tickLabelProps={{
-              fontSize: 10,
-              textAnchor: "middle",
-              color: "#6c757d",
-              fill: "rgb(108, 117, 125)",
-            }}
+          <BarSeries
+            dataKey="Food"
+            data={data}
+            xAccessor={(d) => d.name}
+            yAccessor={(d) => d.food}
+            //colorAccessor={(d) => "green"}
           />
-        </Group>
-      </Group>
+          <BarSeries
+            dataKey="Soda"
+            data={data}
+            xAccessor={(d) => d.name}
+            yAccessor={(d) => d.soda}
+            //colorAccessor={(d) => "blue"}
+          />
+        </AnimatedBarStack>
+        <AnimatedAxis
+          orientation="bottom"
+          key="hoi"
+          tickLabelProps={{
+            fontSize: 11,
+            textAnchor: "middle",
+            color: "#6c757d",
+            fill: "rgb(108, 117, 125)",
+          }}
+          numTicks={data.length}
+          tickComponent={(props) => {
+            const tickLabelSize = 10;
+            const tickRotate = -33;
+            const tickColor = "#8e205f";
+            const tick = props;
+            const tickX = tick.x;
+            const tickY = tick.y + 20; //+ tickLabelSize + props.tickLength;
+
+            console.log("ticking", tick);
+            return (
+              <text
+                transform={`translate(-10, 20) rotate(${tickRotate})`}
+                fontSize={tickLabelSize}
+                textAnchor="middle"
+              >
+                {tick.formattedValue}
+              </text>
+            );
+
+            //const axisCenter = (props.axisToPoint.x - props.axisFromPoint.x) / 2;
+
+            return <text>hoi</text>;
+          }}
+        />
+        <AnimatedAxis
+          orientation="left"
+          tickLabelProps={{
+            fontSize: 10,
+            textAnchor: "middle",
+            color: "#6c757d",
+            fill: "rgb(108, 117, 125)",
+          }}
+          label="Consumptions"
+        />
+      </XYChart>
     </svg>
   );
 }
@@ -272,6 +249,7 @@ export function Committees() {
   }, [timeRange]);
 
   //const data = [{name: "Scriptcie", beer: 33, soda: 7, food: 17}];
+  const interpolate = {data};
 
   return (
     <div className="d-flex flex-column h-100">
@@ -299,19 +277,12 @@ export function Committees() {
             onChange={(e) => {
               handleSetTimeScale(e.currentTarget.value as TimeScale);
             }}
+            value={timeScale}
           >
-            <option value="day" selected={timeScale === "day"}>
-              Day
-            </option>
-            <option value="week" selected={timeScale === "week"}>
-              Week
-            </option>
-            <option value="month" selected={timeScale === "month"}>
-              Month
-            </option>
-            <option value="year" selected={timeScale === "year"}>
-              Year
-            </option>
+            <option value="day">Day</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+            <option value="year">Year</option>
           </select>
           <button className="tile button" onClick={next}>
             Next {timeScale}
