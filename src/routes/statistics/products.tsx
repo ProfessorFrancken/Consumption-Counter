@@ -194,7 +194,7 @@ const Statistics = ({
   );
 };
 
-const StatisticsSreen = () => {
+export const ProductsStatistics = () => {
   const {activities} = useActivities();
   const statisticsQuery = useStatisticsQuery();
   const transactions = take(useTransactions(), 30);
@@ -207,5 +207,3 @@ const StatisticsSreen = () => {
     />
   );
 };
-
-export default StatisticsSreen;

@@ -38,7 +38,7 @@ const products = range(0, 30).map((idx) => {
 });
 
 const year = new Date().getFullYear();
-const committees = range(0, 10).flatMap((idx) => {
+const committees = range(0, 33).flatMap((idx) => {
   const committeeMembers = sampleSize(members, Math.ceil(10 * Math.random() + 5));
 
   return committeeMembers.map((committeeMember) => {

@@ -21,6 +21,8 @@ import RecentMembers from "./routes/recent/index";
 import Compucie from "./routes/compucie/index";
 import Settings from "./routes/compucie/settings/index";
 import Statistics from "./routes/statistics/index";
+import {CommitteesStatistics} from "./routes/statistics/committees";
+import {ProductsStatistics} from "./routes/statistics/products";
 import Present from "./routes/present/index";
 import {Layout} from "./components/layout/layout";
 import {ApplicationProviders} from "./application-providers";
@@ -124,11 +126,39 @@ export const createAppRoutes = (
         />
         <Route
           path="statistics"
-          element={<Statistics />}
           handle={{
             title: <span>Statistics</span>,
           }}
-        />
+        >
+          <Route
+            index
+            element={<Navigate to="/statistics/transactions" />}
+            handle={{
+              title: <span>Statistics</span>,
+            }}
+          />
+          <Route
+            path="transactions"
+            element={<Statistics />}
+            handle={{
+              title: <span>Statistics</span>,
+            }}
+          />
+          <Route
+            path="committees"
+            element={<CommitteesStatistics />}
+            handle={{
+              title: <span>Committees</span>,
+            }}
+          />
+          <Route
+            path="products"
+            element={<ProductsStatistics />}
+            handle={{
+              title: <span>Products</span>,
+            }}
+          />
+        </Route>
         <Route
           path="committees"
           element={<Committees />}

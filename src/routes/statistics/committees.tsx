@@ -1,8 +1,6 @@
 import {groupBy, map, take} from "lodash";
 import moment from "moment";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import HeatMap from "./../../components/statistics/heat-map";
-import PurchasesOfWeek from "./../../components/statistics/purchases-of-week";
 import {OrderedOrder} from "../../components/orders/queued-orders-context";
 import {Product} from "../../components/orders-context";
 import {Activity, useActivities} from "../../queries/activities";
@@ -12,6 +10,7 @@ import {styled} from "styled-components";
 import ProductsPrice from "../../components/products-price";
 import {useMemo} from "react";
 import {NavLink} from "react-router-dom";
+import {Committees} from "components/statistics/committees";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -146,55 +145,14 @@ const Statistics = ({
           <FontAwesomeIcon icon={"chevron-circle-right"} size="lg" />
         </NavLink>
       </div>
-      <div
-        style={{
-          columnCount: 4,
-          columnGap: "2rem",
-        }}
-      >
-        <PurchasesOfWeek
-          purchases={purchases}
-          today={purchasesToday}
-          type="total"
-          icon="shopping-cart"
-        />
-        <PurchasesOfWeek
-          purchases={purchases}
-          today={purchasesToday}
-          type="beer"
-          icon="beer"
-        />
-        <PurchasesOfWeek
-          purchases={purchases}
-          today={purchasesToday}
-          type="soda"
-          icon={["fab", "gulp"]}
-        />
-        <PurchasesOfWeek
-          purchases={purchases}
-          today={purchasesToday}
-          type="food"
-          icon="utensils"
-        />
+      <div className="h-100 w-100 flex-grow-1">
+        <Committees />
       </div>
-
-      <div
-        style={{
-          overflowY: "scroll",
-          minHeight: 0,
-          minWidth: 0,
-          flex: "1 1 0",
-        }}
-        className="py-3"
-      >
-        <Transactions transactions={transactions} />
-      </div>
-      <HeatMap statistics={statistics} activities={activities} />
     </StatisticsGrid>
   );
 };
 
-const StatisticsSreen = () => {
+export const CommitteesStatistics = () => {
   const {activities} = useActivities();
   const statisticsQuery = useStatisticsQuery();
   const transactions = take(useTransactions(), 30);
@@ -207,5 +165,3 @@ const StatisticsSreen = () => {
     />
   );
 };
-
-export default StatisticsSreen;
