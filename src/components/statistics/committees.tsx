@@ -157,6 +157,7 @@ function BarExample({width, height, margin: old = defaultMargin, data}: BarStack
             />
           </AnimatedBarStack>
           <AnimatedAxis
+            animationTrajectory="min"
             orientation="bottom"
             key="hoi"
             tickLabelProps={{
@@ -191,6 +192,7 @@ function BarExample({width, height, margin: old = defaultMargin, data}: BarStack
             }}
           />
           <AnimatedAxis
+            animationTrajectory="min"
             orientation="left"
             tickLabelProps={{
               fontSize: 10,
