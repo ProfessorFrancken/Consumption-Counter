@@ -30,6 +30,7 @@ import {LegendThreshold, LegendOrdinal} from "@visx/legend";
 import {useSearchParams} from "react-router-dom";
 import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import api from "api";
 
 export default function getSubTicks<Scale extends AnyD3Scale>(
   scale: Scale,
@@ -97,8 +98,27 @@ function CommitteesStatisticsForTimeRange({
   const committeeStatisticsQuery = useSuspenseQuery({
     queryKey: ["committee-statistics", timeRange, committees.length],
     queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000));
-      return getData();
+      const response = await api.get<{
+        statistics: {
+          beer: number;
+          food: number;
+          soda: number;
+          committee: {id: number; name: string};
+        }[];
+      }>("/statistics/committees", {
+        startDate: timeRange[0].format("YYYY-MM-DD"),
+        endDate: timeRange[1].format("YYYY-MM-DD"),
+      });
+
+      return response.statistics.map((stats) => {
+        const committee = committees.find(({id}) => id === stats.committee.id);
+        return {
+          name: committee?.name ?? `${stats.committee.id}`,
+          beer: stats.beer,
+          food: stats.food,
+          soda: stats.soda,
+        };
+      });
     },
   });
   const data = committeeStatisticsQuery.data;
