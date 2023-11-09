@@ -64,7 +64,6 @@ button {
   line-height: var(--rowSize);
   text-align: right;
   padding-right: 0.5em;
-  font-size: 24px;
 
   display: flex;
   flex-direction: row;

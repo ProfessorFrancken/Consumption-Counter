@@ -53,18 +53,35 @@ const HeaderTitle = () => {
   );
 };
 
-const GoBackToBuying = () => {
+const SubTitle = () => {
+  const matches = useMatches();
+  const lastMatch = matches.at(-1);
   const member = useSelectedMember();
   const location = useLocation();
+
+  if (lastMatch?.handle !== undefined) {
+    const subTitleHandle = lastMatch.handle as {subTitle?: ReactNode};
+    if (subTitleHandle.subTitle) {
+      return <>{subTitleHandle.subTitle}</>;
+    }
+  }
 
   if (!member) {
     return null;
   }
 
   if (location.pathname.includes("pricelist")) {
-    return <NavLink to={`/products?memberId=${member.id}`}>Buy products</NavLink>;
+    return (
+      <div className="header-item d-flex justify-content-center">
+        <NavLink to={`/products?memberId=${member.id}`}>Buy products</NavLink>
+      </div>
+    );
   }
-  return <NavLink to={`/products/pricelist?memberId=${member.id}`}>Show prices</NavLink>;
+  return (
+    <div className="header-item d-flex justify-content-center">
+      <NavLink to={`/products/pricelist?memberId=${member.id}`}>Show prices</NavLink>
+    </div>
+  );
 };
 
 const Header = ({onClick}: {onClick: () => void}) => {
@@ -73,9 +90,7 @@ const Header = ({onClick}: {onClick: () => void}) => {
   return (
     <header className="header">
       <HeaderTitle />
-      <div className="header-item d-flex justify-content-center">
-        <GoBackToBuying />
-      </div>
+      <SubTitle />
       <h2
         className="association header-item text-right h4 d-flex align-items-center font-weight-normal mb-0"
         onClick={onClick}

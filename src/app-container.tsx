@@ -33,6 +33,7 @@ import Loading from "./routes/loading/index";
 import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
 import {BuyProductsForMemberTitle, CommitteeTitle} from "components/layout/header";
+import {DateRangeForm} from "components/statistics/committees";
 
 function isErrorResponse(error: any): error is ErrorResponse {
   return (
@@ -149,6 +150,7 @@ export const createAppRoutes = (
             element={<CommitteesStatistics />}
             handle={{
               title: <span>Committees</span>,
+              subTitle: <DateRangeForm />,
             }}
           />
           <Route
