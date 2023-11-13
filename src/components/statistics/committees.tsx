@@ -1,59 +1,56 @@
-import {Suspense, useCallback, useEffect, useMemo, useState} from "react";
-import {BarStack} from "@visx/shape";
-import {Group} from "@visx/group";
-import {AxisBottom, AxisLeft} from "@visx/axis";
-import {
-  AnyD3Scale,
-  getTicks,
-  scaleBand,
-  ScaleInput,
-  scaleLinear,
-  scaleOrdinal,
-  scaleThreshold,
-} from "@visx/scale";
-import ParentSize from "@visx/responsive/lib/components/ParentSize";
-import {GridRows, GridColumns} from "@visx/grid";
+import {Suspense, useCallback, useMemo} from "react";
 import {useCommittees} from "queries/committees";
 import moment, {Moment} from "moment";
-import {Spring} from "react-spring";
 import {
   XYChart,
   lightTheme as theme,
   AnimatedBarStack,
   AnimatedBarSeries as BarSeries,
   AnimatedAxis,
-  Axis,
   AnimatedGrid,
   Tooltip,
 } from "@visx/xychart";
-import {LegendThreshold, LegendOrdinal} from "@visx/legend";
 import {useSearchParams} from "react-router-dom";
-import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {useSuspenseQuery} from "@tanstack/react-query";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 import api from "api";
+import {DateRangePicker} from "components/date-range-picker";
+import {CalendarDate, parseDate} from "@internationalized/date";
 
-export default function getSubTicks<Scale extends AnyD3Scale>(
-  scale: Scale,
-  numTicks?: number
-): ScaleInput<Scale>[] {
-  // Because `Scale` is generic type which maybe a subset of AnyD3Scale
-  // that may not have `ticks` field,
-  // TypeScript will not let us do the `'ticks' in scale` check directly.
-  // Have to manually cast and expand type first.
-  const s = scale;
+const useDateRange = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  if ("ticks" in s) {
-    return s.ticks(numTicks * 2);
-  }
+  const beforeSearchParam = searchParams.get("before");
+  const before = useMemo(() => {
+    const now = moment();
+    return beforeSearchParam !== null
+      ? moment(beforeSearchParam)
+      : now.clone().startOf("week");
+  }, [beforeSearchParam]);
 
-  return scale.domain().filter((_, index, arr) => {
-    return (
-      numTicks == null ||
-      arr.length <= numTicks ||
-      index % Math.round((arr.length - 1) / numTicks) === 0
-    );
-  });
-}
+  const afterSearchParam = searchParams.get("after");
+  const after = useMemo(() => {
+    const now = moment();
+    return afterSearchParam !== null
+      ? moment(afterSearchParam)
+      : now.clone().endOf("week");
+  }, [afterSearchParam]);
+
+  const setTimeRange = useCallback(
+    ([before, after]: [Moment, Moment]) => {
+      searchParams.set("before", before.format("YYYY-MM-DD"));
+      searchParams.set("after", after.format("YYYY-MM-DD"));
+      setSearchParams(searchParams);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  return useMemo(() => {
+    const timeRange = [before, after] satisfies [Moment, Moment];
+    return {timeRange, setTimeRange};
+  }, [before, after, setTimeRange]);
+};
 
 type Field = "beer" | "soda" | "food";
 type CommitteeData = {
@@ -62,10 +59,6 @@ type CommitteeData = {
   soda: number;
   food: number;
 };
-
-const defaultMargin = {top: 40, right: 80, bottom: 40, left: 40};
-
-const keys = ["beer", "food", "soda"];
 
 const tickLabelProps = {
   fontSize: 10,
@@ -80,10 +73,9 @@ export type BarStackProps = {
   events?: boolean;
   timeRange: [Moment, Moment];
 };
-function CommitteesStatisticsForTimeRange({
-  timeRange,
-  margin: old = defaultMargin,
-}: BarStackProps) {
+function CommitteesStatisticsForTimeRange() {
+  const {timeRange} = useDateRange();
+
   const {committees} = useCommittees();
   const getData = useCallback(() => {
     return [...committees].map((c, idx) => {
@@ -95,9 +87,11 @@ function CommitteesStatisticsForTimeRange({
       };
     });
   }, [committees]);
+
   const committeeStatisticsQuery = useSuspenseQuery({
     queryKey: ["committee-statistics", timeRange, committees.length],
     queryFn: async () => {
+      return getData();
       const response = await api.get<{
         statistics: {
           beer: number;
@@ -183,7 +177,7 @@ function CommitteesStatisticsForTimeRange({
 
               return (
                 <>
-                  dd {tooltipData?.nearestDatum?.datum.name}
+                  {tooltipData?.nearestDatum?.datum.name}
                   <br />
                   <br />
                   {(["beer", "food", "soda"] as Field[]).map((category) => {
@@ -206,109 +200,26 @@ function CommitteesStatisticsForTimeRange({
   );
 }
 
-type TimeScale = "day" | "week" | "month" | "year";
-
-const useDateRange = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const timeScale = (searchParams.get("time-scale") ?? "week") as TimeScale;
-  const setTimeScale = useCallback(
-    (timeScale: TimeScale) => {
-      searchParams.set("time-scale", timeScale);
-      setSearchParams(searchParams);
-    },
-    [searchParams, setSearchParams]
-  );
-
-  const beforeSearchParam = searchParams.get("before");
-  const before = useMemo(() => {
-    const now = moment();
-    return beforeSearchParam !== null
-      ? moment(beforeSearchParam)
-      : now.clone().startOf(timeScale);
-  }, [beforeSearchParam, timeScale]);
-
-  const afterSearchParam = searchParams.get("after");
-  const after = useMemo(() => {
-    const now = moment();
-    return afterSearchParam !== null
-      ? moment(afterSearchParam)
-      : now.clone().endOf(timeScale);
-  }, [afterSearchParam, timeScale]);
-
-  const setTimeRange = useCallback(
-    ([before, after]: [Moment, Moment]) => {
-      searchParams.set("before", before.format("YYYY-MM-DD"));
-      searchParams.set("after", after.format("YYYY-MM-DD"));
-      setSearchParams(searchParams);
-    },
-    [searchParams, setSearchParams]
-  );
-
-  return useMemo(() => {
-    const timeRange = [before, after] satisfies [Moment, Moment];
-    return {timeScale, setTimeScale, timeRange, setTimeRange};
-  }, [timeScale, setTimeScale, before, after, setTimeRange]);
-};
-
 export const DateRangeForm = () => {
-  const {timeScale, setTimeScale, timeRange, setTimeRange} = useDateRange();
+  const {timeRange, setTimeRange} = useDateRange();
 
-  const next = () => {
-    const start = timeRange[0].add(1, timeScale);
-    setTimeRange([start, start.clone().endOf(timeScale)]);
+  const value = {
+    start: parseDate(timeRange[0].format("YYYY-MM-DD")),
+    end: parseDate(timeRange[1].format("YYYY-MM-DD")),
   };
 
-  const previous = () => {
-    const start = timeRange[0].subtract(1, timeScale);
-    setTimeRange([start, start.clone().endOf(timeScale)]);
-  };
-
-  const handleSetTimeScale = (timeScale: TimeScale) => {
-    setTimeScale(timeScale);
-
-    const start = timeRange[0].clone().startOf(timeScale);
-    const end = start.clone().endOf(timeScale);
-
-    setTimeRange([start, end]);
+  const onChange = (range: {start: CalendarDate; end: CalendarDate}) => {
+    setTimeRange([moment(range.start.toString()), moment(range.end.toString())]);
   };
 
   return (
     <div className="d-flex gap-3 py-4 " style={{gap: "1rem"}}>
-      <button className="tile button" onClick={previous}>
-        Previous {timeScale}
-      </button>
-      <div className="d-flex align-items-center">
-        {timeScale === "day" ? (
-          timeRange[0].format("DD-MM-YYYY")
-        ) : (
-          <span>
-            {timeRange[0].format("DD-MM-YYYY")} - {timeRange[1].format("DD-MM-YYYY")}
-          </span>
-        )}
-      </div>
-      <select
-        className="px-3"
-        onChange={(e) => {
-          handleSetTimeScale(e.currentTarget.value as TimeScale);
-        }}
-        value={timeScale}
-      >
-        <option value="day">Day</option>
-        <option value="week">Week</option>
-        <option value="month">Month</option>
-        <option value="year">Year</option>
-      </select>
-      <button className="tile button" onClick={next}>
-        Next {timeScale}
-      </button>
+      <DateRangePicker value={value} onChange={onChange} />
     </div>
   );
 };
 
 export function Committees() {
-  const {timeRange} = useDateRange();
-
   return (
     <div className="d-flex flex-column h-100">
       <div className="h-100 w-100 flex-grow-1">
@@ -325,7 +236,7 @@ export function Committees() {
             </div>
           }
         >
-          <CommitteesStatisticsForTimeRange timeRange={timeRange} />
+          <CommitteesStatisticsForTimeRange />
         </Suspense>
       </div>
     </div>

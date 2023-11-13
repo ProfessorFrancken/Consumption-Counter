@@ -84,26 +84,41 @@ const SubTitle = () => {
   );
 };
 
+const RightHeader = ({onClick}: {onClick: () => void}) => {
+  const matches = useMatches();
+  const lastMatch = matches.at(-1);
+
+  if (lastMatch?.handle !== undefined) {
+    const rightTitleHandle = lastMatch.handle as {rightTitle?: ReactNode};
+    if (rightTitleHandle.rightTitle) {
+      return <>{rightTitleHandle.rightTitle}</>;
+    }
+  }
+
+  return (
+    <h2 className="association text-right h4 font-weight-normal mb-0" onClick={onClick}>
+      T.F.V. 'Professor Francken'
+    </h2>
+  );
+};
+
 const Header = ({onClick}: {onClick: () => void}) => {
   const failedOrders = useFailedOrders();
 
   return (
-    <header className="header">
+    <header className="header d-flex justify-content-between align-items-center">
       <HeaderTitle />
       <SubTitle />
-      <h2
-        className="association header-item text-right h4 d-flex align-items-center font-weight-normal mb-0"
-        onClick={onClick}
-      >
-        T.F.V. 'Professor Francken'
-      </h2>
-      {failedOrders > 0 && (
-        <div className="ms-2">
-          <NavLink to="/settings">
-            <div className="badge badge-danger">{failedOrders}</div>
-          </NavLink>
-        </div>
-      )}
+      <div className="header-item d-flex align-items-center">
+        <RightHeader onClick={onClick} />
+        {failedOrders > 0 && (
+          <div className="ms-2">
+            <NavLink to="/settings">
+              <div className="badge badge-danger">{failedOrders}</div>
+            </NavLink>
+          </div>
+        )}
+      </div>
     </header>
   );
 };
