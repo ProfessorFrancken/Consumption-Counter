@@ -1,10 +1,10 @@
 import * as React from "react";
 import {fireEvent, render, screen} from "@testing-library/react";
 import {useProductsQuery} from "./products";
-import {InfrastructureProviders} from "root";
+import {InfrastructureProviders} from "../root";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
-import {render as renderApp, getProduct} from "test-utils";
+import {render as renderApp, getProduct} from "../test-utils";
 import {useOrder} from "../components/orders-context";
 
 describe("Product context", () => {

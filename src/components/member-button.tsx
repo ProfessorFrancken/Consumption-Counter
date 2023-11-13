@@ -1,4 +1,4 @@
-import {MemberType} from "queries/members";
+import {MemberType} from "../queries/members";
 
 const smallButton = (button?: {width: number | null; height: number | null}) => {
   if (button === undefined) {

@@ -1,6 +1,6 @@
 import {rest} from "msw";
 import {setupServer} from "msw/node";
-import {render, screen} from "test-utils";
+import {render, screen} from "../../test-utils";
 import PresentScreen from "./index";
 
 describe("Present screen", () => {

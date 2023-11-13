@@ -1,6 +1,6 @@
 import {screen} from "@testing-library/react";
 import ProductsPrice from "./products-price";
-import {render} from "test-utils";
+import {render} from "../test-utils";
 
 describe("displaying the price of products", () => {
   it("shows a formated price for 1 product", () => {

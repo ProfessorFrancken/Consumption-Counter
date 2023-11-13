@@ -11,7 +11,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./index.css";
 import {ApplicationProviders} from "./application-providers";
 import Loading from "./routes/loading/index";
-import {BuyProductsForMemberTitle, CommitteeTitle} from "components/layout/header";
+import {BuyProductsForMemberTitle, CommitteeTitle} from "./components/layout/header";
 
 type Props = {
   queryClient?: QueryClient;

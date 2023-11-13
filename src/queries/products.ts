@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {queryOptions, useQuery} from "@tanstack/react-query";
-import api from "api";
+import api from "../api";
 
 export type ApiProductsResponse = {
   products: Array<{
@@ -69,7 +69,7 @@ export const useProductsQuery = () => {
     }
     return;
 
-    const products = query.data;
+    const products = query.data ?? [];
 
     const images = products.map((product) => {
       let img = new Image();

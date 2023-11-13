@@ -108,7 +108,7 @@ export const useMembers = () => {
     }
     return;
 
-    const members = membersQuery.data;
+    const members = membersQuery.data ?? [];
     const images = members
       .filter((member) => member.cosmetics && member.cosmetics.image)
       .map((member) => {

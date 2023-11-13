@@ -1,5 +1,5 @@
 import GoBack from "./go-back";
-import {render, fireEvent, screen} from "test-utils";
+import {render, fireEvent, screen} from "../../../test-utils";
 
 afterEach(() => {
   localStorage.removeItem("plus_one_order_queue");

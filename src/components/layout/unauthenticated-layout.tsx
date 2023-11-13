@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import logo from "assets/logo.png";
+import logo from "../../assets/logo.png";
 
 export const UnauthenticatedLayout = ({children}: {children: ReactNode}) => {
   return (

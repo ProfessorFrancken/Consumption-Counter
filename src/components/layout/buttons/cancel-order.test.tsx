@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import CancelOrder from "./cancel-order";
-import {fireEvent, getMember, getProduct, render, screen} from "test-utils";
+import {fireEvent, getMember, getProduct, render, screen} from "../../../test-utils";
 import {useOrder} from "../../orders-context";
 
 afterEach(() => {

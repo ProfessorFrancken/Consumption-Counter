@@ -1,7 +1,7 @@
 import {useQueryClient} from "@tanstack/react-query";
 import {useNavigate} from "react-router";
 import {useSelectMember} from "../../components/orders-context";
-import {useCommittees, CommitteeMember} from "queries/committees";
+import {useCommittees, CommitteeMember} from "../../queries/committees";
 import {groupBy} from "lodash";
 import {MemberType} from "../../queries/members";
 import {NavLink} from "react-router-dom";

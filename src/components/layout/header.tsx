@@ -2,7 +2,7 @@ import {useSelectedMember} from "../orders-context";
 import {useCommittees} from "../../queries/committees";
 import {NavLink, useLocation, useMatches, useParams} from "react-router-dom";
 import {ReactNode} from "react";
-import {useFailedOrders} from "components/orders/queued-orders-context";
+import {useFailedOrders} from "../../components/orders/queued-orders-context";
 
 export const CommitteeTitle = () => {
   const params = useParams<{page: string}>();

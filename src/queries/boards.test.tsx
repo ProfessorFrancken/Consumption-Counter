@@ -3,7 +3,7 @@ import {screen} from "@testing-library/react";
 import {useBoards} from "./boards";
 import {rest} from "msw";
 import {setupServer} from "msw/node";
-import {render} from "test-utils";
+import {render} from "../test-utils";
 
 const boardMembers = [
   {

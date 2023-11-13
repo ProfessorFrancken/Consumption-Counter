@@ -3,7 +3,7 @@ import {screen} from "@testing-library/react";
 import {useCommittees} from "./committees";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
-import {render} from "test-utils";
+import {render} from "../test-utils";
 
 describe("Committee context", () => {
   const SelectCommittee: React.FC = () => {

@@ -2,8 +2,8 @@
 import {Factory, trait} from "miragejs";
 import {faker} from "@faker-js/faker";
 import moment from "moment";
-import {ApiMembersResponse} from "queries/members";
-import {ArrayElement} from "types";
+import {ApiMembersResponse} from "../../queries/members";
+import {ArrayElement} from "../../types";
 
 export const memberFactoryDefinition = {
   id: (i: any) => parseInt(i, 10),

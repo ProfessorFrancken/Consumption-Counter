@@ -1,6 +1,6 @@
 import {screen, within} from "@testing-library/react";
 import Footer from "./footer";
-import {render} from "test-utils";
+import {render} from "../../test-utils";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
 

@@ -1,7 +1,7 @@
 import {Factory} from "miragejs";
 import {faker} from "@faker-js/faker";
-import {ApiProductsResponse} from "queries/products";
-import {ArrayElement} from "types";
+import {ApiProductsResponse} from "../../queries/products";
+import {ArrayElement} from "../../types";
 
 export const productFactoryDefinition = {
   id: (i: any) => parseInt(i, 10),

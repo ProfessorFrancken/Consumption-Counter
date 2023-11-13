@@ -1,5 +1,5 @@
 import {queryOptions, useQuery} from "@tanstack/react-query";
-import api from "api";
+import api from "../api";
 import moment from "moment";
 
 export type ApiStatisticsResponse = {

@@ -1,10 +1,10 @@
 import {rest} from "msw";
-import {ApiBoardsResponse} from "queries/boards";
-import {ApiCommmitteesResponse} from "queries/committees";
-import {ApiMembersResponse} from "queries/members";
-import {ApiOrdersResponse} from "queries/orders";
-import {ApiProductsResponse} from "queries/products";
-import {ApiStatisticsResponse} from "queries/statistics";
+import {ApiBoardsResponse} from "../../queries/boards";
+import {ApiCommmitteesResponse} from "../../queries/committees";
+import {ApiMembersResponse} from "../../queries/members";
+import {ApiOrdersResponse} from "../../queries/orders";
+import {ApiProductsResponse} from "../../queries/products";
+import {ApiStatisticsResponse} from "../../queries/statistics";
 import {token} from "./authentication";
 
 export const getHandlers = ({

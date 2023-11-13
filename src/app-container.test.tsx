@@ -1,6 +1,6 @@
 import AppContainerWithoutLocation from "./app-container";
 import MockDate from "mockdate";
-import {render, fireEvent, act, screen} from "test-utils";
+import {render, fireEvent, act, screen} from "./test-utils";
 import {TIME_TO_CANCEL} from "./components/orders/queued-orders-context";
 import {SCREEN_SAVER_TIMEOUT} from "./components/redirect-when-idle";
 import {waitFor, within} from "@testing-library/react";

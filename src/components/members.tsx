@@ -1,4 +1,4 @@
-import {MemberType} from "queries/members";
+import {MemberType} from "../queries/members";
 import Member from "./member-button";
 
 type Props = {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {fireEvent, render, screen} from "@testing-library/react";
-import {render as renderApp} from "test-utils";
+import {render as renderApp} from "../../test-utils";
 import {useQueuedOrders} from "./queued-orders-context";
 import {rest} from "msw";
 import {setupServer} from "msw/node";

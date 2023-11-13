@@ -1,7 +1,7 @@
 import * as React from "react";
 import {render, screen} from "@testing-library/react";
 import {useActivities} from "./activities";
-import {InfrastructureProviders} from "root";
+import {InfrastructureProviders} from "../root";
 import {rest} from "msw";
 import {setupServer} from "msw/node";
 

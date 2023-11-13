@@ -1,6 +1,6 @@
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Statistic} from "queries/statistics";
+import {Statistic} from "../../queries/statistics";
 import {WeeklyPurchasesAsBarGraph} from "./weekly-purchases-as-bar-graph";
 
 type Purchases = Omit<Statistic, "date"> & {

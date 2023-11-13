@@ -1,7 +1,7 @@
 import React from "react";
 import {screen} from "@testing-library/react";
 import {default as CommitteesContainer} from "./index";
-import {render, within} from "test-utils";
+import {render, within} from "../../test-utils";
 import clock from "jest-plugin-clock";
 
 describe("committees", () => {

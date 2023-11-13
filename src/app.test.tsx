@@ -1,7 +1,7 @@
 import Products from "./routes/products/index";
 import Prominent from "./routes/prominent/index";
 import RecentMembers from "./routes/recent/index";
-import {render, screen, within} from "test-utils";
+import {render, screen, within} from "./test-utils";
 import clock from "jest-plugin-clock";
 import {mockedState} from "./test-utils/mocked-state";
 import AppContainer from "./app-container";

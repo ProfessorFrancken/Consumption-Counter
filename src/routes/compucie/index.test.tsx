@@ -1,5 +1,4 @@
-import React from "react";
-import {render, fireEvent, screen} from "test-utils";
+import {render, fireEvent, screen} from "../../test-utils";
 import CompucieScreen from "./index";
 import {Route, Routes} from "react-router";
 import {setupServer} from "msw/node";

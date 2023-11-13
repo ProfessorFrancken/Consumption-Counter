@@ -1,9 +1,9 @@
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useCommittees} from "queries/committees";
-import {useBoards} from "queries/boards";
-import {useMembers} from "queries/members";
-import {useStatisticsQuery} from "queries/statistics";
+import {useCommittees} from "../../queries/committees";
+import {useBoards} from "../../queries/boards";
+import {useMembers} from "../../queries/members";
+import {useStatisticsQuery} from "../../queries/statistics";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 const useMenuItems = () => {

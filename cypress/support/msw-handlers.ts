@@ -1,10 +1,9 @@
 import moment from "moment";
-import {setupWorker} from "msw";
 import {getHandlers} from "./../../src/test-utils/server/msw-handlers";
-import {getBoardMemberApi} from "test-utils/server/boards";
-import {getCommitteeMemberApi} from "test-utils/server/committees";
-import {getProductApi} from "test-utils/server/products";
-import {getMemberApi} from "test-utils/server/members";
+import {getBoardMemberApi} from "../../src/test-utils/server/boards";
+import {getCommitteeMemberApi} from "../../src/test-utils/server/committees";
+import {getProductApi} from "../../src/test-utils/server/products";
+import {getMemberApi} from "../../src/test-utils/server/members";
 
 const member = {
   firstName: "John",

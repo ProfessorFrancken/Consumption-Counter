@@ -1,5 +1,5 @@
 import {SurnameRanges} from "./index";
-import {render, fireEvent, screen} from "test-utils";
+import {render, fireEvent, screen} from "../test-utils";
 
 describe("selecting a range of surnames", () => {
   it("shows a list of ranges of surnames the user can select", () => {

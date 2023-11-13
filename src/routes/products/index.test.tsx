@@ -1,7 +1,7 @@
 import React from "react";
 import {screen} from "@testing-library/react";
 import Products from "./index";
-import {render, fireEvent, getMember, getProduct} from "test-utils";
+import {render, fireEvent, getMember, getProduct} from "../../test-utils";
 import {
   OrderContext,
   useSelectedMember,
@@ -10,7 +10,7 @@ import {
 import {MemberType} from "../../queries/members";
 import clock from "jest-plugin-clock";
 import ProductsScreen from "./index";
-import {Product} from "queries/products";
+import {Product} from "../../queries/products";
 import {defaultMembers} from "../../test-utils/mocked-state";
 
 it("renders without crashing", () => {

@@ -1,5 +1,5 @@
 import {styled} from "styled-components";
-import {Committees} from "components/statistics/committees";
+import {Committees} from "./../../components/statistics/committees";
 
 const StatisticsGrid = styled.div`
   display: flex;

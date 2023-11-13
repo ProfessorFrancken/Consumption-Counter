@@ -1,5 +1,5 @@
 import {Suspense, useCallback, useMemo} from "react";
-import {useCommittees} from "queries/committees";
+import {useCommittees} from "../../queries/committees";
 import moment, {Moment} from "moment";
 import {
   XYChart,
@@ -14,8 +14,8 @@ import {useSearchParams} from "react-router-dom";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-import api from "api";
-import {DateRangePicker} from "components/date-range-picker";
+import api from "../../api";
+import {DateRangePicker} from "../date-range-picker";
 import {CalendarDate, parseDate} from "@internationalized/date";
 
 const useDateRange = () => {
@@ -91,7 +91,7 @@ function CommitteesStatisticsForTimeRange() {
   const committeeStatisticsQuery = useSuspenseQuery({
     queryKey: ["committee-statistics", timeRange, committees.length],
     queryFn: async () => {
-      return getData();
+      //return getData();
       const response = await api.get<{
         statistics: {
           beer: number;

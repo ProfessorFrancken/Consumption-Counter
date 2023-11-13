@@ -6,7 +6,7 @@ import {
 import Moment from "react-moment";
 import ProductsPrice from "../../../components/products-price";
 import {groupBy, map} from "lodash";
-import {Product} from "queries/products";
+import {Product} from "../../../queries/products";
 import AuthenticationForm from "./../../../components/authentication/authentication-form";
 
 // Show all products that were bought and the amount of times they were bought

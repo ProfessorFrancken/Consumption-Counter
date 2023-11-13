@@ -1,7 +1,6 @@
-import React from "react";
 import {screen} from "@testing-library/react";
 import {default as SelectCommitteeMembersContainer} from "./index";
-import {render} from "test-utils";
+import {render} from "../../../test-utils";
 import clock from "jest-plugin-clock";
 import {Route, Routes} from "react-router-dom";
 

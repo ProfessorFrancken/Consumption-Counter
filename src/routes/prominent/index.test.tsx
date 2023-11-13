@@ -1,6 +1,6 @@
 import {screen} from "@testing-library/react";
 import {default as ProminentContainer} from "./index";
-import {render, within} from "test-utils";
+import {render, within} from "../../test-utils";
 import clock from "jest-plugin-clock";
 
 describe("prominent", () => {
