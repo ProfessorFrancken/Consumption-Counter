@@ -5,7 +5,7 @@ import Root from "./root";
 async function initialize() {
   if (ENVIRONMENT && !(window as any).Cypress) {
     const {worker} = await import("./test-utils/server/msw-browser");
-    worker.start();
+    await worker.start();
   }
 }
 

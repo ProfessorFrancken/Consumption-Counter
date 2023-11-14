@@ -124,11 +124,11 @@ const queryClient = new QueryClient({
   },
 });
 
-export const router = createBrowserRouter(
-  createAppRoutes(queryClient, ApplicationProviders)
-);
+const appRoutes = createAppRoutes(queryClient, ApplicationProviders);
 
 const Root = () => {
+  const router = createBrowserRouter(appRoutes);
+
   return (
     <StrictMode>
       <QueryClientProvider client={queryClient}>
