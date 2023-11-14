@@ -17,6 +17,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import api from "../../api";
 import {DateRangePicker} from "../date-range-picker";
 import {CalendarDate, parseDate} from "@internationalized/date";
+import {useCommitteesStatisticsQuery} from "../../queries/statistics";
 
 const useDateRange = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -75,47 +76,8 @@ export type BarStackProps = {
 };
 function CommitteesStatisticsForTimeRange() {
   const {timeRange} = useDateRange();
-
   const {committees} = useCommittees();
-  const getData = useCallback(() => {
-    return [...committees].map((c, idx) => {
-      return {
-        name: `Committee ${idx}`,
-        beer: Math.ceil(330 * Math.random()),
-        food: Math.ceil(330 * Math.random()),
-        soda: Math.ceil(330 * Math.random()),
-      };
-    });
-  }, [committees]);
-
-  const committeeStatisticsQuery = useSuspenseQuery({
-    queryKey: ["committee-statistics", timeRange, committees.length],
-    queryFn: async () => {
-      //return getData();
-      const response = await api.get<{
-        statistics: {
-          beer: number;
-          food: number;
-          soda: number;
-          committee: {id: number; name: string};
-        }[];
-      }>("/statistics/committees", {
-        startDate: timeRange[0].format("YYYY-MM-DD"),
-        endDate: timeRange[1].format("YYYY-MM-DD"),
-      });
-
-      return response.statistics.map((stats) => {
-        const committee = committees.find(({id}) => id === stats.committee.id);
-        return {
-          name: committee?.name ?? `${stats.committee.id}`,
-          beer: stats.beer,
-          food: stats.food,
-          soda: stats.soda,
-        };
-      });
-    },
-  });
-  const data = committeeStatisticsQuery.data;
+  const {data} = useCommitteesStatisticsQuery({timeRange, committees});
 
   return (
     <div className="w-100 h-100">
@@ -213,7 +175,7 @@ export const DateRangeForm = () => {
   };
 
   return (
-    <div className="d-flex gap-3 py-4 " style={{gap: "1rem"}}>
+    <div className="d-flex gap-3 py-4">
       <DateRangePicker value={value} onChange={onChange} />
     </div>
   );

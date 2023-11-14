@@ -1,10 +1,10 @@
 import {Activity} from "../../queries/activities";
 import React from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
-import {Statistic} from "../../queries/statistics";
+import {TransactionStatistic} from "../../queries/statistics";
 
 const HeatMap: React.FC<{
-  statistics: Statistic[];
+  statistics: TransactionStatistic[];
   activities: Activity[];
 }> = ({statistics = [], activities = []}) => {
   if (statistics.length === 0) {
@@ -13,7 +13,7 @@ const HeatMap: React.FC<{
   const end = statistics[0];
   const start = statistics[statistics.length - 1];
 
-  const titleForValue = (value: Statistic) => {
+  const titleForValue = (value: TransactionStatistic) => {
     if (value === null) {
       return null;
     }
@@ -28,7 +28,7 @@ const HeatMap: React.FC<{
     }, Soda: ${value.soda}`;
   };
 
-  const classToBeUsed = (value: Statistic) => {
+  const classToBeUsed = (value: TransactionStatistic) => {
     if (!value) {
       return "color-empty";
     }
@@ -42,7 +42,7 @@ const HeatMap: React.FC<{
   );
 
   const averagePurchases = totalPurchases / statistics.length;
-  const colorToBeUsed = (value: Statistic) => {
+  const colorToBeUsed = (value: TransactionStatistic) => {
     if (value.date === null) {
       return "rgba(0, 0, 0, 0)";
     }
@@ -85,7 +85,7 @@ const HeatMap: React.FC<{
         )`;
   };
 
-  const tooltip = (value: Statistic) => {
+  const tooltip = (value: TransactionStatistic) => {
     if (value === null || value.date === null) {
       return undefined;
     }

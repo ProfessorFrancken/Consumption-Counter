@@ -4,7 +4,10 @@ import {ApiCommmitteesResponse} from "../../queries/committees";
 import {ApiMembersResponse} from "../../queries/members";
 import {ApiOrdersResponse} from "../../queries/orders";
 import {ApiProductsResponse} from "../../queries/products";
-import {ApiStatisticsResponse} from "../../queries/statistics";
+import {
+  ApiCommitteesStatisticsResponse,
+  ApiTransactionsStatisticsResponse,
+} from "../../queries/statistics";
 import {token} from "./authentication";
 
 export const getHandlers = ({
@@ -12,14 +15,16 @@ export const getHandlers = ({
   members,
   committees,
   boardMembers,
-  statistics,
+  transactionStatistics,
+  committeesStatistics,
   orders,
 }: {
   members: ApiMembersResponse["members"];
   products: ApiProductsResponse["products"];
   boardMembers: ApiBoardsResponse["boardMembers"];
   committees: ApiCommmitteesResponse["committees"];
-  statistics: ApiStatisticsResponse["statistics"];
+  transactionStatistics: ApiTransactionsStatisticsResponse["statistics"];
+  committeesStatistics: ApiCommitteesStatisticsResponse["statistics"];
   orders: ApiOrdersResponse["orders"];
 }) => {
   const handlers = [
@@ -40,11 +45,14 @@ export const getHandlers = ({
     rest.get("*/boards", (req, res, ctx) => {
       return res(ctx.json({boardMembers}));
     }),
+    rest.get("*/statistics/categories", (req, res, ctx) => {
+      return res(ctx.json({statistics: transactionStatistics}));
+    }),
+    rest.get("*/statistics/committees", (req, res, ctx) => {
+      return res(ctx.json({statistics: committeesStatistics}));
+    }),
     rest.get("*/committees", (req, res, ctx) => {
       return res(ctx.json({committees}));
-    }),
-    rest.get("*/statistics/categories", (req, res, ctx) => {
-      return res(ctx.json({statistics}));
     }),
     rest.get("*/activities", (req, res, ctx) => {
       return res(ctx.json({activities: []}));

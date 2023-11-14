@@ -6,7 +6,7 @@ import {QueryObserverResult, useQuery} from "@tanstack/react-query";
 import {committeeMembersQueryOptions} from "../../queries/committees";
 import {boardMembersQueryOptions} from "../../queries/boards";
 import {activitiesQueryOptions} from "../../queries/activities";
-import {statisticsQueryOptions} from "../../queries/statistics";
+import {transactionsStatisticsQueryOptions} from "../../queries/statistics";
 import {ordersQueryOptions} from "../../queries/orders";
 import {membersQueryOptions} from "../../queries/members";
 
@@ -61,7 +61,7 @@ const LoadingScreen = () => {
   const after = moment().subtract(2, "years").format("YYYY-MM-DD");
   const before = moment().add(1, "years").format("YYYY-MM-DD");
   const activitiesQuery = useQuery(activitiesQueryOptions({after, before}));
-  const statisticsQuery = useQuery(statisticsQueryOptions());
+  const statisticsQuery = useQuery(transactionsStatisticsQueryOptions());
   const ordersQuery = useQuery(ordersQueryOptions());
 
   const queries = [

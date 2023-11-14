@@ -12,7 +12,7 @@ import {createSearchParams, useSearchParams} from "react-router-dom";
 import {useMembers} from "../queries/members";
 import {useMutation, UseMutationResult, useQueryClient} from "@tanstack/react-query";
 import {OrderTransaction} from "../queries/orders";
-import {Statistic} from "../queries/statistics";
+import {TransactionStatistic} from "../queries/statistics";
 import moment from "moment";
 
 // TODO remove
@@ -182,7 +182,7 @@ const useMakeOrder = (reset: () => void) => {
         return orders === undefined ? newOrders : [...newOrders, ...orders];
       });
 
-      queryClient.setQueryData<Statistic[]>(
+      queryClient.setQueryData<TransactionStatistic[]>(
         ["statistics", "categories"],
         (statistics) => {
           if (statistics === undefined) {

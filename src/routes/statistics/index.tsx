@@ -7,11 +7,13 @@ import {OrderedOrder} from "../../components/orders/queued-orders-context";
 import {Product} from "../../components/orders-context";
 import {Activity, useActivities} from "../../queries/activities";
 import {useTransactions} from "../../queries/orders";
-import {Statistic, useStatisticsQuery} from "./../../queries/statistics";
+import {
+  TransactionStatistic,
+  useTransactionsStatisticsQuery,
+} from "./../../queries/statistics";
 import {styled} from "styled-components";
 import ProductsPrice from "../../components/products-price";
 import {useMemo} from "react";
-import {NavLink} from "react-router-dom";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Product[]) =>
@@ -93,7 +95,7 @@ const Statistics = ({
   activities = [],
   transactions,
 }: {
-  statistics: Statistic[];
+  statistics: TransactionStatistic[];
   activities: Activity[];
   transactions: OrderedOrder[];
 }) => {
@@ -188,7 +190,7 @@ const Statistics = ({
 
 const StatisticsSreen = () => {
   const {activities} = useActivities();
-  const statisticsQuery = useStatisticsQuery();
+  const statisticsQuery = useTransactionsStatisticsQuery();
   const transactions = take(useTransactions(), 30);
 
   return (

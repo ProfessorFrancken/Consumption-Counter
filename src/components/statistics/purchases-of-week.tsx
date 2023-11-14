@@ -1,9 +1,9 @@
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Statistic} from "../../queries/statistics";
+import {TransactionStatistic} from "../../queries/statistics";
 import {WeeklyPurchasesAsBarGraph} from "./weekly-purchases-as-bar-graph";
 
-type Purchases = Omit<Statistic, "date"> & {
+type Purchases = Omit<TransactionStatistic, "date"> & {
   date: Date;
   beer: number;
   soda: number;

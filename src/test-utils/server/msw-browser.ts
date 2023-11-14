@@ -8,6 +8,7 @@ import moment from "moment";
 import {getHandlers} from "./msw-handlers";
 import {getBoardMemberApi} from "./boards";
 import {getOrderApi} from "./orders";
+import {ApiCommitteesStatisticsResponse} from "../../queries/statistics";
 
 faker.seed(33);
 
@@ -38,16 +39,26 @@ const products = range(0, 30).map((idx) => {
 });
 
 const year = new Date().getFullYear();
-const committees = range(0, 33).flatMap((idx) => {
+const committees = range(0, 33).map((idx) => {
   const committeeMembers = sampleSize(members, Math.ceil(10 * Math.random() + 5));
 
-  return committeeMembers.map((committeeMember) => {
-    return getCommitteeMemberApi({
-      commissie_id: `${idx}`,
-      lid_id: `${committeeMember.id}`,
-      jaar: year,
-    });
+  const {naam: name} = getCommitteeMemberApi({
+    commissie_id: `${idx}`,
+    lid_id: `${idx}`,
+    jaar: year,
   });
+
+  return {
+    id: idx,
+    name,
+    members: committeeMembers.map((committeeMember) => {
+      return getCommitteeMemberApi({
+        commissie_id: `${idx}`,
+        lid_id: `${committeeMember.id}`,
+        jaar: year,
+      });
+    }),
+  };
 });
 
 const boardMembers = range(0, 20).flatMap((boardIdx) => {
@@ -79,7 +90,7 @@ const ordersByDate = groupBy(orders, (order) =>
 
 // NOTE: the heat map currently requires every date to be present,
 // will be fixed later
-const statistics = range(0, 2 * 365).map((idx) => {
+const transactionStatistics = range(0, 2 * 365).map((idx) => {
   const date = moment().subtract(idx, "day").format("YYYY-MM-DD");
 
   const beer = ordersByDate[date]?.filter((order) => order.type === "Bier")?.length ?? 0;
@@ -94,14 +105,38 @@ const statistics = range(0, 2 * 365).map((idx) => {
   };
 });
 
+const ordersByMember = groupBy(orders, (order) => order.member_id);
+
+const committeesStatistics: ApiCommitteesStatisticsResponse["statistics"] =
+  committees.map((committee) => {
+    const orders = committee.members.flatMap(
+      (member) => ordersByMember[member.lid_id] ?? []
+    );
+
+    const beer = orders?.filter((order) => order.type === "Bier")?.length ?? 0;
+    const soda = orders?.filter((order) => order.type === "Fris")?.length ?? 0;
+    const food = orders?.filter((order) => order.type === "Eten")?.length ?? 0;
+
+    return {
+      beer,
+      food,
+      soda,
+      committee: {
+        id: committee.id,
+        name: committee.name,
+      },
+    };
+  });
+
 // This configures a Service Worker with the given request handlers.
 export const worker = setupWorker(
   ...getHandlers({
     products,
     members,
-    committees,
+    committees: committees.flatMap(({members}) => members),
     boardMembers,
-    statistics,
+    transactionStatistics,
+    committeesStatistics,
     orders,
   })
 );
