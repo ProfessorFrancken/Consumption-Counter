@@ -10,11 +10,11 @@ type Props = {
 export const StatisticsNavigation = ({left, right, title}: Props) => {
   return (
     <div className="d-flex justify-content-between py-2 flex-grow mx-auto gap-3">
-      <NavLink to={left}>
+      <NavLink to={left} unstable_viewTransition>
         <FontAwesomeIcon icon={"chevron-circle-left"} size="lg" />
       </NavLink>
       {title}
-      <NavLink to={right}>
+      <NavLink to={right} unstable_viewTransition>
         <FontAwesomeIcon icon={"chevron-circle-right"} size="lg" />
       </NavLink>
     </div>
