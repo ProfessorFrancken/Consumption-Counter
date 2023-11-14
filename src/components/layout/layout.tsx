@@ -8,7 +8,7 @@ import {ReactNode} from "react";
 
 const backgroundFromProduct = (background: string | null) => {
   return background === null
-    ? {}
+    ? {backgroundColor: `var(--secondary)`}
     : {
         backgroundImage: `url("${background}")`,
         backgroundRepeat: "no-repeat",

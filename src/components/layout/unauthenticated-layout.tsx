@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png";
 export const UnauthenticatedLayout = ({children}: {children: ReactNode}) => {
   return (
     <div className="d-flex align-items-center justify-content-center h-100">
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center bg-light p-5 rounded">
         <div className="mr-5">
           <img
             src={logo}
