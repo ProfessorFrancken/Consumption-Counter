@@ -1,7 +1,7 @@
 import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "../api";
 import {useNavigate} from "react-router";
-import {uniqBy} from "lodash";
+import uniqBy from "lodash/uniqBy";
 import {MemberType} from "../queries/members";
 import {useMembers} from "./members";
 import {useCallback, useMemo} from "react";

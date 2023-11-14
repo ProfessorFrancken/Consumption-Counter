@@ -1,6 +1,10 @@
 import {setupWorker} from "msw";
 import {getMemberApi} from "./members";
-import {range, sampleSize, sample, orderBy, groupBy} from "lodash";
+import groupBy from "lodash/groupBy";
+import range from "lodash/range";
+import sampleSize from "lodash/sampleSize";
+import sample from "lodash/sample";
+import orderBy from "lodash/orderBy";
 import {getProductApi} from "./products";
 import {getCommitteeMemberApi} from "./committees";
 import {faker} from "@faker-js/faker";

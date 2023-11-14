@@ -1,7 +1,9 @@
 import {queryOptions, useQuery} from "@tanstack/react-query";
 import api from "../api";
 import {MemberType} from "./members";
-import {groupBy, sortBy, take} from "lodash";
+import take from "lodash/take";
+import sortBy from "lodash/sortBy";
+import groupBy from "lodash/groupBy";
 import {useMembers} from "./members";
 import {useMemo} from "react";
 

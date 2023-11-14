@@ -1,5 +1,6 @@
 import React from "react";
-import {pick, maxBy} from "lodash";
+import pick from "lodash/pick";
+import maxBy from "lodash/maxBy";
 import {MemberType} from "../../queries/members";
 import {Product} from "../orders-context";
 import api from "../../api";

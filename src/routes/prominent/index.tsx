@@ -1,6 +1,6 @@
 import {useSelectMember} from "../../components/orders-context";
 import {useActiveBoardMembers, useMostRecentBoards} from "../../queries/boards";
-import {sortBy} from "lodash";
+import sortBy from "lodash/sortBy";
 import {MemberType} from "../../queries/members";
 import {BoardMember} from "../../queries/boards";
 import Member from "./../../components/member-button";

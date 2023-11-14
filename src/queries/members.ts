@@ -1,5 +1,6 @@
 import {queryOptions, useQuery} from "@tanstack/react-query";
-import {chunk, orderBy} from "lodash";
+import chunk from "lodash/chunk";
+import orderBy from "lodash/orderBy";
 import {useEffect, useMemo, useState} from "react";
 import api from "./../api";
 

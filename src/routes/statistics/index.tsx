@@ -1,4 +1,6 @@
-import {groupBy, map, take} from "lodash";
+import groupBy from "lodash/groupBy";
+import map from "lodash/map";
+import take from "lodash/take";
 import moment from "moment";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import HeatMap from "./../../components/statistics/heat-map";

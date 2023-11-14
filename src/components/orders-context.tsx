@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {MemberType} from "../queries/members";
 import {useProductsQuery} from "../queries/products";
-import {sortBy, groupBy} from "lodash";
+import sortBy from "lodash/sortBy";
+import groupBy from "lodash/groupBy";
 import {
   OrderedOrder,
   TIME_TO_CANCEL,

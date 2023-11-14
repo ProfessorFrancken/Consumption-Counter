@@ -4,7 +4,8 @@ import {
   useQueuedOrders,
 } from "./../../../components/orders/queued-orders-context";
 import ProductsPrice from "../../../components/products-price";
-import {groupBy, map} from "lodash";
+import groupBy from "lodash/groupBy";
+import map from "lodash/map";
 import {Product} from "../../../queries/products";
 import AuthenticationForm from "./../../../components/authentication/authentication-form";
 import moment from "moment";

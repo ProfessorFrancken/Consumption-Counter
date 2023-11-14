@@ -1,6 +1,7 @@
 import {useMemo} from "react";
 import {MemberType} from "./members";
-import {take, uniq} from "lodash";
+import take from "lodash/take";
+import uniq from "lodash/uniq";
 import {useMembers} from "./members";
 import {OrderedOrder} from "../components/orders/queued-orders-context";
 import {queryOptions, useQuery} from "@tanstack/react-query";
