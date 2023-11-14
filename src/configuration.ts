@@ -1,2 +1,2 @@
-export const BASE_API = process.env.REACT_APP_API_SERVER;
-export const ENVIRONMENT = process.env.NODE_ENV;
+export const BASE_API = import.meta.env.VITE_APP_API_SERVER;
+export const ENVIRONMENT = import.meta.env.MODE;
