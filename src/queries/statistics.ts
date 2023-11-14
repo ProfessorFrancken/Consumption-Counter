@@ -73,17 +73,6 @@ export const useCommitteesStatisticsQuery = ({
   timeRange: [Moment, Moment];
   committees: Committee[];
 }) => {
-  const getData = useCallback(() => {
-    return [...committees].map((c, idx) => {
-      return {
-        name: `Committee ${idx}`,
-        beer: Math.ceil(330 * Math.random()),
-        food: Math.ceil(330 * Math.random()),
-        soda: Math.ceil(330 * Math.random()),
-      };
-    });
-  }, [committees]);
-
   const committeeStatisticsQuery = useSuspenseQuery({
     queryKey: ["committee-statistics", timeRange, committees.length],
     queryFn: async () => {
