@@ -138,14 +138,6 @@ const Statistics = ({
 
   return (
     <StatisticsGrid>
-      <div className="d-flex justify-content-between py-2">
-        <NavLink to="/">
-          <FontAwesomeIcon icon={"chevron-circle-left"} size="lg" />
-        </NavLink>
-        <NavLink to="/">
-          <FontAwesomeIcon icon={"chevron-circle-right"} size="lg" />
-        </NavLink>
-      </div>
       <div
         style={{
           columnCount: 4,

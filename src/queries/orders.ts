@@ -38,8 +38,6 @@ export const useTransactions = () => {
   const productsQuery = useProductsQuery();
   const products = productsQuery.data;
 
-  console.log({orders, productsQuery, products});
-
   return useMemo(() => {
     if (!orders.data) {
       return [];

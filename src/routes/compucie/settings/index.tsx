@@ -3,11 +3,11 @@ import {
   OrderedOrder,
   useQueuedOrders,
 } from "./../../../components/orders/queued-orders-context";
-import Moment from "react-moment";
 import ProductsPrice from "../../../components/products-price";
 import {groupBy, map} from "lodash";
 import {Product} from "../../../queries/products";
 import AuthenticationForm from "./../../../components/authentication/authentication-form";
+import moment from "moment";
 
 // Show all products that were bought and the amount of times they were bought
 const listOfProducts = (products: Pick<Product, "id" | "name" | "price">[]) =>
@@ -27,30 +27,31 @@ type Props = {
   buy: (order: OrderedOrder) => void;
   cancel: (order: OrderedOrder) => void;
 };
-const FailedOrder = ({order, buy, cancel}: Props) => (
-  <tr>
-    <th scope="row">
-      <Moment fromNow interval={1000} unix>
-        {order.order.ordered_at / 1000}
-      </Moment>
-    </th>
-    <td>{order.order.member.fullname}</td>
-    <td>{listOfProducts(order.order.products)}</td>
-    <td className="text-right">
-      <ProductsPrice products={order.order.products} />
-    </td>
-    <td className="text-right">{status(order)}</td>
-    <td className="text-right">
-      <button className="btn btn-link text-success mr-2" onClick={() => buy(order.order)}>
-        Retry now
-      </button>
+const FailedOrder = ({order, buy, cancel}: Props) => {
+  return (
+    <tr>
+      <th scope="row">{moment(order.order.ordered_at).fromNow()}</th>
+      <td>{order.order.member.fullname}</td>
+      <td>{listOfProducts(order.order.products)}</td>
+      <td className="text-right">
+        <ProductsPrice products={order.order.products} />
+      </td>
+      <td className="text-right">{status(order)}</td>
+      <td className="text-right">
+        <button
+          className="btn btn-link text-success mr-2"
+          onClick={() => buy(order.order)}
+        >
+          Retry now
+        </button>
 
-      <button className="btn btn-link text-danger" onClick={() => cancel(order.order)}>
-        Cancel
-      </button>
-    </td>
-  </tr>
-);
+        <button className="btn btn-link text-danger" onClick={() => cancel(order.order)}>
+          Cancel
+        </button>
+      </td>
+    </tr>
+  );
+};
 
 const RetryAll = ({
   orders,
