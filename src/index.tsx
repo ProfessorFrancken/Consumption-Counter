@@ -1,9 +1,11 @@
 import {createRoot} from "react-dom/client";
+import {ENVIRONMENT} from "./configuration";
 import Root from "./root";
 
-if (process.env.NODE_ENV === "development" && !(window as any).Cypress) {
-  const {worker} = require("./test-utils/server/msw-browser");
-  worker.start();
+if (ENVIRONMENT && !(window as any).Cypress) {
+  import("./test-utils/server/msw-browser").then(({worker}) => {
+    worker.start();
+  });
 }
 
 const container = document.getElementById("root");

@@ -1,7 +1,8 @@
 import axios, {isAxiosError} from "axios";
 import {json} from "react-router-dom";
+import {BASE_API} from "./configuration";
 
-export const baseApi = process.env.REACT_APP_API_SERVER;
+export const baseApi = BASE_API;
 
 function authHeader() {
   // return authorization header with jwt token
