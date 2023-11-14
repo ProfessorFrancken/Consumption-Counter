@@ -4,16 +4,40 @@ import RecentMembers from "./routes/recent/index";
 import {render, screen, within} from "./test-utils";
 import clock from "jest-plugin-clock";
 import {mockedState} from "./test-utils/mocked-state";
-import AppContainer from "./app-container";
+import {createAppRoutes} from "./app-container";
+import {useQueryClient} from "@tanstack/react-query";
+import {ApplicationProviders} from "./application-providers";
+import {createMemoryRouter, RouterProvider} from "react-router";
 
-function setup(routes = ["/"]) {
+const NewAppContainer = ({routes}: {routes: string[]}) => {
+  const queryClient = useQueryClient();
+  const appRoutes = createAppRoutes(queryClient, ApplicationProviders);
+  const router = createMemoryRouter(appRoutes, {initialEntries: routes});
+  return <RouterProvider router={router} />;
+};
+
+async function setup(routes = ["/"]) {
+  localStorage.setItem(
+    "plus_one_authorization",
+    JSON.stringify({
+      token:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
+    })
+  );
+
   const storeState = mockedState();
-  return render(<AppContainer />, {storeState, routes});
+  render(<NewAppContainer routes={routes} />, {
+    storeState,
+    routes,
+    dontRenderRouterProvider: true,
+  });
+
+  await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
 }
 
 describe("rendering", () => {
-  it("renders without crashing", () => {
-    setup();
+  it("renders without crashing", async () => {
+    await setup();
 
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
     expect(screen.getByRole("navigation")).toBeInTheDocument();
@@ -25,8 +49,8 @@ describe("rendering", () => {
     expect(screen.getByRole("main")).toBeInTheDocument();
   });
 
-  it("shows a selection of surname ranges by default", () => {
-    setup();
+  it("shows a selection of surname ranges by default", async () => {
+    await setup();
     const main = within(screen.getByRole("main"));
 
     expect(main.getByRole("button")).toHaveTextContent("Snow-Snow");
@@ -58,8 +82,8 @@ describe("rendering", () => {
     });
 
     routes.forEach((route) => {
-      it(`renders ${route.path}`, () => {
-        setup([route.path]);
+      it(`renders ${route.path}`, async () => {
+        await setup([route.path]);
 
         const title = screen.getByRole("heading", {level: 1});
         expect(title).toHaveTextContent(route.title);

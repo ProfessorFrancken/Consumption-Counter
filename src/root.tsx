@@ -17,10 +17,12 @@ type Props = {
   queryClient?: QueryClient;
   routes?: string[];
   children: React.ReactNode;
+  dontRenderRouterProvider?: boolean;
 };
 
 export const InfrastructureProviders = ({
   children,
+  dontRenderRouterProvider = false,
   routes,
   queryClient: defaultQueryClient = new QueryClient(),
 }: Props) => {
@@ -109,7 +111,7 @@ export const InfrastructureProviders = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      {dontRenderRouterProvider ? <>{children}</> : <RouterProvider router={router} />}
     </QueryClientProvider>
   );
 };

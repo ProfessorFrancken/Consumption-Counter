@@ -31,7 +31,14 @@ const AllTheProviders: React.FC<{
   storeState: StoreState;
   routes: string[];
   children: React.ReactNode;
-}> = ({children, storeState = {}, routes, ...props}) => {
+  dontRenderRouterProvider?: boolean;
+}> = ({
+  children,
+  storeState = {},
+  routes,
+  dontRenderRouterProvider = false,
+  ...props
+}) => {
   const {
     authentication = defaultAuthentication,
     order = {
@@ -86,15 +93,23 @@ const AllTheProviders: React.FC<{
   // TODO put the test application providers in a separat thing that we pass to infrastructure providers
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <InfrastructureProviders queryClient={queryClient} routes={actualRoutes}>
-        <AuthenticationProvider {...authentication}>
-          <QueuedOrdersProvider
-            queuedOrder={queuedOrder ?? undefined}
-            queuedOrders={queuedOrders ?? undefined}
-          >
-            <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
-          </QueuedOrdersProvider>
-        </AuthenticationProvider>
+      <InfrastructureProviders
+        queryClient={queryClient}
+        routes={actualRoutes}
+        dontRenderRouterProvider={dontRenderRouterProvider}
+      >
+        {dontRenderRouterProvider ? (
+          <>{children}</>
+        ) : (
+          <AuthenticationProvider {...authentication}>
+            <QueuedOrdersProvider
+              queuedOrder={queuedOrder ?? undefined}
+              queuedOrders={queuedOrders ?? undefined}
+            >
+              <OrderProvider order={order ?? undefined}>{children}</OrderProvider>
+            </QueuedOrdersProvider>
+          </AuthenticationProvider>
+        )}
       </InfrastructureProviders>
     </Suspense>
   );
@@ -106,14 +121,17 @@ const customRender = (
     wrapperProps?: any;
     storeState?: StoreState;
     routes?: string[];
+    dontRenderRouterProvider?: boolean;
   } = {
     wrapperProps: {},
     storeState: {},
     routes: undefined,
+    dontRenderRouterProvider: false,
   }
 ) => {
   const wrapper = (props: any) => (
     <AllTheProviders
+      dontRenderRouterProvider={options.dontRenderRouterProvider}
       {...props}
       storeState={options.storeState}
       routes={options.routes}

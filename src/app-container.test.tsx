@@ -1,23 +1,24 @@
-import AppContainerWithoutLocation from "./app-container";
+import {createAppRoutes} from "./app-container";
 import MockDate from "mockdate";
 import {render, fireEvent, act, screen} from "./test-utils";
 import {TIME_TO_CANCEL} from "./components/orders/queued-orders-context";
 import {SCREEN_SAVER_TIMEOUT} from "./components/redirect-when-idle";
 import {waitFor, within} from "@testing-library/react";
-import {useLocation} from "react-router";
+import {createMemoryRouter, RouterProvider} from "react-router";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
 import {mocks} from "./test-utils/mocked-state";
+import {useQueryClient} from "@tanstack/react-query";
+import {ApplicationProviders} from "./application-providers";
 
-// Ugly hack that allows us to read the browser's current location
-const AppContainer = () => {
-  const location = useLocation();
-  return (
-    <>
-      <span aria-label="location">{location.pathname}</span>
-      <AppContainerWithoutLocation />
-    </>
-  );
+const NewAppContainer = ({navigate}: {navigate: (to: string) => void}) => {
+  const queryClient = useQueryClient();
+  const appRoutes = createAppRoutes(queryClient, ApplicationProviders);
+  const router = createMemoryRouter(appRoutes);
+  router.subscribe((x) => {
+    navigate(x.location.pathname);
+  });
+  return <RouterProvider router={router} />;
 };
 
 afterEach(() => {
@@ -63,7 +64,18 @@ describe("Consumption Counter", () => {
     server.close();
   });
 
+  const navigate = jest.fn();
   beforeEach(() => {
+    navigate.mockReset();
+
+    localStorage.setItem(
+      "plus_one_authorization",
+      JSON.stringify({
+        token:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
+      })
+    );
+
     MockDate.set(new Date(1514764800000));
 
     jest.useFakeTimers();
@@ -95,10 +107,13 @@ describe("Consumption Counter", () => {
     });
   });
 
-  const selectRangeIncludingJohnSnow = () => {
+  const selectRangeIncludingJohnSnow = async () => {
     fireEvent.click(screen.getByText("Snow-Snow"));
 
-    expect(screen.getByLabelText("location")).toHaveTextContent("/members/0");
+    await waitFor(() => {
+      expect(navigate).toHaveBeenCalledWith("/members/0");
+    });
+
     expect(screen.getByText("John Snow")).toBeInTheDocument();
   };
 
@@ -106,10 +121,12 @@ describe("Consumption Counter", () => {
     fireEvent.click(screen.getByText("John Snow"));
   };
 
-  const addHertogJanToOrder = () => {
-    expect(screen.getByLabelText("location")).toHaveTextContent("/products");
+  const addHertogJanToOrder = async () => {
+    await waitFor(() => {
+      expect(navigate).toHaveBeenCalledWith("/products");
+    });
 
-    const product = screen.getByLabelText(/Buy Hertog Jan/);
+    const product = await screen.findByLabelText(/Buy Hertog Jan/);
     expect(product).toBeInTheDocument();
 
     fireEvent.mouseDown(product);
@@ -118,7 +135,7 @@ describe("Consumption Counter", () => {
 
   const expectOrderToBeBought = async () => {
     expect(await screen.findByText(/Cancel buying .*/)).toBeInTheDocument();
-    expect(screen.getByLabelText("location")).toHaveTextContent("/");
+    expect(navigate).toHaveBeenCalledWith("/");
 
     act(() => {
       jest.advanceTimersByTime(10000);
@@ -132,8 +149,11 @@ describe("Consumption Counter", () => {
     expect(await screen.findByLabelText("John Snow")).toBeInTheDocument();
   };
 
-  const selectBuyMore = () => {
-    expect(screen.getByLabelText("location")).toHaveTextContent("/products");
+  const selectBuyMore = async () => {
+    await waitFor(() => {
+      expect(navigate).toHaveBeenCalledWith("/products");
+    });
+
     expect(screen.getByText("Hertog Jan")).toBeInTheDocument();
     const product = screen.getByText("Hertog Jan");
 
@@ -157,7 +177,7 @@ describe("Consumption Counter", () => {
 
   const selectProminent = () => {
     fireEvent.click(screen.getByLabelText("Prominent"));
-    expect(screen.getByLabelText("location")).toHaveTextContent("/prominent");
+    expect(navigate).toHaveBeenCalledWith("/prominent");
   };
 
   const cancelOrder = async () => {
@@ -176,101 +196,118 @@ describe("Consumption Counter", () => {
 
   const selectCommittees = () => {
     fireEvent.click(screen.getByLabelText("Committees"));
-    expect(screen.getByLabelText("location")).toHaveTextContent("/committees");
+    expect(navigate).toHaveBeenCalledWith("/committees");
   };
 
   const selectCompucie = () => {
     fireEvent.click(screen.getByRole("button", {name: "Compucie"}));
-    expect(screen.getByLabelText("location")).toHaveTextContent("/committees/0");
+    expect(navigate).toHaveBeenCalledWith("/committees/0");
   };
 
   const selectRecent = () => {
     fireEvent.click(screen.getByLabelText("Recent"));
-    expect(screen.getByLabelText("location")).toHaveTextContent("/recent");
+    expect(navigate).toHaveBeenCalledWith("/recent");
   };
 
-  const selectStatistics = () => {
+  const selectStatistics = async () => {
     fireEvent.click(screen.getByLabelText("Statistics"));
-    expect(screen.getByLabelText("location")).toHaveTextContent("/statistics");
+
+    await waitFor(() => {
+      expect(navigate).toHaveBeenCalledWith("/statistics");
+    });
   };
 
   it("allows a member to buy a product", async () => {
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
 
     selectRangeIncludingJohnSnow();
     selectJohnSnow();
 
     await waitFor(() => {
-      expect(screen.getByLabelText("location")).toHaveTextContent("/products");
+      expect(navigate).toHaveBeenCalledWith("/products");
     });
 
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
     await expectOrderToBeBought();
   });
 
   it("allows buying multiple products", async () => {
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
 
-    selectRangeIncludingJohnSnow();
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+    await selectRangeIncludingJohnSnow();
     selectJohnSnow();
 
     // Now enable buying more products
-    selectBuyMore();
+    await selectBuyMore();
     expectBuyMoreToBeSelected();
 
     // Let's buy some pils
-    addHertogJanToOrder();
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
+    await addHertogJanToOrder();
 
     await buyAll();
   });
 
   it("is possible to cancel an order", async () => {
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
 
-    selectRangeIncludingJohnSnow();
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+    await selectRangeIncludingJohnSnow();
     selectJohnSnow();
 
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
 
     await cancelOrder();
   });
 
   it("is possible to buy products using the prominent list", async () => {
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
     selectProminent();
     selectJohnSnow();
 
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
     await expectOrderToBeBought();
   });
 
   it("is possible to buy products using the committees list", async () => {
     MockDate.set(new Date(1514764800001));
 
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
     selectCommittees();
     selectCompucie();
     selectJohnSnow();
 
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
     await expectOrderToBeBought();
   });
 
   it("is possible to buy products using the recent list", async () => {
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
 
     // TODO: Here we are duplicating buying an order, it might be better
     // to mock the state?
-    selectRangeIncludingJohnSnow();
+    await selectRangeIncludingJohnSnow();
     selectJohnSnow();
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
     await expectOrderToBeBought();
 
     selectRecent();
     selectJohnSnow();
 
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
     await expectOrderToBeBought();
 
     expect(await screen.findByRole("button", {name: "Go back"})).toBeInTheDocument();
@@ -283,11 +320,14 @@ describe("Consumption Counter", () => {
   });
 
   it("shows a splashscreen when buying specific products", async () => {
-    render(<AppContainer />);
-    selectRangeIncludingJohnSnow();
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+    await selectRangeIncludingJohnSnow();
     selectJohnSnow();
 
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
 
     const background = "Uo6qQC4Hm8TUqyNjw2G4.jpg";
     const splashStyle = {backgroundImage: `url("${background}")`};
@@ -301,21 +341,117 @@ describe("Consumption Counter", () => {
     expect(layout).not.toHaveStyle(splashStyle);
   });
 
+  // Redirects
+  // Shows a list of transactions
+
+  // Shows error messages when things go wrong
+
+  // Keeps track of all transactions that went wrong
+
+  // Retries transactions
+
+  it("does allows cancelling an order after an other order's timeout was handled", async () => {
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+    await selectRangeIncludingJohnSnow();
+    selectJohnSnow();
+    await addHertogJanToOrder();
+
+    // Run time forward a little so that the timeout of the first orders
+    // does not occur on the same time as the second
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
+    });
+
+    MockDate.set(new Date(1514764800000 + 4000));
+    selectJohnSnow();
+    await addHertogJanToOrder();
+
+    // Run the first timeout
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
+    });
+    const cancelBtn = await screen.findByText(/Cancel buying .*/);
+    fireEvent.click(cancelBtn);
+    expect(cancelBtn).not.toBeInTheDocument();
+
+    act(() => {
+      jest.advanceTimersByTime(TIME_TO_CANCEL);
+    });
+    await selectStatistics();
+    expect(await screen.findAllByText(/bought by.*/)).toHaveLength(1);
+  });
+
+  describe("when the system is idle for a specific time", () => {
+    it("goes back to the main screen after 30 seconds", async () => {
+      render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+      await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+      await selectRangeIncludingJohnSnow();
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT);
+      });
+      expect(navigate).toHaveBeenCalledWith("/");
+    });
+
+    it("should reset the screensaver timer when going to a different route", async () => {
+      render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+      await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+      await selectRangeIncludingJohnSnow();
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
+      });
+      selectRecent();
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
+      });
+      expect(navigate).toHaveBeenCalledWith("/recent");
+      act(() => {
+        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
+      });
+      expect(navigate).toHaveBeenCalledWith("/");
+    });
+  });
+
+  it("is possible select members through the compucie screen", async () => {
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
+
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+    const header = screen.getByRole("heading", {level: 2});
+    expect(header).toHaveTextContent("T.F.V. 'Professor Francken'");
+    fireEvent.click(header);
+
+    expect(navigate).toHaveBeenCalledWith("/compucie");
+
+    selectJohnSnow();
+
+    await addHertogJanToOrder();
+    await expectOrderToBeBought();
+  });
+
   // This test checks if we don't have any async issues
   it("is possible to buy a product after someone else has bought a product", async () => {
-    render(<AppContainer />);
+    render(<NewAppContainer navigate={navigate} />, {dontRenderRouterProvider: true});
 
-    selectRangeIncludingJohnSnow();
+    await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
+
+    await selectRangeIncludingJohnSnow();
     selectJohnSnow();
 
     await waitFor(() => {
-      expect(screen.getByLabelText("location")).toHaveTextContent("/products");
+      expect(navigate).toHaveBeenCalledWith("/products");
     });
-    addHertogJanToOrder();
+    await addHertogJanToOrder();
 
     // Buy another product by clicking the go back button
     await waitFor(() => {
-      expect(screen.getByLabelText("location")).not.toHaveTextContent("/products");
+      expect(navigate).toHaveBeenNthCalledWith(6, "/");
     });
 
     selectJohnSnow();
@@ -328,13 +464,17 @@ describe("Consumption Counter", () => {
       expect(screen.queryByText(/Cancel buying .*/)).not.toBeInTheDocument();
     });
 
-    expect(screen.getByLabelText("location")).toHaveTextContent("/products");
-    addHertogJanToOrder();
     await waitFor(() => {
-      expect(screen.getByLabelText("location")).not.toHaveTextContent("/products");
+      //console.log(navigate.call, navigate.caller);
+      expect(navigate).toHaveBeenNthCalledWith(5, "/products");
+    });
+    await addHertogJanToOrder();
+
+    await waitFor(() => {
+      expect(navigate).toHaveBeenNthCalledWith(10, "/");
     });
 
-    selectStatistics();
+    await selectStatistics();
 
     expect(await screen.findAllByText("bought by John Snow")).toHaveLength(1);
     await waitFor(async () => {
@@ -351,88 +491,5 @@ describe("Consumption Counter", () => {
     await waitFor(() => {
       expect(screen.getAllByText(/bought by.*/)).toHaveLength(2);
     });
-  });
-  // Redirects
-  // Shows a list of transactions
-
-  // Shows error messages when things go wrong
-
-  // Keeps track of all transactions that went wrong
-
-  // Retries transactions
-
-  it("does allows cancelling an order after an other order's timeout was handled", async () => {
-    render(<AppContainer />);
-
-    selectRangeIncludingJohnSnow();
-    selectJohnSnow();
-    addHertogJanToOrder();
-
-    // Run time forward a little so that the timeout of the first orders
-    // does not occur on the same time as the second
-    act(() => {
-      jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
-    });
-
-    MockDate.set(new Date(1514764800000 + 4000));
-    selectJohnSnow();
-    addHertogJanToOrder();
-
-    // Run the first timeout
-    act(() => {
-      jest.advanceTimersByTime(TIME_TO_CANCEL / 2);
-    });
-    const cancelBtn = await screen.findByText(/Cancel buying .*/);
-    fireEvent.click(cancelBtn);
-    expect(cancelBtn).not.toBeInTheDocument();
-
-    act(() => {
-      jest.advanceTimersByTime(TIME_TO_CANCEL);
-    });
-    selectStatistics();
-    expect(await screen.findAllByText(/bought by.*/)).toHaveLength(1);
-  });
-
-  describe("when the system is idle for a specific time", () => {
-    it("goes back to the main screen after 30 seconds", () => {
-      render(<AppContainer />);
-      selectRangeIncludingJohnSnow();
-      act(() => {
-        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT);
-      });
-      expect(screen.getByLabelText("location")).toHaveTextContent("/");
-    });
-
-    it("should reset the screensaver timer when going to a different route", () => {
-      render(<AppContainer />);
-      selectRangeIncludingJohnSnow();
-      act(() => {
-        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
-      });
-      selectRecent();
-      act(() => {
-        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
-      });
-      expect(screen.getByLabelText("location")).toHaveTextContent("/recent");
-      act(() => {
-        jest.advanceTimersByTime(SCREEN_SAVER_TIMEOUT / 2);
-      });
-      expect(screen.getByLabelText("location")).toHaveTextContent("/");
-    });
-  });
-
-  it("is possible select members through the compucie screen", async () => {
-    render(<AppContainer />);
-
-    const header = screen.getByRole("heading", {level: 2});
-    expect(header).toHaveTextContent("T.F.V. 'Professor Francken'");
-    fireEvent.click(header);
-
-    expect(screen.getByLabelText("location")).toHaveTextContent("/compucie");
-
-    selectJohnSnow();
-
-    addHertogJanToOrder();
-    await expectOrderToBeBought();
   });
 });

@@ -87,7 +87,7 @@ const ErrorBoundary = () => {
 const ErrorBoundaryLayout = () => {
   const data = useLoaderData() as {queries: unknown};
 
-  console.log("error boundary layout", data);
+  //console.log("error boundary layout", data);
   return (
     <Suspense fallback={<Loading />}>
       <RedirectWhenIdle />
@@ -135,22 +135,22 @@ export const createAppRoutes = (
         // defer the queries and show a loading screen
         let waitTime = {time: 0};
 
-        console.log("waiting?");
+        //console.log("waiting?");
         await Promise.any([queries, sleep(200).then(() => (waitTime.time = 600))]);
-        console.log("done waitting");
+        //console.log("done waitting");
 
-        console.log(waitTime);
+        //console.log(waitTime);
 
         if (waitTime.time !== 0) {
-          console.log("sleeping?");
+          //console.log("sleeping?");
           //await sleep(waitTime);
         }
 
         return defer({
           queries: queries.then(async (data) => {
-            console.log("ahoi@", waitTime);
+            //console.log("ahoi@", waitTime);
             await sleep(waitTime.time);
-            console.log("done sleeping");
+            //console.log("done sleeping");
             return data;
           }),
         });
@@ -286,51 +286,3 @@ export const createAppRoutes = (
     </Route>
   );
 };
-
-export const AppContainer = () => {
-  return (
-    <Routes>
-      <Route
-        element={
-          <>
-            <RedirectWhenIdle />
-            <Outlet />
-          </>
-        }
-      >
-        <Route path="/loading" element={<Loading />} />
-        <Route
-          path="*"
-          element={
-            <Layout>
-              <Outlet />
-            </Layout>
-          }
-        >
-          <Route index element={<SurnameRanges />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="compucie" element={<Compucie />} />
-          <Route path="prominent" element={<Prominent />} />
-          <Route path="statistics" element={<Statistics />} />
-          <Route path="committees" element={<Committees />} />
-          <Route path="committees/:page" element={<SelectMemberFromCommittee />} />
-          <Route
-            path="recent"
-            element={<RecentMembers />}
-            handle={{
-              title: <span>Recent</span>,
-            }}
-          />
-          <Route path="products" element={<Products />} />
-          <Route path="products/pricelist" element={<PriceList />} />
-          <Route path="statistics" element={<Statistics />} />
-          <Route path="present" element={<Present />} />
-          <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
-          <Route path="members" element={<Navigate to="/" />} />
-        </Route>
-      </Route>
-    </Routes>
-  );
-};
-
-export default AppContainer;
