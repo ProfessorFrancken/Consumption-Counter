@@ -55,6 +55,7 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.7.3",
+    "spin-delay": "^1.2.0",
     "styled-components": "^6.0.8",
     "typescript": "^4.9.0",
     "usehooks-ts": "^2.9.1",
@@ -63,7 +64,9 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": ["prettier --single-quote --write"]
+    "src/**/*.{js,jsx,json,css}": [
+      "prettier --single-quote --write"
+    ]
   },
   "scripts": {
     "start": "vite",
@@ -88,7 +91,9 @@
       "plugin:cypress/recommended",
       "plugin:prettier/recommended"
     ],
-    "plugins": ["prettier"],
+    "plugins": [
+      "prettier"
+    ],
     "rules": {
       "prettier/prettier": "error"
     }
@@ -115,7 +120,11 @@
     "prettier": "3.0.3"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -123,7 +132,10 @@
     ]
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}", "!src/test-utils/**"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/test-utils/**"
+    ],
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
     }
