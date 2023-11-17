@@ -8,6 +8,9 @@ import {createAppRoutes} from "./app-container";
 import {useQueryClient} from "@tanstack/react-query";
 import {ApplicationProviders} from "./application-providers";
 import {createMemoryRouter, RouterProvider} from "react-router";
+import {setupServer} from "msw/node";
+import {rest} from "msw";
+import {mocks} from "./test-utils/mocked-state";
 
 const NewAppContainer = ({routes}: {routes: string[]}) => {
   const queryClient = useQueryClient();
@@ -17,14 +20,6 @@ const NewAppContainer = ({routes}: {routes: string[]}) => {
 };
 
 async function setup(routes = ["/"]) {
-  localStorage.setItem(
-    "plus_one_authorization",
-    JSON.stringify({
-      token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
-    })
-  );
-
   const storeState = mockedState();
   render(<NewAppContainer routes={routes} />, {
     storeState,
@@ -34,6 +29,54 @@ async function setup(routes = ["/"]) {
 
   await screen.findByRole("img", {name: "Logo of T.F.V. 'Professor Francken'"});
 }
+
+const server = setupServer(
+  rest.get("*/members", (req, res, ctx) => {
+    return res(ctx.json({members: mocks.members}));
+  }),
+  rest.get("*/products", (req, res, ctx) => {
+    return res(ctx.json({products: mocks.members}));
+  }),
+  rest.get("*/boards", (req, res, ctx) => {
+    return res(ctx.json({boardMembers: mocks.boards}));
+  }),
+  rest.get("*/committees", (req, res, ctx) => {
+    return res(ctx.json({committees: mocks.committees}));
+  }),
+  rest.get("*/statistics/categories", (req, res, ctx) => {
+    return res(ctx.json({statistics: []}));
+  }),
+  rest.get("*/activities", (req, res, ctx) => {
+    return res(ctx.json({activities: []}));
+  }),
+  rest.post("*/orders", (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+  rest.get("*/orders", (req, res, ctx) => {
+    return res(ctx.json({products: []}));
+  }),
+  rest.get("*/sponsors", (req, res, ctx) => {
+    return res(ctx.json({sponsors: []}));
+  })
+);
+
+beforeAll(() => {
+  server.listen();
+});
+
+afterAll(() => {
+  server.close();
+});
+
+beforeEach(() => {
+  localStorage.setItem(
+    "plus_one_authorization",
+    JSON.stringify({
+      token:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjI1OTE3MDIsImV4cCI6MTU1NDEyNzcwMiwicGx1cy1vbmUiOnRydWV9._KlpRSqK7AHgYX4WybMPJlTazuoU4OY1KoEyQtkiTd4",
+    })
+  );
+});
 
 describe("rendering", () => {
   it("renders without crashing", async () => {

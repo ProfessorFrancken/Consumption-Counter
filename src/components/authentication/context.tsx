@@ -1,10 +1,10 @@
 import React from "react";
-import {UseMutateFunction, useMutation} from "@tanstack/react-query";
+import {UseMutateFunction, useMutation, useQueryClient} from "@tanstack/react-query";
 import AuthenticationForm from "./authentication-form";
 import api from "./../../api";
 import {UnauthenticatedLayout} from "../layout/unauthenticated-layout";
 import {useLocalStorage} from "usehooks-ts";
-import {ErrorResponse} from "react-router";
+import {ErrorResponse, useRevalidator} from "react-router";
 
 export type State = {
   request: boolean;
@@ -24,11 +24,18 @@ function isErrorResponse(error: any): error is ErrorResponse {
 }
 
 function useLogin(setToken: ({token}: {token: string}) => void) {
+  const queryClient = useQueryClient();
+  const revalidator = useRevalidator();
+
   const login = async (password: string) => {
     try {
       const response = await api.post("/authenticate", {password});
       const token = response.token as string;
+
+      // Clear all queries as we likely weren't authenticated before, resulting in 403 responses
+      queryClient.clear();
       setToken({token});
+      revalidator.revalidate();
 
       return token;
     } catch (e) {
@@ -55,14 +62,7 @@ export const AuthenticationProvider: React.FC<{
 
   return (
     <AuthenticationContext.Provider value={value} {...props}>
-      {value.token ? (
-        props.children
-      ) : (
-        <UnauthenticatedLayout>
-          <h1>Francken Consumption Counter</h1>
-          <AuthenticationForm />
-        </UnauthenticatedLayout>
-      )}
+      {props.children}
     </AuthenticationContext.Provider>
   );
 };

@@ -3,7 +3,7 @@ import {jwtDecode as decode} from "jwt-decode";
 import moment from "moment";
 import {ReactNode} from "react";
 import {useForm} from "react-hook-form";
-import {useNavigate} from "react-router";
+import {useNavigate, useRevalidator} from "react-router";
 import {useAuthentication} from "./context";
 
 const Button = ({
@@ -72,19 +72,15 @@ const AuthenticateButton = ({
 
 const AuthenticationForm = () => {
   const {authenticate, token, request, error} = useAuthentication();
+
   const {
     handleSubmit,
     register,
     formState: {errors},
   } = useForm();
-  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(({password}) => {
-    authenticate(password, {
-      onSuccess: () => {
-        navigate("/loading");
-      },
-    });
+    authenticate(password);
   });
 
   return (

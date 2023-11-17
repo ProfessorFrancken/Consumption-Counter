@@ -1,4 +1,13 @@
 import {
+  Suspense,
+  SuspenseProps,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  ReactNode,
+} from "react";
+import {
   Navigate,
   Routes,
   Route,
@@ -9,6 +18,7 @@ import {
   ErrorResponse,
   useLoaderData,
   defer,
+  Await,
 } from "react-router-dom";
 import RedirectWhenIdle from "./components/redirect-when-idle";
 import SurnameRanges from "./routes/index";
@@ -31,7 +41,6 @@ import "./components/font-awesome";
 import {UnauthenticatedLayout} from "./components/layout/unauthenticated-layout";
 import AuthenticationForm from "./components/authentication/authentication-form";
 import Loading from "./routes/loading/index";
-import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
 import {BuyProductsForMemberTitle, CommitteeTitle} from "./components/layout/header";
 import {DateRangeForm} from "./components/statistics/committees";
@@ -56,16 +65,25 @@ function isErrorResponse(error: any): error is ErrorResponse {
 const ErrorBoundary = () => {
   const error = useRouteError();
 
-  console.log({error});
+  console.log("Error boundary, element", {error});
 
   if (isRouteErrorResponse(error) || isErrorResponse(error)) {
     if ([401, 403].includes(error.status)) {
       return (
         <UnauthenticatedLayout>
-          <h1>Unauthorized</h1>
+          <h1>Francken Consumption Counter</h1>
           <AuthenticationForm />
+          <div className="d-none">
+            <span className="text-muted">
+              Whoops an error! {error.status} - {error.statusText}
+            </span>
+            <pre>{JSON.stringify(error.data)}</pre>
+          </div>
         </UnauthenticatedLayout>
       );
+    }
+    if (error.status === 404) {
+      return <Navigate to="/" />;
     }
   }
 
@@ -90,8 +108,10 @@ const ErrorBoundaryLayout = () => {
   //console.log("error boundary layout", data);
   return (
     <Suspense fallback={<Loading />}>
-      <RedirectWhenIdle />
-      <Outlet />
+      <Await resolve={data.queries}>
+        <RedirectWhenIdle />
+        <Outlet />
+      </Await>
     </Suspense>
   );
 };
@@ -156,8 +176,6 @@ export const createAppRoutes = (
         });
       }}
     >
-      <Route path="loading" element={<Loading />} />
-
       <Route
         element={
           <Layout>
