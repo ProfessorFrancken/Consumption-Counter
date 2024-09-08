@@ -3,7 +3,7 @@ import {ENVIRONMENT} from "./configuration";
 import Root from "./root";
 
 async function initialize() {
-  if (ENVIRONMENT && !(window as any).Cypress) {
+  if (ENVIRONMENT !== "production" && !(window as any).Cypress) {
     const {worker} = await import("./test-utils/server/msw-browser");
     await worker.start();
   }
