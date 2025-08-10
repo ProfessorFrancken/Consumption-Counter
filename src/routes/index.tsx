@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router";
 import {useGroupedSurnames} from "../queries/members";
 import {MemberType} from "../queries/members";
+import SearchBar from "components/layout/searchbar";
 
 type Range = {
   idx: number;
@@ -14,16 +15,23 @@ type SurnameRangesProps = {
 };
 
 export const SurnameRanges = ({ranges, selectRange}: SurnameRangesProps) => (
-  <div className="tilesGrid">
-    {ranges.map((range) => (
-      <button className="button tile" onClick={() => selectRange(range)} key={range.idx}>
-        {range.surname_start}
-        <br />
-        -<br />
-        {range.surname_end}
-      </button>
-    ))}
-  </div>
+  <>
+    <SearchBar />
+    <div className="tilesGrid">
+      {ranges.map((range) => (
+        <button
+          className="button tile"
+          onClick={() => selectRange(range)}
+          key={range.idx}
+        >
+          {range.surname_start}
+          <br />
+          -<br />
+          {range.surname_end}
+        </button>
+      ))}
+    </div>
+  </>
 );
 
 const SurnameRangesScreen = () => {

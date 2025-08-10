@@ -1,5 +1,6 @@
 import {MemberType} from "queries/members";
 import Member from "./member-button";
+import SearchBar from "./layout/searchbar";
 
 type Props = {
   members: MemberType[];
@@ -7,11 +8,14 @@ type Props = {
 };
 
 const Members = ({members, selectMember}: Props) => (
-  <nav className="tilesGrid">
-    {members.map((member) => (
-      <Member member={member} key={member.id} onClick={selectMember} />
-    ))}
-  </nav>
+  <>
+    <SearchBar />
+    <nav className="tilesGrid">
+      {members.map((member) => (
+        <Member member={member} key={member.id} onClick={selectMember} />
+      ))}
+    </nav>
+  </>
 );
 
 export default Members;
