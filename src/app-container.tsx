@@ -31,6 +31,7 @@ import Loading from "./routes/loading/index";
 import {Suspense} from "react";
 import {QueryClient} from "@tanstack/react-query";
 import {BuyProductsForMemberTitle, CommitteeTitle} from "components/layout/header";
+import SearchMembers from "routes/members/search";
 
 function isErrorResponse(error: any): error is ErrorResponse {
   return (
@@ -179,6 +180,7 @@ export const createAppRoutes = (
           }}
         />
         <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
+        <Route path="search" element={<SearchMembers />} />
         <Route path="members" element={<Navigate to="/" />} />
       </Route>
     </Route>
@@ -224,6 +226,7 @@ export const AppContainer = () => {
           <Route path="statistics" element={<Statistics />} />
           <Route path="present" element={<Present />} />
           <Route path="members/:page" element={<SelectMemberFromSurnameRange />} />
+          <Route path="search" element={<SearchMembers />} />
           <Route path="members" element={<Navigate to="/" />} />
         </Route>
       </Route>
